@@ -205,8 +205,9 @@ let activeCatalogGenre = 'all';
             renderMediaGrid(filtered);
         }
 
-        function filterGenre(genre) {
+        function filterGenre(genre,update=true) {
             activeCatalogGenre = genre;
+            if(update)goRoute('#/kategori/'+encodeURIComponent(genre));
             showCatalogView(genre==='all'?'Tüm Kategoriler':genre);
             activeCatalogType='all'; renderFilteredCatalog();
             document.querySelectorAll('.genre-pill').forEach(button => {
@@ -238,8 +239,9 @@ let activeCatalogGenre = 'all';
             document.getElementById('catalog-heading').innerText = title;
             window.scrollTo({top:0,behavior:'smooth'});
         }
-        function switchTab(tab) {
+        function switchTab(tab,update=true) {
             closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery='';
+            if(update)goRoute(tab==='movie'?'#/filmler':tab==='tv'?'#/diziler':tab==='watchlist'?'#/listem':'#/kesfet');
             document.getElementById('search-input').value='';
             activeCatalogType = tab==='movie'?'movie':tab==='tv'?'tv':'all';
             const title = tab==='movie'?'Filmler':tab==='tv'?'Diziler':tab==='watchlist'?'İzleme Listem':'Keşfet';
@@ -254,49 +256,62 @@ document.getElementById('search-input').addEventListener('input', function(e) {
 
 
 // İçerik detay görünümü
-function showDashboard(bgColor = '#0b0c10') {
-            document.getElementById('theme-body').style.backgroundColor = bgColor;
-            document.getElementById('dashboard-view').classList.remove('hidden');
-            document.getElementById('detail-page-view').classList.add('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function openDetailPage(id) {
-            const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
-
-            document.getElementById('theme-body').style.backgroundColor = item.themeColor;
-            document.getElementById('detail-backdrop').src = item.backdrop || item.image;
-            document.getElementById('detail-poster').src = item.image;
-            document.getElementById('detail-title').innerText = item.title;
-            document.getElementById('detail-category').innerText = item.category;
-            document.getElementById('detail-rating').innerHTML = `<i class="fa-solid fa-star"></i> ${item.rating} IMDb`;
-            document.getElementById('detail-year').innerText = item.year;
-            document.getElementById('detail-duration').innerText = item.duration;
-            document.getElementById('detail-type-label').innerText = item.type === 'tv' ? 'Dizi' : 'Film';
-            document.getElementById('detail-info-genre').innerText = item.category;
-            document.getElementById('detail-info-year').innerText = item.year;
-            document.getElementById('detail-desc').innerText = item.desc;
-            document.getElementById('detail-director').innerText = item.director;
-
-            updateDetailButtons(item.id);
-
-            const castContainer = document.getElementById('detail-cast-list');
-            castContainer.innerHTML = item.cast.map(c => `
-                <div class="bg-white/5 border border-white/10 p-3 rounded-xl flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-yellow/20 text-brand-yellow flex items-center justify-center font-bold text-xs">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <span class="text-xs font-bold text-white">${c}</span>
-                </div>
-            `).join('');
-
-            document.getElementById('detail-play-btn').onclick = () => launchPlayer(item.title);
-
-            document.getElementById('dashboard-view').classList.add('hidden');
-            document.getElementById('detail-page-view').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
+function goRoute(path){ if(location.hash!==path) location.hash=path; else routeFromHash(); }
+function routeFromHash(){
+ const p=decodeURIComponent(location.hash.replace(/^#\/?/,'' )).split('/');
+ if(!p[0]||p[0]==='anasayfa'){showDashboard(false);return;}
+ if(p[0]==='film'||p[0]==='dizi'){openDetailPage(p.slice(1).join('/'),false);return;}
+ if(p[0]==='filmler'){switchTab('movie',false);return;}
+ if(p[0]==='diziler'){switchTab('tv',false);return;}
+ if(p[0]==='kesfet'){switchTab('all',false);return;}
+ if(p[0]==='listem'){switchTab('watchlist',false);return;}
+ if(p[0]==='kategori'){filterGenre(p.slice(1).join('/')||'all',false);return;}
+ showDashboard(false);
+}
+function showDashboard(update=true){
+ document.getElementById('theme-body').style.backgroundColor='#0b0c10';
+ document.getElementById('dashboard-view').classList.remove('hidden');
+ document.getElementById('detail-page-view').classList.add('hidden');
+ document.getElementById('hero-section').classList.remove('hidden');
+ document.getElementById('home-collections').classList.remove('hidden');
+ const live=document.getElementById('live-tv-section');if(live)live.classList.remove('hidden');
+ const catalog=document.getElementById('catalog-page');if(catalog)catalog.classList.add('hidden');
+ document.getElementById('detail-related').classList.add('hidden');
+ if(update&&location.hash!=='#/anasayfa')history.pushState(null,'','#/anasayfa');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function openDetailPage(id,update=true){
+ const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
+ if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
+ document.getElementById('theme-body').style.backgroundColor='#050505';
+ document.getElementById('detail-backdrop').src=item.backdrop||item.image;
+ document.getElementById('detail-poster').src=item.image;
+ document.getElementById('detail-title').innerText=item.title;
+ document.getElementById('detail-category').innerText=item.category||item.genre||'';
+ document.getElementById('detail-rating').innerHTML='<i class="fa-solid fa-star"></i> '+(item.rating||'—')+' IMDb';
+ document.getElementById('detail-year').innerText=item.year||'';
+ document.getElementById('detail-duration').innerText=item.duration||'';
+ document.getElementById('detail-type-label').innerText=item.type==='tv'?'Dizi':'Film';
+ document.getElementById('detail-country').innerText=item.country||'Ülke bilgisi yok';
+ document.getElementById('detail-info-country').innerText=item.country||'—';
+ document.getElementById('detail-info-genre').innerText=item.category||item.genre||'—';
+ document.getElementById('detail-info-year').innerText=item.year||'—';
+ document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
+ document.getElementById('detail-director').innerText=item.director||'—';
+ document.getElementById('detail-score-row').innerHTML='<span class="detail-score-pill"><b>IMDb</b><strong>★ '+(item.rating||'—')+'</strong></span><span class="detail-score-pill"><b>TMDB</b><strong>'+(item.tmdbRating||'—')+'</strong></span><span class="detail-score-pill"><b>RT</b><strong>'+(item.rottenTomatoes||'—')+'</strong></span><span class="detail-score-pill"><b>Popcorn</b><strong>'+(item.popcornmeter||'—')+'</strong></span>';
+ updateDetailButtons(item.id);
+ document.getElementById('detail-cast-list').innerHTML=(item.cast||[]).map(n=>'<div class="detail-cast-person"><span><i class="fa-solid fa-user"></i></span><b>'+n+'</b></div>').join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
+ document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
+ document.getElementById('detail-trailer-btn').onclick=()=>item.trailerUrl?window.open(item.trailerUrl,'_blank','noopener'):window.alert('Fragman bağlantısı bulunmuyor.');
+ const related=mediaDatabase.filter(m=>m.id!==item.id&&(m.type===item.type||m.genre===item.genre)).sort((x,y)=>Number(y.rating||0)-Number(x.rating||0)).slice(0,10);
+ document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3><p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
+ document.getElementById('dashboard-view').classList.add('hidden');
+ document.getElementById('detail-page-view').classList.remove('hidden');
+ document.getElementById('detail-related').classList.remove('hidden');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+window.addEventListener('hashchange',routeFromHash);
+window.addEventListener('popstate',routeFromHash);
 
 // Oynatıcı arayüzü kontrolleri
 function launchPlayer(title) {
@@ -355,6 +370,7 @@ function launchPlayer(title) {
                 renderHomeCollections();
                 renderMediaGrid();
                 renderLiveTv();
+                if(location.hash)routeFromHash();
             } catch (error) {
                 console.error('Katalog yükleme hatası:', error);
                 const grid = document.getElementById('media-grid');
