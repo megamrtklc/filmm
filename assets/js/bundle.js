@@ -207,7 +207,8 @@ let activeCatalogGenre = 'all';
 
         function filterGenre(genre) {
             activeCatalogGenre = genre;
-            renderFilteredCatalog();
+            showCatalogView(genre==='all'?'Tüm Kategoriler':genre);
+            activeCatalogType='all'; renderFilteredCatalog();
             document.querySelectorAll('.genre-pill').forEach(button => {
                 const selected = button.getAttribute('onclick') === `filterGenre('${genre}')`;
                 button.classList.toggle('bg-brand-red', selected);
@@ -229,25 +230,22 @@ let activeCatalogGenre = 'all';
                 button.classList.toggle('text-slate-400', !selected);
             });
         }
+        function showCatalogView(title) {
+            document.getElementById('hero-section').classList.add('hidden');
+            document.getElementById('home-collections').classList.add('hidden');
+            const live = document.getElementById('live-tv-section'); if (live) live.classList.add('hidden');
+            document.getElementById('catalog-page').classList.remove('hidden');
+            document.getElementById('catalog-heading').innerText = title;
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
         function switchTab(tab) {
-            showDashboard();
-            const heading = document.getElementById('catalog-heading');
-            if (tab === 'movie') {
-                heading.innerText = 'Filmler';
-                renderMediaGrid(mediaDatabase.filter(m => m.type === 'movie'));
-            } else if (tab === 'tv') {
-                heading.innerText = 'Diziler';
-                renderMediaGrid(mediaDatabase.filter(m => m.type === 'tv'));
-            } else if (tab === 'favorites') {
-                heading.innerText = 'Favorilerim';
-                renderMediaGrid(mediaDatabase.filter(m => favorites.includes(m.id)));
-            } else if (tab === 'watchlist') {
-                heading.innerText = 'İzleme Listem';
-                renderMediaGrid(mediaDatabase.filter(m => watchlist.includes(m.id)));
-            } else {
-                heading.innerText = 'Tüm İçerik Kataloğu (30+ Yapım)';
-                renderMediaGrid(mediaDatabase);
-            }
+            closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery='';
+            document.getElementById('search-input').value='';
+            activeCatalogType = tab==='movie'?'movie':tab==='tv'?'tv':'all';
+            const title = tab==='movie'?'Filmler':tab==='tv'?'Diziler':tab==='watchlist'?'İzleme Listem':'Keşfet';
+            showCatalogView(title);
+            const items = tab==='watchlist' ? mediaDatabase.filter(m=>watchlist.includes(m.id)||watchlist.includes(String(m.id))) : mediaDatabase.filter(m=>activeCatalogType==='all'||m.type===activeCatalogType);
+            renderMediaGrid(items);
         }
 document.getElementById('search-input').addEventListener('input', function(e) {
             activeCatalogQuery = e.target.value || '';
