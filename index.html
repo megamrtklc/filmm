@@ -65,12 +65,35 @@
         }
         .live-dot { animation: livePulse 1.8s infinite; }
         #theme-body { transition: background-color 0.8s ease-in-out; }
+
+        .site-header{position:absolute;inset:0 0 auto;height:104px;padding:0 4.5rem;background:linear-gradient(180deg,rgba(0,0,0,.82),transparent);border:0;backdrop-filter:none;z-index:40}
+        .hero-section{min-height:max(760px,100svh);align-items:flex-start;padding:150px 4.5rem 205px;border:0;isolation:isolate}
+        .hero-section #hero-bg{object-position:center 28%;transform:scale(1.015);transition:opacity .45s ease,transform 8s ease}
+        .hero-section.is-changing #hero-bg{opacity:.35;transform:scale(1.06)}
+        .hero-section .hero-vignette{background:linear-gradient(90deg,rgba(0,0,0,.96),rgba(0,0,0,.78) 34%,rgba(0,0,0,.25) 72%),linear-gradient(0deg,#08090c,rgba(8,9,12,.72) 16%,transparent 58%),linear-gradient(180deg,rgba(0,0,0,.42),transparent 28%)}
+        .hero-copy{max-width:590px;margin-top:clamp(45px,9vh,115px)}
+        .hero-copy h1{max-width:720px;font-size:clamp(2.7rem,6vw,5.7rem);letter-spacing:-.055em}
+        .hero-thumbnails{position:absolute;z-index:20;left:4.5rem;right:4.5rem;bottom:30px;display:flex;align-items:flex-end;gap:13px;overflow-x:auto;padding:18px 5px 12px;scroll-snap-type:x mandatory}
+        .hero-thumb{position:relative;flex:0 0 112px;height:158px;overflow:hidden;border-radius:9px;border:1px solid rgba(255,255,255,.16);background:#151515;cursor:pointer;opacity:.76;transform:translateY(0) scale(.96);transition:transform .28s ease,opacity .28s ease,border-color .28s ease,box-shadow .28s ease;scroll-snap-align:start}
+        .hero-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+        .hero-thumb:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.92))}
+        .hero-thumb span{position:absolute;z-index:2;left:9px;right:8px;bottom:9px;color:#fff;font-size:10px;line-height:1.25;font-weight:800;text-shadow:0 1px 5px #000}
+        .hero-thumb:hover,.hero-thumb.active{opacity:1;transform:translateY(-10px) scale(1.04);border-color:#fcc014;box-shadow:0 12px 30px rgba(0,0,0,.55)}
+        .hero-thumb:hover img,.hero-thumb.active img{transform:scale(1.08)}
+        .hero-thumb.active:before{content:"";position:absolute;z-index:3;top:0;left:0;right:0;height:3px;background:#fcc014}
+        .hero-arrows{position:absolute;z-index:22;right:4.5rem;bottom:88px;display:flex;gap:9px}
+        .hero-arrow{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.45);color:white;transition:.2s}
+        .hero-arrow:hover{background:#fcc014;color:#08090c;border-color:#fcc014}
+        .hero-kicker{color:#fcc014;font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
+        @media(max-width:767px){.site-header{height:78px;padding:0 18px}.site-header nav{display:none!important}.site-header .search-wrap{display:block!important;width:38px}.site-header #search-input{display:none}.hero-section{min-height:790px;padding:112px 22px 215px}.hero-copy{margin-top:55px}.hero-copy h1{font-size:clamp(2.5rem,12vw,4.2rem)}.hero-thumbnails{left:16px;right:16px;bottom:24px;gap:10px}.hero-thumb{flex-basis:94px;height:134px}.hero-arrows{right:20px;bottom:178px}}
+        @media(prefers-reduced-motion:reduce){.hero-thumb,.hero-thumb img,#hero-bg{transition:none!important}}
+
     </style>
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
     <!-- ÜST NAVİGASYON -->
-    <header class="h-20 bg-black/70 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40 px-6 lg:px-12 flex items-center justify-between">
+    <header class="site-header flex items-center justify-between">
         <div class="flex items-center gap-10">
             <div onclick="showDashboard('#0b0c10')" class="flex items-center gap-2 cursor-pointer group">
                 <div class="bg-gradient-to-r from-red-600 to-brand-red px-3.5 py-1.5 rounded-xl shadow-lg shadow-red-600/30 font-black tracking-tighter text-xl text-white flex items-center gap-1">
@@ -94,7 +117,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <div class="relative hidden sm:block w-52 lg:w-72">
+            <div class="search-wrap relative hidden sm:block w-52 lg:w-72">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input id="search-input" type="text" placeholder="30+ film ve dizi arasında ara..." 
                        class="w-full bg-slate-900/90 border border-white/10 focus:border-brand-yellow text-slate-200 placeholder-slate-400 text-xs rounded-full py-2 pl-9 pr-4 outline-none transition-all">
@@ -110,14 +133,15 @@
     <!-- DASHBOARD VIEW -->
     <div id="dashboard-view" class="flex-1 flex flex-col transition-opacity duration-300">
         <!-- HERO SPOTLIGHT -->
-        <section class="relative min-h-[640px] flex items-center px-6 lg:px-16 overflow-hidden border-b border-white/5">
+        <section id="hero-section" class="hero-section relative min-h-[640px] flex items-center overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <img id="hero-bg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1920&q=80" 
                      alt="Hero Cover" class="w-full h-full object-cover object-top scale-100 transition-all duration-700">
                 <div class="absolute inset-0 hero-vignette"></div>
             </div>
 
-            <div class="relative z-10 max-w-2xl space-y-4 my-12">
+            <div class="hero-copy relative z-10 max-w-2xl space-y-4 my-12">
+                <div class="hero-kicker">Öne Çıkan Yapım</div>
                 <div class="flex items-center gap-2 text-brand-yellow text-sm font-bold">
                     <div class="flex gap-1 text-xs">
                         <i class="fa-solid fa-star"></i>
@@ -153,8 +177,10 @@
                 </div>
             </div>
 
-            <div class="absolute bottom-6 right-6 lg:right-12 z-20 max-w-xl hidden md:flex items-center gap-3 overflow-x-auto p-2 no-scrollbar">
-                <div id="hero-thumbnails-rail" class="flex gap-3"></div>
+            <div id="hero-thumbnails-rail" class="hero-thumbnails no-scrollbar" aria-label="Son eklenen içerikler"></div>
+            <div class="hero-arrows">
+                <button class="hero-arrow" type="button" aria-label="Önceki içerik" onclick="stepHero(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="hero-arrow" type="button" aria-label="Sonraki içerik" onclick="stepHero(1)"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </section>
 
@@ -421,29 +447,41 @@
             watchBtn.onclick = (e) => toggleWatchlist(id, e);
         }
 
-        function setHeroMedia(id) {
+        const heroItems = [...mediaDatabase].sort((a,b) => Number(b.year)-Number(a.year)).slice(0,10);
+        let heroIndex = 0;
+        let heroTimer = null;
+        function setHeroMedia(id, userAction = false) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
-            heroCurrentId = item.id;
-            heroCurrentTitle = item.title;
-
-            document.getElementById('hero-bg').src = item.image;
+            const idx = heroItems.findIndex(m => m.id === item.id);
+            if (idx >= 0) heroIndex = idx;
+            heroCurrentId = item.id; heroCurrentTitle = item.title;
+            const section = document.getElementById('hero-section');
+            const bg = document.getElementById('hero-bg');
+            section.classList.add('is-changing');
+            window.setTimeout(() => { bg.src = item.image; bg.alt = item.title; section.classList.remove('is-changing'); }, 150);
             document.getElementById('hero-title').innerText = item.title;
             document.getElementById('hero-rating-count').innerText = item.ratingCount;
-            document.getElementById('hero-meta').innerText = `${item.year} - ${item.category} | Yönetmen: ${item.director}`;
+            document.getElementById('hero-meta').innerText = `${item.year} • ${item.category} • Yönetmen: ${item.director}`;
             document.getElementById('hero-desc').innerText = item.desc;
-
-            document.getElementById('theme-body').style.backgroundColor = item.themeColor;
+            document.querySelectorAll('.hero-thumb').forEach((el,i) => {
+                const active = heroItems[i]?.id === item.id;
+                el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
+            });
+            if (userAction) restartHeroTimer();
         }
-
         function renderHeroThumbnails() {
-            const rail = document.getElementById('hero-thumbnails-rail');
-            rail.innerHTML = mediaDatabase.slice(0, 10).map(m => `
-                <div onclick="setHeroMedia(${m.id})" class="w-28 h-36 rounded-xl overflow-hidden border border-white/20 cursor-pointer relative shrink-0 group hover:scale-105 transition-all shadow-xl">
-                    <img src="${m.image}" alt="${m.title}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                    <span class="absolute bottom-2 left-2 text-[10px] font-bold text-white truncate drop-shadow-md">${m.title}</span>
-                </div>
-            `).join('');
+            document.getElementById('hero-thumbnails-rail').innerHTML = heroItems.map((m,i) => `
+                <button type="button" onclick="setHeroMedia(${m.id},true)" onmouseenter="setHeroMedia(${m.id},true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
+                    <img src="${m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>
+                </button>`).join('');
+        }
+        function stepHero(direction) {
+            heroIndex=(heroIndex+direction+heroItems.length)%heroItems.length;
+            setHeroMedia(heroItems[heroIndex].id,true);
+        }
+        function restartHeroTimer() {
+            if(heroTimer) clearInterval(heroTimer);
+            heroTimer=setInterval(()=>{if(!document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},6500);
         }
 
         function renderMediaGrid(items = mediaDatabase) {
