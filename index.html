@@ -41,15 +41,34 @@
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
-    <!-- ÜST NAVİGASYON -->
+    <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
     <header class="site-header">
-        <div class="header-brand" onclick="showDashboard('#0b0c10')" role="button" tabindex="0" aria-label="Ana sayfa"><span class="brand-mark"><b>NY</b><strong>7</strong><small>TV</small></span></div>
+        <div class="header-topline">
+            <a class="header-brand" href="#" onclick="showDashboard();return false;" aria-label="NY7 TV ana sayfa">
+                <span class="brand-mark"><b>NY</b><strong>7</strong><small>TV</small></span>
+            </a>
+            <div class="header-actions">
+                <label class="search-wrap glass-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara">
+                </label>
+                <div class="nav-dropdown user-dropdown" id="user-menu">
+                    <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false">
+                        <i class="fa-regular fa-circle-user"></i><span>Hesabım</span><i class="fa-solid fa-chevron-down user-chevron"></i>
+                    </button>
+                    <div class="nav-menu user-menu-panel">
+                        <button onclick="showProfileNotice();closeHeaderMenus()"><i class="fa-regular fa-user"></i> Profilim</button>
+                        <button onclick="showSettingsNotice();closeHeaderMenus()"><i class="fa-solid fa-gear"></i> Ayarlar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <nav class="main-nav" aria-label="Ana menü">
-            <a href="#" onclick="showDashboard('#0b0c10');return false;">Anasayfa</a>
-            <a href="#" onclick="switchTab('movie');return false;">Filmler</a>
-            <a href="#" onclick="switchTab('tv');return false;">Diziler</a>
-            <a href="#" onclick="switchTab('all');return false;">Keşfet</a>
-            <a href="#" onclick="switchTab('watchlist');return false;">Listem</a>
+            <a class="nav-home" href="#" onclick="showDashboard();return false;"><i class="fa-solid fa-house"></i> Anasayfa</a>
+            <a href="#" onclick="switchTab('movie');return false;"><i class="fa-solid fa-film"></i> Filmler</a>
+            <a href="#" onclick="switchTab('tv');return false;"><i class="fa-solid fa-tv"></i> Diziler</a>
+            <a href="#" onclick="switchTab('all');return false;"><i class="fa-solid fa-compass"></i> Keşfet</a>
+            <a href="#" onclick="switchTab('watchlist');return false;"><i class="fa-solid fa-bookmark"></i> Listem</a>
             <div class="nav-dropdown" id="categories-menu">
                 <button type="button" class="nav-trigger" onclick="toggleHeaderMenu('categories-menu')" aria-expanded="false"><i class="fa-solid fa-layer-group"></i> Kategoriler <i class="fa-solid fa-chevron-down nav-chevron"></i></button>
                 <div class="nav-menu category-menu">
@@ -66,16 +85,6 @@
                 </div>
             </div>
         </nav>
-        <div class="header-actions">
-            <label class="search-wrap glass-search"><i class="fa-solid fa-magnifying-glass"></i><input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara"><kbd>⌕</kbd></label>
-            <div class="nav-dropdown user-dropdown" id="user-menu">
-                <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false"><i class="fa-regular fa-circle-user"></i><i class="fa-solid fa-chevron-up user-chevron"></i><i class="fa-solid fa-chevron-down user-chevron"></i></button>
-                <div class="nav-menu user-menu-panel">
-                    <button onclick="showProfileNotice();closeHeaderMenus()"><i class="fa-regular fa-user"></i> Profilim</button>
-                    <button onclick="showSettingsNotice();closeHeaderMenus()"><i class="fa-solid fa-gear"></i> Ayarlar</button>
-                </div>
-            </div>
-        </div>
     </header>
 
     <!-- DASHBOARD VIEW -->
