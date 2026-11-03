@@ -54,8 +54,17 @@ function setHeroMedia(id, userAction = false) {
             section.classList.add('is-changing');
             window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); }, 150);
             document.getElementById('hero-title').innerText = item.title;
-            document.getElementById('hero-rating-count').innerText = item.ratingCount;
-            document.getElementById('hero-meta').innerText = `${item.year} • ${item.category} • Yönetmen: ${item.director}`;
+            const ratings = document.getElementById('hero-ratings');
+            const ratingValue = value => value !== undefined && value !== null && String(value).trim() !== '' ? value : '—';
+            ratings.innerHTML = `
+                <span class="hero-rating-badge imdb"><b>IMDb</b><strong>${ratingValue(item.rating)}</strong></span>
+                <span class="hero-rating-badge tmdb"><b class="tmdb-mark">TMDB</b><strong>${ratingValue(item.tmdbRating)}</strong></span>
+                <span class="hero-rating-badge tomato"><b class="tomato-mark">🍅 RT</b><strong>${ratingValue(item.rottenTomatoes)}</strong></span>
+                <span class="hero-rating-badge popcorn"><b class="popcorn-mark">🍿</b><strong>${ratingValue(item.popcornmeter)}</strong></span>`;
+            const runtime = item.type === 'tv'
+                ? [item.seasons ? `${item.seasons} sezon` : '', item.episodes ? `${item.episodes} bölüm` : '', item.duration || ''].filter(Boolean).join(' • ')
+                : (item.duration || '');
+            document.getElementById('hero-meta').innerText = [item.year, item.type === 'tv' ? 'Dizi' : 'Film', runtime, item.category].filter(Boolean).join(' • ');
             document.getElementById('hero-desc').innerText = item.desc;
             document.querySelectorAll('.hero-thumb').forEach((el,i) => {
                 const active = heroItems[i]?.id === item.id;
