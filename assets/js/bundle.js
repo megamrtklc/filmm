@@ -194,12 +194,27 @@ let activeCatalogGenre = 'all';
 
         
 const countryAliases={
-'Spain':['İspanya','🇪🇸'],'France':['Fransa','🇫🇷'],'Germany':['Almanya','🇩🇪'],'United States of America':['ABD','🇺🇸'],'United States':['ABD','🇺🇸'],'United Kingdom':['Birleşik Krallık','🇬🇧'],'UK':['Birleşik Krallık','🇬🇧'],'Italy':['İtalya','🇮🇹'],'Turkey':['Türkiye','🇹🇷'],'Türkiye':['Türkiye','🇹🇷'],'Canada':['Kanada','🇨🇦'],'Australia':['Avustralya','🇦🇺'],'Japan':['Japonya','🇯🇵'],'South Korea':['Güney Kore','🇰🇷'],'China':['Çin','🇨🇳'],'India':['Hindistan','🇮🇳'],'Russia':['Rusya','🇷🇺'],'Brazil':['Brezilya','🇧🇷'],'Mexico':['Meksika','🇲🇽'],'Argentina':['Arjantin','🇦🇷'],'Portugal':['Portekiz','🇵🇹'],'Netherlands':['Hollanda','🇳🇱'],'Belgium':['Belçika','🇧🇪'],'Switzerland':['İsviçre','🇨🇭'],'Sweden':['İsveç','🇸🇪'],'Norway':['Norveç','🇳🇴'],'Denmark':['Danimarka','🇩🇰'],'Finland':['Finlandiya','🇫🇮'],'Ireland':['İrlanda','🇮🇪'],'Poland':['Polonya','🇵🇱'],'Greece':['Yunanistan','🇬🇷'],'Ukraine':['Ukrayna','🇺🇦'],'New Zealand':['Yeni Zelanda','🇳🇿'],'South Africa':['Güney Afrika','🇿🇦'],'Egypt':['Mısır','🇪🇬'],'Morocco':['Fas','🇲🇦'],'Lebanon':['Lübnan','🇱🇧'],'Kuwait':['Kuveyt','🇰🇼'],'Libyan Arab Jamahiriya':['Libya','🇱🇾'],'United Arab Emirates':['BAE','🇦🇪'],'Czech Republic':['Çekya','🇨🇿'],'Romania':['Romanya','🇷🇴'],'Iceland':['İzlanda','🇮🇸'],'Thailand':['Tayland','🇹🇭'],'Indonesia':['Endonezya','🇮🇩'],'Colombia':['Kolombiya','🇨🇴'],'Chile':['Şili','🇨🇱'],'Peru':['Peru','🇵🇪'],'Serbia':['Sırbistan','🇷🇸'],'Croatia':['Hırvatistan','🇭🇷'],'Hungary':['Macaristan','🇭🇺'],'Bulgaria':['Bulgaristan','🇧🇬'],'Luxembourg':['Lüksemburg','🇱🇺']
+'Spain':['İspanya','🇪🇸'],'France':['Fransa','🇫🇷'],'Germany':['Almanya','🇩🇪'],
+'United States of America':['ABD','🇺🇸'],'United States':['ABD','🇺🇸'],'USA':['ABD','🇺🇸'],'U.S.A.':['ABD','🇺🇸'],'US':['ABD','🇺🇸'],
+'United Kingdom':['Birleşik Krallık','🇬🇧'],'Great Britain':['Büyük Britanya','🇬🇧'],'UK':['Birleşik Krallık','🇬🇧'],'U.K.':['Birleşik Krallık','🇬🇧'],
+'England':['İngiltere','🏴'],'Scotland':['İskoçya','🏴'],'Wales':['Galler','🏴'],
+'Italy':['İtalya','🇮🇹'],'Turkey':['Türkiye','🇹🇷'],'Türkiye':['Türkiye','🇹🇷'],'Canada':['Kanada','🇨🇦'],'Australia':['Avustralya','🇦🇺'],'Japan':['Japonya','🇯🇵'],'South Korea':['Güney Kore','🇰🇷'],'China':['Çin','🇨🇳'],'India':['Hindistan','🇮🇳'],'Russia':['Rusya','🇷🇺'],'Brazil':['Brezilya','🇧🇷'],'Mexico':['Meksika','🇲🇽'],'Argentina':['Arjantin','🇦🇷'],'Portugal':['Portekiz','🇵🇹'],'Netherlands':['Hollanda','🇳🇱'],'Belgium':['Belçika','🇧🇪'],'Switzerland':['İsviçre','🇨🇭'],'Sweden':['İsveç','🇸🇪'],'Norway':['Norveç','🇳🇴'],'Denmark':['Danimarka','🇩🇰'],'Finland':['Finlandiya','🇫🇮'],'Ireland':['İrlanda','🇮🇪'],'Poland':['Polonya','🇵🇱'],'Greece':['Yunanistan','🇬🇷'],'Ukraine':['Ukrayna','🇺🇦'],'New Zealand':['Yeni Zelanda','🇳🇿'],'South Africa':['Güney Afrika','🇿🇦'],'Egypt':['Mısır','🇪🇬'],'Morocco':['Fas','🇲🇦'],'Lebanon':['Lübnan','🇱🇧'],'Kuwait':['Kuveyt','🇰🇼'],'Libyan Arab Jamahiriya':['Libya','🇱🇾'],'United Arab Emirates':['Birleşik Arap Emirlikleri','🇦🇪'],'UAE':['BAE','🇦🇪'],'Czech Republic':['Çekya','🇨🇿'],'Romania':['Romanya','🇷🇴'],'Iceland':['İzlanda','🇮🇸'],'Thailand':['Tayland','🇹🇭'],'Indonesia':['Endonezya','🇮🇩'],'Colombia':['Kolombiya','🇨🇴'],'Chile':['Şili','🇨🇱'],'Peru':['Peru','🇵🇪'],'Serbia':['Sırbistan','🇷🇸'],'Croatia':['Hırvatistan','🇭🇷'],'Hungary':['Macaristan','🇭🇺'],'Bulgaria':['Bulgaristan','🇧🇬'],'Luxembourg':['Lüksemburg','🇱🇺']
 };
-function countryTokens(value){return String(value||'').split(/\\s*[,/]\\s*/).map(x=>x.trim()).filter(Boolean)}
+function countryTokens(value){return String(value||'').split(/\\s*[,/;|\\n]+\\s*/).map(x=>x.trim()).filter(Boolean)}
 function countryKey(value){return String(value||'').trim().toLocaleLowerCase('tr-TR').replace(/\\s+/g,' ')}
-function countryDisplay(value){const hit=countryAliases[value]||Object.entries(countryAliases).find(([k,v])=>v[0].toLocaleLowerCase('tr-TR')===String(value).toLocaleLowerCase('tr-TR'))?.[1];return hit?{name:hit[0],flag:hit[1]}:{name:value,flag:'🌐'};}
-function filterByCountry(country){activeCatalogCountry=countryKey(country);activeCatalogGenre='all';activeCatalogType='all';activeCatalogQuery='';document.getElementById('search-input').value='';showCatalogView(countryDisplay(country).name+' Yapımları');goRoute('#/ulke/'+encodeURIComponent(country));renderFilteredCatalog();}
+function countryDisplay(value){
+ const key=countryKey(value);
+ const entry=Object.entries(countryAliases).find(([name,info])=>countryKey(name)===key||countryKey(info[0])===key);
+ return entry?{name:entry[1][0],flag:entry[1][1]}:{name:String(value||'').trim(),flag:'🌐'};
+}
+function escapeCountryHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function filterByCountry(country,update=true){
+ activeCatalogCountry=countryKey(country);activeCatalogGenre='all';activeCatalogType='all';activeCatalogQuery='';
+ const search=document.getElementById('search-input');if(search)search.value='';
+ showCatalogView(countryDisplay(country).name+' Yapımları');
+ if(update)goRoute('#/ulke/'+encodeURIComponent(country));
+ renderFilteredCatalog();
+}
 document.addEventListener('click',function(event){const chip=event.target.closest('.detail-country-chip');if(chip)filterByCountry(chip.dataset.country);});
 
 function renderFilteredCatalog() {
@@ -279,7 +294,7 @@ function routeFromHash(){
  if(p[0]==='kesfet'){switchTab('all',false);return;}
  if(p[0]==='listem'){switchTab('watchlist',false);return;}
  if(p[0]==='kategori'){activeCatalogCountry='';filterGenre(p.slice(1).join('/')||'all',false);return;}
- if(p[0]==='ulke'){filterByCountry(p.slice(1).join('/'));return;}
+ if(p[0]==='ulke'){filterByCountry(p.slice(1).join('/'),false);return;}
  showDashboard(false);
 }
 function showDashboard(update=true){
@@ -308,8 +323,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-year').innerText=item.year||'';
  document.getElementById('detail-duration').innerText=item.duration||'';
  document.getElementById('detail-type-label').innerText=item.type==='tv'?'Dizi':'Film';
- document.getElementById('detail-country').innerText=item.country||'Ülke bilgisi yok';
- document.getElementById('detail-country-list').innerHTML=countryTokens(item.country).map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+country.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"><span class="flag">'+info.flag+'</span><span>'+info.name+'</span></button>';}).join('')||'<span>—</span>';
+ const countries=countryTokens(item.country);\n document.getElementById('detail-country').innerText=countries.map(country=>countryDisplay(country).name).join(', ')||'Ülke bilgisi yok';\n document.getElementById('detail-country-list').innerHTML=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'"><span class="flag">'+info.flag+'</span><span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('')||'<span>—</span>';
  document.getElementById('detail-info-genre').innerText=item.category||item.genre||'—';
  document.getElementById('detail-info-year').innerText=item.year||'—';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
