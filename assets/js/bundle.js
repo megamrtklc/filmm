@@ -93,7 +93,7 @@ function renderMediaGrid(items = mediaDatabase) {
                 return `
                 <div onclick="openDetailPage('${m.id}')" class="movie-card group cursor-pointer" style="--theme-glow: ${m.themeColor}">
                     <div class="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-slate-900 shadow-xl">
-                        <img src="${m.image}" alt="${m.title}" class="w-full h-full object-cover">
+                        <img src="${m.image}" alt="${m.title}" loading="lazy" decoding="async" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
                         
                         <div class="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center z-10">
