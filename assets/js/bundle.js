@@ -322,7 +322,7 @@ function renderCastPage(){
  const firstPage=currentCastNames.slice(0,6);
  const secondPage=currentCastNames.slice(6,15);
  const visible=activeCastPage===0?firstPage:secondPage;
- list.innerHTML=visible.map(n=>{const safe=escapeCastHtml(n);return '<button type="button" class="detail-cast-person" onclick="openActorPage(\''+safe.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')"><img data-cast-name="'+safe+'" src="https://ui-avatars.com/api/?name='+encodeURIComponent(n)+'&background=252936&color=ffffff&size=256&bold=true" alt="'+safe+'" loading="lazy"><b>'+safe+'</b><small>Karakter bilgisi katalogda yok</small></button>';}).join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
+ list.innerHTML=visible.map(n=>{const safe=escapeCastHtml(n);return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img data-cast-name="'+safe+'" src="https://ui-avatars.com/api/?name='+encodeURIComponent(n)+'&background=252936&color=ffffff&size=256&bold=true" alt="'+safe+'" loading="lazy"><b>'+safe+'</b><small>Karakter bilgisi katalogda yok</small></button>';}).join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
  controls.classList.toggle('hidden',currentCastNames.length<=6);
  label.textContent=activeCastPage===0?'1 / 2':'2 / 2';
  controls.querySelector('button:first-child').disabled=activeCastPage===0;
@@ -407,11 +407,29 @@ function openActorPage(name,update=true){
  document.getElementById('actor-filmography-title').textContent=actorName+' — '+works.length+' yapım';
  document.getElementById('actor-filmography-grid').innerHTML=works.map(m=>'<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span><b>'+escapeCastHtml(m.title)+'</b><small>'+escapeCastHtml(m.year||'')+' · '+(m.type==='tv'?'Dizi':'Film')+'</small></span></button>').join('')||'<p>Bu oyuncunun yer aldığı bir yapım henüz katalogda bulunmuyor.</p>';
  window.scrollTo({top:0,behavior:'smooth'});
- fetchActorSummary(actorName).then(data=>{
+ fetchActorSummary(actorName).then(async data=>{
   if(!document.getElementById('actor-page-view').classList.contains('hidden')&&document.getElementById('actor-profile-name').textContent===actorName){
    document.getElementById('actor-biography-text').textContent=data.extract||'Oyuncu hakkında biyografi bilgisi bulunamadı.';
    document.getElementById('actor-profile-image').src=data.thumbnail?.source||avatar;
    document.getElementById('actor-wikipedia-link').href=data.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(actorName.replace(/ /g,'_'));
+   try{
+    if(data.wikibase_item){
+     const entityResponse=await fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&ids='+encodeURIComponent(data.wikibase_item)+'&props=claims&format=json&origin=*');
+     const entityData=await entityResponse.json();
+     const claims=entityData.entities?.[data.wikibase_item]?.claims||{};
+     const birth=claims.P569?.[0]?.mainsnak?.datavalue?.value?.time;
+     const citizenship=claims.P27?.[0]?.mainsnak?.datavalue?.value?.id;
+     const birthName=claims.P1477?.[0]?.mainsnak?.datavalue?.value?.text;
+     if(birth)document.getElementById('actor-birth-date').textContent=birth.slice(1,11);
+     if(birthName)document.getElementById('actor-profile-name').textContent=birthName;
+     if(citizenship){
+      const countryResponse=await fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&ids='+encodeURIComponent(citizenship)+'&props=labels&languages=tr|en&format=json&origin=*');
+      const countryData=await countryResponse.json();
+      const countryEntity=countryData.entities?.[citizenship];
+      document.getElementById('actor-country').textContent=countryEntity?.labels?.tr?.value||countryEntity?.labels?.en?.value||'Bilgi bulunamadı';
+     }
+    }
+   }catch(e){}
   }
  }).catch(()=>{
   document.getElementById('actor-biography-text').textContent='Bu oyuncu için çevrimiçi biyografi bilgisi şu anda alınamadı. Filmografisi sitenin mevcut kataloğundan listelenmiştir.';
@@ -419,6 +437,10 @@ function openActorPage(name,update=true){
  });
 }
 window.openActorPage=openActorPage;
+document.addEventListener('click',function(event){
+ const actorCard=event.target.closest('[data-actor-name]');
+ if(actorCard){openActorPage(actorCard.getAttribute('data-actor-name'));return;}
+});
 
 window.addEventListener('hashchange',routeFromHash);
 
