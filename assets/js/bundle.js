@@ -289,6 +289,7 @@ function routeFromHash(){
  const p=decodeURIComponent(location.hash.replace(/^#\/?/,'' )).split('/');
  if(!p[0]||p[0]==='anasayfa'){showDashboard(false);return;}
  if(p[0]==='film'||p[0]==='dizi'){openDetailPage(p.slice(1).join('/'),false);return;}
+ if(p[0]==='oyuncu'){openActorPage(p.slice(1).join('/'),false);return;}
  if(p[0]==='filmler'){switchTab('movie',false);return;}
  if(p[0]==='diziler'){switchTab('tv',false);return;}
  if(p[0]==='kesfet'){switchTab('all',false);return;}
@@ -301,6 +302,7 @@ function showDashboard(update=true){
  document.getElementById('theme-body').style.backgroundColor='#0b0c10';
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');
+ document.getElementById('actor-page-view').classList.add('hidden');
  document.getElementById('hero-section').classList.remove('hidden');
  document.getElementById('home-collections').classList.remove('hidden');
  const live=document.getElementById('live-tv-section');if(live)live.classList.remove('hidden');
@@ -320,7 +322,7 @@ function renderCastPage(){
  const firstPage=currentCastNames.slice(0,6);
  const secondPage=currentCastNames.slice(6,15);
  const visible=activeCastPage===0?firstPage:secondPage;
- list.innerHTML=visible.map(n=>{const safe=escapeCastHtml(n);return '<div class="detail-cast-person"><img data-cast-name="'+safe+'" src="https://ui-avatars.com/api/?name='+encodeURIComponent(n)+'&background=252936&color=ffffff&size=256&bold=true" alt="'+safe+'" loading="lazy"><b>'+safe+'</b></div>';}).join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
+ list.innerHTML=visible.map(n=>{const safe=escapeCastHtml(n);return '<button type="button" class="detail-cast-person" onclick="openActorPage(\''+safe.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')"><img data-cast-name="'+safe+'" src="https://ui-avatars.com/api/?name='+encodeURIComponent(n)+'&background=252936&color=ffffff&size=256&bold=true" alt="'+safe+'" loading="lazy"><b>'+safe+'</b><small>Karakter bilgisi katalogda yok</small></button>';}).join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
  controls.classList.toggle('hidden',currentCastNames.length<=6);
  label.textContent=activeCastPage===0?'1 / 2':'2 / 2';
  controls.querySelector('button:first-child').disabled=activeCastPage===0;
@@ -333,7 +335,22 @@ function changeCastPage(direction){
  activeCastPage=direction>0?1:0;
  renderCastPage();
 }
-async function loadCastPortraits(){const imgs=[...document.querySelectorAll('#detail-cast-list img[data-cast-name]')];await Promise.all(imgs.map(async img=>{const name=img.dataset.castName;try{const url='https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&gsrnamespace=0&prop=pageimages&piprop=thumbnail&pithumbsize=320&format=json&origin=*';const response=await fetch(url);const data=await response.json();const page=Object.values(data.query?.pages||{})[0];if(page?.thumbnail?.source)img.src=page.thumbnail.source;}catch(e){}}));}
+async function fetchActorSummary(name){
+ const url='https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(name.replace(/ /g,'_'));
+ const response=await fetch(url,{headers:{'Accept':'application/json'}});
+ if(!response.ok)throw new Error('Oyuncu profili bulunamadı');
+ const data=await response.json();
+ if(data.type==='disambiguation')throw new Error('Birden fazla eşleşme');
+ return data;
+}
+async function loadCastPortraits(){
+ const imgs=[...document.querySelectorAll('#detail-cast-list img[data-cast-name]')];
+ await Promise.all(imgs.map(async img=>{
+  const name=img.dataset.castName;
+  try{const data=await fetchActorSummary(name);if(data.thumbnail?.source)img.src=data.thumbnail.source;}
+  catch(e){img.classList.add('cast-photo-fallback');}
+ }));
+}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -361,10 +378,48 @@ function openDetailPage(id,update=true){
  const related=mediaDatabase.filter(m=>m.id!==item.id&&(m.type===item.type||m.genre===item.genre)).sort((x,y)=>Number(y.rating||0)-Number(x.rating||0)).slice(0,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3><p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  document.getElementById('dashboard-view').classList.add('hidden');
+ document.getElementById('actor-page-view').classList.add('hidden');
  document.getElementById('detail-page-view').classList.remove('hidden');
  document.getElementById('detail-related').classList.remove('hidden');
  window.scrollTo({top:0,behavior:'smooth'});
 }
+
+function openActorPage(name,update=true){
+ const actorName=decodeURIComponent(String(name||'')).trim();
+ if(!actorName)return;
+ const actorKey=actorName.toLocaleLowerCase('tr-TR');
+ const works=mediaDatabase.filter(m=>(m.cast||[]).some(c=>String(c).toLocaleLowerCase('tr-TR')===actorKey));
+ if(update){const path='#/oyuncu/'+encodeURIComponent(actorName);if(location.hash!==path)history.pushState(null,'',path);}
+ document.getElementById('dashboard-view').classList.add('hidden');
+ document.getElementById('detail-page-view').classList.add('hidden');
+ document.getElementById('detail-related').classList.add('hidden');
+ document.getElementById('actor-page-view').classList.remove('hidden');
+ document.getElementById('theme-body').style.backgroundColor='#07080c';
+ document.getElementById('actor-profile-name').textContent=actorName;
+ document.getElementById('actor-biography-title').textContent=actorName;
+ document.getElementById('actor-biography-text').textContent='Oyuncu biyografisi yükleniyor…';
+ document.getElementById('actor-birth-date').textContent='Bilgi bulunamadı';
+ document.getElementById('actor-country').textContent='Bilgi bulunamadı';
+ const avatar='https://ui-avatars.com/api/?name='+encodeURIComponent(actorName)+'&background=252936&color=ffffff&size=512&bold=true';
+ document.getElementById('actor-profile-image').src=avatar;
+ const featured=works.slice().sort((a,b)=>Number(b.year||0)-Number(a.year||0)).slice(0,6);
+ document.getElementById('actor-featured-films').innerHTML=featured.map(m=>'<button type="button" class="actor-featured-poster" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span>'+escapeCastHtml(m.title)+'</span></button>').join('')||'<p>Bu oyuncu için katalogda yapım bulunamadı.</p>';
+ document.getElementById('actor-filmography-title').textContent=actorName+' — '+works.length+' yapım';
+ document.getElementById('actor-filmography-grid').innerHTML=works.map(m=>'<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span><b>'+escapeCastHtml(m.title)+'</b><small>'+escapeCastHtml(m.year||'')+' · '+(m.type==='tv'?'Dizi':'Film')+'</small></span></button>').join('')||'<p>Bu oyuncunun yer aldığı bir yapım henüz katalogda bulunmuyor.</p>';
+ window.scrollTo({top:0,behavior:'smooth'});
+ fetchActorSummary(actorName).then(data=>{
+  if(!document.getElementById('actor-page-view').classList.contains('hidden')&&document.getElementById('actor-profile-name').textContent===actorName){
+   document.getElementById('actor-biography-text').textContent=data.extract||'Oyuncu hakkında biyografi bilgisi bulunamadı.';
+   document.getElementById('actor-profile-image').src=data.thumbnail?.source||avatar;
+   document.getElementById('actor-wikipedia-link').href=data.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(actorName.replace(/ /g,'_'));
+  }
+ }).catch(()=>{
+  document.getElementById('actor-biography-text').textContent='Bu oyuncu için çevrimiçi biyografi bilgisi şu anda alınamadı. Filmografisi sitenin mevcut kataloğundan listelenmiştir.';
+  document.getElementById('actor-wikipedia-link').href='https://en.wikipedia.org/w/index.php?search='+encodeURIComponent(actorName);
+ });
+}
+window.openActorPage=openActorPage;
+
 window.addEventListener('hashchange',routeFromHash);
 
 window.addEventListener('popstate',routeFromHash);
