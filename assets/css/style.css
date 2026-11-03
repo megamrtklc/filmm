@@ -75,3 +75,11 @@
         .detail-info-card{background:#101010;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:22px}
         .detail-info-card h3{font-size:14px;font-weight:800;margin-bottom:15px}
         @media(max-width:700px){.detail-topbar{height:68px;padding:0 18px}.detail-visual{height:410px}.detail-overlap{margin-top:-105px;grid-template-columns:112px minmax(0,1fr);gap:15px}.detail-description-panel{padding:18px 0 24px}.detail-copy h1{font-size:25px}.detail-copy .detail-rating-row{gap:5px}.detail-subline{font-size:10px}.detail-lower{grid-template-columns:1fr;padding:16px 18px 0}.detail-poster-frame{border-radius:2px}.detail-actions{gap:8px;flex-wrap:wrap}}
+
+
+/* Mobil katalog filtreleri */
+.catalog-genre-scroller{scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-padding-inline:1rem}
+.catalog-genre-scroller::-webkit-scrollbar{display:none}
+.catalog-genre-scroller .genre-pill{min-height:40px;white-space:nowrap;scroll-snap-align:start;transition:background-color .18s,border-color .18s,color .18s}
+.catalog-type-filter button{min-height:38px;white-space:nowrap}
+@media(max-width:640px){.catalog-genre-scroller{margin-inline:-.25rem;padding-inline:.25rem;gap:.5rem}.catalog-type-filter{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-type-filter button{padding-inline:.55rem}}
