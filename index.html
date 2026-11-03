@@ -6,7 +6,7 @@
     <title>NY 7 TV - Film ve Dizi Platformu</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome 6 Icons -->
+    <!-- FontAwesome 6 for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,10 +38,12 @@
     </script>
 
     <style>
+        /* Özel Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
         ::-webkit-scrollbar-thumb { background: #232733; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #ff0f1b; }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -67,11 +69,11 @@
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
-    <!-- ÜST GEZİNTİ ÇUBUĞU (NAVBAR) -->
-    <header class="h-20 bg-black/50 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40 px-6 lg:px-12 flex items-center justify-between">
+    <!-- ÜST NAVİGASYON -->
+    <header class="h-20 bg-black/70 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40 px-6 lg:px-12 flex items-center justify-between">
         <div class="flex items-center gap-10">
             <div onclick="showDashboard('#0b0c10')" class="flex items-center gap-2 cursor-pointer group">
-                <div class="bg-gradient-to-r from-red-600 to-brand-red px-3 py-1.5 rounded-lg shadow-lg shadow-red-600/30 font-black tracking-tighter text-xl text-white flex items-center gap-1">
+                <div class="bg-gradient-to-r from-red-600 to-brand-red px-3.5 py-1.5 rounded-xl shadow-lg shadow-red-600/30 font-black tracking-tighter text-xl text-white flex items-center gap-1">
                     <span>NY</span>
                     <span class="bg-yellow-400 text-black px-1.5 py-0.5 rounded text-base font-extrabold">7</span>
                     <span class="text-xs uppercase font-bold tracking-widest text-white ml-0.5">TV</span>
@@ -92,9 +94,9 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <div class="relative hidden sm:block w-48 lg:w-64">
+            <div class="relative hidden sm:block w-52 lg:w-72">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="search-input" type="text" placeholder="Film veya dizi ara..." 
+                <input id="search-input" type="text" placeholder="30+ film ve dizi arasında ara..." 
                        class="w-full bg-slate-900/90 border border-white/10 focus:border-brand-yellow text-slate-200 placeholder-slate-400 text-xs rounded-full py-2 pl-9 pr-4 outline-none transition-all">
             </div>
 
@@ -105,9 +107,9 @@
         </div>
     </header>
 
-    <!-- ANA SAYFA GÖRÜNÜMÜ -->
+    <!-- DASHBOARD VIEW -->
     <div id="dashboard-view" class="flex-1 flex flex-col transition-opacity duration-300">
-        <!-- MANŞET (HERO SPOTLIGHT) -->
+        <!-- HERO SPOTLIGHT -->
         <section class="relative min-h-[640px] flex items-center px-6 lg:px-16 overflow-hidden border-b border-white/5">
             <div class="absolute inset-0 z-0">
                 <img id="hero-bg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1920&q=80" 
@@ -144,6 +146,7 @@
                         <i class="fa-solid fa-play text-xs"></i>
                         <span>Şimdi İzle</span>
                     </button>
+
                     <button onclick="openDetailPage(heroCurrentId)" class="px-7 py-3 rounded-full bg-black/40 hover:bg-white/10 text-white font-bold text-xs border border-white/30 backdrop-blur-md transition-all">
                         <span>Fragman</span>
                     </button>
@@ -155,7 +158,7 @@
             </div>
         </section>
 
-        <!-- İÇERİK KATALOĞU -->
+        <!-- KATALOG VE FİLTRELER -->
         <main class="p-6 lg:p-12 space-y-10">
             <!-- TÜR FİLTRELERİ -->
             <div class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
@@ -166,6 +169,9 @@
                 <button onclick="filterGenre('Gerilim')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Gerilim</button>
                 <button onclick="filterGenre('Fantastik')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Fantastik</button>
                 <button onclick="filterGenre('Suç')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Suç</button>
+                <button onclick="filterGenre('Animasyon')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Animasyon</button>
+                <button onclick="filterGenre('Macera')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Macera</button>
+                <button onclick="filterGenre('Gizem')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Gizem</button>
             </div>
 
             <!-- FİLM IZGARASI -->
@@ -173,8 +179,9 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
                     <h2 id="section-title" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
                         <span class="w-2.5 h-6 rounded-sm bg-brand-red inline-block"></span>
-                        <span>Popüler Filmler ve Diziler</span>
+                        <span id="catalog-heading">Tüm İçerik Kataloğu (30+ Yapım)</span>
                     </h2>
+
                     <div class="flex items-center bg-slate-900/90 p-1 rounded-xl border border-white/10 text-xs font-semibold self-start sm:self-auto">
                         <button onclick="filterType('all')" class="px-4 py-1.5 rounded-lg bg-brand-red text-white font-bold transition-all">Tümü</button>
                         <button onclick="filterType('movie')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">Filmler</button>
@@ -193,21 +200,23 @@
                         <span>Canlı TV Kanalları</span>
                     </h2>
                 </div>
+
                 <div id="live-tv-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
             </section>
         </main>
     </div>
 
-    <!-- DİNAMİK RENKLİ DETAY SAYFASI GÖRÜNÜMÜ -->
+    <!-- RENKLİ DETAY SAYFASI GÖRÜNÜMÜ -->
     <div id="detail-page-view" class="hidden min-h-screen flex-1 flex-col transition-all duration-500 pb-20">
         <div class="px-8 py-4 flex items-center justify-between bg-black/40 backdrop-blur-md border-b border-white/10 sticky top-20 z-20">
             <button onclick="showDashboard()" class="flex items-center gap-2 text-xs font-bold text-white/90 hover:text-brand-yellow bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full border border-white/10 transition-all">
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Ana Sayfaya Dön</span>
             </button>
+
             <div class="flex items-center gap-2 text-xs text-slate-300 font-mono bg-black/60 px-3 py-1.5 rounded-full border border-white/10">
                 <span id="theme-color-dot" class="w-3 h-3 rounded-full"></span>
-                <span>Dinamik Arka Plan Rengi Senkronize Edildi</span>
+                <span>Dinamik Tema Rengi Senkronizasyonu</span>
             </div>
         </div>
 
@@ -218,11 +227,13 @@
 
                 <div class="relative z-10 flex flex-col md:flex-row items-end gap-8 w-full">
                     <img id="detail-poster" src="" alt="Poster" class="w-52 rounded-2xl border-2 border-white/20 shadow-2xl object-cover shrink-0 hidden sm:block">
+
                     <div class="space-y-4 flex-1">
                         <div class="flex items-center gap-2.5 flex-wrap">
                             <span id="detail-category" class="px-3 py-1 rounded-md bg-brand-yellow text-black font-black text-xs uppercase tracking-wider"></span>
                             <span id="detail-rating" class="px-2.5 py-1 rounded-md bg-black/80 text-amber-400 text-xs font-bold border border-amber-400/30"></span>
                             <span id="detail-year" class="text-xs font-semibold text-slate-300 bg-white/10 px-2.5 py-1 rounded-md"></span>
+                            <span id="detail-duration" class="text-xs font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-md"></span>
                         </div>
 
                         <h1 id="detail-title" class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-none"></h1>
@@ -258,6 +269,10 @@
                         <h4 class="text-xs font-bold text-brand-yellow uppercase tracking-wider">Yapım Bilgileri</h4>
                         <div class="space-y-2.5 text-slate-300">
                             <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-slate-500">Yönetmen</span>
+                                <span id="detail-director" class="font-bold text-white"></span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
                                 <span class="text-slate-500">Ses Seçenekleri</span>
                                 <span class="font-bold text-white">Türkçe, İngilizce</span>
                             </div>
@@ -276,7 +291,7 @@
         </div>
     </div>
 
-    <!-- TAM EKRAN VİDEO OYNATICI MODAL -->
+    <!-- OYNATICI MODAL -->
     <div id="player-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6">
         <div class="flex items-center justify-between text-white z-10">
             <div class="flex items-center gap-3">
@@ -319,7 +334,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT MANTIĞI VE VERİ SETİ -->
+    <!-- JAVASCRIPT MANTIĞI VE 32 ADET FİLM/DİZİ VERİTABANI -->
     <script>
         const mediaDatabase = [
             { id: 1, title: 'THE BATMAN', type: 'movie', category: 'Drama / Suç', genre: 'Suç', rating: '8.9', ratingCount: '(235)', year: '2022', duration: '2s 56d', themeColor: '#0b0f19', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'Gotham Şehri\'nin karanlık sularında adaleti arayan Batman, şehrin elitlerini hedef alan sadist bir katilin izini sürerken geçmişiyle ilgili sırlarla yüzleşir.', director: 'Matt Reeves', cast: ['Robert Pattinson', 'Zoë Kravitz', 'Paul Dano'] },
@@ -327,7 +342,33 @@
             { id: 3, title: 'SQUID GAME', type: 'tv', category: 'Gerilim / Drama', genre: 'Gerilim', rating: '8.7', ratingCount: '(890)', year: '2024', duration: 'Sezon 2', themeColor: '#25081c', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80', desc: 'Maddi sıkıntı içindeki yüzlerce oyuncu, ölümcül çocuk oyunlarında büyük ödül için yarışmayı kabul eder.', director: 'Hwang Dong-hyuk', cast: ['Lee Jung-jae', 'Lee Byung-hun', 'Wi Ha-jun'] },
             { id: 4, title: 'ROGUE ONE', type: 'movie', category: 'Bilim Kurgu / Aksiyon', genre: 'Bilim Kurgu', rating: '8.1', ratingCount: '(180)', year: '2023', duration: '2s 13d', themeColor: '#071f28', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80', desc: 'Bir grup kahraman, İmparatorluğun en büyük silahı olan Ölüm Yıldızı\'nın planlarını çalmak için tehlikeli bir göreve atılır.', director: 'Gareth Edwards', cast: ['Felicity Jones', 'Diego Luna', 'Alan Tudyk'] },
             { id: 5, title: 'PROMETHEUS', type: 'movie', category: 'Bilim Kurgu / Korku', genre: 'Bilim Kurgu', rating: '7.8', ratingCount: '(310)', year: '2021', duration: '2s 04d', themeColor: '#121b18', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80', desc: 'İnsanlığın kökenlerini arayan bir bilim ekibi, evrenin en karanlık köşesinde insan türünün geleceğini tehdit eden bir sırla karşılaşır.', director: 'Ridley Scott', cast: ['Noomi Rapace', 'Michael Fassbender', 'Charlize Theron'] },
-            { id: 6, title: 'ENDER\'S GAME', type: 'movie', category: 'Aksiyon / Bilim Kurgu', genre: 'Aksiyon', rating: '7.5', ratingCount: '(155)', year: '2022', duration: '1s 54d', themeColor: '#1a1005', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80', desc: 'Genç Ender Wiggin, insanlığı yok etmeye kararlı uzaylı ırkına karşı verilecek son savaşta ordunun lideri olarak eğitilir.', director: 'Gavin Hood', cast: ['Asa Butterfield', 'Harrison Ford', 'Hailee Steinfeld'] }
+            { id: 6, title: 'ENDER\'S GAME', type: 'movie', category: 'Aksiyon / Bilim Kurgu', genre: 'Aksiyon', rating: '7.5', ratingCount: '(155)', year: '2022', duration: '1s 54d', themeColor: '#1a1005', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80', desc: 'Genç Ender Wiggin, insanlığı yok etmeye kararlı uzaylı ırkına karşı verilecek son savaşta ordunun lideri olarak eğitilir.', director: 'Gavin Hood', cast: ['Asa Butterfield', 'Harrison Ford', 'Hailee Steinfeld'] },
+            { id: 7, title: 'INTERSTELLAR', type: 'movie', category: 'Bilim Kurgu / Macera', genre: 'Bilim Kurgu', rating: '8.7', ratingCount: '(1.2M)', year: '2014', duration: '2s 49d', themeColor: '#0a192f', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=80', desc: 'Dünya yaşanamaz hale geldiğinde bir grup astronot, insanlığın yeni evini bulmak için bir solucan deliğinden geçer.', director: 'Christopher Nolan', cast: ['Matthew McConaughey', 'Anne Hathaway', 'Jessica Chastain'] },
+            { id: 8, title: 'CYBERPUNK EDGE', type: 'tv', category: 'Animasyon / Bilim Kurgu', genre: 'Animasyon', rating: '8.4', ratingCount: '(95K)', year: '2023', duration: '1 Sezon', themeColor: '#1a0033', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80', desc: 'Teknoloji ve vücut modifikasyonu takıntılı bir geleceğin megakentinde hayatta kalmaya çalışan bir paralı askerin hikayesi.', director: 'Hiroyuki Imaishi', cast: ['AOI', 'KENN', 'Hiroki Touchi'] },
+            { id: 9, title: 'THE LAST OF US', type: 'tv', category: 'Drama / Macera', genre: 'Drama', rating: '8.8', ratingCount: '(450K)', year: '2023', duration: '2 Sezon', themeColor: '#1f1a0f', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80', desc: 'Salgınla yıkılmış bir dünyada Joel, 14 yaşındaki Ellie\'yi karantina bölgesinden kaçırmak üzere görevlendirilir.', director: 'Craig Mazin', cast: ['Pedro Pascal', 'Bella Ramsey', 'Gabriel Luna'] },
+            { id: 10, title: 'AVATAR: THE WAY OF WATER', type: 'movie', category: 'Fantastik / Macera', genre: 'Fantastik', rating: '7.6', ratingCount: '(420K)', year: '2022', duration: '3s 12d', themeColor: '#002b36', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', desc: 'Jake Sully ve Neytiri, Pandora\'nın okyanus bölgelerine kaçarak ailelerini korumak için yeni kabilelerle ittifak kurarlar.', director: 'James Cameron', cast: ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'] },
+            { id: 11, title: 'STRANGER THINGS', type: 'tv', category: 'Gizem / Bilim Kurgu', genre: 'Gizem', rating: '8.7', ratingCount: '(1.1M)', year: '2022', duration: '4 Sezon', themeColor: '#2b0000', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'Ufak bir kasabada kaybolan bir çocuğun ardından gizemli deneyler ve doğaüstü güçler ortaya çıkar.', director: 'Duffer Brothers', cast: ['Millie Bobby Brown', 'Finn Wolfhard', 'Winona Ryder'] },
+            { id: 12, title: 'BLADE RUNNER 2049', type: 'movie', category: 'Bilim Kurgu / Drama', genre: 'Bilim Kurgu', rating: '8.0', ratingCount: '(600K)', year: '2017', duration: '2s 44d', themeColor: '#120024', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80', desc: 'Genç bir replikant avcısı, toplumun kalanını kaosa sürükleyebilecek uzun süredir saklanan bir sırrı açığa çıkarır.', director: 'Denis Villeneuve', cast: ['Ryan Gosling', 'Harrison Ford', 'Ana de Armas'] },
+            { id: 13, title: 'TOP GUN: MAVERICK', type: 'movie', category: 'Aksiyon / Drama', genre: 'Aksiyon', rating: '8.3', ratingCount: '(680K)', year: '2022', duration: '2s 11d', themeColor: '#2a1a08', image: 'https://images.unsplash.com/photo-1519074069444-1ba4eae16748?auto=format&fit=crop&w=1200&q=80', desc: '30 yılı aşkın hizmetten sonra Maverick, özel bir görev için pilot müfrezesini eğitmek üzere göreve çağrılır.', director: 'Joseph Kosinski', cast: ['Tom Cruise', 'Miles Teller', 'Jennifer Connelly'] },
+            { id: 14, title: 'ARCANE', type: 'tv', category: 'Animasyon / Aksiyon', genre: 'Animasyon', rating: '9.0', ratingCount: '(280K)', year: '2024', duration: '2 Sezon', themeColor: '#002129', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80', desc: 'Ütopik Piltover ile yeraltı şehri Zaun arasındaki gerilimin ortasında iki kız kardeş karşı karşıya gelir.', director: 'Pascal Charrue', cast: ['Hailee Steinfeld', 'Ella Purnell', 'Kevin Alejandro'] },
+            { id: 15, title: 'OPPENHEIMER', type: 'movie', category: 'Biyografi / Drama', genre: 'Drama', rating: '8.9', ratingCount: '(720K)', year: '2023', duration: '3s 00d', themeColor: '#1f0d00', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=80', desc: 'Fizikçi J. Robert Oppenheimer\'ın Manhattan Projesi kapsamındaki atom bombasının geliştirilme hikayesi.', director: 'Christopher Nolan', cast: ['Cillian Murphy', 'Emily Blunt', 'Matt Damon'] },
+            { id: 16, title: 'DUNES: PART TWO', type: 'movie', category: 'Bilim Kurgu / Macera', genre: 'Macera', rating: '8.6', ratingCount: '(510K)', year: '2024', duration: '2s 46d', themeColor: '#211300', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'Paul Atreides, ailesini yok eden komploculara karşı intikam almak için Chani ve Fremenlerle birleşir.', director: 'Denis Villeneuve', cast: ['Timothée Chalamet', 'Zendaya', 'Rebecca Ferguson'] },
+            { id: 17, title: 'THE MANDALORIAN', type: 'tv', category: 'Aksiyon / Macera', genre: 'Macera', rating: '8.7', ratingCount: '(560K)', year: '2023', duration: '3 Sezon', themeColor: '#0d1b2a', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80', desc: 'Galaksinin dış hatlarında yalnız bir ödül avcısı, beklenmedik bir hedefi koruma görevini üstlenir.', director: 'Jon Favreau', cast: ['Pedro Pascal', 'Carl Weathers', 'Giancarlo Esposito'] },
+            { id: 18, title: 'SPIDER-MAN: ACROSS THE SPIDER-VERSE', type: 'movie', category: 'Animasyon / Aksiyon', genre: 'Animasyon', rating: '8.7', ratingCount: '(380K)', year: '2023', duration: '2s 20d', themeColor: '#2b001a', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80', desc: 'Miles Morales, Çoklu Evren boyunca Spider-People ekibiyle karşılaşır ve kahramanlığın anlamını yeniden tanımlar.', director: 'Joaquim Dos Santos', cast: ['Shameik Moore', 'Hailee Steinfeld', 'Oscar Isaac'] },
+            { id: 19, title: 'SUCCESSION', type: 'tv', category: 'Drama', genre: 'Drama', rating: '8.9', ratingCount: '(310K)', year: '2023', duration: '4 Sezon', themeColor: '#141414', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', desc: 'Küresel medya imparatorluğunu yöneten Roy ailesi içinde güç ve iktidar mücadelesi baş gösterir.', director: 'Jesse Armstrong', cast: ['Brian Cox', 'Jeremy Strong', 'Sarah Snook'] },
+            { id: 20, title: 'DARK', type: 'tv', category: 'Gizem / Bilim Kurgu', genre: 'Gizem', rating: '8.7', ratingCount: '(420K)', year: '2020', duration: '3 Sezon', themeColor: '#051114', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'Kayıp bir çocuk iki aileye geçmiş, bugün ve geleceği kapsayan karmaşık zaman yolculuğu gizemini açar.', director: 'Baran bo Odar', cast: ['Louis Hofmann', 'Karoline Eichhorn', 'Lisa Vicari'] },
+            { id: 21, title: 'CHERNOBYL', type: 'tv', category: 'Drama / Tarih', genre: 'Drama', rating: '9.4', ratingCount: '(850K)', year: '2019', duration: '1 Sezon', themeColor: '#171c10', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80', desc: '1986\'daki Çernobil nükleer santral felaketinin gerçek ve tüyler ürpertici hikayesi.', director: 'Craig Mazin', cast: ['Jared Harris', 'Stellan Skarsgård', 'Emily Watson'] },
+            { id: 22, title: 'THE BEAR', type: 'tv', category: 'Drama / Komedi', genre: 'Drama', rating: '8.6', ratingCount: '(210K)', year: '2024', duration: '3 Sezon', themeColor: '#03192e', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80', desc: 'Genç ve yetenekli bir şef, ailesinin sandviç dükkanını yönetmek için Chicago\'ya geri döner.', director: 'Christopher Storer', cast: ['Jeremy Allen White', 'Ayo Edebiri', 'Ebon Moss-Bachrach'] },
+            { id: 23, title: 'MISSION IMPOSSIBLE: DEAD RECKONING', type: 'movie', category: 'Aksiyon / Gerilim', genre: 'Aksiyon', rating: '7.8', ratingCount: '(260K)', year: '2023', duration: '2s 43d', themeColor: '#1d1100', image: 'https://images.unsplash.com/photo-1519074069444-1ba4eae16748?auto=format&fit=crop&w=1200&q=80', desc: 'Ethan Hunt ve IMF ekibi, insanlığı tehdit eden tehlikeli bir yapay zekayı ele geçirmeye çalışır.', director: 'Christopher McQuarrie', cast: ['Tom Cruise', 'Hayley Atwell', 'Ving Rhames'] },
+            { id: 24, title: 'HOUSE OF THE DRAGON', type: 'tv', category: 'Fantastik / Drama', genre: 'Fantastik', rating: '8.4', ratingCount: '(410K)', year: '2024', duration: '2 Sezon', themeColor: '#2e0000', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80', desc: 'Game of Thrones olaylarından 200 yıl önce Targaryen Hanedanı içinde patlak veren iç savaşın hikayesi.', director: 'Ryan Condal', cast: ['Matt Smith', 'Emma D\'Arcy', 'Olivia Cooke'] },
+            { id: 25, title: 'JOHN WICK: CHAPTER 4', type: 'movie', category: 'Aksiyon / Suç', genre: 'Aksiyon', rating: '7.7', ratingCount: '(340K)', year: '2023', duration: '2s 49d', themeColor: '#240a00', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'John Wick, Yüksek Konsey\'i yenmek için dünya çapında en güçlü ittifaklarla karşı karşıya gelir.', director: 'Chad Stahelski', cast: ['Keanu Reeves', 'Donnie Yen', 'Bill Skarsgård'] },
+            { id: 26, title: 'BREAKING BAD', type: 'tv', category: 'Suç / Drama', genre: 'Suç', rating: '9.5', ratingCount: '(2.1M)', year: '2013', duration: '5 Sezon', themeColor: '#0d1f0d', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80', desc: 'Kanser teşhisi konan bir kimya öğretmeni, ailesinin geleceğini güvence altına almak için uyuşturucu üretimine başlar.', director: 'Vince Gilligan', cast: ['Bryan Cranston', 'Aaron Paul', 'Anna Gunn'] },
+            { id: 27, title: 'SEVEN', type: 'movie', category: 'Suç / Gizem', genre: 'Suç', rating: '8.6', ratingCount: '(1.7M)', year: '1995', duration: '2s 07d', themeColor: '#120d08', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'İki dedektif, yedi ölümcül günahı temel alarak cinayetler işleyen bir seri katilin izini sürer.', director: 'David Fincher', cast: ['Morgan Freeman', 'Brad Pitt', 'Kevin Spacey'] },
+            { id: 28, title: 'BETTER CALL SAUL', type: 'tv', category: 'Suç / Drama', genre: 'Suç', rating: '9.0', ratingCount: '(610K)', year: '2022', duration: '6 Sezon', themeColor: '#1c1700', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', desc: 'Küçük çaplı avukat Jimmy McGill\'in ahlaki çöküşle suç avukatı Saul Goodman\'a dönüşüm süreci.', director: 'Vince Gilligan', cast: ['Bob Odenkirk', 'Rhea Seehorn', 'Jonathan Banks'] },
+            { id: 29, title: 'INCEPTION', type: 'movie', category: 'Bilim Kurgu / Aksiyon', genre: 'Bilim Kurgu', rating: '8.8', ratingCount: '(2.5M)', year: '2010', duration: '2s 28d', themeColor: '#0a1526', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80', desc: 'İnsanların rüyalarına girerek sırları çalan bir hırsıza, bir fikri zihne yerleştirme görevi verilir.', director: 'Christopher Nolan', cast: ['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Elliot Page'] },
+            { id: 30, title: 'THE CROWN', type: 'tv', category: 'Drama / Tarih', genre: 'Drama', rating: '8.6', ratingCount: '(250K)', year: '2023', duration: '6 Sezon', themeColor: '#1f1300', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', desc: 'Kraliçe II. Elizabeth\'in saltanat dönemi ve İngiliz Kraliyet ailesinin siyasi mücadeleleri.', director: 'Peter Morgan', cast: ['Claire Foy', 'Olivia Colman', 'Imelda Staunton'] },
+            { id: 31, title: 'GLADIATOR II', type: 'movie', category: 'Aksiyon / Drama', genre: 'Aksiyon', rating: '7.9', ratingCount: '(190K)', year: '2024', duration: '2s 28d', themeColor: '#2b1000', image: 'https://images.unsplash.com/photo-1519074069444-1ba4eae16748?auto=format&fit=crop&w=1200&q=80', desc: 'Maximus\'un ölümünden yıllar sonra Lucius, Roma\'nın geleceği için Colosseum arenasında dövüşmek zorunda kalır.', director: 'Ridley Scott', cast: ['Paul Mescal', 'Pedro Pascal', 'Denzel Washington'] },
+            { id: 32, title: 'FARGO', type: 'tv', category: 'Suç / Drama', genre: 'Suç', rating: '8.9', ratingCount: '(400K)', year: '2024', duration: '5 Sezon', themeColor: '#0d1821', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'Minnesota kasabalarında beklenmedik bir şekilde şiddete dönüşen karmaşık suç vakaları.', director: 'Noah Hawley', cast: ['Juno Temple', 'Jon Hamm', 'Jennifer Jason Leigh'] }
         ];
 
         const liveTvChannels = [
@@ -344,7 +385,11 @@
 
         function toggleFavorite(id, e) {
             if (e) e.stopPropagation();
-            favorites = favorites.includes(id) ? favorites.filter(favId => favId !== id) : [...favorites, id];
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
             localStorage.setItem('ny7_favorites', JSON.stringify(favorites));
             renderMediaGrid();
             if (document.getElementById('detail-fav-btn')) updateDetailButtons(id);
@@ -352,7 +397,11 @@
 
         function toggleWatchlist(id, e) {
             if (e) e.stopPropagation();
-            watchlist = watchlist.includes(id) ? watchlist.filter(wId => wId !== id) : [...watchlist, id];
+            if (watchlist.includes(id)) {
+                watchlist = watchlist.filter(wId => wId !== id);
+            } else {
+                watchlist.push(id);
+            }
             localStorage.setItem('ny7_watchlist', JSON.stringify(watchlist));
             renderMediaGrid();
             if (document.getElementById('detail-watch-btn')) updateDetailButtons(id);
@@ -361,10 +410,13 @@
         function updateDetailButtons(id) {
             const isFav = favorites.includes(id);
             const isWatch = watchlist.includes(id);
+            
             const favBtn = document.getElementById('detail-fav-btn');
             const watchBtn = document.getElementById('detail-watch-btn');
+
             favBtn.innerHTML = `<i class="${isFav ? 'fa-solid text-brand-red' : 'fa-regular'} fa-heart"></i>`;
             favBtn.onclick = (e) => toggleFavorite(id, e);
+
             watchBtn.innerHTML = `<i class="${isWatch ? 'fa-solid text-brand-yellow' : 'fa-regular'} fa-bookmark"></i>`;
             watchBtn.onclick = (e) => toggleWatchlist(id, e);
         }
@@ -373,17 +425,19 @@
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
             heroCurrentId = item.id;
             heroCurrentTitle = item.title;
+
             document.getElementById('hero-bg').src = item.image;
             document.getElementById('hero-title').innerText = item.title;
             document.getElementById('hero-rating-count').innerText = item.ratingCount;
             document.getElementById('hero-meta').innerText = `${item.year} - ${item.category} | Yönetmen: ${item.director}`;
             document.getElementById('hero-desc').innerText = item.desc;
+
             document.getElementById('theme-body').style.backgroundColor = item.themeColor;
         }
 
         function renderHeroThumbnails() {
             const rail = document.getElementById('hero-thumbnails-rail');
-            rail.innerHTML = mediaDatabase.map(m => `
+            rail.innerHTML = mediaDatabase.slice(0, 10).map(m => `
                 <div onclick="setHeroMedia(${m.id})" class="w-28 h-36 rounded-xl overflow-hidden border border-white/20 cursor-pointer relative shrink-0 group hover:scale-105 transition-all shadow-xl">
                     <img src="${m.image}" alt="${m.title}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
@@ -395,9 +449,10 @@
         function renderMediaGrid(items = mediaDatabase) {
             const container = document.getElementById('media-grid');
             if (items.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 font-medium text-sm">Bu kategoride henüz içerik bulunmuyor.</div>`;
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 font-medium text-sm">Bu filtreye uygun içerik bulunmuyor.</div>`;
                 return;
             }
+
             container.innerHTML = items.map(m => {
                 const isFav = favorites.includes(m.id);
                 const isWatch = watchlist.includes(m.id);
@@ -406,8 +461,11 @@
                     <div class="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-slate-900 shadow-xl">
                         <img src="${m.image}" alt="${m.title}" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
+                        
                         <div class="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center z-10">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-black/80 text-brand-yellow border border-amber-400/30">★ ${m.rating}</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-black/80 text-brand-yellow border border-amber-400/30">
+                                ★ ${m.rating}
+                            </span>
                             <div class="flex gap-1">
                                 <button onclick="toggleFavorite(${m.id}, event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all">
                                     <i class="${isFav ? 'fa-solid text-brand-red' : 'fa-regular'} fa-heart text-xs"></i>
@@ -417,10 +475,13 @@
                                 </button>
                             </div>
                         </div>
+
                         <div class="absolute bottom-3 left-3 right-3 space-y-1">
-                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">${m.category}</span>
+                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">
+                                ${m.category}
+                            </span>
                             <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
-                            <p class="text-[10px] text-slate-400 font-medium">${m.year}</p>
+                            <p class="text-[10px] text-slate-400 font-medium">${m.year} • ${m.duration}</p>
                         </div>
                     </div>
                 </div>
@@ -454,15 +515,20 @@
 
         function openDetailPage(id) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
+
             document.getElementById('theme-body').style.backgroundColor = item.themeColor;
             document.getElementById('theme-color-dot').style.backgroundColor = item.themeColor;
+
             document.getElementById('detail-backdrop').src = item.image;
             document.getElementById('detail-poster').src = item.image;
             document.getElementById('detail-title').innerText = item.title;
             document.getElementById('detail-category').innerText = item.category;
             document.getElementById('detail-rating').innerHTML = `<i class="fa-solid fa-star"></i> ${item.rating} IMDb`;
             document.getElementById('detail-year').innerText = item.year;
+            document.getElementById('detail-duration').innerText = item.duration;
             document.getElementById('detail-desc').innerText = item.desc;
+            document.getElementById('detail-director').innerText = item.director;
+
             updateDetailButtons(item.id);
 
             const castContainer = document.getElementById('detail-cast-list');
@@ -476,6 +542,7 @@
             `).join('');
 
             document.getElementById('detail-play-btn').onclick = () => launchPlayer(item.title);
+
             document.getElementById('dashboard-view').classList.add('hidden');
             document.getElementById('detail-page-view').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -493,11 +560,23 @@
 
         function switchTab(tab) {
             showDashboard();
-            if (tab === 'movie') renderMediaGrid(mediaDatabase.filter(m => m.type === 'movie'));
-            else if (tab === 'tv') renderMediaGrid(mediaDatabase.filter(m => m.type === 'tv'));
-            else if (tab === 'favorites') renderMediaGrid(mediaDatabase.filter(m => favorites.includes(m.id)));
-            else if (tab === 'watchlist') renderMediaGrid(mediaDatabase.filter(m => watchlist.includes(m.id)));
-            else renderMediaGrid(mediaDatabase);
+            const heading = document.getElementById('catalog-heading');
+            if (tab === 'movie') {
+                heading.innerText = 'Filmler';
+                renderMediaGrid(mediaDatabase.filter(m => m.type === 'movie'));
+            } else if (tab === 'tv') {
+                heading.innerText = 'Diziler';
+                renderMediaGrid(mediaDatabase.filter(m => m.type === 'tv'));
+            } else if (tab === 'favorites') {
+                heading.innerText = 'Favorilerim';
+                renderMediaGrid(mediaDatabase.filter(m => favorites.includes(m.id)));
+            } else if (tab === 'watchlist') {
+                heading.innerText = 'İzleme Listem';
+                renderMediaGrid(mediaDatabase.filter(m => watchlist.includes(m.id)));
+            } else {
+                heading.innerText = 'Tüm İçerik Kataloğu (30+ Yapım)';
+                renderMediaGrid(mediaDatabase);
+            }
         }
 
         function launchPlayer(title) {
@@ -531,7 +610,8 @@
             const query = e.target.value.toLowerCase();
             const filtered = mediaDatabase.filter(m => 
                 m.title.toLowerCase().includes(query) || 
-                m.category.toLowerCase().includes(query)
+                m.category.toLowerCase().includes(query) ||
+                m.genre.toLowerCase().includes(query)
             );
             renderMediaGrid(filtered);
         });
