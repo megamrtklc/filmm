@@ -38,7 +38,7 @@
         }
     </script>
 
-        <link rel="stylesheet" href="assets/css/style.css?v=20261103-actor">
+        <link rel="stylesheet" href="assets/css/style.css?v=20261103-actor-gallery">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -240,13 +240,13 @@
                     </div>
                 </div>
             </div>
-            <section id="detail-related" class="detail-related hidden"><div class="detail-related-heading"><span>DAHA FAZLASI</span><h2>Benzer yapımlar</h2></div><div id="detail-related-rail" class="collection-rail"></div></section>
             <div class="detail-lower detail-cast-inline">
                 <div class="detail-info-card detail-cast-card">
                     <div class="detail-cast-heading"><h3><i class="fa-solid fa-users text-amber-400 mr-2"></i>Oyuncu Kadrosu</h3><div id="detail-cast-controls" class="detail-cast-controls hidden"><button type="button" onclick="changeCastPage(-1)" aria-label="Önceki oyuncular"><i class="fa-solid fa-chevron-left"></i></button><span id="detail-cast-page-label">1 / 2</span><button type="button" onclick="changeCastPage(1)" aria-label="Sonraki oyuncular"><i class="fa-solid fa-chevron-right"></i></button></div></div>
                     <div id="detail-cast-list" class="detail-cast-grid"></div>
                 </div>
             </div>
+            <section id="detail-related" class="detail-related hidden"><div class="detail-related-heading"><span>DAHA FAZLASI</span><h2>Benzer yapımlar</h2></div><div id="detail-related-rail" class="collection-rail"></div></section>
         </section>
     </div>
 
@@ -256,7 +256,7 @@
     <div id="actor-page-view" class="actor-page hidden min-h-screen flex-1">
         <section class="actor-hero">
             <div class="actor-hero-top"><button class="detail-back" onclick="showDashboard()"><i class="fa-solid fa-arrow-left"></i> Geri dön</button><span>OYUNCU PROFİLİ</span></div>
-            <div id="actor-featured-films" class="actor-featured-films" aria-label="Oyuncunun öne çıkan yapımları"></div>
+            <div id="actor-featured-photos" class="actor-featured-photos" aria-label="Oyuncunun fotoğrafları"></div>
         </section>
         <main class="actor-profile-layout">
             <aside class="actor-profile-sidebar">
@@ -264,6 +264,7 @@
                 <h1 id="actor-profile-name"></h1>
                 <div class="actor-facts">
                     <div><span>Doğum tarihi</span><b id="actor-birth-date">Bilgi aranıyor…</b></div>
+                    <div><span>Doğum yeri</span><b id="actor-birth-place">Bilgi aranıyor…</b></div>
                     <div><span>Ülke</span><b id="actor-country">Bilgi aranıyor…</b></div>
                     <div><span>Meslek</span><b>Oyuncu</b></div>
                 </div>
@@ -275,10 +276,22 @@
                 <a id="actor-wikipedia-link" href="#" target="_blank" rel="noopener">Kaynak ve daha fazla bilgi <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
             </section>
         </main>
+        <section class="actor-gallery-section">
+            <div class="detail-related-heading"><span>FOTOĞRAF GALERİSİ</span><h2>Oyuncudan kareler</h2></div>
+            <div class="actor-gallery-toolbar"><span id="actor-gallery-count">Fotoğraflar yükleniyor…</span><div class="actor-gallery-controls"><button type="button" onclick="changeActorGalleryPage(-1)" aria-label="Önceki fotoğraflar"><i class="fa-solid fa-chevron-left"></i></button><button type="button" onclick="changeActorGalleryPage(1)" aria-label="Sonraki fotoğraflar"><i class="fa-solid fa-chevron-right"></i></button></div></div>
+            <div id="actor-gallery-grid" class="actor-gallery-grid"></div>
+        </section>
         <section class="actor-filmography">
             <div class="detail-related-heading"><span>FİLMOGRAFİ</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div>
             <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
         </section>
+    </div>
+    <div id="actor-photo-modal" class="actor-photo-modal hidden" role="dialog" aria-modal="true" aria-label="Oyuncu fotoğrafı">
+        <button type="button" class="actor-photo-close" onclick="closeActorPhoto()" aria-label="Kapat"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="actor-photo-nav actor-photo-prev" onclick="stepActorPhoto(-1)" aria-label="Önceki fotoğraf"><i class="fa-solid fa-chevron-left"></i></button>
+        <img id="actor-photo-modal-image" src="" alt="Büyük oyuncu fotoğrafı">
+        <button type="button" class="actor-photo-nav actor-photo-next" onclick="stepActorPhoto(1)" aria-label="Sonraki fotoğraf"><i class="fa-solid fa-chevron-right"></i></button>
+        <div id="actor-photo-modal-caption" class="actor-photo-modal-caption"></div>
     </div>
 
     <!-- OYNATICI MODAL -->
@@ -331,6 +344,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261103-5"></script>
+    <script src="assets/js/bundle.js?v=20261103-actor-gallery"></script>
 </body>
 </html>
