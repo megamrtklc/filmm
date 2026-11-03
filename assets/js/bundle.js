@@ -173,8 +173,14 @@ let activeCatalogGenre = 'all';
         function filterType(type) {
             activeCatalogType = type;
             renderFilteredCatalog();
+            document.querySelectorAll('.catalog-type-filter button').forEach(button => {
+                const selected = button.getAttribute('onclick') === `filterType('${type}')`;
+                button.classList.toggle('bg-brand-red', selected);
+                button.classList.toggle('text-white', selected);
+                button.classList.toggle('font-bold', selected);
+                button.classList.toggle('text-slate-400', !selected);
+            });
         }
-
         function switchTab(tab) {
             showDashboard();
             const heading = document.getElementById('catalog-heading');
