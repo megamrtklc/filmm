@@ -118,3 +118,24 @@
  .movie-card,.movie-card img,#hero-bg,.hero-thumb{transition:none!important;animation:none!important}
  .movie-card:hover{transform:none}
 }
+
+
+/* Dinamik ana sayfa koleksiyonları */
+.home-collections { padding-bottom: .25rem; }
+.collection-section[hidden] { display: none !important; }
+.collection-heading { display:flex; align-items:end; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.07); padding-bottom:.8rem; }
+.collection-eyebrow { color:#e11d48; font-size:9px; font-weight:900; letter-spacing:.2em; margin-bottom:.25rem; }
+.collection-heading h2 { color:#fff; font-size:clamp(1.15rem,2vw,1.55rem); font-weight:850; letter-spacing:-.035em; }
+.collection-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(132px, 16%); gap:1rem; overflow-x:auto; padding:.25rem .1rem .9rem; scroll-snap-type:x mandatory; scrollbar-width:thin; scrollbar-color:rgba(225,29,72,.65) rgba(255,255,255,.05); }
+.collection-card { min-width:0; cursor:pointer; scroll-snap-align:start; transition:transform .25s ease; }
+.collection-card:hover,.collection-card:focus-visible { transform:translateY(-5px); outline:none; }
+.collection-poster-wrap { position:relative; aspect-ratio:2/3; overflow:hidden; border-radius:13px; background:#15151b; border:1px solid rgba(255,255,255,.09); box-shadow:0 10px 28px rgba(0,0,0,.22); }
+.collection-poster-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .45s ease; }
+.collection-card:hover img,.collection-card:focus-visible img { transform:scale(1.06); }
+.collection-rating { position:absolute; top:8px; left:8px; padding:4px 7px; border-radius:6px; color:#facc15; background:rgba(0,0,0,.82); font-size:10px; font-weight:900; }
+.collection-card-copy { padding:.6rem .1rem 0; }
+.collection-card-copy h3 { color:#f8fafc; font-size:12px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.collection-card-copy p { color:#94a3b8; font-size:10px; margin-top:3px; }
+.collection-card-copy p span { color:#e11d48; padding:0 3px; }
+@media(max-width:640px) { .collection-rail { grid-auto-columns:38%; gap:.75rem; } .collection-card-copy h3 { font-size:11px; } }
+@media(min-width:641px) and (max-width:900px) { .collection-rail { grid-auto-columns:23%; } }
