@@ -374,3 +374,9 @@
  .detail-cast-person img{height:125px}
  .detail-cast-person b{font-size:9px!important;padding:0 7px 8px}
 }
+
+.detail-country-list{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.detail-country-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid #ffffff20;background:#ffffff0a;color:#f4f4f5;border-radius:7px;padding:5px 7px;font-size:10px;font-weight:700;cursor:pointer;transition:.18s}
+.detail-country-chip:hover{background:#e11d4830;border-color:#e11d48}
+.detail-country-chip .flag{font-size:14px;line-height:1}
+@media(max-width:700px){.detail-country-list{justify-content:flex-start}.detail-country-credit{gap:6px}}
