@@ -216,14 +216,14 @@
                         <span id="detail-rating" class="text-xs font-bold text-amber-300"></span>
                     </div>
                     <h1 id="detail-title"></h1>
-                    <div class="detail-subline"><span id="detail-year"></span><span class="mx-2">/</span><span id="detail-duration"></span><span class="mx-2">/</span><span id="detail-type-label"></span></div>
+                    <div class="detail-subline"><span id="detail-year"></span><span> • </span><span id="detail-duration"></span><span> • </span><span id="detail-type-label"></span><span> • </span><span id="detail-country"></span></div><div id="detail-score-row" class="detail-score-row"></div>
                 </div>
             </div>
             <div class="detail-description-panel">
                 <h2>Açıklama</h2>
                 <p id="detail-desc"></p>
                 <div class="detail-actions">
-                    <button id="detail-play-btn" class="detail-trailer"><i class="fa-solid fa-play mr-2"></i> İzlemeye Başla</button>
+                    <button id="detail-play-btn" class="detail-trailer"><i class="fa-solid fa-play mr-2"></i> İzlemeye Başla</button><button id="detail-trailer-btn" class="detail-secondary-btn"><i class="fa-brands fa-youtube mr-2"></i> Fragmanı İzle</button>
                     <button id="detail-fav-btn" class="detail-icon-btn" aria-label="Favorilere ekle"><i class="fa-regular fa-heart"></i></button>
                     <button id="detail-watch-btn" class="detail-icon-btn" aria-label="İzleme listesine ekle"><i class="fa-regular fa-bookmark"></i></button>
                 </div>
@@ -237,13 +237,15 @@
             <div class="detail-info-card">
                 <h3 class="text-amber-400 uppercase tracking-wider">Yapım Bilgileri</h3>
                 <div class="space-y-3 text-xs text-slate-300">
-                    <div class="flex justify-between gap-4 border-b border-white/10 pb-2"><span class="text-slate-500">Yönetmen</span><span id="detail-director" class="font-bold text-white text-right"></span></div>
+                    <div class="flex justify-between gap-4 border-b border-white/10 pb-2"><span class="text-slate-500">Yönetmen</span><span id="detail-director" class="font-bold text-white text-right"></span></div><div class="flex justify-between gap-4 border-b border-white/10 pb-2"><span class="text-slate-500">Ülke</span><span id="detail-info-country" class="font-bold text-white text-right"></span></div>
                     <div class="flex justify-between gap-4 border-b border-white/10 pb-2"><span class="text-slate-500">Tür</span><span id="detail-info-genre" class="font-bold text-white text-right"></span></div>
                     <div class="flex justify-between gap-4"><span class="text-slate-500">Yayın yılı</span><span id="detail-info-year" class="font-bold text-white text-right"></span></div>
                 </div>
             </div>
         </section>
     </div>
+
+    <section id="detail-related" class="detail-related hidden"><div class="detail-related-heading"><span>DAHA FAZLASI</span><h2>Benzer yapımlar</h2></div><div id="detail-related-rail" class="collection-rail"></div></section>
 
     <!-- OYNATICI MODAL -->
     <div id="player-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6">
