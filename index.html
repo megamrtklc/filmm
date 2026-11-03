@@ -43,26 +43,9 @@
 
     <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
     <header class="site-header">
-        <div class="header-topline">
-            <a class="header-brand" href="#" onclick="showDashboard();return false;" aria-label="NY7 TV ana sayfa">
-                <span class="brand-mark"><b>NY</b><strong>7</strong><small>TV</small></span>
-            </a>
-            <div class="header-actions">
-                <label class="search-wrap glass-search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara">
-                </label>
-                <div class="nav-dropdown user-dropdown" id="user-menu">
-                    <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false">
-                        <i class="fa-regular fa-circle-user"></i>
-                    </button>
-                    <div class="nav-menu user-menu-panel">
-                        <button onclick="showProfileNotice();closeHeaderMenus()"><i class="fa-regular fa-user"></i> Profilim</button>
-                        <button onclick="showSettingsNotice();closeHeaderMenus()"><i class="fa-solid fa-gear"></i> Ayarlar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <a class="header-brand" href="#" onclick="showDashboard();return false;" aria-label="NY7 TV ana sayfa">
+            <span class="brand-mark"><b>NY</b><strong>7</strong><small>TV</small></span>
+        </a>
         <nav class="main-nav" aria-label="Ana menü">
             <a class="nav-home" href="#" onclick="showDashboard();return false;"><i class="fa-solid fa-house"></i> Anasayfa</a>
             <a href="#" onclick="switchTab('movie');return false;"><i class="fa-solid fa-film"></i> Filmler</a>
@@ -85,6 +68,21 @@
                 </div>
             </div>
         </nav>
+        <div class="header-actions">
+            <label class="search-wrap glass-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara">
+            </label>
+            <div class="nav-dropdown user-dropdown" id="user-menu">
+                <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false">
+                    <img class="user-avatar" src="https://i.pravatar.cc/80?img=12" alt="Temsili profil resmi">
+                </button>
+                <div class="nav-menu user-menu-panel">
+                    <button onclick="showProfileNotice();closeHeaderMenus()"><i class="fa-regular fa-user"></i> Profilim</button>
+                    <button onclick="showSettingsNotice();closeHeaderMenus()"><i class="fa-solid fa-gear"></i> Ayarlar</button>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- DASHBOARD VIEW -->
