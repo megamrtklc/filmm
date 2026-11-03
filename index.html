@@ -43,15 +43,15 @@
 
     <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
     <header class="site-header">
-        <a class="header-brand" href="#" onclick="showDashboard();return false;" aria-label="NY7 TV ana sayfa">
+        <a class="header-brand" href="#/anasayfa" aria-label="NY7 TV ana sayfa">
             <span class="brand-mark"><b>NY</b><strong>7</strong><small>TV</small></span>
         </a>
         <nav class="main-nav" aria-label="Ana menü">
             <a class="nav-home" href="#" onclick="showDashboard();return false;"><i class="fa-solid fa-house"></i> Anasayfa</a>
-            <a href="#" onclick="switchTab('movie');return false;"><i class="fa-solid fa-film"></i> Filmler</a>
-            <a href="#" onclick="switchTab('tv');return false;"><i class="fa-solid fa-tv"></i> Diziler</a>
-            <a href="#" onclick="switchTab('all');return false;"><i class="fa-solid fa-compass"></i> Keşfet</a>
-            <a href="#" onclick="switchTab('watchlist');return false;"><i class="fa-solid fa-bookmark"></i> Listem</a>
+            <a href="#/filmler"><i class="fa-solid fa-film"></i> Filmler</a>
+            <a href="#/diziler"><i class="fa-solid fa-tv"></i> Diziler</a>
+            <a href="#/kesfet"><i class="fa-solid fa-compass"></i> Keşfet</a>
+            <a href="#/listem"><i class="fa-solid fa-bookmark"></i> Listem</a>
             <div class="nav-dropdown" id="categories-menu">
                 <button type="button" class="nav-trigger" onclick="toggleHeaderMenu('categories-menu')" aria-expanded="false"><i class="fa-solid fa-layer-group"></i> Kategoriler <i class="fa-solid fa-chevron-down nav-chevron"></i></button>
                 <div class="nav-menu category-menu">
