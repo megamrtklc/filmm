@@ -95,7 +95,7 @@ function renderHomeCollections() {
         return Number.isFinite(value) ? value : 0;
     };
     const card = item => `
-        <article class="collection-card" onclick="openDetailPage('${item.id}')" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailPage('${item.id}')}">
+        <article class="collection-card" data-detail-id="${item.id}" tabindex="0" role="button" aria-label="${item.title} detayını aç">
             <div class="collection-poster-wrap">
                 <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
                 <span class="collection-rating">★ ${item.rating || '—'}</span>
@@ -139,7 +139,7 @@ function renderMediaGrid(items = mediaDatabase) {
                 const isFav = favorites.includes(m.id) || favorites.includes(String(m.id));
                 const isWatch = watchlist.includes(m.id) || watchlist.includes(String(m.id));
                 return `
-                <div onclick="openDetailPage('${m.id}')" class="movie-card group cursor-pointer" style="--theme-glow: ${m.themeColor}">
+                <div data-detail-id="${m.id}" role="button" tabindex="0" aria-label="${m.title} detayını aç" class="movie-card group cursor-pointer" style="--theme-glow: ${m.themeColor}">
                     <div class="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-slate-900 shadow-xl">
                         <img src="${m.image}" alt="${m.title}" loading="lazy" decoding="async" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
@@ -327,7 +327,26 @@ function openDetailPage(id,update=true){
  window.scrollTo({top:0,behavior:'smooth'});
 }
 window.addEventListener('hashchange',routeFromHash);
+
 window.addEventListener('popstate',routeFromHash);
+
+// Afiş tıklamalarını tek noktadan yakala; mobil ve masaüstünde detay ekranını aç.
+window.openDetailPage = openDetailPage;
+document.addEventListener('click', function(event) {
+    const poster = event.target.closest('[data-detail-id]');
+    if (!poster) return;
+    const id = poster.getAttribute('data-detail-id');
+    if (id) openDetailPage(id);
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const poster = event.target.closest('[data-detail-id]');
+    if (!poster) return;
+    event.preventDefault();
+    const id = poster.getAttribute('data-detail-id');
+    if (id) openDetailPage(id);
+});
+
 
 // Oynatıcı arayüzü kontrolleri
 function launchPlayer(title) {
