@@ -545,9 +545,7 @@
         function openDetailPage(id) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
 
-            document.getElementById('theme-body').style.backgroundColor = item.themeColor;
-            document.getElementById('theme-color-dot').style.backgroundColor = item.themeColor;
-
+            document.getElementById('theme-body').style.backgroundColor = item.themeColor;
             document.getElementById('detail-backdrop').src = item.image;
             document.getElementById('detail-poster').src = item.image;
             document.getElementById('detail-title').innerText = item.title;
