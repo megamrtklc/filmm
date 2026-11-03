@@ -391,3 +391,9 @@
  .detail-overlap{margin-top:-180px!important}
  .detail-copy{padding-top:12px!important}
 }
+
+
+/* Birden fazla ülkeyi detay künyesinde dikey ve ayrı ayrı göster */
+.detail-country-list{display:flex!important;flex-direction:column!important;align-items:flex-end!important;flex-wrap:nowrap!important;gap:7px!important}
+.detail-country-chip{width:max-content;max-width:100%;justify-content:flex-start!important}
+@media(max-width:700px){.detail-country-list{align-items:flex-start!important}}
