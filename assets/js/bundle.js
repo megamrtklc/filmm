@@ -190,8 +190,19 @@ function renderMediaGrid(items = mediaDatabase) {
 let activeCatalogGenre = 'all';
         let activeCatalogType = 'all';
         let activeCatalogQuery = '';
+        let activeCatalogCountry = '';
 
-        function renderFilteredCatalog() {
+        
+const countryAliases={
+'Spain':['İspanya','🇪🇸'],'France':['Fransa','🇫🇷'],'Germany':['Almanya','🇩🇪'],'United States of America':['ABD','🇺🇸'],'United States':['ABD','🇺🇸'],'United Kingdom':['Birleşik Krallık','🇬🇧'],'UK':['Birleşik Krallık','🇬🇧'],'Italy':['İtalya','🇮🇹'],'Turkey':['Türkiye','🇹🇷'],'Türkiye':['Türkiye','🇹🇷'],'Canada':['Kanada','🇨🇦'],'Australia':['Avustralya','🇦🇺'],'Japan':['Japonya','🇯🇵'],'South Korea':['Güney Kore','🇰🇷'],'China':['Çin','🇨🇳'],'India':['Hindistan','🇮🇳'],'Russia':['Rusya','🇷🇺'],'Brazil':['Brezilya','🇧🇷'],'Mexico':['Meksika','🇲🇽'],'Argentina':['Arjantin','🇦🇷'],'Portugal':['Portekiz','🇵🇹'],'Netherlands':['Hollanda','🇳🇱'],'Belgium':['Belçika','🇧🇪'],'Switzerland':['İsviçre','🇨🇭'],'Sweden':['İsveç','🇸🇪'],'Norway':['Norveç','🇳🇴'],'Denmark':['Danimarka','🇩🇰'],'Finland':['Finlandiya','🇫🇮'],'Ireland':['İrlanda','🇮🇪'],'Poland':['Polonya','🇵🇱'],'Greece':['Yunanistan','🇬🇷'],'Ukraine':['Ukrayna','🇺🇦'],'New Zealand':['Yeni Zelanda','🇳🇿'],'South Africa':['Güney Afrika','🇿🇦'],'Egypt':['Mısır','🇪🇬'],'Morocco':['Fas','🇲🇦'],'Lebanon':['Lübnan','🇱🇧'],'Kuwait':['Kuveyt','🇰🇼'],'Libyan Arab Jamahiriya':['Libya','🇱🇾'],'United Arab Emirates':['BAE','🇦🇪'],'Czech Republic':['Çekya','🇨🇿'],'Romania':['Romanya','🇷🇴'],'Iceland':['İzlanda','🇮🇸'],'Thailand':['Tayland','🇹🇭'],'Indonesia':['Endonezya','🇮🇩'],'Colombia':['Kolombiya','🇨🇴'],'Chile':['Şili','🇨🇱'],'Peru':['Peru','🇵🇪'],'Serbia':['Sırbistan','🇷🇸'],'Croatia':['Hırvatistan','🇭🇷'],'Hungary':['Macaristan','🇭🇺'],'Bulgaria':['Bulgaristan','🇧🇬'],'Luxembourg':['Lüksemburg','🇱🇺']
+};
+function countryTokens(value){return String(value||'').split(/\\s*[,/]\\s*/).map(x=>x.trim()).filter(Boolean)}
+function countryKey(value){return String(value||'').trim().toLocaleLowerCase('tr-TR').replace(/\\s+/g,' ')}
+function countryDisplay(value){const hit=countryAliases[value]||Object.entries(countryAliases).find(([k,v])=>v[0].toLocaleLowerCase('tr-TR')===String(value).toLocaleLowerCase('tr-TR'))?.[1];return hit?{name:hit[0],flag:hit[1]}:{name:value,flag:'🌐'};}
+function filterByCountry(country){activeCatalogCountry=countryKey(country);activeCatalogGenre='all';activeCatalogType='all';activeCatalogQuery='';document.getElementById('search-input').value='';showCatalogView(countryDisplay(country).name+' Yapımları');goRoute('#/ulke/'+encodeURIComponent(country));renderFilteredCatalog();}
+document.addEventListener('click',function(event){const chip=event.target.closest('.detail-country-chip');if(chip)filterByCountry(chip.dataset.country);});
+
+function renderFilteredCatalog() {
             const query = activeCatalogQuery.trim().toLocaleLowerCase('tr-TR');
             const filtered = mediaDatabase.filter(m => {
                 const genre = (m.genre || '').toLocaleLowerCase('tr-TR');
@@ -199,8 +210,9 @@ let activeCatalogGenre = 'all';
                 const needle = activeCatalogGenre.toLocaleLowerCase('tr-TR');
                 const genreMatch = activeCatalogGenre === 'all' || genre.includes(needle) || category.includes(needle);
                 const typeMatch = activeCatalogType === 'all' || m.type === activeCatalogType;
+                const countryMatch = !activeCatalogCountry || countryTokens(m.country).some(x=>countryKey(x)===activeCatalogCountry);
                 const searchMatch = !query || (m.title || '').toLocaleLowerCase('tr-TR').includes(query) || category.includes(query) || genre.includes(query);
-                return genreMatch && typeMatch && searchMatch;
+                return genreMatch && typeMatch && searchMatch && countryMatch;
             });
             renderMediaGrid(filtered);
         }
@@ -266,7 +278,8 @@ function routeFromHash(){
  if(p[0]==='diziler'){switchTab('tv',false);return;}
  if(p[0]==='kesfet'){switchTab('all',false);return;}
  if(p[0]==='listem'){switchTab('watchlist',false);return;}
- if(p[0]==='kategori'){filterGenre(p.slice(1).join('/')||'all',false);return;}
+ if(p[0]==='kategori'){activeCatalogCountry='';filterGenre(p.slice(1).join('/')||'all',false);return;}
+ if(p[0]==='ulke'){filterByCountry(p.slice(1).join('/'));return;}
  showDashboard(false);
 }
 function showDashboard(update=true){
@@ -296,7 +309,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-duration').innerText=item.duration||'';
  document.getElementById('detail-type-label').innerText=item.type==='tv'?'Dizi':'Film';
  document.getElementById('detail-country').innerText=item.country||'Ülke bilgisi yok';
- document.getElementById('detail-info-country').innerText=item.country||'—';
+ document.getElementById('detail-country-list').innerHTML=countryTokens(item.country).map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+country.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"><span class="flag">'+info.flag+'</span><span>'+info.name+'</span></button>';}).join('')||'<span>—</span>';
  document.getElementById('detail-info-genre').innerText=item.category||item.genre||'—';
  document.getElementById('detail-info-year').innerText=item.year||'—';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
