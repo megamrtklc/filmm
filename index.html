@@ -135,6 +135,22 @@
 
         <!-- KATALOG VE FİLTRELER -->
         <main class="p-6 lg:p-12 space-y-10">
+            <!-- ANA SAYFA KOLEKSİYONLARI -->
+            <section id="home-collections" class="home-collections space-y-10" aria-label="Öne çıkan film ve dizi koleksiyonları">
+                <div id="collection-featured" class="collection-section space-y-4">
+                    <div class="collection-heading"><div><p class="collection-eyebrow">KEŞFET</p><h2>Öne Çıkan Yapımlar</h2></div></div>
+                    <div id="featured-rail" class="collection-rail"></div>
+                </div>
+                <div id="collection-movies" class="collection-section space-y-4">
+                    <div class="collection-heading"><div><p class="collection-eyebrow">SİNEMA</p><h2>Yüksek Puanlı Filmler</h2></div></div>
+                    <div id="top-movies-rail" class="collection-rail"></div>
+                </div>
+                <div id="collection-series" class="collection-section space-y-4">
+                    <div class="collection-heading"><div><p class="collection-eyebrow">DİZİ DÜNYASI</p><h2>Öne Çıkan Diziler</h2></div></div>
+                    <div id="top-series-rail" class="collection-rail"></div>
+                </div>
+            </section>
+
             <!-- TÜR FİLTRELERİ -->
             <div class="catalog-genre-scroller flex items-center gap-2 overflow-x-auto pb-3 no-scrollbar snap-x snap-mandatory" role="group" aria-label="Tür filtresi">
                 <button onclick="filterGenre('all')" class="genre-pill snap-start px-4 py-2 rounded-full bg-brand-red text-white text-xs font-bold shrink-0 shadow-lg">Tüm Türler</button>
