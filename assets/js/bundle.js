@@ -310,7 +310,30 @@ function showDashboard(update=true){
  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-async function loadCastPortraits(names){const imgs=[...document.querySelectorAll('#detail-cast-list img[data-cast-name]')];await Promise.all(imgs.map(async img=>{const name=img.dataset.castName;try{const url='https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&gsrnamespace=0&prop=pageimages&piprop=thumbnail&pithumbsize=320&format=json&origin=*';const response=await fetch(url);const data=await response.json();const page=Object.values(data.query?.pages||{})[0];if(page?.thumbnail?.source)img.src=page.thumbnail.source;}catch(e){}}));}
+let activeCastPage=0;
+let currentCastNames=[];
+function escapeCastHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function renderCastPage(){
+ const list=document.getElementById('detail-cast-list');
+ const controls=document.getElementById('detail-cast-controls');
+ const label=document.getElementById('detail-cast-page-label');
+ const firstPage=currentCastNames.slice(0,6);
+ const secondPage=currentCastNames.slice(6,15);
+ const visible=activeCastPage===0?firstPage:secondPage;
+ list.innerHTML=visible.map(n=>{const safe=escapeCastHtml(n);return '<div class="detail-cast-person"><img data-cast-name="'+safe+'" src="https://ui-avatars.com/api/?name='+encodeURIComponent(n)+'&background=252936&color=ffffff&size=256&bold=true" alt="'+safe+'" loading="lazy"><b>'+safe+'</b></div>';}).join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
+ controls.classList.toggle('hidden',currentCastNames.length<=6);
+ label.textContent=activeCastPage===0?'1 / 2':'2 / 2';
+ controls.querySelector('button:first-child').disabled=activeCastPage===0;
+ controls.querySelector('button:last-child').disabled=activeCastPage===1||secondPage.length===0;
+ loadCastPortraits();
+}
+function changeCastPage(direction){
+ const hasSecondPage=currentCastNames.length>6;
+ if(!hasSecondPage)return;
+ activeCastPage=direction>0?1:0;
+ renderCastPage();
+}
+async function loadCastPortraits(){const imgs=[...document.querySelectorAll('#detail-cast-list img[data-cast-name]')];await Promise.all(imgs.map(async img=>{const name=img.dataset.castName;try{const url='https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&gsrnamespace=0&prop=pageimages&piprop=thumbnail&pithumbsize=320&format=json&origin=*';const response=await fetch(url);const data=await response.json();const page=Object.values(data.query?.pages||{})[0];if(page?.thumbnail?.source)img.src=page.thumbnail.source;}catch(e){}}));}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -332,7 +355,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-director').innerText=item.director||'—';
  document.getElementById('detail-score-row').innerHTML='<span class="detail-score-pill"><b>IMDb</b><strong>★ '+(item.rating||'—')+'</strong></span><span class="detail-score-pill"><b>TMDB</b><strong>'+(item.tmdbRating||'—')+'</strong></span><span class="detail-score-pill"><b>RT</b><strong>'+(item.rottenTomatoes||'—')+'</strong></span><span class="detail-score-pill"><b>Popcorn</b><strong>'+(item.popcornmeter||'—')+'</strong></span>';
  updateDetailButtons(item.id);
- const castNames=(item.cast||[]);document.getElementById('detail-cast-list').innerHTML=castNames.map((n,i)=>'<div class="detail-cast-person"><img data-cast-name="'+String(n).replace(/"/g,'&quot;')+'" src="https://ui-avatars.com/api/?name='+encodeURIComponent(n)+'&background=252936&color=ffffff&size=256&bold=true" alt="'+String(n).replace(/"/g,'&quot;')+'" loading="lazy"><b>'+n+'</b></div>').join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';loadCastPortraits(castNames);
+ currentCastNames=(item.cast||[]).slice(0,15);activeCastPage=0;renderCastPage();
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
  document.getElementById('detail-trailer-btn').onclick=()=>item.trailerUrl?window.open(item.trailerUrl,'_blank','noopener'):window.alert('Fragman bağlantısı bulunmuyor.');
  const related=mediaDatabase.filter(m=>m.id!==item.id&&(m.type===item.type||m.genre===item.genre)).sort((x,y)=>Number(y.rating||0)-Number(x.rating||0)).slice(0,10);
