@@ -408,12 +408,12 @@ async function loadActorGallery(name){
  renderActorGallery();
  try{
   const query='filetype:bitmap "'+name.replace(/"/g,'')+'"';
-  const url='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(query)+'&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url&iiurlwidth=900&format=json&origin=*';
+  const url='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(query)+'&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url%7Cextmetadata&iiextmetadatafilter=LicenseShortName%7CArtist%7CCredit&iiurlwidth=900&format=json&origin=*';
   const response=await fetch(url);
   if(!response.ok)throw new Error('Görseller alınamadı');
   const data=await response.json();
   const pages=Object.values(data.query?.pages||{});
-  actorGalleryPhotos=pages.map(p=>{const info=p.imageinfo?.[0];return info?.thumburl?{url:info.url,thumb:info.thumburl,title:p.title}:null;}).filter(Boolean).slice(0,20);
+  actorGalleryPhotos=pages.map(p=>{const info=p.imageinfo?.[0];return info?.thumburl?{url:info.url,thumb:info.thumburl,title:p.title,page:info.descriptionurl,license:info.extmetadata?.LicenseShortName?.value||'Lisans bilgisi sayfada',artist:info.extmetadata?.Artist?.value||info.extmetadata?.Credit?.value||''}:null;}).filter(Boolean).slice(0,20);
   renderActorGallery();
   if(actorGalleryPhotos.length){
    const hero=document.getElementById('actor-featured-photos');
@@ -429,7 +429,7 @@ function openActorPhoto(index){
  activeActorPhoto=(index+actorGalleryPhotos.length)%actorGalleryPhotos.length;
  const photo=actorGalleryPhotos[activeActorPhoto];
  document.getElementById('actor-photo-modal-image').src=photo.url||photo.thumb;
- document.getElementById('actor-photo-modal-caption').textContent=(activeActorPhoto+1)+' / '+actorGalleryPhotos.length;
+ const caption=document.getElementById('actor-photo-modal-caption');caption.innerHTML=(activeActorPhoto+1)+' / '+actorGalleryPhotos.length+(photo.page?' · <a href=\"'+escapeCastHtml(photo.page)+'\" target=\"_blank\" rel=\"noopener\">Kaynak / lisans</a>':'');
  document.getElementById('actor-photo-modal').classList.remove('hidden');
  document.body.classList.add('actor-modal-open');
 }
