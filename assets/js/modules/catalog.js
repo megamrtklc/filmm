@@ -58,14 +58,40 @@ function renderMediaGrid(items = mediaDatabase) {
                 </div>
             `).join('');
         }
-function filterGenre(genre) {
-            if (genre === 'all') renderMediaGrid(mediaDatabase);
-            else renderMediaGrid(mediaDatabase.filter(m => m.genre === genre || m.category.includes(genre)));
+let activeCatalogGenre = 'all';
+        let activeCatalogType = 'all';
+        let activeCatalogQuery = '';
+
+        function renderFilteredCatalog() {
+            const query = activeCatalogQuery.trim().toLocaleLowerCase('tr-TR');
+            const filtered = mediaDatabase.filter(m => {
+                const genre = (m.genre || '').toLocaleLowerCase('tr-TR');
+                const category = (m.category || '').toLocaleLowerCase('tr-TR');
+                const needle = activeCatalogGenre.toLocaleLowerCase('tr-TR');
+                const genreMatch = activeCatalogGenre === 'all' || genre.includes(needle) || category.includes(needle);
+                const typeMatch = activeCatalogType === 'all' || m.type === activeCatalogType;
+                const searchMatch = !query || (m.title || '').toLocaleLowerCase('tr-TR').includes(query) || category.includes(query) || genre.includes(query);
+                return genreMatch && typeMatch && searchMatch;
+            });
+            renderMediaGrid(filtered);
+        }
+
+        function filterGenre(genre) {
+            activeCatalogGenre = genre;
+            renderFilteredCatalog();
+            document.querySelectorAll('.genre-pill').forEach(button => {
+                const selected = button.getAttribute('onclick') === `filterGenre('${genre}')`;
+                button.classList.toggle('bg-brand-red', selected);
+                button.classList.toggle('text-white', selected);
+                button.classList.toggle('font-bold', selected);
+                button.classList.toggle('bg-slate-900', !selected);
+                button.classList.toggle('text-slate-300', !selected);
+            });
         }
 
         function filterType(type) {
-            if (type === 'all') renderMediaGrid(mediaDatabase);
-            else renderMediaGrid(mediaDatabase.filter(m => m.type === type));
+            activeCatalogType = type;
+            renderFilteredCatalog();
         }
 
         function switchTab(tab) {
