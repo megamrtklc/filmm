@@ -118,6 +118,15 @@ function renderHomeCollections() {
     document.getElementById('collection-series').hidden = series.length === 0;
 }
 
+function toggleHeaderMenu(id) {
+    const target=document.getElementById(id); const wasOpen=target.classList.contains('open');
+    closeHeaderMenus(); if(!wasOpen){target.classList.add('open');target.querySelector('.nav-trigger,.user-trigger')?.setAttribute('aria-expanded','true');}
+}
+function closeHeaderMenus(){document.querySelectorAll('.nav-dropdown.open').forEach(menu=>{menu.classList.remove('open');menu.querySelector('.nav-trigger,.user-trigger')?.setAttribute('aria-expanded','false');});}
+document.addEventListener('click',event=>{if(!event.target.closest('.nav-dropdown'))closeHeaderMenus();});
+function showProfileNotice(){window.alert('Profil alanı yakında kullanıma açılacak.');}
+function showSettingsNotice(){window.alert('Ayarlar alanı yakında kullanıma açılacak.');}
+
 // Katalog listeleme, arama ve filtreleme
 function renderMediaGrid(items = mediaDatabase) {
             const container = document.getElementById('media-grid');
