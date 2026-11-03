@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NY 7 TV - Premium Streaming Platform UI</title>
+    <title>NY 7 TV - Film ve Dizi Platformu</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome 6 for Icons -->
+    <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,69 +38,38 @@
     </script>
 
     <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.4);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #232733;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff0f1b;
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
+        ::-webkit-scrollbar-thumb { background: #232733; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff0f1b; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Hero Overlay Fade Gradient */
         .hero-vignette {
             background: radial-gradient(circle at 75% 30%, rgba(0, 0, 0, 0) 20%, #0b0c10 90%),
                         linear-gradient(to top, var(--bg-current, #0b0c10) 0%, rgba(11, 12, 16, 0.6) 40%, rgba(11, 12, 16, 0.1) 100%),
                         linear-gradient(to right, var(--bg-current, #0b0c10) 0%, rgba(11, 12, 16, 0.85) 45%, rgba(11, 12, 16, 0.1) 100%);
         }
 
-        /* Movie Poster Card Elevation */
-        .movie-card {
-            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
+        .movie-card { transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .movie-card:hover {
             transform: translateY(-8px) scale(1.03);
             box-shadow: 0 20px 30px -10px var(--theme-glow, rgba(255, 15, 27, 0.5));
         }
 
-        /* Live Indicator Animation */
         @keyframes livePulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.3; transform: scale(1.2); }
         }
-        .live-dot {
-            animation: livePulse 1.8s infinite;
-        }
-
-        /* Background Smooth Accent Sync */
-        #theme-body {
-            transition: background-color 0.8s ease-in-out;
-        }
+        .live-dot { animation: livePulse 1.8s infinite; }
+        #theme-body { transition: background-color 0.8s ease-in-out; }
     </style>
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
-    <!-- TOP NAVIGATION BAR (Matching NY 7 TV Reference) -->
+    <!-- ÜST GEZİNTİ ÇUBUĞU (NAVBAR) -->
     <header class="h-20 bg-black/50 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40 px-6 lg:px-12 flex items-center justify-between">
-        
-        <!-- Left Logo & Nav Links -->
         <div class="flex items-center gap-10">
-            <!-- Brand Logo -->
             <div onclick="showDashboard('#0b0c10')" class="flex items-center gap-2 cursor-pointer group">
                 <div class="bg-gradient-to-r from-red-600 to-brand-red px-3 py-1.5 rounded-lg shadow-lg shadow-red-600/30 font-black tracking-tighter text-xl text-white flex items-center gap-1">
                     <span>NY</span>
@@ -109,56 +78,44 @@
                 </div>
             </div>
 
-            <!-- Top Header Links -->
             <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-300">
-                <a href="#" onclick="showDashboard('#0b0c10')" class="text-white font-bold hover:text-brand-red transition-colors">Home</a>
-                <a href="#" onclick="switchTab('movies')" class="hover:text-white transition-colors">Movies</a>
-                <a href="#" onclick="switchTab('live')" class="hover:text-white transition-colors flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-red-500 live-dot"></span> Live TV
+                <a href="#" onclick="showDashboard('#0b0c10')" class="text-white font-bold hover:text-brand-red transition-colors">Ana Sayfa</a>
+                <a href="#" onclick="switchTab('movie')" class="hover:text-white transition-colors">Filmler</a>
+                <a href="#" onclick="switchTab('tv')" class="hover:text-white transition-colors">Diziler</a>
+                <a href="#" onclick="switchTab('watchlist')" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-bookmark text-brand-yellow text-xs"></i> İzleme Listesi
                 </a>
-                <a href="#" onclick="switchTab('series')" class="hover:text-white transition-colors">Series</a>
-                <div class="relative group cursor-pointer py-2">
-                    <span class="hover:text-white transition-colors flex items-center gap-1">
-                        Release <i class="fa-solid fa-chevron-down text-[10px] ml-0.5"></i>
-                    </span>
-                </div>
-                <a href="#" class="hover:text-white transition-colors">Blog</a>
+                <a href="#" onclick="switchTab('favorites')" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-heart text-brand-red text-xs"></i> Favorilerim
+                </a>
             </nav>
         </div>
 
-        <!-- Right Search & Login Actions -->
         <div class="flex items-center gap-4">
-            <!-- Search Bar Box -->
             <div class="relative hidden sm:block w-48 lg:w-64">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="search-input" type="text" placeholder="Search..." 
+                <input id="search-input" type="text" placeholder="Film veya dizi ara..." 
                        class="w-full bg-slate-900/90 border border-white/10 focus:border-brand-yellow text-slate-200 placeholder-slate-400 text-xs rounded-full py-2 pl-9 pr-4 outline-none transition-all">
             </div>
 
-            <!-- User Login Button -->
             <button class="px-5 py-2 rounded-full bg-brand-yellow hover:bg-brand-yellowHover text-black font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-yellow-500/20 transition-transform active:scale-95">
                 <i class="fa-solid fa-lock text-xs"></i>
-                <span>Login</span>
+                <span>Giriş Yap</span>
             </button>
         </div>
     </header>
 
-    <!-- DASHBOARD VIEW -->
+    <!-- ANA SAYFA GÖRÜNÜMÜ -->
     <div id="dashboard-view" class="flex-1 flex flex-col transition-opacity duration-300">
-
-        <!-- DYNAMIC HERO SPOTLIGHT SECTION -->
+        <!-- MANŞET (HERO SPOTLIGHT) -->
         <section class="relative min-h-[640px] flex items-center px-6 lg:px-16 overflow-hidden border-b border-white/5">
-            
-            <!-- Hero Image Background -->
             <div class="absolute inset-0 z-0">
                 <img id="hero-bg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1920&q=80" 
                      alt="Hero Cover" class="w-full h-full object-cover object-top scale-100 transition-all duration-700">
                 <div class="absolute inset-0 hero-vignette"></div>
             </div>
 
-            <!-- Left Info Area -->
             <div class="relative z-10 max-w-2xl space-y-4 my-12">
-                <!-- Stars Rating -->
                 <div class="flex items-center gap-2 text-brand-yellow text-sm font-bold">
                     <div class="flex gap-1 text-xs">
                         <i class="fa-solid fa-star"></i>
@@ -170,101 +127,87 @@
                     <span id="hero-rating-count" class="text-xs text-slate-400 font-normal">(235)</span>
                 </div>
 
-                <!-- Title -->
                 <h1 id="hero-title" class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white drop-shadow-md leading-none">
                     THE BATMAN
                 </h1>
 
-                <!-- Sub Metadata -->
                 <div id="hero-meta" class="text-xs font-semibold text-slate-400 space-x-2">
-                    <span>2022</span>
-                    <span>•</span>
-                    <span>Drama / Crime</span>
-                    <span>•</span>
-                    <span>Director: Matt Reeves</span>
+                    <span>2022</span> • <span>Drama / Suç</span> • <span>Yönetmen: Matt Reeves</span>
                 </div>
 
-                <!-- Description -->
                 <p id="hero-desc" class="text-slate-300 text-xs sm:text-sm line-clamp-3 leading-relaxed max-w-xl font-light pt-1">
-                    The Batman is an upcoming American superhero film based on the DC Comics character of the same name. Produced by DC Films and distributed by Warner Bros.
+                    Gotham Şehri'nin karanlık sularında adaleti arayan Batman, şehrin elitlerini hedef alan sadist bir katilin izini sürerken geçmişiyle ilgili sırlarla yüzleşir.
                 </p>
 
-                <a id="hero-readmore" href="#" onclick="openDetailPage(heroCurrentId)" class="inline-block text-xs font-bold text-blue-400 underline hover:text-blue-300">Read more</a>
-
-                <!-- CTA Action Buttons -->
                 <div class="flex items-center gap-4 pt-4">
                     <button id="hero-watch-btn" onclick="launchPlayer(heroCurrentTitle)" class="px-7 py-3 rounded-full bg-brand-red hover:bg-brand-redHover text-white font-extrabold text-xs flex items-center gap-2.5 shadow-xl shadow-red-600/30 transition-transform transform hover:scale-105 active:scale-95">
                         <i class="fa-solid fa-play text-xs"></i>
-                        <span>Watch Now</span>
+                        <span>Şimdi İzle</span>
                     </button>
-
                     <button onclick="openDetailPage(heroCurrentId)" class="px-7 py-3 rounded-full bg-black/40 hover:bg-white/10 text-white font-bold text-xs border border-white/30 backdrop-blur-md transition-all">
-                        <span>Trailer</span>
+                        <span>Fragman</span>
                     </button>
                 </div>
             </div>
 
-            <!-- BOTTOM RIGHT HORIZONTAL THUMBNAIL OVERLAY CAROUSEL -->
             <div class="absolute bottom-6 right-6 lg:right-12 z-20 max-w-xl hidden md:flex items-center gap-3 overflow-x-auto p-2 no-scrollbar">
-                <div id="hero-thumbnails-rail" class="flex gap-3">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="hero-thumbnails-rail" class="flex gap-3"></div>
             </div>
         </section>
 
-        <!-- MAIN CATALOG SECTIONS -->
-        <main class="p-6 lg:p-12 space-y-12">
+        <!-- İÇERİK KATALOĞU -->
+        <main class="p-6 lg:p-12 space-y-10">
+            <!-- TÜR FİLTRELERİ -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <button onclick="filterGenre('all')" class="genre-pill px-4 py-2 rounded-full bg-brand-red text-white text-xs font-bold shrink-0 shadow-lg">Tüm Türler</button>
+                <button onclick="filterGenre('Aksiyon')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Aksiyon</button>
+                <button onclick="filterGenre('Bilim Kurgu')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Bilim Kurgu</button>
+                <button onclick="filterGenre('Drama')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Drama</button>
+                <button onclick="filterGenre('Gerilim')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Gerilim</button>
+                <button onclick="filterGenre('Fantastik')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Fantastik</button>
+                <button onclick="filterGenre('Suç')" class="genre-pill px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-medium shrink-0">Suç</button>
+            </div>
 
-            <!-- MOVIES & SERIES GRID -->
+            <!-- FİLM IZGARASI -->
             <section class="space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
                     <h2 id="section-title" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
                         <span class="w-2.5 h-6 rounded-sm bg-brand-red inline-block"></span>
-                        <span>Popular Movies & TV Series</span>
+                        <span>Popüler Filmler ve Diziler</span>
                     </h2>
-
                     <div class="flex items-center bg-slate-900/90 p-1 rounded-xl border border-white/10 text-xs font-semibold self-start sm:self-auto">
-                        <button onclick="filterType('all')" class="px-4 py-1.5 rounded-lg bg-brand-red text-white font-bold transition-all">All</button>
-                        <button onclick="filterType('movie')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">Movies</button>
-                        <button onclick="filterType('tv')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">TV Shows</button>
+                        <button onclick="filterType('all')" class="px-4 py-1.5 rounded-lg bg-brand-red text-white font-bold transition-all">Tümü</button>
+                        <button onclick="filterType('movie')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">Filmler</button>
+                        <button onclick="filterType('tv')" class="px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">Diziler</button>
                     </div>
                 </div>
 
-                <div id="media-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="media-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"></div>
             </section>
 
-            <!-- LIVE TV CHANNELS -->
+            <!-- CANLI TV KANALLARI -->
             <section class="space-y-6">
                 <div class="flex items-center justify-between border-b border-white/5 pb-4">
                     <h2 class="text-xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
                         <span class="w-2.5 h-6 rounded-sm bg-brand-yellow inline-block"></span>
-                        <span>Live TV Channels</span>
+                        <span>Canlı TV Kanalları</span>
                     </h2>
-                    <span class="text-xs font-bold text-slate-400 hover:text-brand-yellow cursor-pointer">View All</span>
                 </div>
-
-                <div id="live-tv-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="live-tv-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
             </section>
-
         </main>
     </div>
 
-    <!-- DYNAMIC COLOR-MATCHED DETAIL PAGE VIEW -->
+    <!-- DİNAMİK RENKLİ DETAY SAYFASI GÖRÜNÜMÜ -->
     <div id="detail-page-view" class="hidden min-h-screen flex-1 flex-col transition-all duration-500 pb-20">
-        
         <div class="px-8 py-4 flex items-center justify-between bg-black/40 backdrop-blur-md border-b border-white/10 sticky top-20 z-20">
             <button onclick="showDashboard()" class="flex items-center gap-2 text-xs font-bold text-white/90 hover:text-brand-yellow bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full border border-white/10 transition-all">
                 <i class="fa-solid fa-arrow-left"></i>
-                <span>Back to Home</span>
+                <span>Ana Sayfaya Dön</span>
             </button>
-
             <div class="flex items-center gap-2 text-xs text-slate-300 font-mono bg-black/60 px-3 py-1.5 rounded-full border border-white/10">
                 <span id="theme-color-dot" class="w-3 h-3 rounded-full"></span>
-                <span>Dominant Theme Color Sync</span>
+                <span>Dinamik Arka Plan Rengi Senkronize Edildi</span>
             </div>
         </div>
 
@@ -275,7 +218,6 @@
 
                 <div class="relative z-10 flex flex-col md:flex-row items-end gap-8 w-full">
                     <img id="detail-poster" src="" alt="Poster" class="w-52 rounded-2xl border-2 border-white/20 shadow-2xl object-cover shrink-0 hidden sm:block">
-
                     <div class="space-y-4 flex-1">
                         <div class="flex items-center gap-2.5 flex-wrap">
                             <span id="detail-category" class="px-3 py-1 rounded-md bg-brand-yellow text-black font-black text-xs uppercase tracking-wider"></span>
@@ -284,18 +226,17 @@
                         </div>
 
                         <h1 id="detail-title" class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-none"></h1>
-                        
                         <p id="detail-desc" class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-3xl font-light"></p>
 
                         <div class="flex items-center gap-4 pt-2">
-                            <button id="detail-play-btn" onclick="" class="px-8 py-3.5 rounded-full bg-brand-red hover:bg-brand-redHover text-white font-extrabold text-xs flex items-center gap-2.5 shadow-xl transition-transform hover:scale-105 active:scale-95">
-                                <i class="fa-solid fa-play text-xs"></i> Watch Movie
+                            <button id="detail-play-btn" class="px-8 py-3.5 rounded-full bg-brand-red hover:bg-brand-redHover text-white font-extrabold text-xs flex items-center gap-2.5 shadow-xl transition-transform hover:scale-105 active:scale-95">
+                                <i class="fa-solid fa-play text-xs"></i> Filmi İzle
                             </button>
-                            <button class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/20">
+                            <button id="detail-fav-btn" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/20 transition-all">
                                 <i class="fa-regular fa-heart"></i>
                             </button>
-                            <button class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/20">
-                                <i class="fa-solid fa-share-nodes"></i>
+                            <button id="detail-watch-btn" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/20 transition-all">
+                                <i class="fa-regular fa-bookmark"></i>
                             </button>
                         </div>
                     </div>
@@ -306,28 +247,26 @@
                 <div class="lg:col-span-2 space-y-6">
                     <div class="bg-black/50 border border-white/10 p-6 rounded-2xl backdrop-blur-md space-y-4">
                         <h3 class="text-base font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-users text-brand-yellow"></i> Cast & Stars
+                            <i class="fa-solid fa-users text-brand-yellow"></i> Oyuncu Kadrosu
                         </h3>
-                        <div id="detail-cast-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            <!-- Populated JS -->
-                        </div>
+                        <div id="detail-cast-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
                     </div>
                 </div>
 
                 <div class="space-y-6">
                     <div class="bg-black/50 border border-white/10 p-6 rounded-2xl backdrop-blur-md space-y-3 text-xs">
-                        <h4 class="text-xs font-bold text-brand-yellow uppercase tracking-wider">Production Info</h4>
+                        <h4 class="text-xs font-bold text-brand-yellow uppercase tracking-wider">Yapım Bilgileri</h4>
                         <div class="space-y-2.5 text-slate-300">
                             <div class="flex justify-between border-b border-white/5 pb-2">
-                                <span class="text-slate-500">Audio Languages</span>
-                                <span class="font-bold text-white">English, Turkish, Spanish</span>
+                                <span class="text-slate-500">Ses Seçenekleri</span>
+                                <span class="font-bold text-white">Türkçe, İngilizce</span>
                             </div>
                             <div class="flex justify-between border-b border-white/5 pb-2">
-                                <span class="text-slate-500">Subtitles</span>
-                                <span class="font-bold text-white">Multi-subtitles available</span>
+                                <span class="text-slate-500">Altyazılar</span>
+                                <span class="font-bold text-white">Türkçe, İngilizce</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-500">Stream Quality</span>
+                                <span class="text-slate-500">Yayın Kalitesi</span>
                                 <span class="font-bold text-emerald-400">4K Ultra HD</span>
                             </div>
                         </div>
@@ -335,10 +274,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- FULLSCREEN VIDEO PLAYER MODAL -->
+    <!-- TAM EKRAN VİDEO OYNATICI MODAL -->
     <div id="player-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6">
         <div class="flex items-center justify-between text-white z-10">
             <div class="flex items-center gap-3">
@@ -346,8 +284,8 @@
                     <i class="fa-solid fa-arrow-left text-xl"></i>
                 </button>
                 <div>
-                    <h3 id="player-media-title" class="font-bold text-sm">Playing Title</h3>
-                    <span class="text-[10px] text-brand-yellow font-mono">NY 7 TV Ultra HD Stream</span>
+                    <h3 id="player-media-title" class="font-bold text-sm">Oynatılan İçerik</h3>
+                    <span class="text-[10px] text-brand-yellow font-mono">NY 7 TV Ultra HD Yayın</span>
                 </div>
             </div>
             <button onclick="closePlayer()" class="p-2 rounded-full hover:bg-white/10 text-white">
@@ -361,7 +299,7 @@
                 <div class="w-20 h-20 rounded-full bg-brand-red/30 border-2 border-brand-red flex items-center justify-center mx-auto cursor-pointer hover:scale-110 transition-transform" onclick="togglePlayState()">
                     <i id="player-play-icon" class="fa-solid fa-pause text-brand-red text-3xl"></i>
                 </div>
-                <p class="text-xs text-slate-400 font-mono">Streaming media online...</p>
+                <p class="text-xs text-slate-400 font-mono">Çevrimiçi medya oynatılıyor...</p>
             </div>
         </div>
 
@@ -376,129 +314,70 @@
                     </button>
                     <span class="font-mono text-slate-300">00:45:12 / 02:18:00</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button class="hover:text-brand-yellow"><i class="fa-solid fa-expand"></i></button>
-                </div>
+                <button class="hover:text-brand-yellow"><i class="fa-solid fa-expand"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT MANTIĞI VE VERİ SETİ -->
     <script>
         const mediaDatabase = [
-            {
-                id: 1,
-                title: 'THE BATMAN',
-                type: 'movie',
-                category: 'Drama / Crime',
-                rating: '8.9',
-                ratingCount: '(235)',
-                year: '2022',
-                duration: '2h 56m',
-                themeColor: '#0b0f19',
-                image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80',
-                desc: 'The Batman is an upcoming American superhero film based on the DC Comics character of the same name. Produced by DC Films and distributed by Warner Bros.',
-                director: 'Matt Reeves',
-                cast: ['Robert Pattinson', 'Zoë Kravitz', 'Paul Dano']
-            },
-            {
-                id: 2,
-                title: 'DOCTOR STRANGE',
-                type: 'movie',
-                category: 'Fantasy / Adventure',
-                rating: '8.5',
-                ratingCount: '(412)',
-                year: '2022',
-                duration: '2h 06m',
-                themeColor: '#360914',
-                image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80',
-                desc: 'Doctor Strange teams up with a mysterious teenage girl from his dreams who can travel across multiverses, to battle multiple threats across the multiverse.',
-                director: 'Sam Raimi',
-                cast: ['Benedict Cumberbatch', 'Elizabeth Olsen', 'Xochitl Gomez']
-            },
-            {
-                id: 3,
-                title: 'SQUID GAME',
-                type: 'tv',
-                category: 'Thriller / Drama',
-                rating: '8.7',
-                ratingCount: '(890)',
-                year: '2024',
-                duration: 'Season 2',
-                themeColor: '#25081c',
-                image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
-                desc: 'Hundreds of cash-strapped players accept a strange invitation to compete in children’s games. Inside, a tempting prize awaits with deadly high stakes.',
-                director: 'Hwang Dong-hyuk',
-                cast: ['Lee Jung-jae', 'Lee Byung-hun', 'Wi Ha-jun']
-            },
-            {
-                id: 4,
-                title: 'ROGUE ONE',
-                type: 'movie',
-                category: 'Sci-Fi / Action',
-                rating: '8.1',
-                ratingCount: '(180)',
-                year: '2023',
-                duration: '2h 13m',
-                themeColor: '#071f28',
-                image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
-                desc: 'In a time of conflict, a group of unlikely heroes band together on a mission to steal the plans to the Death Star, the Empire’s ultimate weapon of destruction.',
-                director: 'Gareth Edwards',
-                cast: ['Felicity Jones', 'Diego Luna', 'Alan Tudyk']
-            },
-            {
-                id: 5,
-                title: 'PROMETHEUS',
-                type: 'movie',
-                category: 'Sci-Fi / Horror',
-                rating: '7.8',
-                ratingCount: '(310)',
-                year: '2021',
-                duration: '2h 04m',
-                themeColor: '#121b18',
-                image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80',
-                desc: 'Following clues to the origin of mankind, a team finds a structure on a distant moon, but they soon realize they are not alone.',
-                director: 'Ridley Scott',
-                cast: ['Noomi Rapace', 'Michael Fassbender', 'Charlize Theron']
-            },
-            {
-                id: 6,
-                title: 'ENDER\'S GAME',
-                type: 'movie',
-                category: 'Action / Sci-Fi',
-                rating: '7.5',
-                ratingCount: '(155)',
-                year: '2022',
-                duration: '1h 54m',
-                themeColor: '#1a1005',
-                image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80',
-                desc: 'Young Ender Wiggin is recruited by the International Military to lead the fight against the Formics, a hostile alien race.',
-                director: 'Gavin Hood',
-                cast: ['Asa Butterfield', 'Harrison Ford', 'Hailee Steinfeld']
-            }
+            { id: 1, title: 'THE BATMAN', type: 'movie', category: 'Drama / Suç', genre: 'Suç', rating: '8.9', ratingCount: '(235)', year: '2022', duration: '2s 56d', themeColor: '#0b0f19', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80', desc: 'Gotham Şehri\'nin karanlık sularında adaleti arayan Batman, şehrin elitlerini hedef alan sadist bir katilin izini sürerken geçmişiyle ilgili sırlarla yüzleşir.', director: 'Matt Reeves', cast: ['Robert Pattinson', 'Zoë Kravitz', 'Paul Dano'] },
+            { id: 2, title: 'DOCTOR STRANGE', type: 'movie', category: 'Fantastik / Aksiyon', genre: 'Fantastik', rating: '8.5', ratingCount: '(412)', year: '2022', duration: '2s 06d', themeColor: '#360914', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80', desc: 'Doctor Strange, çoklu evrenlerin gizemli kapılarını aralarken tehlikeli alternatif evrenlerde güçlü düşmanlarla mücadele etmek zorunda kalır.', director: 'Sam Raimi', cast: ['Benedict Cumberbatch', 'Elizabeth Olsen', 'Xochitl Gomez'] },
+            { id: 3, title: 'SQUID GAME', type: 'tv', category: 'Gerilim / Drama', genre: 'Gerilim', rating: '8.7', ratingCount: '(890)', year: '2024', duration: 'Sezon 2', themeColor: '#25081c', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80', desc: 'Maddi sıkıntı içindeki yüzlerce oyuncu, ölümcül çocuk oyunlarında büyük ödül için yarışmayı kabul eder.', director: 'Hwang Dong-hyuk', cast: ['Lee Jung-jae', 'Lee Byung-hun', 'Wi Ha-jun'] },
+            { id: 4, title: 'ROGUE ONE', type: 'movie', category: 'Bilim Kurgu / Aksiyon', genre: 'Bilim Kurgu', rating: '8.1', ratingCount: '(180)', year: '2023', duration: '2s 13d', themeColor: '#071f28', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80', desc: 'Bir grup kahraman, İmparatorluğun en büyük silahı olan Ölüm Yıldızı\'nın planlarını çalmak için tehlikeli bir göreve atılır.', director: 'Gareth Edwards', cast: ['Felicity Jones', 'Diego Luna', 'Alan Tudyk'] },
+            { id: 5, title: 'PROMETHEUS', type: 'movie', category: 'Bilim Kurgu / Korku', genre: 'Bilim Kurgu', rating: '7.8', ratingCount: '(310)', year: '2021', duration: '2s 04d', themeColor: '#121b18', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80', desc: 'İnsanlığın kökenlerini arayan bir bilim ekibi, evrenin en karanlık köşesinde insan türünün geleceğini tehdit eden bir sırla karşılaşır.', director: 'Ridley Scott', cast: ['Noomi Rapace', 'Michael Fassbender', 'Charlize Theron'] },
+            { id: 6, title: 'ENDER\'S GAME', type: 'movie', category: 'Aksiyon / Bilim Kurgu', genre: 'Aksiyon', rating: '7.5', ratingCount: '(155)', year: '2022', duration: '1s 54d', themeColor: '#1a1005', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80', desc: 'Genç Ender Wiggin, insanlığı yok etmeye kararlı uzaylı ırkına karşı verilecek son savaşta ordunun lideri olarak eğitilir.', director: 'Gavin Hood', cast: ['Asa Butterfield', 'Harrison Ford', 'Hailee Steinfeld'] }
         ];
 
         const liveTvChannels = [
-            { name: 'Disney Channel', icon: 'fa-tv', tag: 'Kids 24/7' },
-            { name: 'HBO HD Live', icon: 'fa-film', tag: 'Blockbuster Cinema' },
-            { name: 'ESPN Sports', icon: 'fa-trophy', tag: 'Live Match Broadcast' },
-            { name: 'Discovery HD', icon: 'fa-earth-americas', tag: 'Nature Documentaries' }
+            { name: 'Disney Channel', icon: 'fa-tv', tag: 'Çocuk 24/7' },
+            { name: 'HBO HD Live', icon: 'fa-film', tag: 'Sinema Kuşağı' },
+            { name: 'ESPN Sports', icon: 'fa-trophy', tag: 'Canlı Maç Yayını' },
+            { name: 'Discovery HD', icon: 'fa-earth-americas', tag: 'Belgesel' }
         ];
 
+        let favorites = JSON.parse(localStorage.getItem('ny7_favorites') || '[]');
+        let watchlist = JSON.parse(localStorage.getItem('ny7_watchlist') || '[]');
         let heroCurrentId = 1;
         let heroCurrentTitle = 'THE BATMAN';
+
+        function toggleFavorite(id, e) {
+            if (e) e.stopPropagation();
+            favorites = favorites.includes(id) ? favorites.filter(favId => favId !== id) : [...favorites, id];
+            localStorage.setItem('ny7_favorites', JSON.stringify(favorites));
+            renderMediaGrid();
+            if (document.getElementById('detail-fav-btn')) updateDetailButtons(id);
+        }
+
+        function toggleWatchlist(id, e) {
+            if (e) e.stopPropagation();
+            watchlist = watchlist.includes(id) ? watchlist.filter(wId => wId !== id) : [...watchlist, id];
+            localStorage.setItem('ny7_watchlist', JSON.stringify(watchlist));
+            renderMediaGrid();
+            if (document.getElementById('detail-watch-btn')) updateDetailButtons(id);
+        }
+
+        function updateDetailButtons(id) {
+            const isFav = favorites.includes(id);
+            const isWatch = watchlist.includes(id);
+            const favBtn = document.getElementById('detail-fav-btn');
+            const watchBtn = document.getElementById('detail-watch-btn');
+            favBtn.innerHTML = `<i class="${isFav ? 'fa-solid text-brand-red' : 'fa-regular'} fa-heart"></i>`;
+            favBtn.onclick = (e) => toggleFavorite(id, e);
+            watchBtn.innerHTML = `<i class="${isWatch ? 'fa-solid text-brand-yellow' : 'fa-regular'} fa-bookmark"></i>`;
+            watchBtn.onclick = (e) => toggleWatchlist(id, e);
+        }
 
         function setHeroMedia(id) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
             heroCurrentId = item.id;
             heroCurrentTitle = item.title;
-
             document.getElementById('hero-bg').src = item.image;
             document.getElementById('hero-title').innerText = item.title;
             document.getElementById('hero-rating-count').innerText = item.ratingCount;
-            document.getElementById('hero-meta').innerText = `${item.year} - ${item.category} | Director: ${item.director}`;
+            document.getElementById('hero-meta').innerText = `${item.year} - ${item.category} | Yönetmen: ${item.director}`;
             document.getElementById('hero-desc').innerText = item.desc;
-
             document.getElementById('theme-body').style.backgroundColor = item.themeColor;
         }
 
@@ -515,26 +394,37 @@
 
         function renderMediaGrid(items = mediaDatabase) {
             const container = document.getElementById('media-grid');
-            container.innerHTML = items.map(m => `
+            if (items.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 font-medium text-sm">Bu kategoride henüz içerik bulunmuyor.</div>`;
+                return;
+            }
+            container.innerHTML = items.map(m => {
+                const isFav = favorites.includes(m.id);
+                const isWatch = watchlist.includes(m.id);
+                return `
                 <div onclick="openDetailPage(${m.id})" class="movie-card group cursor-pointer" style="--theme-glow: ${m.themeColor}">
                     <div class="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-slate-900 shadow-xl">
                         <img src="${m.image}" alt="${m.title}" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
-                        
-                        <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded text-[10px] font-black bg-black/80 text-brand-yellow border border-amber-400/30">
-                            ★ ${m.rating}
-                        </span>
-
+                        <div class="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center z-10">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-black/80 text-brand-yellow border border-amber-400/30">★ ${m.rating}</span>
+                            <div class="flex gap-1">
+                                <button onclick="toggleFavorite(${m.id}, event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all">
+                                    <i class="${isFav ? 'fa-solid text-brand-red' : 'fa-regular'} fa-heart text-xs"></i>
+                                </button>
+                                <button onclick="toggleWatchlist(${m.id}, event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all">
+                                    <i class="${isWatch ? 'fa-solid text-brand-yellow' : 'fa-regular'} fa-bookmark text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="absolute bottom-3 left-3 right-3 space-y-1">
-                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">
-                                ${m.category}
-                            </span>
+                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">${m.category}</span>
                             <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
                             <p class="text-[10px] text-slate-400 font-medium">${m.year}</p>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function renderLiveTv() {
@@ -564,10 +454,8 @@
 
         function openDetailPage(id) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
-
             document.getElementById('theme-body').style.backgroundColor = item.themeColor;
             document.getElementById('theme-color-dot').style.backgroundColor = item.themeColor;
-
             document.getElementById('detail-backdrop').src = item.image;
             document.getElementById('detail-poster').src = item.image;
             document.getElementById('detail-title').innerText = item.title;
@@ -575,6 +463,7 @@
             document.getElementById('detail-rating').innerHTML = `<i class="fa-solid fa-star"></i> ${item.rating} IMDb`;
             document.getElementById('detail-year').innerText = item.year;
             document.getElementById('detail-desc').innerText = item.desc;
+            updateDetailButtons(item.id);
 
             const castContainer = document.getElementById('detail-cast-list');
             castContainer.innerHTML = item.cast.map(c => `
@@ -587,10 +476,14 @@
             `).join('');
 
             document.getElementById('detail-play-btn').onclick = () => launchPlayer(item.title);
-
             document.getElementById('dashboard-view').classList.add('hidden');
             document.getElementById('detail-page-view').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterGenre(genre) {
+            if (genre === 'all') renderMediaGrid(mediaDatabase);
+            else renderMediaGrid(mediaDatabase.filter(m => m.genre === genre || m.category.includes(genre)));
         }
 
         function filterType(type) {
@@ -598,10 +491,12 @@
             else renderMediaGrid(mediaDatabase.filter(m => m.type === type));
         }
 
-        function switchTab(type) {
+        function switchTab(tab) {
             showDashboard();
-            if (type === 'movies') renderMediaGrid(mediaDatabase.filter(m => m.type === 'movie'));
-            else if (type === 'series') renderMediaGrid(mediaDatabase.filter(m => m.type === 'tv'));
+            if (tab === 'movie') renderMediaGrid(mediaDatabase.filter(m => m.type === 'movie'));
+            else if (tab === 'tv') renderMediaGrid(mediaDatabase.filter(m => m.type === 'tv'));
+            else if (tab === 'favorites') renderMediaGrid(mediaDatabase.filter(m => favorites.includes(m.id)));
+            else if (tab === 'watchlist') renderMediaGrid(mediaDatabase.filter(m => watchlist.includes(m.id)));
             else renderMediaGrid(mediaDatabase);
         }
 
