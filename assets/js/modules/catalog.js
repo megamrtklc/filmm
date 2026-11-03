@@ -1,3 +1,33 @@
+
+function renderHomeCollections() {
+    const score = item => {
+        const value = Number.parseFloat(item.rating);
+        return Number.isFinite(value) ? value : 0;
+    };
+    const card = item => `
+        <article class="collection-card" onclick="openDetailPage('${item.id}')" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailPage('${item.id}')}">
+            <div class="collection-poster-wrap">
+                <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
+                <span class="collection-rating">★ ${item.rating || '—'}</span>
+            </div>
+            <div class="collection-card-copy"><h3>${item.title}</h3><p>${item.year || ''} <span>•</span> ${item.type === 'tv' ? 'Dizi' : 'Film'}</p></div>
+        </article>`;
+    const fill = (id, items) => {
+        const rail = document.getElementById(id);
+        if (!rail) return;
+        rail.innerHTML = items.length ? items.map(card).join('') : '<p class="text-sm text-slate-500">Bu koleksiyonda henüz içerik yok.</p>';
+    };
+    const valid = mediaDatabase.filter(item => item.image && item.title);
+    const featured = [...valid].sort((a,b) => score(b)-score(a)).slice(0,12);
+    const movies = valid.filter(item => item.type === 'movie').sort((a,b) => score(b)-score(a)).slice(0,12);
+    const series = valid.filter(item => item.type === 'tv').sort((a,b) => score(b)-score(a)).slice(0,12);
+    fill('featured-rail', featured);
+    fill('top-movies-rail', movies);
+    fill('top-series-rail', series);
+    document.getElementById('collection-movies').hidden = movies.length === 0;
+    document.getElementById('collection-series').hidden = series.length === 0;
+}
+
 // Katalog listeleme, arama ve filtreleme
 function renderMediaGrid(items = mediaDatabase) {
             const container = document.getElementById('media-grid');
