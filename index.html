@@ -240,6 +240,7 @@
                     </div>
                 </div>
             </div>
+            <section id="detail-related" class="detail-related hidden"><div class="detail-related-heading"><span>DAHA FAZLASI</span><h2>Benzer yapımlar</h2></div><div id="detail-related-rail" class="collection-rail"></div></section>
             <div class="detail-lower detail-cast-inline">
                 <div class="detail-info-card detail-cast-card">
                     <div class="detail-cast-heading"><h3><i class="fa-solid fa-users text-amber-400 mr-2"></i>Oyuncu Kadrosu</h3><div id="detail-cast-controls" class="detail-cast-controls hidden"><button type="button" onclick="changeCastPage(-1)" aria-label="Önceki oyuncular"><i class="fa-solid fa-chevron-left"></i></button><span id="detail-cast-page-label">1 / 2</span><button type="button" onclick="changeCastPage(1)" aria-label="Sonraki oyuncular"><i class="fa-solid fa-chevron-right"></i></button></div></div>
@@ -249,7 +250,36 @@
         </section>
     </div>
 
-    <section id="detail-related" class="detail-related hidden"><div class="detail-related-heading"><span>DAHA FAZLASI</span><h2>Benzer yapımlar</h2></div><div id="detail-related-rail" class="collection-rail"></div></section>
+    
+
+
+    <div id="actor-page-view" class="actor-page hidden min-h-screen flex-1">
+        <section class="actor-hero">
+            <div class="actor-hero-top"><button class="detail-back" onclick="showDashboard()"><i class="fa-solid fa-arrow-left"></i> Geri dön</button><span>OYUNCU PROFİLİ</span></div>
+            <div id="actor-featured-films" class="actor-featured-films" aria-label="Oyuncunun öne çıkan yapımları"></div>
+        </section>
+        <main class="actor-profile-layout">
+            <aside class="actor-profile-sidebar">
+                <div class="actor-profile-photo"><img id="actor-profile-image" src="" alt="Oyuncu fotoğrafı"></div>
+                <h1 id="actor-profile-name"></h1>
+                <div class="actor-facts">
+                    <div><span>Doğum tarihi</span><b id="actor-birth-date">Bilgi aranıyor…</b></div>
+                    <div><span>Ülke</span><b id="actor-country">Bilgi aranıyor…</b></div>
+                    <div><span>Meslek</span><b>Oyuncu</b></div>
+                </div>
+            </aside>
+            <section class="actor-biography">
+                <div class="actor-section-kicker">HAYATI VE KARİYERİ</div>
+                <h2 id="actor-biography-title"></h2>
+                <p id="actor-biography-text">Oyuncu hakkında bilgiler yükleniyor…</p>
+                <a id="actor-wikipedia-link" href="#" target="_blank" rel="noopener">Kaynak ve daha fazla bilgi <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </section>
+        </main>
+        <section class="actor-filmography">
+            <div class="detail-related-heading"><span>FİLMOGRAFİ</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div>
+            <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
+        </section>
+    </div>
 
     <!-- OYNATICI MODAL -->
     <div id="player-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6">
@@ -301,6 +331,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261103-4"></script>
+    <script src="assets/js/bundle.js?v=20261103-5"></script>
 </body>
 </html>
