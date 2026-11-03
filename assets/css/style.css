@@ -300,3 +300,20 @@
  .header-actions{gap:5px}
  .glass-search,.user-trigger{width:32px;height:32px;min-width:32px;flex-basis:32px}
 }
+
+
+/* Header sıralaması: logo, menü, sağda arama ve profil */
+.site-header{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:clamp(10px,1.35vw,22px)}
+.header-brand{order:0;flex:0 0 auto}
+.main-nav{order:1;flex:1 1 auto;min-width:0;justify-content:center}
+.header-actions{order:2;flex:0 0 auto;margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:clamp(7px,.9vw,13px)}
+.user-trigger{width:39px;height:39px;min-width:39px;padding:3px;border-radius:11px;overflow:hidden;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.24);display:grid;place-items:center}
+.user-avatar{display:block;width:31px;height:31px;object-fit:cover;border-radius:8px}
+@media(max-width:760px){
+ .site-header{flex-direction:row;flex-wrap:nowrap;gap:8px}
+ .header-brand{order:0}
+ .main-nav{order:1;flex:1 1 auto;justify-content:flex-start}
+ .header-actions{order:2;flex:0 0 auto;margin-left:0}
+ .user-trigger{width:35px;height:35px;min-width:35px;border-radius:10px}
+ .user-avatar{width:27px;height:27px;border-radius:7px}
+}
