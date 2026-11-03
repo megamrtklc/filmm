@@ -251,6 +251,7 @@ let activeCatalogGenre = 'all';
         }
 document.getElementById('search-input').addEventListener('input', function(e) {
             activeCatalogQuery = e.target.value || '';
+            if (activeCatalogQuery.trim()) showCatalogView('Arama Sonuçları');
             renderFilteredCatalog();
         });
 
