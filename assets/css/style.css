@@ -2477,3 +2477,202 @@ body[data-theme="light"] .footer,body[data-theme="light"] footer{background:#e9e
 .theme-toggle{width:40px;height:40px;flex:0 0 40px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:rgba(255,255,255,.08);color:#facc15;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
 .theme-toggle:hover{transform:translateY(-1px);background:rgba(255,255,255,.15);border-color:rgba(250,204,21,.55)}
 @media(max-width:767px){.theme-toggle{width:36px;height:36px;flex-basis:36px}.header-actions{gap:8px}}
+
+
+
+/* NY7 Light Mode v2 — kapsamlı yüzey, kart ve metin kontrastı */
+html[data-theme="light"],html.light{color-scheme:light!important}
+body[data-theme="light"]{
+ background:#f4f6fa!important;color:#202938!important;
+ --bg-current:#f4f6fa;--surface-current:#ffffff;--text-current:#202938;--muted-current:#667085;
+ --ny7-light-surface:#fff;--ny7-light-soft:#f8fafc;--ny7-light-border:#e2e7ef;--ny7-light-text:#202938;--ny7-light-muted:#667085;
+}
+body[data-theme="light"] #theme-body,
+body[data-theme="light"] main,
+body[data-theme="light"] .flex-1.flex.flex-col{
+ background-color:#f4f6fa!important;color:#202938!important;
+}
+
+/* Tailwind koyu yüzey sınıfları: sayfa zemini ve paneller */
+body[data-theme="light"] [class*="bg-slate-950"],
+body[data-theme="light"] [class*="bg-slate-900"],
+body[data-theme="light"] [class*="bg-slate-800"],
+body[data-theme="light"] [class*="bg-slate-700"],
+body[data-theme="light"] [class*="bg-gray-950"],
+body[data-theme="light"] [class*="bg-gray-900"],
+body[data-theme="light"] [class*="bg-gray-800"],
+body[data-theme="light"] [class*="bg-zinc-950"],
+body[data-theme="light"] [class*="bg-zinc-900"],
+body[data-theme="light"] [class*="bg-neutral-950"],
+body[data-theme="light"] [class*="bg-neutral-900"],
+body[data-theme="light"] [class*="bg-black/"],
+body[data-theme="light"] [class*="bg-[#0"],
+body[data-theme="light"] [class*="bg-[#1"],
+body[data-theme="light"] [class*="bg-[#2"]{
+ background-color:#fff!important;
+ background-image:none;
+}
+body[data-theme="light"] [class*="bg-slate-800/"],
+body[data-theme="light"] [class*="bg-slate-900/"],
+body[data-theme="light"] [class*="bg-gray-800/"],
+body[data-theme="light"] [class*="bg-gray-900/"],
+body[data-theme="light"] [class*="bg-black/"]{
+ background-color:#f8fafc!important;
+}
+
+/* Metinler: koyu tema beyaz/gri tonlarını okunaklı koyu renge çevir */
+body[data-theme="light"] [class*="text-white"],
+body[data-theme="light"] [class*="text-slate-50"],
+body[data-theme="light"] [class*="text-slate-100"],
+body[data-theme="light"] [class*="text-slate-200"],
+body[data-theme="light"] [class*="text-gray-50"],
+body[data-theme="light"] [class*="text-gray-100"],
+body[data-theme="light"] [class*="text-gray-200"]{
+ color:#263244!important;
+}
+body[data-theme="light"] [class*="text-slate-300"],
+body[data-theme="light"] [class*="text-slate-400"],
+body[data-theme="light"] [class*="text-slate-500"],
+body[data-theme="light"] [class*="text-gray-300"],
+body[data-theme="light"] [class*="text-gray-400"],
+body[data-theme="light"] [class*="text-gray-500"]{
+ color:#667085!important;
+}
+body[data-theme="light"] [class*="border-white/"],
+body[data-theme="light"] [class*="border-slate-"],
+body[data-theme="light"] [class*="border-gray-"],
+body[data-theme="light"] [class*="border-zinc-"]{
+ border-color:#e2e7ef!important;
+}
+
+/* Ana sayfa bölümleri, keşif kartları ve katalog */
+body[data-theme="light"] .home-collections,
+body[data-theme="light"] .collection-section,
+body[data-theme="light"] .catalog-page,
+body[data-theme="light"] .catalog-section,
+body[data-theme="light"] .catalog-type-filter,
+body[data-theme="light"] .catalog-genre-scroller,
+body[data-theme="light"] .mood-discovery-result,
+body[data-theme="light"] .mood-discovery-loading{
+ color:#263244!important;
+}
+body[data-theme="light"] .collection-section,
+body[data-theme="light"] .mood-discovery-result,
+body[data-theme="light"] .mood-discovery-loading,
+body[data-theme="light"] .catalog-type-filter{
+ background:#fff!important;border:1px solid #e5e9f0!important;border-radius:18px;
+ box-shadow:0 8px 24px rgba(25,38,58,.055);
+}
+body[data-theme="light"] .collection-heading,
+body[data-theme="light"] .collection-heading *,
+body[data-theme="light"] .catalog-page h1,
+body[data-theme="light"] .catalog-page h2,
+body[data-theme="light"] .catalog-page h3{
+ color:#202938!important;
+}
+body[data-theme="light"] .genre-pill:not(.bg-brand-red){
+ background:#fff!important;color:#475467!important;border:1px solid #e2e7ef!important;
+}
+body[data-theme="light"] .catalog-type-filter button:not(.bg-brand-red){
+ color:#667085!important;
+}
+
+/* Kartların ortak görünümü */
+body[data-theme="light"] .media-card,
+body[data-theme="light"] .movie-card,
+body[data-theme="light"] .series-card,
+body[data-theme="light"] .info-card,
+body[data-theme="light"] .content-card,
+body[data-theme="light"] .actor-profile-card,
+body[data-theme="light"] .director-profile-card,
+body[data-theme="light"] .detail-description-panel,
+body[data-theme="light"] .detail-cast-card,
+body[data-theme="light"] .detail-facts-card,
+body[data-theme="light"] .detail-fact-item,
+body[data-theme="light"] .detail-fact,
+body[data-theme="light"] .actor-profile-facts-horizontal,
+body[data-theme="light"] .director-profile-facts,
+body[data-theme="light"] .actor-biography,
+body[data-theme="light"] .director-biography,
+body[data-theme="light"] .profile-card,
+body[data-theme="light"] .profile-facts,
+body[data-theme="light"] .profile-info-card{
+ background-color:#fff!important;background-image:none!important;
+ color:#263244!important;border:1px solid #e5e9f0!important;
+ box-shadow:0 8px 26px rgba(25,38,58,.06)!important;
+}
+body[data-theme="light"] .detail-main,
+body[data-theme="light"] .detail-overlap,
+body[data-theme="light"] .detail-copy,
+body[data-theme="light"] .actor-page,
+body[data-theme="light"] .director-page,
+body[data-theme="light"] #actor-page-view,
+body[data-theme="light"] #director-page-view,
+body[data-theme="light"] #detail-page-view{
+ background-color:#f4f6fa!important;color:#263244!important;
+}
+body[data-theme="light"] .detail-main h1,
+body[data-theme="light"] .detail-main h2,
+body[data-theme="light"] .detail-main h3,
+body[data-theme="light"] .detail-copy h1,
+body[data-theme="light"] .detail-facts-card *,
+body[data-theme="light"] .detail-cast-card *,
+body[data-theme="light"] .actor-profile-card *,
+body[data-theme="light"] .director-profile-card *,
+body[data-theme="light"] .profile-card *{
+ color:inherit;
+}
+body[data-theme="light"] .detail-subline,
+body[data-theme="light"] .detail-description-panel p,
+body[data-theme="light"] .detail-facts-card small,
+body[data-theme="light"] .actor-profile-facts-horizontal .fact-label,
+body[data-theme="light"] .director-profile-facts .fact-label{
+ color:#667085!important;
+}
+
+/* Form alanları, açılır menüler ve arama sonuçları */
+body[data-theme="light"] input,
+body[data-theme="light"] select,
+body[data-theme="light"] textarea{
+ background:#fff!important;color:#263244!important;border-color:#d9e0e9!important;
+}
+body[data-theme="light"] input::placeholder,
+body[data-theme="light"] textarea::placeholder{color:#98a2b3!important}
+body[data-theme="light"] .nav-menu,
+body[data-theme="light"] .user-menu-panel,
+body[data-theme="light"] .category-menu,
+body[data-theme="light"] .header-search-results{
+ background:#fff!important;color:#263244!important;border:1px solid #e2e7ef!important;
+ box-shadow:0 16px 38px rgba(20,32,50,.13)!important;
+}
+body[data-theme="light"] .nav-menu a,
+body[data-theme="light"] .nav-menu button,
+body[data-theme="light"] .user-menu-panel a,
+body[data-theme="light"] .category-menu a,
+body[data-theme="light"] .header-search-results *{
+ color:#344054!important;
+}
+
+/* Simge ve etkileşimli kontroller */
+body[data-theme="light"] .catalog-page i,
+body[data-theme="light"] .detail-main i,
+body[data-theme="light"] .actor-page i,
+body[data-theme="light"] .director-page i{color:inherit}
+body[data-theme="light"] .bg-brand-red,
+body[data-theme="light"] .bg-brand-yellow,
+body[data-theme="light"] .bg-red-600,
+body[data-theme="light"] .bg-amber-500{
+ color:#fff!important;
+}
+body[data-theme="light"] button:not(.bg-brand-red):not(.bg-red-600):not(.theme-toggle),
+body[data-theme="light"] .detail-back{
+ border-color:#e2e7ef;
+}
+body[data-theme="light"] .footer,
+body[data-theme="light"] footer{
+ background:#e9edf3!important;color:#536074!important;border-color:#dce2ea!important;
+}
+body[data-theme="light"] .footer *,
+body[data-theme="light"] footer *{color:inherit}
+body[data-theme="light"] .hero-section{color:#fff!important}
+body[data-theme="light"] .hero-section .hero-vignette{background:linear-gradient(90deg,rgba(12,16,24,.88),rgba(12,16,24,.62) 38%,rgba(12,16,24,.12) 78%),linear-gradient(0deg,#f4f6fa 0%,rgba(244,246,250,.5) 12%,transparent 48%)!important}
