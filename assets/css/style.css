@@ -2590,3 +2590,52 @@ body.trailer-popup-open{overflow:hidden}
  .detail-modal-panel .detail-copy h1{font-size:clamp(20px,6vw,30px)}
  .detail-modal-panel .detail-description-panel{padding:18px 0 24px}
 }
+
+
+/* Premium trailer popup refinement */
+.trailer-popup{padding:clamp(14px,3vw,30px)}
+.trailer-popup-backdrop{background:rgba(3,4,8,.84);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.trailer-popup-card{width:min(1160px,100%);max-height:min(92vh,900px);overflow:auto;overscroll-behavior:contain;border:1px solid rgba(215,184,94,.28);border-radius:22px;background:linear-gradient(145deg,#11131a 0%,#090a0e 72%);box-shadow:0 34px 110px rgba(0,0,0,.78),0 0 0 1px rgba(255,255,255,.025) inset}
+.trailer-popup-head{position:sticky;top:0;z-index:3;padding:18px 22px;background:linear-gradient(180deg,rgba(17,19,26,.98),rgba(17,19,26,.9));border-bottom:1px solid rgba(255,255,255,.065);backdrop-filter:blur(14px)}
+.trailer-popup-head span{color:#d7b85e}
+.trailer-popup-head h2{font-size:clamp(15px,1.6vw,19px);letter-spacing:-.025em}
+.trailer-popup-head button{width:40px;height:40px;border-color:rgba(215,184,94,.28);background:rgba(215,184,94,.08);color:#f6e7b7;transition:transform .2s ease,background .2s ease,border-color .2s ease}
+.trailer-popup-head button:hover{transform:rotate(90deg);background:rgba(215,184,94,.18);border-color:rgba(215,184,94,.6)}
+.trailer-popup-content{grid-template-columns:250px minmax(0,1fr);gap:24px;padding:20px 22px 22px;align-items:start}
+.trailer-popup-info{gap:13px}
+.trailer-popup-poster-frame{width:100%;max-width:220px;aspect-ratio:2/3;display:grid;place-items:center;overflow:hidden;margin:0 auto 2px;border:1px solid rgba(215,184,94,.2);border-radius:12px;background:radial-gradient(ellipse at center,rgba(215,184,94,.08),rgba(255,255,255,.025) 65%,rgba(0,0,0,.3));box-shadow:0 12px 32px rgba(0,0,0,.32),0 0 0 4px rgba(255,255,255,.018)}
+.trailer-popup-poster{width:100%;height:100%;max-height:none;object-fit:contain;object-position:center;border-radius:0;background:transparent}
+.trailer-popup-meta span{border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.045)}
+.trailer-popup-category{display:flex;flex-wrap:wrap;gap:6px}
+.trailer-popup-imdb{padding:9px 11px;border:1px solid rgba(244,200,75,.16);border-radius:9px;background:rgba(244,200,75,.055)}
+.trailer-popup-credits{display:flex;flex-direction:column;gap:9px;padding:11px 12px;border:1px solid rgba(255,255,255,.075);border-radius:10px;background:rgba(255,255,255,.025)}
+.trailer-popup-credits[hidden]{display:none}
+.trailer-popup-credit-row span{display:block;margin-bottom:4px;color:#d7b85e;font-size:9px;font-weight:900;letter-spacing:.15em}
+.trailer-popup-credit-row p{color:#d2d3d9;font-size:11px;line-height:1.55;font-weight:600;overflow-wrap:anywhere}
+.trailer-popup-summary{padding-top:12px;border-top-color:rgba(215,184,94,.16)}
+.trailer-popup-summary p{line-height:1.7}
+.trailer-popup-player{aspect-ratio:16/9;border:1px solid rgba(215,184,94,.2);border-radius:13px;background:#020305;box-shadow:0 16px 42px rgba(0,0,0,.38)}
+.trailer-popup-player iframe{border:0}
+.trailer-popup-empty{min-height:180px}
+@media(max-width:700px){
+ .trailer-popup{padding:10px}
+ .trailer-popup-card{max-height:94dvh;border-radius:16px}
+ .trailer-popup-head{padding:12px 14px}
+ .trailer-popup-head button{width:36px;height:36px}
+ .trailer-popup-content{grid-template-columns:1fr;gap:12px;padding:13px}
+ .trailer-popup-player{order:0;border-radius:10px}
+ .trailer-popup-info{order:1;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px 12px;align-items:start}
+ .trailer-popup-poster-frame{grid-column:1;grid-row:1 / span 5;width:92px;height:138px;aspect-ratio:auto;margin:0;border-radius:9px}
+ .trailer-popup-poster{width:100%;height:100%;object-fit:contain}
+ .trailer-popup-meta,.trailer-popup-category,.trailer-popup-imdb,.trailer-popup-credits,.trailer-popup-summary{grid-column:2;min-width:0}
+ .trailer-popup-meta{gap:4px}
+ .trailer-popup-meta span{font-size:9px;padding:4px 6px}
+ .trailer-popup-imdb{padding:6px 8px}
+ .trailer-popup-credits{padding:8px 9px;gap:7px}
+ .trailer-popup-credit-row p{font-size:10px}
+ .trailer-popup-summary{padding-top:7px}
+ .trailer-popup-summary p{-webkit-line-clamp:4;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .trailer-popup-card,.trailer-popup-head button{transition:none}
+}
