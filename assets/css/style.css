@@ -2247,3 +2247,33 @@ body.actor-modal-open{overflow:hidden}
  .director-profile-biography p{font-size:12px;line-height:1.75;max-height:220px}
 }
 @media(max-width:420px){.director-profile-fact-list{grid-template-columns:1fr}}
+
+/* Compact director profile refinement */
+.director-profile-panel{max-width:1040px;margin:18px auto!important;border-radius:15px}
+.director-profile-content{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.director-profile-facts{padding:15px 17px}
+.director-profile-identity{align-items:flex-start;gap:13px;margin:0 0 10px}
+.director-profile-photo,.director-profile-avatar{width:76px;height:84px;flex:0 0 76px;border-radius:10px}
+.director-profile-heading{display:flex;flex-direction:column;gap:7px;min-width:0}
+.director-profile-heading h2{font-size:18px;line-height:1.2;margin:1px 0 2px}
+.director-profile-birth,.director-profile-inline-fact{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;min-width:0}
+.director-profile-birth span,.director-profile-inline-fact span{color:#d7b66b;font-size:9px;font-weight:850;letter-spacing:.06em}
+.director-profile-birth b,.director-profile-inline-fact b{color:#e4e7ed;font-size:11px;line-height:1.4;font-weight:600;overflow-wrap:anywhere}
+.director-profile-fact-list{display:grid;grid-template-columns:1fr;gap:6px}
+.director-profile-fact{padding:7px 9px;border-radius:8px}
+.director-profile-fact span{font-size:9px;margin-bottom:3px}
+.director-profile-fact b{font-size:11px;line-height:1.4}
+.director-profile-biography{padding:17px 19px;justify-content:flex-start}
+.director-profile-biography>small{font-size:9px;margin-bottom:9px}
+.director-profile-biography p{font-size:12px;line-height:1.55;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;overflow:hidden;max-height:calc(1.55em * 5);padding:0}
+.director-profile-biography a{margin-top:9px;font-size:10px}
+@media(max-width:700px){
+ .director-profile-panel{margin:14px 0!important}
+ .director-profile-content{grid-template-columns:1fr}
+ .director-profile-facts{padding:13px 14px}
+ .director-profile-identity{gap:11px;margin-bottom:8px}
+ .director-profile-photo,.director-profile-avatar{width:70px;height:78px;flex-basis:70px}
+ .director-profile-heading h2{font-size:16px}
+ .director-profile-biography{padding:13px 15px}
+ .director-profile-biography p{font-size:11px;line-height:1.5;-webkit-line-clamp:5;line-clamp:5;max-height:7.5em}
+}
