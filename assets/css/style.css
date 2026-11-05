@@ -2443,3 +2443,44 @@ body.actor-modal-open{overflow:hidden}
 }
 #detail-page-view .detail-cast-heading:before{opacity:.38!important}
 \n
+
+/* NY7 UX iyilestirmeleri — koyu sinematik tema korunur */
+.movie-card{min-width:0;transition:transform .28s ease,filter .28s ease}
+.movie-card:hover{transform:translateY(-5px);filter:drop-shadow(0 12px 22px rgba(0,0,0,.32))}
+.movie-card img,.collection-card img{transition:transform .38s ease,filter .3s ease}
+.movie-card:hover img,.collection-card:hover img{transform:scale(1.045);filter:brightness(1.08)}
+.header-search-results,.nav-menu,.detail-cast-heading,.detail-topbar{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.header-search-empty{display:flex;flex-direction:column;align-items:center;gap:7px;padding:18px 14px;text-align:center;color:#aeb4c0}
+.header-search-empty>span{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#ffffff0d;color:#d9b44e}
+.header-search-empty b{font-size:12px;color:#f1f2f5}.header-search-empty small{font-size:10px;line-height:1.5;color:#9299a6}
+.header-search-empty button,.ny7-empty-state button,.ny7-error-state button{margin-top:6px;padding:9px 14px;border:1px solid rgba(245,196,75,.35);border-radius:999px;background:rgba(245,196,75,.12);color:#f4ce70;font-size:11px;font-weight:800;transition:background .2s ease,transform .2s ease}
+.header-search-empty button:hover,.ny7-empty-state button:hover,.ny7-error-state button:hover{background:rgba(245,196,75,.22);transform:translateY(-1px)}
+.ny7-empty-state,.ny7-error-state{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:260px;padding:32px 18px;text-align:center;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:radial-gradient(ellipse at top,rgba(245,196,75,.08),transparent 65%),linear-gradient(145deg,#171a22,#0d0f14)}
+.ny7-empty-icon{width:58px;height:58px;display:grid;place-items:center;border-radius:18px;background:rgba(245,196,75,.1);color:#e6bd5d;font-size:22px;margin-bottom:13px}
+.ny7-empty-state h3,.ny7-error-state b{font-size:16px;font-weight:850;color:#f5f5f6}
+.ny7-empty-state p,.ny7-error-state p{max-width:390px;margin-top:7px;color:#9ba2ae;font-size:12px;line-height:1.7}
+.ny7-error-state>i{font-size:25px;color:#e9b85a;margin-bottom:12px}
+.ny7-skeleton-card{position:relative;overflow:hidden;min-height:210px;border-radius:14px;background:linear-gradient(145deg,#1b1e27,#101218);border:1px solid #ffffff0b}
+.ny7-skeleton-card:after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);animation:ny7Shimmer 1.35s infinite}
+.ny7-skeleton-card span{display:block;width:100%;aspect-ratio:2/3;background:#ffffff08}
+.ny7-skeleton-card i,.ny7-skeleton-card b{display:block;height:8px;margin:11px 10px;border-radius:6px;background:#ffffff0c}.ny7-skeleton-card b{width:58%;margin-top:8px}
+@keyframes ny7Shimmer{100%{transform:translateX(100%)}}
+@keyframes ny7FadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+#detail-page-view:not(.hidden),#actor-page-view:not(.hidden),#catalog-page:not(.hidden){animation:ny7FadeIn .28s ease both}
+.detail-cast-grid{grid-template-columns:repeat(auto-fit,minmax(112px,1fr))}
+#detail-page-view,#actor-page-view,.catalog-page,.home-collections{min-width:0;max-width:100%}
+@media(max-width:700px){
+ main{padding-left:16px!important;padding-right:16px!important}
+ .home-feature-row{min-width:0;max-width:100%;overflow:hidden}
+ .detail-main,.detail-overlap,.detail-lower,.detail-related{min-width:0;max-width:100%}
+ .detail-overlap{grid-template-columns:100px minmax(0,1fr)!important;gap:12px!important}
+ .detail-cast-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ .detail-cast-person{min-width:0;overflow:hidden}.detail-cast-person b{overflow-wrap:anywhere}
+ .detail-facts-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .detail-actions{flex-wrap:wrap}.detail-actions button{max-width:100%}
+ .catalog-page,.catalog-page section,.movie-card{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+ .movie-card,.movie-card img,.collection-card img,.ny7-skeleton-card:after{animation:none!important;transition:none!important}
+ #detail-page-view:not(.hidden),#actor-page-view:not(.hidden),#catalog-page:not(.hidden){animation:none!important}
+}
