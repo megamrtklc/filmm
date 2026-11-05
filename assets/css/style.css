@@ -2420,3 +2420,25 @@ body.actor-modal-open{overflow:hidden}
  #detail-page-view .detail-fact{min-height:76px!important}
  #detail-page-view .detail-cast-heading{min-height:42px;padding:7px 9px}
 }
+
+
+/* Detay alanlari icin birbirinden farkli arka plan gorselleri */
+#detail-page-view .detail-description-panel:before{
+ background-image:var(--detail-scene-image)!important;
+ background-position:center 42%!important;
+ opacity:.62!important
+}
+/* Yapim bilgileri: sinema projektoru / film yapim atmosferi */
+#detail-page-view .detail-fact:before{
+ background-image:url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80")!important;
+ background-position:center!important;
+ opacity:.25!important
+}
+/* Oyuncu kadrosu: kamera ve set atmosferi */
+#detail-page-view .detail-cast-card:before,
+#detail-page-view .detail-cast-heading:before{
+ background-image:url("https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1600&q=85")!important;
+ background-position:center 38%!important;
+ opacity:.3!important
+}
+#detail-page-view .detail-cast-heading:before{opacity:.38!important}
