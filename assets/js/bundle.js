@@ -633,11 +633,14 @@ async function loadActorGallery(name){
   if(!response.ok)throw new Error('Görseller alınamadı');
   const data=await response.json();
   const pages=Object.values(data.query?.pages||{});
-  actorGalleryPhotos=pages.map(p=>{const info=p.imageinfo?.[0];return info?.thumburl?{url:info.url,thumb:info.thumburl,title:p.title,page:info.descriptionurl,license:info.extmetadata?.LicenseShortName?.value||'Lisans bilgisi sayfada',artist:info.extmetadata?.Artist?.value||info.extmetadata?.Credit?.value||''}:null;}).filter(Boolean).slice(0,20);
+  actorGalleryPhotos=pages.map(p=>{const info=p.imageinfo?.[0];return info?.thumburl?{url:info.url,thumb:info.thumburl,title:p.title,page:info.descriptionurl,width:info.width||0,height:info.height||0,license:info.extmetadata?.LicenseShortName?.value||'Lisans bilgisi sayfada',artist:info.extmetadata?.Artist?.value||info.extmetadata?.Credit?.value||''}:null;}).filter(Boolean).slice(0,20);
   renderActorGallery();
+  const hero=document.getElementById('actor-featured-photos');
   if(actorGalleryPhotos.length){
-   const hero=document.getElementById('actor-featured-photos');
-   hero.innerHTML=actorGalleryPhotos.slice(0,6).map((p,i)=>'<button type="button" class="actor-featured-photo" data-gallery-index="'+i+'"><img src="'+escapeCastHtml(p.thumb||p.url)+'" alt="'+escapeCastHtml(name)+' fotoğrafı" loading="lazy"></button>').join('');
+   const bannerPhoto=actorGalleryPhotos.find(p=>p.width>p.height)||actorGalleryPhotos[0];
+   hero.innerHTML='<img class="actor-banner-image" src="'+escapeCastHtml(bannerPhoto.thumb||bannerPhoto.url)+'" alt="'+escapeCastHtml(name)+' yatay oyuncu afişi" loading="eager"><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
+  }else{
+   hero.innerHTML='<div class="actor-banner-placeholder">Bu oyuncu için yatay görsel bulunamadı</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
   }
  }catch(error){
   document.getElementById('actor-gallery-count').textContent='Fotoğraf galerisi şu anda yüklenemedi.';
@@ -692,7 +695,7 @@ function openActorPage(name,update=true){
  document.getElementById('detail-related').classList.add('hidden');
  document.getElementById('actor-page-view').classList.remove('hidden');
  document.getElementById('theme-body').style.backgroundColor='#07080c';
- document.getElementById('actor-profile-name').textContent=actorName;
+ document.getElementById('actor-banner-name').textContent=actorName;
  document.getElementById('actor-biography-title').textContent=actorName;
  document.getElementById('actor-biography-text').textContent='Oyuncu biyografisi yükleniyor…';
  document.getElementById('actor-birth-date').textContent='Bilgi bulunamadı';
@@ -700,7 +703,7 @@ function openActorPage(name,update=true){
  document.getElementById('actor-country').textContent='Bilgi bulunamadı';
  const avatar='https://ui-avatars.com/api/?name='+encodeURIComponent(actorName)+'&background=252936&color=ffffff&size=512&bold=true';
  document.getElementById('actor-profile-image').src=avatar;
- document.getElementById('actor-featured-photos').innerHTML='<div class="actor-hero-empty">Oyuncu fotoğrafları yükleniyor…</div>';
+ document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
  document.getElementById('actor-gallery-grid').innerHTML='';
  document.getElementById('actor-filmography-title').textContent=actorName+' — '+works.length+' yapım';
  document.getElementById('actor-filmography-grid').innerHTML=works.map(m=>'<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span><b>'+escapeCastHtml(m.title)+'</b><small>'+escapeCastHtml(m.year||'')+' · '+(m.type==='tv'?'Dizi':'Film')+'</small></span></button>').join('')||'<p>Bu oyuncunun yer aldığı bir yapım henüz katalogda bulunmuyor.</p>';
@@ -708,7 +711,7 @@ function openActorPage(name,update=true){
  loadActorGallery(actorName);
  window.scrollTo({top:0,behavior:'smooth'});
  fetchActorSummary(actorName).then(async data=>{
-  if(document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-profile-name').textContent!==actorName)return;
+  if(document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-banner-name').textContent!==actorName)return;
   document.getElementById('actor-biography-text').textContent=data.extract||'Oyuncu hakkında biyografi bilgisi bulunamadı.';
   document.getElementById('actor-profile-image').src=data.thumbnail?.source||avatar;
   document.getElementById('actor-wikipedia-link').href=data.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(actorName.replace(/ /g,'_'));
@@ -722,7 +725,7 @@ function openActorPage(name,update=true){
     const birthplace=claims.P19?.[0]?.mainsnak?.datavalue?.value?.id;
     const birthName=claims.P1477?.[0]?.mainsnak?.datavalue?.value?.text;
     if(birth)document.getElementById('actor-birth-date').textContent=birth.slice(1,11);
-    if(birthName)document.getElementById('actor-profile-name').textContent=birthName;
+    if(birthName)document.getElementById('actor-banner-name').textContent=birthName;
     const [countryLabel,placeLabel]=await Promise.all([fetchWikidataLabel(citizenship),fetchWikidataLabel(birthplace)]);
     if(countryLabel){const country=countryDisplay(countryLabel);document.getElementById('actor-country').innerHTML='<span class="actor-country-value">'+country.flag+' '+escapeCastHtml(country.name)+'</span>';}
     if(placeLabel)document.getElementById('actor-birth-place').textContent=placeLabel;
