@@ -2971,3 +2971,8 @@ body.trailer-popup-open{overflow:hidden}
 .site-header{z-index:100!important}
 #actor-page-view{padding-top:88px!important}
 @media(max-width:767px){#actor-page-view{padding-top:100px!important}}
+
+
+/* Oyuncu yüzlerini korumak için detay manşetinde daha geniş dikey kadraj */
+#detail-page-view .detail-visual{height:clamp(360px,46vw,540px)!important}
+@media(max-width:767px){#detail-page-view .detail-visual{height:290px!important}}
