@@ -1346,3 +1346,86 @@ body.actor-modal-open{overflow:hidden}
 .home-feature-row #daily-pick-section .mood-discovery-description{font-size:12px!important;line-height:1.58!important;-webkit-line-clamp:4!important}
 .main-nav>a:hover:after,.main-nav>a.nav-home:after{bottom:5px!important}
 }
+
+
+/* Moduna göre keşfet: başlık ve kategori seçicisi aynı satırda */
+.home-feature-row #daily-pick-section .mood-discovery-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  padding:17px 15px 0!important;
+}
+.home-feature-row #daily-pick-section .mood-discovery-heading{
+  flex:1 1 auto!important;
+  min-width:0!important;
+}
+.home-feature-row #daily-pick-section .mood-discovery-eyebrow{
+  font-size:8px!important;
+  letter-spacing:.08em!important;
+  white-space:nowrap!important;
+}
+.home-feature-row #daily-pick-section .mood-discovery-heading h2{
+  font-size:16px!important;
+  line-height:1.12!important;
+  margin:5px 0 3px!important;
+}
+.home-feature-row #daily-pick-section .mood-discovery-heading p{
+  font-size:9px!important;
+  line-height:1.3!important;
+  white-space:nowrap!important;
+}
+.home-feature-row #daily-pick-section .mood-category-select{
+  flex:0 0 116px!important;
+  width:116px!important;
+  min-width:0!important;
+  margin:0!important;
+}
+.home-feature-row #daily-pick-section .mood-category-trigger{
+  width:100%!important;
+  min-width:0!important;
+  height:34px!important;
+  padding:0 8px!important;
+  gap:6px!important;
+  font-size:9px!important;
+  white-space:nowrap!important;
+}
+.home-feature-row #daily-pick-section .mood-category-trigger span{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.home-feature-row #daily-pick-section .mood-category-menu{
+  width:190px!important;
+  min-width:190px!important;
+  right:0!important;
+  left:auto!important;
+  max-height:260px!important;
+  overflow-y:auto!important;
+}
+.home-feature-row #daily-pick-section .mood-discovery-feature{
+  margin-top:14px!important;
+}
+@media(max-width:560px){
+  .home-feature-row #daily-pick-section .mood-discovery-head{
+    display:flex!important;
+    align-items:center!important;
+    gap:9px!important;
+    padding:16px 13px 0!important;
+  }
+  .home-feature-row #daily-pick-section .mood-discovery-heading h2{font-size:15px!important}
+  .home-feature-row #daily-pick-section .mood-discovery-heading p{font-size:8px!important}
+  .home-feature-row #daily-pick-section .mood-discovery-eyebrow{font-size:7px!important}
+  .home-feature-row #daily-pick-section .mood-category-select{
+    flex:0 0 108px!important;width:108px!important;
+  }
+  .home-feature-row #daily-pick-section .mood-category-trigger{
+    height:32px!important;padding:0 6px!important;font-size:8px!important;
+  }
+  .home-feature-row #daily-pick-section .mood-discovery-feature{margin-top:12px!important}
+}
+@media(max-width:360px){
+  .home-feature-row #daily-pick-section .mood-discovery-head{align-items:flex-start!important}
+  .home-feature-row #daily-pick-section .mood-discovery-heading p{white-space:normal!important}
+  .home-feature-row #daily-pick-section .mood-category-select{flex-basis:100px!important;width:100px!important}
+}
