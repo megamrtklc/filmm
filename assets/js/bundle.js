@@ -727,7 +727,7 @@ function renderFilteredCatalog() {
             const live = document.getElementById('live-tv-section'); if (live) live.classList.add('hidden');
             document.getElementById('catalog-page').classList.remove('hidden');
             document.getElementById('catalog-heading').innerText = title;
-            window.scrollTo({top:0,behavior:'smooth'});
+            window.scrollTo({top:0,behavior:history.state?.ny7ScrollY!=null?'auto':'smooth'});
         }
         function switchTab(tab,update=true) {
             hideDirectorProfile();closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery=''; activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
@@ -832,7 +832,7 @@ function showDashboard(update=true){
  document.getElementById('detail-related').classList.add('hidden');
  if(update&&location.hash!=='#/anasayfa')history.pushState(null,'','#/anasayfa');
  updateHeaderActiveState();
- window.scrollTo({top:0,behavior:'smooth'});
+ window.scrollTo({top:0,behavior:!update&&history.state?.ny7ScrollY!=null?'auto':'smooth'});
 }
 
 let activeCastPage=0;
