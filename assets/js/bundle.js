@@ -162,7 +162,8 @@ function renderMoodRecommendation(item, category) {
             <div class="mood-discovery-copy">
                 <span class="mood-discovery-tag">${escapeCountryHtml(categoryLabel)} <b>•</b> ${typeLabel}</span>
                 <h3>${title}</h3>
-                <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span><span><i class="fa-solid fa-star"></i> ${rating} IMDb</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}</div>
+                <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}</div>
+                <div class="mood-discovery-imdb"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb PUANI</span></div>
                 <p class="mood-discovery-description">${description}</p>
                 <div class="mood-discovery-actions">
                     <button type="button" class="mood-discovery-primary" onclick="openDetailPage('${id}')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button>
@@ -179,6 +180,8 @@ function toggleMoodCategoryMenu() {
     const opening = menu.hidden;
     menu.hidden = !opening;
     trigger.setAttribute('aria-expanded', String(opening));
+    const chevron = trigger.querySelector('.mood-select-chevron');
+    if (chevron) chevron.style.transform = opening ? 'rotate(180deg)' : 'rotate(0deg)';
 }
 
 function chooseMoodPick(category) {
