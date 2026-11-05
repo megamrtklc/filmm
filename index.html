@@ -38,7 +38,7 @@
         }
     </script>
 
-        <link rel="stylesheet" href="assets/css/style.css?v=20261105-mini-discovery">
+        <link rel="stylesheet" href="assets/css/style.css?v=20261105-mood-hero">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -53,7 +53,7 @@
             <a href="#/diziler"><i class="fa-solid fa-tv"></i> Diziler</a>
             <a href="#/kesfet"><i class="fa-solid fa-compass"></i> Keşfet</a>
             <a href="#/listem"><i class="fa-solid fa-bookmark"></i> Listem</a>
-            <a class="nav-daily-pick" href="#" onclick="document.getElementById('daily-pick-section')?.scrollIntoView({behavior:'smooth',block:'center'});closeHeaderMenus();return false;"><i class="fa-solid fa-wand-magic-sparkles"></i> Günün Seçimi</a>
+            <a class="nav-daily-pick" href="#" onclick="document.getElementById('daily-pick-section')?.scrollIntoView({behavior:'smooth',block:'center'});closeHeaderMenus();return false;"><i class="fa-solid fa-wand-magic-sparkles"></i> Moduna Göre Keşfet</a>
             <div class="nav-dropdown" id="categories-menu">
                 <button type="button" class="nav-trigger" onclick="toggleHeaderMenu('categories-menu')" aria-expanded="false"><i class="fa-solid fa-layer-group"></i> Kategoriler <i class="fa-solid fa-chevron-down nav-chevron"></i></button>
                 <div class="nav-menu category-menu">
@@ -137,29 +137,11 @@
 
         <!-- KATALOG VE FİLTRELER -->
         <main class="p-6 lg:p-12 space-y-10">
-            <!-- KOMPAKT KEŞİF KARTLARI -->
-            <section id="daily-pick-section" class="discovery-mini-grid" aria-label="Kişisel film ve dizi keşif alanı">
-                <article class="daily-pick-mini" aria-label="Bugün ne izlesem önerisi">
-                    <div id="daily-pick-card" class="daily-pick-card">
-                        <div class="daily-pick-loading">Bugünün önerisi hazırlanıyor...</div>
-                    </div>
-                </article>
-                <article class="mood-pick-mini" aria-label="Ruh haline göre yapım önerisi">
-                    <div class="mood-mini-backdrop"></div>
-                    <div class="mood-mini-content">
-                        <span class="mood-mini-eyebrow"><i class="fa-solid fa-clapperboard"></i> MODUNA GÖRE KEŞFET</span>
-                        <h2>Ruh Haline Göre<br>Ne İzlesek?</h2>
-                        <p>Şu an hangi tarz sana daha yakın?</p>
-                        <div class="mood-options">
-                            <button type="button" onclick="chooseMoodPick('action')"><i class="fa-solid fa-bolt"></i><span>Aksiyon dolu</span><i class="fa-solid fa-arrow-right"></i></button>
-                            <button type="button" onclick="chooseMoodPick('fun')"><i class="fa-solid fa-face-laugh"></i><span>Eğlenceli</span><i class="fa-solid fa-arrow-right"></i></button>
-                            <button type="button" onclick="chooseMoodPick('mystery')"><i class="fa-solid fa-masks-theater"></i><span>Gizemli</span><i class="fa-solid fa-arrow-right"></i></button>
-                        </div>
-                        <div id="mood-pick-result" class="mood-pick-result" aria-live="polite">
-                            <div class="mood-result-line"><span>Bir ruh hali seç</span><strong>Sana uygun yapımı bulalım</strong></div>
-                        </div>
-                    </div>
-                </article>
+            <!-- MODUNA GÖRE KEŞFET MANŞETİ -->
+            <section id="daily-pick-section" class="mood-discovery-hero" aria-label="Moduna göre film ve dizi keşfet">
+                <div id="mood-discovery-result" class="mood-discovery-result" aria-live="polite">
+                    <div class="mood-discovery-loading">Sana özel bir yapım seçiliyor...</div>
+                </div>
             </section>
 
             <!-- ANA SAYFA KOLEKSİYONLARI -->
