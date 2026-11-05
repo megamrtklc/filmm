@@ -118,6 +118,25 @@ function renderHomeCollections() {
     document.getElementById('collection-series').hidden = series.length === 0;
 }
 
+function updateHeaderActiveState(){
+    const raw=decodeURIComponent((location.hash||'#/anasayfa').replace(/^#\\/?/,''));
+    const parts=raw.split('/');
+    const route=parts[0]||'anasayfa';
+    const routeMap={anasayfa:'.nav-home',filmler:'a[href="#/filmler"]',diziler:'a[href="#/diziler"]',kesfet:'a[href="#/kesfet"]',listem:'a[href="#/listem"]'};
+    document.querySelectorAll('.main-nav a').forEach(link=>{
+        const active=link.matches(routeMap[route]||'__no_match__');
+        link.classList.toggle('is-active',active);
+        if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
+    });
+    const categoryActive=route==='kategori';
+    const category=document.querySelector('#categories-menu .nav-trigger');
+    if(category)category.classList.toggle('is-active',categoryActive);
+    document.querySelectorAll('#categories-menu .nav-menu button').forEach(button=>{
+        const selected=categoryActive && button.getAttribute('onclick')?.includes("filterGenre('"+(parts.slice(1).join('/')||'all')+"')");
+        button.classList.toggle('is-selected',!!selected);
+    });
+}
+
 function toggleHeaderMenu(id) {
     const target=document.getElementById(id); const wasOpen=target.classList.contains('open');
     closeHeaderMenus(); if(!wasOpen){target.classList.add('open');target.querySelector('.nav-trigger,.user-trigger')?.setAttribute('aria-expanded','true');}
@@ -235,6 +254,7 @@ function renderFilteredCatalog() {
         function filterGenre(genre,update=true) {
             activeCatalogGenre = genre;
             if(update)goRoute('#/kategori/'+encodeURIComponent(genre));
+            updateHeaderActiveState();
             showCatalogView(genre==='all'?'Tüm Kategoriler':genre);
             activeCatalogType='all'; renderFilteredCatalog();
             document.querySelectorAll('.genre-pill').forEach(button => {
@@ -269,6 +289,7 @@ function renderFilteredCatalog() {
         function switchTab(tab,update=true) {
             closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery='';
             if(update)goRoute(tab==='movie'?'#/filmler':tab==='tv'?'#/diziler':tab==='watchlist'?'#/listem':'#/kesfet');
+            updateHeaderActiveState();
             document.getElementById('search-input').value='';
             activeCatalogType = tab==='movie'?'movie':tab==='tv'?'tv':'all';
             const title = tab==='movie'?'Filmler':tab==='tv'?'Diziler':tab==='watchlist'?'İzleme Listem':'Keşfet';
@@ -286,6 +307,7 @@ document.getElementById('search-input').addEventListener('input', function(e) {
 // İçerik detay görünümü
 function goRoute(path){ if(location.hash!==path) location.hash=path; else routeFromHash(); }
 function routeFromHash(){
+ updateHeaderActiveState();
  const p=decodeURIComponent(location.hash.replace(/^#\/?/,'' )).split('/');
  if(!p[0]||p[0]==='anasayfa'){showDashboard(false);return;}
  if(p[0]==='film'||p[0]==='dizi'){openDetailPage(p.slice(1).join('/'),false);return;}
@@ -309,6 +331,7 @@ function showDashboard(update=true){
  const catalog=document.getElementById('catalog-page');if(catalog)catalog.classList.add('hidden');
  document.getElementById('detail-related').classList.add('hidden');
  if(update&&location.hash!=='#/anasayfa')history.pushState(null,'','#/anasayfa');
+ updateHeaderActiveState();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 
