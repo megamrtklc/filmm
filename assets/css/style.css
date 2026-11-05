@@ -1888,3 +1888,68 @@ body.actor-modal-open{overflow:hidden}
   .site-header .main-nav{gap:15px!important}
   .site-header .main-nav>a,.site-header .main-nav .nav-trigger{font-size:10px!important}
 }
+
+
+/* Oyuncu profili — yatay afiş ve sade bilgi hiyerarşisi */
+.actor-page{background:#090b10!important;color:#f4f5f7}
+.actor-hero{padding:14px clamp(16px,4vw,58px) 0!important;background:#090b10!important;border:0!important}
+.actor-hero-top{max-width:1320px;margin:0 auto 12px!important}
+.actor-banner{position:relative;isolation:isolate;max-width:1320px;margin:0 auto;height:clamp(220px,34vw,410px);overflow:hidden;border:1px solid #ffffff18;border-radius:16px;background:#171a21;box-shadow:0 18px 50px #0008}
+.actor-banner-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;z-index:-2}
+.actor-banner-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,7,11,.92) 0%,rgba(5,7,11,.58) 42%,rgba(5,7,11,.08) 100%),linear-gradient(0deg,rgba(5,7,11,.48),transparent 55%)}
+.actor-banner-copy{position:absolute;left:clamp(20px,5vw,62px);right:20px;bottom:clamp(22px,5vw,56px);max-width:760px}
+.actor-banner-copy>span,.actor-section-heading>div>span,.actor-facts-heading>span{font-size:9px;letter-spacing:.2em;font-weight:850;color:#d7b66b}
+.actor-banner-copy h1{font-size:clamp(28px,5.2vw,58px);font-weight:900;line-height:1.05;letter-spacing:-.035em;margin-top:9px;text-shadow:0 3px 18px #000}
+.actor-banner-placeholder{position:absolute;inset:0;display:grid;place-items:center;color:#aeb5c1;font-size:12px}
+.actor-profile-layout{max-width:1320px!important;margin:24px auto 34px!important;padding:0 clamp(16px,4vw,58px)!important;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.8fr)!important;gap:16px!important;align-items:stretch}
+.actor-biography,.actor-facts-panel{min-width:0;padding:22px 24px;border:1px solid #ffffff12;border-radius:14px;background:#11141b}
+.actor-section-kicker{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.16em;color:#d7b66b}
+.actor-biography h2,.actor-facts-heading h2{font-size:21px;font-weight:850;margin:9px 0 12px}
+.actor-biography p{font-size:13px;line-height:1.85;color:#c4cad4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden}
+.actor-biography a{font-size:10px;margin-top:14px;color:#d7b66b}
+.actor-facts-heading{margin-bottom:8px}
+.actor-facts{padding:0!important;border:0!important;background:transparent!important}
+.actor-facts div{display:grid!important;grid-template-columns:1fr;gap:5px!important;padding:11px 0!important;border-bottom:1px solid #ffffff10!important}
+.actor-facts span{display:flex;align-items:center;gap:8px;font-size:10px!important;color:#929baa}
+.actor-facts span i{width:14px;color:#c6a45e}
+.actor-facts b{font-size:12px!important;color:#eef0f4}
+.actor-profile-image-hidden{display:none!important}
+.actor-filmography,.actor-gallery-section{max-width:1320px!important;padding-left:clamp(16px,4vw,58px)!important;padding-right:clamp(16px,4vw,58px)!important}
+.actor-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #ffffff12}
+.actor-section-heading h2{font-size:22px;font-weight:850;margin-top:5px}
+.actor-section-heading>i{font-size:19px;color:#b6a071}
+.actor-filmography-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:12px!important}
+.actor-work-card{border-radius:11px!important;background:#11141b!important}
+.actor-work-card img{aspect-ratio:2/3;object-fit:cover}
+.actor-gallery-section{margin-top:34px!important}
+.actor-gallery-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important}
+.actor-gallery-photo{aspect-ratio:16/10!important}
+.actor-gallery-photo>span{opacity:1!important}
+@media(max-width:850px){
+ .actor-profile-layout{grid-template-columns:minmax(0,1.4fr) minmax(220px,.9fr)!important;gap:12px!important}
+ .actor-filmography-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+ .actor-gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media(max-width:600px){
+ .actor-hero{padding:10px 12px 0!important}
+ .actor-hero-top{margin-bottom:9px!important}
+ .actor-banner{height:205px;border-radius:11px}
+ .actor-banner-image{object-position:center 25%}
+ .actor-banner-shade{background:linear-gradient(90deg,rgba(5,7,11,.78),rgba(5,7,11,.12)),linear-gradient(0deg,rgba(5,7,11,.6),transparent 70%)}
+ .actor-banner-copy{left:17px;bottom:18px}
+ .actor-banner-copy h1{font-size:28px}
+ .actor-profile-layout{grid-template-columns:1fr!important;margin:16px auto 24px!important;padding:0 12px!important;gap:10px!important}
+ .actor-biography,.actor-facts-panel{padding:16px;border-radius:11px}
+ .actor-biography h2,.actor-facts-heading h2{font-size:18px}
+ .actor-biography p{font-size:11px;line-height:1.75;-webkit-line-clamp:6}
+ .actor-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px}
+ .actor-facts div{padding:9px 0!important}
+ .actor-facts b{font-size:10px!important}
+ .actor-filmography,.actor-gallery-section{padding-left:12px!important;padding-right:12px!important}
+ .actor-section-heading h2{font-size:18px}
+ .actor-filmography-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+ .actor-work-card span{padding:7px}
+ .actor-work-card b{font-size:9px}
+ .actor-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ .actor-gallery-section{margin-top:24px!important}
+}
