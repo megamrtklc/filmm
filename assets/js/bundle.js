@@ -1172,13 +1172,10 @@ function openDetailPage(id,update=true){
  document.querySelector('#detail-page-view .detail-facts-heading h2').innerText=detailKind+' künyesi';
  const countries=countryTokens(item.country);
  const directors=countryTokens(item.director);
- const genres=[...new Set([...countryTokens(item.category),...countryTokens(item.genre)])];
- document.getElementById('detail-country').innerText=countries.map(country=>countryDisplay(country).name).join(', ')||'Ülke bilgisi yok';
- document.getElementById('detail-country-list').innerHTML=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('')||'<span>—</span>';
- document.getElementById('detail-info-genre').innerHTML=genres.map(genre=>'<button type="button" class="detail-taxonomy-chip" data-genre="'+escapeCountryHtml(genre)+'">'+escapeCountryHtml(genre)+'</button>').join('')||'<span>—</span>';
- document.getElementById('detail-info-year').innerText=item.year||'—';
+ const countryMarkup=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'" aria-label="'+escapeCountryHtml(info.name)+' yapımlarını göster">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('');
+ document.getElementById('detail-country').innerHTML=countryMarkup||'<span>Ülke bilgisi yok</span>';
+ document.getElementById('detail-director-inline').innerHTML=directors.length?'<span class="detail-director-label">Yönetmen:</span> '+directors.map(director=>'<button type="button" class="detail-director-link" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('<span class="detail-director-comma">, </span>'):'';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
- document.getElementById('detail-director').innerHTML=directors.map(director=>'<button type="button" class="detail-taxonomy-chip" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('')||'<span>—</span>';
  const readScore=(...values)=>{for(const value of values){const candidate=value&&typeof value==='object'?(value.value??value.score??value.rating):value;if(candidate!==undefined&&candidate!==null&&String(candidate).trim()!==''&&String(candidate).trim().toLowerCase()!=='n/a')return String(candidate).trim();}return '';};
  const scoreItems=[
   {key:'imdb',logo:'IMDb',value:readScore(item.rating,item.imdbRating,item.imdb_rating),suffix:''},
