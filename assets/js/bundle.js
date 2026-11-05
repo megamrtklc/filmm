@@ -135,9 +135,10 @@ function renderMoodRecommendation(item, category) {
     const rating = escapeCountryHtml(item.rating || '—');
     const description = escapeCountryHtml(item.desc || 'Bu yapımı keşfetmek için detaylarına göz at.');
     const id = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const categoryEmoji = { 'Aksiyon':'⚡','Komedi':'😂','Romantik':'❤️','Korku':'👻','Gerilim':'👁️','Gizem':'🔎','Bilim Kurgu':'🤖','Macera':'🧭','Dram':'🎭','Fantastik':'✨','Tarih':'🏛️','Belgesel':'🎬','Animasyon':'🎨','Aile':'👨‍👩‍👧','Suç':'🕵️','Savaş & Politik':'🛡️','Müzik':'🎵','Vahşi Batı':'🤠' };
     const options = moodCategoryOptions.map(option =>
-        '<option value="' + option.value + '"' + (category === option.value ? ' selected' : '') + '> ' +
-        option.label + '</option>'
+        '<option value="' + option.value + '"' + (category === option.value ? ' selected' : '') + '>' +
+        (categoryEmoji[option.value] || '🎞️') + ' ' + option.label + '</option>'
     ).join('');
     result.innerHTML = `
         <div class="mood-discovery-backdrop" style="background-image:url('${backdrop}')"></div>
