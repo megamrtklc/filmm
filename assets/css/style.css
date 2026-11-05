@@ -2277,3 +2277,12 @@ body.actor-modal-open{overflow:hidden}
  .director-profile-biography{padding:13px 15px}
  .director-profile-biography p{font-size:11px;line-height:1.5;-webkit-line-clamp:5;line-clamp:5;max-height:7.5em}
 }
+
+
+/* Yönetmen kartını katalog alanının tam genişliğine yay ve vefat bilgisini doğumun altına hizala */
+.director-profile-panel{width:100%;max-width:none;margin:18px 0!important}
+.director-profile-content{width:100%;grid-template-columns:minmax(0,.92fr) minmax(0,1.35fr)}
+.director-profile-death{display:flex;flex-direction:column;gap:2px;margin-top:1px}
+.director-profile-death span{color:#d7b66b;font-size:9px;font-weight:850;letter-spacing:.06em}
+.director-profile-death b{color:#e4e7ed;font-size:11px;line-height:1.4;font-weight:600;overflow-wrap:anywhere}
+@media(max-width:700px){.director-profile-panel{margin:14px 0!important}.director-profile-content{grid-template-columns:1fr}}
