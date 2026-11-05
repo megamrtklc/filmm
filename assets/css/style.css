@@ -784,10 +784,13 @@ body.actor-modal-open{overflow:hidden}
 .header-search-result:hover,.header-search-result:focus-visible{background:rgba(255,255,255,.09);outline:none}
 .header-search-result img{width:43px;height:59px;flex:0 0 43px;object-fit:cover;border-radius:6px;background:#252833}
 .header-search-result-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:5px}
-.header-search-result-copy strong{font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.header-search-result-copy small{font-size:10px;color:#a1a1aa}
-.header-search-result>i{font-size:10px;color:#facc15}
-.header-search-empty{padding:18px 12px;text-align:center;font-size:12px;color:#a1a1aa}
+.header-search-shell .glass-search input,
+#search-input{font-size:15px!important;font-weight:600!important;line-height:1.4;color:#fff!important;letter-spacing:.01em}
+#search-input::placeholder{font-size:13px;font-weight:500;color:#aeb5c2!important;opacity:1}
+.header-search-result-copy strong{font-size:14px;font-weight:750;line-height:1.35;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-search-result-copy small{font-size:12px;font-weight:600;color:#c3cad5}
+.header-search-result>i{font-size:11px;color:#facc15}
+.header-search-empty{padding:18px 12px;text-align:center;font-size:13px;font-weight:600;color:#c3cad5}
 @media(max-width:760px){
  .header-search-shell{width:36px}
  .header-search-shell:focus-within{width:min(44vw,250px)}
@@ -797,3 +800,9 @@ body.actor-modal-open{overflow:hidden}
 @media(max-width:420px){
  .header-search-shell:focus-within{width:min(48vw,210px)}
 }
+
+
+/* Arama alaninda net ve okunakli tipografi */
+.header-search-shell:focus-within #search-input{font-size:15px!important;font-weight:650!important;color:#fff!important}
+.header-search-result{min-height:76px}
+@media(max-width:760px){.header-search-result-copy strong{font-size:13px}.header-search-result-copy small{font-size:11px}}
