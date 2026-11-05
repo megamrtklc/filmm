@@ -3586,3 +3586,28 @@ body.trailer-popup-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
  #detail-page-view .detail-cast-person{transition:none!important}
 }
+
+
+/* NY7 TV — oyuncu kadrosu: tek ve tutarlı kart sistemi */
+#detail-page-view .detail-cast-inline{display:block!important;width:100%!important;max-width:1180px!important;margin:24px auto 0!important;padding:0 18px!important}
+#detail-page-view .detail-cast-card{position:relative!important;padding:20px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:15px!important;background:#11141b!important;box-shadow:0 10px 28px rgba(0,0,0,.16)!important}
+#detail-page-view .detail-cast-card:before,#detail-page-view .detail-cast-card:after{content:none!important;display:none!important}
+#detail-page-view .detail-cast-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;margin:0 0 16px!important;padding:0 0 13px!important;border-bottom:1px solid rgba(255,255,255,.09)!important}
+#detail-page-view .detail-cast-heading h3{display:flex!important;align-items:center!important;gap:9px!important;margin:0!important;color:#f1f2f4!important;font-size:16px!important;font-weight:750!important;letter-spacing:-.02em!important;text-transform:none!important}
+#detail-page-view .detail-cast-heading h3 i{margin:0!important;color:#c7a66a!important;font-size:15px!important}
+#detail-page-view .detail-cast-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:13px!important}
+#detail-page-view .detail-cast-person{display:flex!important;flex-direction:column!important;align-items:stretch!important;min-width:0!important;min-height:0!important;padding:0!important;overflow:hidden!important;border:1px solid rgba(255,255,255,.085)!important;border-radius:11px!important;background:#171a22!important;color:#f3f4f6!important;text-align:left!important;box-shadow:0 4px 13px rgba(0,0,0,.13)!important;transform:none!important;transition:border-color .18s ease,background .18s ease!important}
+#detail-page-view .detail-cast-person:hover{border-color:rgba(199,166,106,.48)!important;background:#1b1e27!important;transform:translateY(-2px)!important}
+#detail-page-view .detail-cast-person img{display:block!important;flex:none!important;width:100%!important;height:145px!important;aspect-ratio:4/3!important;object-fit:cover!important;object-position:center 24%!important;border:0!important;border-radius:0!important;background:#252936!important;filter:none!important}
+#detail-page-view .detail-cast-person-copy{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;gap:5px!important;min-width:0!important;padding:10px 11px 12px!important}
+#detail-page-view .detail-cast-person b{display:block!important;margin:0!important;padding:0!important;color:#f2f3f5!important;font-size:12px!important;font-weight:700!important;line-height:1.3!important;overflow-wrap:anywhere!important}
+#detail-page-view .detail-cast-person small{display:block!important;margin:0!important;padding:0!important;color:#b5a27d!important;font-size:10px!important;font-weight:500!important;line-height:1.35!important;overflow-wrap:anywhere!important}
+#detail-page-view .detail-cast-controls{display:flex!important;align-items:center!important;gap:8px!important;color:#a1a1aa!important;font-size:11px!important}
+#detail-page-view .detail-cast-controls.hidden{display:none!important}
+#detail-page-view .detail-cast-controls button{display:grid!important;place-items:center!important;width:29px!important;height:29px!important;border:1px solid rgba(255,255,255,.13)!important;border-radius:8px!important;background:rgba(255,255,255,.045)!important;color:#e5e7eb!important;cursor:pointer!important}
+#detail-page-view .detail-cast-controls button:not(:disabled):hover{border-color:rgba(199,166,106,.5)!important;background:rgba(199,166,106,.12)!important}
+#detail-page-view .detail-cast-controls button:disabled{opacity:.3!important;cursor:default!important}
+#detail-page-view .detail-cast-empty{grid-column:1/-1;color:#a1a1aa;font-size:12px}
+@media(max-width:900px){#detail-page-view .detail-cast-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}#detail-page-view .detail-cast-person img{height:clamp(110px,18vw,145px)!important}}
+@media(max-width:560px){#detail-page-view .detail-cast-inline{margin-top:18px!important;padding:0 12px!important}#detail-page-view .detail-cast-card{padding:13px!important;border-radius:12px!important}#detail-page-view .detail-cast-heading{margin-bottom:11px!important;padding-bottom:10px!important}#detail-page-view .detail-cast-heading h3{font-size:14px!important}#detail-page-view .detail-cast-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}#detail-page-view .detail-cast-person img{height:clamp(105px,34vw,150px)!important}#detail-page-view .detail-cast-person-copy{padding:9px!important;gap:4px!important}#detail-page-view .detail-cast-person b{font-size:11px!important}#detail-page-view .detail-cast-person small{font-size:9px!important}}
+@media(prefers-reduced-motion:reduce){#detail-page-view .detail-cast-person{transition:none!important}}
