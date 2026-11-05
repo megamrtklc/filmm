@@ -1177,6 +1177,8 @@ async function fetchWikidataLabel(id){
  }catch(e){return ''}
 }
 function openActorPage(name,update=true){
+ document.body.classList.remove('ny7-detail-open');
+ document.documentElement.classList.remove('ny7-modal-lock');
  const actorName=decodeURIComponent(String(name||'')).trim();
  if(!actorName)return;
  const actorKey=actorName.toLocaleLowerCase('tr-TR');
