@@ -351,11 +351,26 @@ document.addEventListener('click',event=>{if(!event.target.closest('.nav-dropdow
 function showProfileNotice(){window.alert('Profil alanı yakında kullanıma açılacak.');}
 function showSettingsNotice(){window.alert('Ayarlar alanı yakında kullanıma açılacak.');}
 
+
+const NY7_IMAGE_FALLBACK = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#242833"/><stop offset="1" stop-color="#090b10"/></linearGradient></defs><rect width="600" height="900" fill="url(#g)"/><text x="300" y="430" fill="#d9b24e" font-family="Arial" font-size="58" text-anchor="middle" font-weight="700">NY7</text><text x="300" y="490" fill="#aab0bb" font-family="Arial" font-size="22" text-anchor="middle">Görsel kullanılamıyor</text></svg>');
+document.addEventListener('error', function(event) {
+    const img = event.target;
+    if (!img || img.tagName !== 'IMG' || img.dataset.ny7FallbackApplied === '1') return;
+    img.dataset.ny7FallbackApplied = '1';
+    img.src = NY7_IMAGE_FALLBACK;
+}, true);
+
 // Katalog listeleme, arama ve filtreleme
 function renderMediaGrid(items = mediaDatabase) {
             const container = document.getElementById('media-grid');
             if (items.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 font-medium text-sm">Bu filtreye uygun içerik bulunmuyor.</div>`;
+                const isList = location.hash.startsWith('#/listem');
+                container.innerHTML = `<div class="col-span-full ny7-empty-state">
+                    <span class="ny7-empty-icon"><i class="fa-solid ${isList ? 'fa-bookmark' : 'fa-film'}"></i></span>
+                    <h3>${isList ? 'Listen henüz boş' : 'Aradığın yapımı bulamadık'}</h3>
+                    <p>${isList ? 'Beğendiğin film ve dizileri listene ekleyerek burada saklayabilirsin.' : 'Filtreleri değiştirebilir veya kataloğun tamamına göz atabilirsin.'}</p>
+                    <button type="button" onclick="switchTab('all')"><i class="fa-solid fa-compass"></i> Keşfetmeye başla</button>
+                </div>`;
                 return;
             }
 
@@ -751,18 +766,26 @@ function renderHeaderSearchResults(value) {
             <span class="header-search-result-copy"><strong>${title}</strong>${originalTitleMarkup(item,'search-original-title')}<small>${year} · ${type}</small></span>
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
         </button>`;
-    }).join('') : '<div class="header-search-empty">Eşleşen film veya dizi bulunamadı.</div>';
+    }).join('') : '<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen yapım bulunamadı</b><small>Farklı bir kelime deneyebilir veya kataloğu keşfedebilirsin.</small><button type="button" data-search-empty-action>Keşfet</button></div>';
     headerSearchResults.hidden = false;
 }
 headerSearchInput.addEventListener('focus', () => {
     headerSearchInput.closest('.glass-search')?.classList.add('is-expanded');
     renderHeaderSearchResults(headerSearchInput.value);
 });
+let headerSearchDebounce = null;
 headerSearchInput.addEventListener('input', function(e) {
-    // Arama yalnızca üst menüdeki sonuç panelini günceller; katalog görünümünü değiştirmez.
-    renderHeaderSearchResults(e.target.value || '');
+    clearTimeout(headerSearchDebounce);
+    const value = e.target.value || '';
+    headerSearchDebounce = setTimeout(() => renderHeaderSearchResults(value), 140);
 });
 headerSearchResults.addEventListener('click', event => {
+    if (event.target.closest('[data-search-empty-action]')) {
+        headerSearchResults.hidden = true;
+        headerSearchInput.value = '';
+        switchTab('all');
+        return;
+    }
     const result = event.target.closest('[data-search-result-id]');
     if (!result) return;
     const id = result.dataset.searchResultId;
@@ -1168,8 +1191,22 @@ document.addEventListener('click',function(event){
 });
 
 window.addEventListener('hashchange',routeFromHash);
-
-window.addEventListener('popstate',routeFromHash);
+window.addEventListener('scroll', function() {
+    try {
+        const state = history.state && typeof history.state === 'object' ? history.state : {};
+        history.replaceState({...state, ny7ScrollY:window.scrollY}, '', location.href);
+    } catch (_) {}
+}, {passive:true});
+window.addEventListener('popstate',function(event){
+    routeFromHash();
+    const savedY = Number(event.state?.ny7ScrollY);
+    if (Number.isFinite(savedY)) requestAnimationFrame(() => {
+        const root=document.documentElement, previous=root.style.scrollBehavior;
+        root.style.scrollBehavior='auto';
+        window.scrollTo(0,savedY);
+        requestAnimationFrame(()=>{root.style.scrollBehavior=previous;});
+    });
+});
 
 // Afiş tıklamalarını tek noktadan yakala; mobil ve masaüstünde detay ekranını aç.
 window.openDetailPage = openDetailPage;
@@ -1233,9 +1270,17 @@ function launchPlayer(title) {
         let heroIndex = 0;
         let heroTimer = null;
         let catalogInitialized = false;
+        function showCatalogSkeletons() {
+            const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
+            ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id => {
+                const target = document.getElementById(id);
+                if (target) target.innerHTML = Array.from({length:id==='media-grid'?8:5},()=>skeleton).join('');
+            });
+        }
         async function initializeCatalog() {
             if (catalogInitialized) return;
             catalogInitialized = true;
+            showCatalogSkeletons();
             try {
                 const catalogUrl = new URL('data/catalog.json?v=20261105-mood-hero', document.baseURI);
                 let response = await fetch(catalogUrl.href, { cache: 'no-store' });
@@ -1259,7 +1304,7 @@ function launchPlayer(title) {
             } catch (error) {
                 catalogInitialized = false;
                 console.error('Katalog yükleme hatası:', error);
-                const message = '<div class="col-span-full py-12 text-center text-red-400">Film ve dizi kataloğu yüklenemedi. Lütfen biraz sonra yeniden deneyin.</div>';
+                const message = '<div class="col-span-full ny7-error-state"><i class="fa-solid fa-triangle-exclamation"></i><b>İçerikler şu anda yüklenemedi</b><p>Bağlantını kontrol edip yeniden deneyebilirsin.</p><button type="button" onclick="initializeCatalog()"><i class="fa-solid fa-rotate-right"></i> Yeniden dene</button></div>';
                 ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id => {
                     const target = document.getElementById(id);
                     if (target) target.innerHTML = message;
@@ -1270,3 +1315,9 @@ function launchPlayer(title) {
         // Boylece load olayi kacirilsa bile ana sayfa koleksiyonlari bos kalmaz.
         initializeCatalog();
     
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register(new URL('service-worker.js', document.baseURI).href, {scope:new URL('./',document.baseURI).pathname})
+            .catch(error => console.warn('NY7 çevrimdışı desteği etkinleştirilemedi:',error));
+    });
+}
