@@ -150,7 +150,16 @@ function fitHeroTitleToWidth() {
             const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
             const popup=document.getElementById('trailer-popup'),player=document.getElementById('trailer-popup-player'),title=document.getElementById('trailer-popup-title');
             if(!item||!popup||!player)return;
+            const setText=(elementId,value,fallback='—')=>{const el=document.getElementById(elementId);if(el)el.textContent=value!==undefined&&value!==null&&String(value).trim()!==''?String(value):fallback;};
             title.textContent=item.title+' — Fragman';
+            const poster=document.getElementById('trailer-popup-poster');
+            if(poster){poster.src=item.image||item.poster||'';poster.alt=item.title+' afişi';poster.onerror=()=>{poster.style.visibility='hidden';};poster.style.visibility='visible';}
+            setText('trailer-popup-year',item.year);
+            setText('trailer-popup-type',item.type==='tv'?'Dizi':'Film');
+            setText('trailer-popup-duration',item.type==='tv'?[item.seasons?item.seasons+' sezon':'',item.episodes?item.episodes+' bölüm':''].filter(Boolean).join(' • '):item.duration);
+            setText('trailer-popup-category',item.category||item.genre,'Kategori bilgisi yok');
+            setText('trailer-popup-rating',item.rating,'—');
+            setText('trailer-popup-desc',item.desc,'Bu yapım için konu özeti henüz eklenmemiş.');
             const videoId=getHeroTrailerId(item.trailerUrl);
             player.innerHTML=videoId?'<iframe title="'+escapeCountryHtml(item.title)+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>':'<div class="trailer-popup-empty"><i class="fa-solid fa-circle-exclamation"></i><span>Bu yapım için kullanılabilir bir fragman bağlantısı bulunamadı.</span></div>';
             popup.classList.add('is-open');popup.setAttribute('aria-hidden','false');document.body.classList.add('trailer-popup-open');
