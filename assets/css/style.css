@@ -2533,3 +2533,7 @@ html.ny7-modal-lock,html.ny7-modal-lock body{overflow:hidden}
  .detail-modal-panel,.detail-modal-backdrop,.hero-preview-layer,.rail-controls button{animation:none!important;transition:none!important}
  .collection-rail{scroll-behavior:auto}
 }
+
+/* Personal discovery rail */
+#collection-personalized .collection-eyebrow{color:#f4cf62}
+body.ny7-detail-open #actor-page-view{filter:blur(5px);transform:scale(.995);transition:filter .25s ease}
