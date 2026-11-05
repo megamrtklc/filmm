@@ -1595,3 +1595,29 @@ body.actor-modal-open{overflow:hidden}
     padding-top:94px!important;
   }
 }
+
+
+/* Manşet: başlığı biraz küçült, konu metnini iki satırda tut */
+.home-feature-row #hero-section .hero-copy #hero-title{
+  font-size:clamp(24px,2.85vw,39px)!important;
+}
+.home-feature-row #hero-section .hero-copy #hero-desc{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+  max-height:3em!important;
+  height:3em!important;
+  overflow:hidden!important;
+  line-height:1.5!important;
+}
+@media(max-width:560px){
+  .home-feature-row #hero-section .hero-copy #hero-title{
+    font-size:clamp(22px,6.1vw,29px)!important;
+  }
+  .home-feature-row #hero-section .hero-copy #hero-desc{
+    max-height:2.9em!important;
+    height:2.9em!important;
+    font-size:10.5px!important;
+    line-height:1.45!important;
+  }
+}
