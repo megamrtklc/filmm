@@ -2181,3 +2181,11 @@ body.actor-modal-open{overflow:hidden}
 /* Ülke kataloğu başlığında bayrak ve ülke adı */
 #catalog-heading{display:flex;align-items:center;gap:10px}
 .catalog-country-heading-flag{width:30px;height:21px;object-fit:cover;border-radius:4px;border:1px solid rgba(255,255,255,.2);box-shadow:0 2px 7px rgba(0,0,0,.25)}
+
+
+/* Detay sayfasinda tiklanabilir yonetmen ve tur etiketleri */
+.detail-taxonomy-list{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}
+.detail-taxonomy-chip{display:inline-flex;align-items:center;max-width:100%;border:1px solid #ffffff20;background:#ffffff0a;color:#f4f4f5;border-radius:7px;padding:6px 9px;font-size:11px;font-weight:700;line-height:1.35;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.detail-taxonomy-chip:hover{background:#e11d4830;border-color:#e11d48;transform:translateY(-1px)}
+#detail-director,#detail-info-genre{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}
+@media(max-width:700px){#detail-director,#detail-info-genre{justify-content:flex-start}.detail-taxonomy-chip{font-size:10px;padding:6px 8px}}
