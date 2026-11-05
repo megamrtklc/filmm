@@ -3,6 +3,7 @@ let favorites = JSON.parse(localStorage.getItem('ny7_favorites') || '[]');
         let watchlist = JSON.parse(localStorage.getItem('ny7_watchlist') || '[]');
         let heroCurrentId = 1;
         let heroCurrentTitle = 'THE BATMAN';
+let heroImageSwapTimer = null;
 
         function toggleFavorite(id, e) {
             if (e) e.stopPropagation();
@@ -51,8 +52,9 @@ function setHeroMedia(id, userAction = false) {
             heroCurrentId = item.id; heroCurrentTitle = item.title;
             const section = document.getElementById('hero-section');
             const bg = document.getElementById('hero-bg');
+            if (heroImageSwapTimer) window.clearTimeout(heroImageSwapTimer);
             section.classList.add('is-changing');
-            window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); }, 150);
+            heroImageSwapTimer = window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
             document.getElementById('hero-title').innerText = item.title;
             const ratings = document.getElementById('hero-ratings');
             const ratingValue = value => value !== undefined && value !== null && String(value).trim() !== '' ? value : '—';
@@ -91,6 +93,7 @@ function setHeroMedia(id, userAction = false) {
 
 // Moduna göre keşfet: ilk açılışta tüm katalogdan, kategori seçilince ilgili türden rastgele öneri.
 const moodCategoryOptions = [
+    { value:'', label:'Tüm kategoriler', icon:'fa-layer-group', terms:[] },
     { value:'Aksiyon', label:'Aksiyon', icon:'fa-bolt', terms:['aksiyon'] },
     { value:'Komedi', label:'Komedi', icon:'fa-face-laugh', terms:['komedi','comedy'] },
     { value:'Romantik', label:'Romantik', icon:'fa-heart', terms:['romantik','romance'] },
