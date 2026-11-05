@@ -135,10 +135,9 @@ function renderMoodRecommendation(item, category) {
     const rating = escapeCountryHtml(item.rating || '—');
     const description = escapeCountryHtml(item.desc || 'Bu yapımı keşfetmek için detaylarına göz at.');
     const id = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    const categoryEmoji = { 'Aksiyon':'⚡','Komedi':'😂','Romantik':'❤️','Korku':'👻','Gerilim':'👁️','Gizem':'🔎','Bilim Kurgu':'🤖','Macera':'🧭','Dram':'🎭','Fantastik':'✨','Tarih':'🏛️','Belgesel':'🎬','Animasyon':'🎨','Aile':'👨‍👩‍👧','Suç':'🕵️','Savaş & Politik':'🛡️','Müzik':'🎵','Vahşi Batı':'🤠' };
     const options = moodCategoryOptions.map(option =>
-        '<option value="' + option.value + '"' + (category === option.value ? ' selected' : '') + '>' +
-        (categoryEmoji[option.value] || '🎞️') + ' ' + option.label + '</option>'
+        '<button type="button" class="mood-category-option' + (category === option.value ? ' is-active' : '') + '" onclick="chooseMoodPick(\'' + option.value.replace(/'/g, "\\\\'") + '\')">' +
+        '<i class="fa-solid ' + option.icon + '" aria-hidden="true"></i><span>' + option.label + '</span></button>'
     ).join('');
     result.innerHTML = `
         <div class="mood-discovery-backdrop" style="background-image:url('${backdrop}')"></div>
@@ -149,13 +148,14 @@ function renderMoodRecommendation(item, category) {
                 <h2>Bir ruh hali seç</h2>
                 <p>Sana uygun yapımı bulalım</p>
             </div>
-            <label class="mood-category-select">
-                <i class="fa-solid fa-layer-group"></i>
-                <select aria-label="Film veya dizi kategorisi" onchange="chooseMoodPick(this.value)">
-                    <option value="">Tüm kategoriler</option>${options}
-                </select>
-                <i class="fa-solid fa-chevron-down mood-select-chevron"></i>
-            </label>
+            <div class="mood-category-select">
+                <button type="button" class="mood-category-trigger" aria-expanded="false" aria-controls="mood-category-menu" onclick="toggleMoodCategoryMenu()">
+                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                    <span>${category || 'Tüm kategoriler'}</span>
+                    <i class="fa-solid fa-chevron-down mood-select-chevron" aria-hidden="true"></i>
+                </button>
+                <div id="mood-category-menu" class="mood-category-menu" hidden>${options}</div>
+            </div>
         </div>
         <div class="mood-discovery-feature">
             <div class="mood-discovery-poster"><img src="${poster}" alt="${title}" loading="eager"></div>
@@ -172,10 +172,23 @@ function renderMoodRecommendation(item, category) {
         </div>`;
 }
 
+function toggleMoodCategoryMenu() {
+    const menu = document.getElementById('mood-category-menu');
+    const trigger = document.querySelector('.mood-category-trigger');
+    if (!menu || !trigger) return;
+    const opening = menu.hidden;
+    menu.hidden = !opening;
+    trigger.setAttribute('aria-expanded', String(opening));
+}
+
 function chooseMoodPick(category) {
     activeMoodCategory = category || '';
     const result = document.getElementById('mood-discovery-result');
     if (!result) return;
+    const categoryMenu = document.getElementById('mood-category-menu');
+    const categoryTrigger = document.querySelector('.mood-category-trigger');
+    if (categoryMenu) categoryMenu.hidden = true;
+    if (categoryTrigger) categoryTrigger.setAttribute('aria-expanded', 'false');
     const candidates = getMoodCandidates(activeMoodCategory);
     if (!candidates.length) {
         result.innerHTML = '<div class="mood-discovery-empty">Bu kategoride henüz önerilebilecek bir yapım bulunamadı. Başka bir kategori deneyebilirsin.</div>';
