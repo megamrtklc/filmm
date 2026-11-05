@@ -2657,3 +2657,16 @@ body.trailer-popup-open{overflow:hidden}
  .trailer-popup-summary:after{right:20px;bottom:-82px;font-size:125px}
  .trailer-popup-summary p{-webkit-line-clamp:5;font-size:11px}
 }
+
+
+/* Stable trailer close control with a visible text label */
+.trailer-popup-close{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:8px;width:auto;min-width:88px;height:40px;padding:0 13px;white-space:nowrap;overflow:visible;border-radius:999px}
+.trailer-popup-close i{display:block;flex:0 0 auto;width:14px;text-align:center;line-height:1}
+.trailer-popup-close span{display:block;flex:0 0 auto;color:inherit;font-size:11px;font-weight:800;letter-spacing:.01em;line-height:1}
+.trailer-popup-close:hover{transform:none}
+@media(max-width:700px){
+ .trailer-popup-head{gap:12px;padding:12px 13px}
+ .trailer-popup-head>div{min-width:0}
+ .trailer-popup-close{min-width:82px;height:36px;gap:7px;padding:0 11px}
+ .trailer-popup-close span{font-size:10px}
+}
