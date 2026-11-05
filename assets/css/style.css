@@ -2302,7 +2302,7 @@ body.actor-modal-open{overflow:hidden}
 
 
 /* Yönetmen profil kartı - kompakt bilgi satırları ve okunaklı biyografi */
-.director-profile-panel{margin:8px 0 14px!important;overflow:visible!important}
+.director-profile-panel{margin:2px 0 14px!important;overflow:visible!important}
 .director-profile-content{overflow:visible}
 .director-profile-facts,.director-profile-identity,.director-profile-heading{overflow:visible}
 .director-profile-photo-wrap{position:relative;display:block;flex:0 0 76px;width:76px;height:84px;z-index:2}
@@ -2321,7 +2321,7 @@ body.actor-modal-open{overflow:hidden}
 .director-profile-biography>small{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:10px}
 .director-profile-biography p{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.85;letter-spacing:.012em;color:#d9dee8;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;line-clamp:4;max-height:calc(1.85em * 4);overflow:hidden;padding:0}
 @media(max-width:700px){
- .director-profile-panel{margin:6px 0 12px!important}
+ .director-profile-panel{margin:2px 0 12px!important}
  .director-profile-photo-wrap{flex-basis:70px;width:70px;height:78px}
  .director-profile-photo-wrap .director-profile-photo{width:70px;height:78px}
  .director-profile-dates{gap:7px 10px}
