@@ -3043,9 +3043,3 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-facts-wrap{margin-top:16px!important;padding:15px 14px 12px!important}
  #detail-page-view .detail-copy{min-width:0!important}
 }
-
-
-/* Oyuncu profil manşetinde kolaj yerine tek, optimize edilmiş görsel kullanılır. */
-.actor-banner-collage{display:none!important}
-.actor-banner-image{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 28%;z-index:-2}
-@media(max-width:600px){.actor-banner-image{object-position:center 25%}}
