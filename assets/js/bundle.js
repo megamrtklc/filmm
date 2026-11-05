@@ -937,17 +937,19 @@ function renderCastPage(){
  const list=document.getElementById('detail-cast-list');
  const controls=document.getElementById('detail-cast-controls');
  const label=document.getElementById('detail-cast-page-label');
- const firstPage=currentCastNames.slice(0,6);
- const secondPage=currentCastNames.slice(6,15);
+ const firstPage=currentCastNames.slice(0,8);
+ const secondPage=currentCastNames.slice(8,16);
  const visible=activeCastPage===0?firstPage:secondPage;
  list.innerHTML=visible.map(member=>{
   const name=typeof member==='string'?member:member.name;
+  const character=typeof member==='string'?'':member.character||'';
   const photo=typeof member==='string'?'':member.image||'';
   const safe=escapeCastHtml(name);
-  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=256&bold=true';
-  return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><b>'+safe+'</b><small>'+(photo?'Oyuncu':'Fotoğraf doğrulanamadı')+'</small></button>';
- }).join('')||'<p>Oyuncu bilgisi bulunmuyor.</p>';
- controls.classList.toggle('hidden',currentCastNames.length<=6);
+  const role=escapeCastHtml(character);
+  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=160&bold=true';
+  return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></button>';
+ }).join('')||'<p class="detail-cast-empty">Oyuncu bilgisi bulunmuyor.</p>';
+ controls.classList.toggle('hidden',currentCastNames.length<=8);
  label.textContent=activeCastPage===0?'1 / 2':'2 / 2';
  controls.querySelector('button:first-child').disabled=activeCastPage===0;
  controls.querySelector('button:last-child').disabled=activeCastPage===1||secondPage.length===0;
@@ -962,10 +964,10 @@ function changeCastPage(direction){
 async function loadVerifiedCast(item){
  const requestId=String(item.id);
  currentCastItemId=requestId;
- const fallback=(item.cast||[]).slice(0,15).map(name=>({name,image:''}));
+ const fallback=(item.cast||[]).slice(0,16).map(member=>typeof member==='string'?({name:member,image:'',character:''}):({name:member.name||'',image:member.image||'',character:member.character||member.role||''}));
  if(!item.tmdbId){currentCastNames=fallback;renderCastPage();return;}
  const property=item.type==='tv'?'P4983':'P4947';
- const query='SELECT ?actor ?actorLabel ?image ?order WHERE { ?work wdt:'+property+' "'+String(item.tmdbId).replace(/[^0-9]/g,'')+'". ?work p:P161 ?statement. ?statement ps:P161 ?actor. OPTIONAL { ?statement pq:P1545 ?order. } OPTIONAL { ?actor wdt:P18 ?image. } SERVICE wikibase:label { bd:serviceParam wikibase:language "tr,en". } } ORDER BY (IF(BOUND(?order), xsd:integer(?order), 999)) LIMIT 30';
+ const query='SELECT ?actor ?actorLabel ?image ?order ?characterLabel WHERE { ?work wdt:'+property+' "'+String(item.tmdbId).replace(/[^0-9]/g,'')+'". ?work p:P161 ?statement. ?statement ps:P161 ?actor. OPTIONAL { ?statement pq:P1545 ?order. } OPTIONAL { ?statement pq:P453 ?character. } OPTIONAL { ?actor wdt:P18 ?image. } SERVICE wikibase:label { bd:serviceParam wikibase:language "tr,en". } } ORDER BY (IF(BOUND(?order), xsd:integer(?order), 999)) LIMIT 30';
  try{
   const response=await fetch('https://query.wikidata.org/sparql?query='+encodeURIComponent(query)+'&format=json',{headers:{'Accept':'application/sparql-results+json'}});
   if(!response.ok)throw new Error('Doğrulanmış oyuncu listesi alınamadı');
@@ -974,7 +976,7 @@ async function loadVerifiedCast(item){
   const verified=[];
   const seenActors=new Set();
   for(const row of rows){
-   const person={name:row.actorLabel?.value||'',qid:(row.actor?.value||'').split('/').pop(),image:row.image?.value||''};
+   const person={name:row.actorLabel?.value||'',qid:(row.actor?.value||'').split('/').pop(),image:row.image?.value||'',character:row.characterLabel?.value||''};
    if(person.name&&person.qid&&!seenActors.has(person.qid)){seenActors.add(person.qid);verified.push(person);}
   }
   if(currentCastItemId!==requestId)return;
