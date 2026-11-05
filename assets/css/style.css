@@ -3332,3 +3332,23 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view .score-tmdb{border-color:rgba(1,180,228,.42)!important;box-shadow:inset 0 0 10px rgba(1,180,228,.025)!important}
 #detail-page-view .score-rt{border-color:rgba(230,57,70,.42)!important;box-shadow:inset 0 0 10px rgba(230,57,70,.025)!important}
 #detail-page-view .score-popcorn{border-color:rgba(240,68,68,.42)!important;box-shadow:inset 0 0 10px rgba(240,68,68,.025)!important}
+
+
+/* Detail header metadata: country flags and director links replace the removed credits card */
+#detail-page-view .detail-subline{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;line-height:1.7!important}
+#detail-page-view .detail-meta-separator{color:rgba(255,255,255,.35)!important}
+#detail-page-view .detail-inline-countries{display:inline-flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important}
+#detail-page-view .detail-country-chip{display:inline-flex!important;align-items:center!important;gap:5px!important;padding:2px 6px!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:5px!important;background:rgba(8,10,15,.5)!important;color:#e8eaf0!important;font-size:11px!important;font-weight:650!important;line-height:1.4!important;cursor:pointer!important}
+#detail-page-view .detail-country-chip:hover{border-color:rgba(217,181,107,.55)!important;color:#f2d89f!important;background:rgba(217,181,107,.08)!important}
+#detail-page-view .detail-country-chip .flag-image{width:16px!important;height:11px!important;object-fit:cover!important;border-radius:2px!important}
+#detail-page-view .detail-inline-director{display:inline-flex!important;align-items:center!important;flex-wrap:wrap!important;gap:4px!important;color:#aeb4c0!important}
+#detail-page-view .detail-director-label{color:#9299a6!important}
+#detail-page-view .detail-director-link{padding:0!important;border:0!important;background:transparent!important;color:#e8c77f!important;font:inherit!important;font-weight:700!important;cursor:pointer!important;text-decoration:none!important}
+#detail-page-view .detail-director-link:hover{color:#fff!important;text-decoration:underline!important;text-underline-offset:3px!important}
+#detail-page-view .detail-director-comma{color:#9299a6!important}
+#detail-page-view .detail-facts-wrap{display:none!important}
+@media(max-width:760px){
+ #detail-page-view .detail-subline{gap:5px!important;font-size:9px!important}
+ #detail-page-view .detail-country-chip{font-size:9px!important;padding:2px 4px!important}
+ #detail-page-view .detail-country-chip .flag-image{width:14px!important;height:10px!important}
+}
