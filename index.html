@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-ux-v1">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-streaming-v2">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -216,11 +216,13 @@
     </div>
 
     <!-- SİNEMATİK FİLM / DİZİ DETAY SAYFASI -->
-    <div id="detail-page-view" class="hidden min-h-screen flex-1 transition-all duration-500">
+    <div id="detail-page-view" class="detail-modal hidden" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabindex="-1">
+        <div class="detail-modal-backdrop" data-detail-dismiss></div>
+        <div class="detail-modal-panel">
         <section class="detail-visual">
             <img id="detail-backdrop" src="" alt="Yapım arka plan görseli">
             <div class="detail-topbar">
-                <button onclick="showDashboard()" class="detail-back flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Geri dön</button>
+                <button onclick="showDashboard()" class="detail-back flex items-center gap-2"><i class="fa-solid fa-xmark"></i> Kapat</button>
                 <div class="flex items-center gap-2 text-xs font-bold text-white/90"><span class="w-2 h-2 rounded-full bg-amber-400"></span> FILM & DİZİ DETAYI</div>
             </div>
         </section>
@@ -367,6 +369,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-ux-v1"></script>
+    <script src="assets/js/bundle.js?v=20261105-streaming-v2"></script>
 </body>
 </html>
