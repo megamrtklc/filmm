@@ -38,15 +38,35 @@
         }
     </script>
 
-        <link rel="stylesheet" href="assets/css/style.css?v=20261105-final-layout">
+        <link rel="stylesheet" href="assets/css/style.css?v=20261105-home-layout-v2">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
     <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
     <header class="site-header">
+        <div class="header-topline">
         <a class="header-brand" href="#/anasayfa" aria-label="NY7 TV ana sayfa">
             <span class="brand-mark"><b>NY</b><strong>7</strong><small>TV</small></span>
         </a>
+        <div class="header-actions">
+            <div class="header-search-shell">
+                <label class="search-wrap glass-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara" autocomplete="off">
+                </label>
+                <div id="header-search-results" class="header-search-results" role="listbox" aria-label="Arama sonuçları" hidden></div>
+            </div>
+            <div class="nav-dropdown user-dropdown" id="user-menu">
+                <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false">
+                    <img class="user-avatar" src="https://i.pravatar.cc/80?img=12" alt="Temsili profil resmi">
+                </button>
+                <div class="nav-menu user-menu-panel">
+                    <button onclick="showProfileNotice();closeHeaderMenus()"><i class="fa-regular fa-user"></i> Profilim</button>
+                    <button onclick="showSettingsNotice();closeHeaderMenus()"><i class="fa-solid fa-gear"></i> Ayarlar</button>
+                </div>
+            </div>
+        </div>
+        </div>
         <nav class="main-nav" aria-label="Ana menü">
             <a class="nav-home" href="#" onclick="showDashboard();return false;"><i class="fa-solid fa-house"></i> Anasayfa</a>
             <a href="#/filmler"><i class="fa-solid fa-film"></i> Filmler</a>
@@ -70,24 +90,6 @@
                 </div>
             </div>
         </nav>
-        <div class="header-actions">
-            <div class="header-search-shell">
-                <label class="search-wrap glass-search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara" autocomplete="off">
-                </label>
-                <div id="header-search-results" class="header-search-results" role="listbox" aria-label="Arama sonuçları" hidden></div>
-            </div>
-            <div class="nav-dropdown user-dropdown" id="user-menu">
-                <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false">
-                    <img class="user-avatar" src="https://i.pravatar.cc/80?img=12" alt="Temsili profil resmi">
-                </button>
-                <div class="nav-menu user-menu-panel">
-                    <button onclick="showProfileNotice();closeHeaderMenus()"><i class="fa-regular fa-user"></i> Profilim</button>
-                    <button onclick="showSettingsNotice();closeHeaderMenus()"><i class="fa-solid fa-gear"></i> Ayarlar</button>
-                </div>
-            </div>
-        </div>
     </header>
 
     <!-- DASHBOARD VIEW -->
@@ -357,6 +359,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-split-hero"></script>
+    <script src="assets/js/bundle.js?v=20261105-home-layout-v2"></script>
 </body>
 </html>
