@@ -297,11 +297,56 @@ function renderFilteredCatalog() {
             const items = tab==='watchlist' ? mediaDatabase.filter(m=>watchlist.includes(m.id)||watchlist.includes(String(m.id))) : mediaDatabase.filter(m=>activeCatalogType==='all'||m.type===activeCatalogType);
             renderMediaGrid(items);
         }
-document.getElementById('search-input').addEventListener('input', function(e) {
-            activeCatalogQuery = e.target.value || '';
-            if (activeCatalogQuery.trim()) showCatalogView('Arama Sonuçları');
-            renderFilteredCatalog();
-        });
+const headerSearchInput = document.getElementById('search-input');
+const headerSearchResults = document.getElementById('header-search-results');
+function renderHeaderSearchResults(value) {
+    if (!headerSearchResults) return;
+    const query = String(value || '').trim().toLocaleLowerCase('tr-TR');
+    if (!query) {
+        headerSearchResults.hidden = true;
+        headerSearchResults.innerHTML = '';
+        return;
+    }
+    const matches = mediaDatabase.filter(item =>
+        String(item.title || '').toLocaleLowerCase('tr-TR').includes(query)
+    ).slice(0, 8);
+    headerSearchResults.innerHTML = matches.length ? matches.map(item => {
+        const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
+        const image = escapeCountryHtml(item.image || '');
+        const year = escapeCountryHtml(item.year || 'Yıl bilgisi yok');
+        const type = item.type === 'tv' ? 'Dizi' : 'Film';
+        return `<button type="button" class="header-search-result" role="option" data-search-result-id="${escapeCountryHtml(item.id)}">
+            <img src="${image}" alt="" loading="lazy">
+            <span class="header-search-result-copy"><strong>${title}</strong><small>${year} · ${type}</small></span>
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </button>`;
+    }).join('') : '<div class="header-search-empty">Eşleşen film veya dizi bulunamadı.</div>';
+    headerSearchResults.hidden = false;
+}
+headerSearchInput.addEventListener('focus', () => {
+    headerSearchInput.closest('.glass-search')?.classList.add('is-expanded');
+    renderHeaderSearchResults(headerSearchInput.value);
+});
+headerSearchInput.addEventListener('input', function(e) {
+    activeCatalogQuery = e.target.value || '';
+    renderHeaderSearchResults(activeCatalogQuery);
+    if (activeCatalogQuery.trim()) showCatalogView('Arama Sonuçları');
+    renderFilteredCatalog();
+});
+headerSearchResults.addEventListener('click', event => {
+    const result = event.target.closest('[data-search-result-id]');
+    if (!result) return;
+    const id = result.dataset.searchResultId;
+    headerSearchResults.hidden = true;
+    headerSearchInput.blur();
+    openDetailPage(id);
+});
+document.addEventListener('click', event => {
+    if (!event.target.closest('.header-search-shell') && headerSearchResults) headerSearchResults.hidden = true;
+});
+headerSearchInput.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && headerSearchResults) headerSearchResults.hidden = true;
+});
 
 
 // İçerik detay görünümü
