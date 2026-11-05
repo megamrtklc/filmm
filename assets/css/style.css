@@ -3282,3 +3282,19 @@ body.trailer-popup-open{overflow:hidden}
   #detail-page-view .detail-description-panel:after{right:9px!important;bottom:0!important}
   #detail-page-view .detail-description-panel p{font-size:13.5px!important;line-height:1.8!important;letter-spacing:.02em!important}
 }
+
+
+/* Son hizalama: künye içeriği başlıkla aynı sol başlangıç çizgisinde */
+#detail-page-view .detail-facts-wrap{padding-left:15px!important;padding-right:15px!important}
+#detail-page-view .detail-facts-heading{margin-left:0!important;padding-left:0!important;text-align:left!important}
+#detail-page-view .detail-facts-grid{width:100%!important;align-items:stretch!important}
+#detail-page-view .detail-fact{width:100%!important;justify-items:start!important;justify-content:start!important;text-align:left!important;padding-left:0!important;padding-right:0!important}
+#detail-page-view .detail-fact>span,#detail-page-view .detail-fact>b,#detail-page-view .detail-fact .detail-country-list{text-align:left!important;justify-self:start!important}
+
+/* Ambilight yalnızca sol afiş sütununda */
+#detail-page-view{--poster-tone-1-rgb:213,166,63;--poster-tone-2-rgb:116,75,160;--poster-tone-3-rgb:176,68,72}
+#detail-page-view:before,#detail-page-view:after{content:none!important;display:none!important}
+#detail-page-view .detail-poster-column{position:relative!important;isolation:isolate!important;z-index:1!important;--poster-tone-1-rgb:213,166,63;--poster-tone-2-rgb:116,75,160;--poster-tone-3-rgb:176,68,72}
+#detail-page-view .detail-poster-column:before{content:""!important;display:block!important;position:absolute!important;z-index:-1!important;inset:-30px -26px!important;border-radius:30px!important;pointer-events:none!important;background:radial-gradient(ellipse at 12% 48%,rgba(var(--poster-tone-1-rgb),.78),transparent 58%),radial-gradient(ellipse at 88% 50%,rgba(var(--poster-tone-2-rgb),.72),transparent 58%),radial-gradient(ellipse at 50% 8%,rgba(var(--poster-tone-3-rgb),.55),transparent 62%)!important;filter:blur(30px) saturate(1.5)!important;opacity:.9!important;transition:opacity .5s ease!important}
+#detail-page-view .detail-poster-frame{position:relative!important;z-index:1!important}
+@media(max-width:760px){#detail-page-view .detail-poster-column:before{inset:-20px -16px!important;filter:blur(23px) saturate(1.45)!important}}
