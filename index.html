@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-trailer-close-button-v5">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-trailer-footer-close-v6">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -324,7 +324,7 @@
     <div id="trailer-popup" class="trailer-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="trailer-popup-title">
         <div class="trailer-popup-backdrop" data-trailer-dismiss></div>
         <div class="trailer-popup-card">
-            <div class="trailer-popup-head"><div><span>NY7 • FRAGMAN</span><h2 id="trailer-popup-title">Fragmanı İzle</h2></div><button type="button" class="trailer-popup-close" onclick="closeTrailerPopup()" aria-label="Fragman penceresini kapat"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Kapat</span></button></div>
+            <div class="trailer-popup-head"><div><span>NY7 • FRAGMAN</span><h2 id="trailer-popup-title">Fragmanı İzle</h2></div><button type="button" onclick="closeTrailerPopup()" aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="trailer-popup-content">
                 <aside class="trailer-popup-info">
                     <div class="trailer-popup-poster-frame"><img id="trailer-popup-poster" class="trailer-popup-poster" src="" alt="Yapım afişi"></div>
@@ -345,6 +345,7 @@
                     </section>
                 </div>
             </div>
+            <div class="trailer-popup-footer"><button type="button" class="trailer-popup-footer-close" onclick="closeTrailerPopup()"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Kapat</span></button></div>
         </div>
     </div>
 
@@ -398,6 +399,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-trailer-close-button-v5"></script>
+    <script src="assets/js/bundle.js?v=20261105-trailer-footer-close-v6"></script>
 </body>
 </html>
