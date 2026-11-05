@@ -2698,8 +2698,8 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view>.detail-visual{background:rgba(9,11,16,.14)!important}
 #detail-page-view .detail-visual:after{
  background:
-  linear-gradient(90deg,rgba(5,7,11,.48),rgba(5,7,11,.04) 72%),
-  linear-gradient(0deg,rgba(9,11,16,.68),rgba(9,11,16,.04) 58%,rgba(0,0,0,.14))!important;
+  linear-gradient(90deg,rgba(5,7,11,.34),rgba(5,7,11,.02) 72%),
+  linear-gradient(0deg,rgba(9,11,16,.48),rgba(9,11,16,.02) 58%,rgba(0,0,0,.08))!important;
 }
 #detail-page-view>.detail-main{
  background:linear-gradient(180deg,rgba(9,11,16,.48),rgba(9,11,16,.64) 30%,rgba(9,11,16,.80))!important;
