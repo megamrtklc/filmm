@@ -2111,3 +2111,16 @@ body.actor-modal-open{overflow:hidden}
  .actor-gallery-photo>span{opacity:1!important;background:linear-gradient(0deg,rgba(3,5,9,.38),transparent 55%)!important}
  .actor-gallery-more{width:100%!important;justify-content:center!important}
 }
+
+
+/* Oyuncu biyografisi: tam metin için okunabilir uzun içerik düzeni */
+.actor-biography{min-height:0!important}
+.actor-biography p{
+ display:block!important;-webkit-line-clamp:unset!important;
+ -webkit-box-orient:initial!important;max-height:none!important;overflow:visible!important;
+ white-space:pre-line!important;font-size:14px!important;line-height:1.95!important;
+ color:#d0d5df!important;max-width:1120px!important
+}
+@media(max-width:600px){
+ .actor-biography p{display:block!important;-webkit-line-clamp:unset!important;max-height:none!important;overflow:visible!important;font-size:12px!important;line-height:1.85!important}
+}
