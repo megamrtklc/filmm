@@ -753,7 +753,7 @@ body.actor-modal-open{overflow:hidden}
   padding-bottom:0!important;
 }
 #hero-section .hero-thumbnails{
-  bottom:18px!important;
+  bottom:8px!important;
 }
 #hero-section .hero-arrows{
   bottom:132px!important;
@@ -765,7 +765,7 @@ body.actor-modal-open{overflow:hidden}
     padding-bottom:0!important;
   }
   #hero-section .hero-thumbnails{
-    bottom:14px!important;
+    bottom:6px!important;
   }
   #hero-section .hero-arrows{
     bottom:142px!important;
