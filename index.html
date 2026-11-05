@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-credits-align-v1">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-detail-redesign-v1">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -232,15 +232,6 @@
             <div class="detail-overlap">
                 <div class="detail-poster-column">
                     <div class="detail-poster-frame"><img id="detail-poster" src="" alt="Film veya dizi afişi"></div>
-            <section class="detail-facts-wrap" aria-label="Yapım künyesi">
-                <div class="detail-facts-heading"><span>YAPIM BİLGİLERİ</span><h2>Yapım künyesi</h2></div>
-                <div class="detail-facts-grid">
-                    <div class="detail-fact"><span><i class="fa-solid fa-chair"></i> Yönetmen</span><b id="detail-director"></b></div>
-                    <div class="detail-fact"><span><i class="fa-solid fa-globe"></i> Ülke</span><div id="detail-country-list" class="detail-country-list"></div></div>
-                    <div class="detail-fact"><span><i class="fa-solid fa-masks-theater"></i> Tür</span><b id="detail-info-genre"></b></div>
-                    <div class="detail-fact"><span><i class="fa-solid fa-calendar-days"></i> Yayın yılı</span><b id="detail-info-year"></b></div>
-                </div>
-            </section>
                 </div>
                 <div class="detail-copy">
                     <div class="detail-rating-row flex items-center gap-2 flex-wrap">
@@ -263,6 +254,15 @@
                     </div>
                 </div>
             </div>
+            <section class="detail-facts-wrap" aria-label="Yapım künyesi">
+                <div class="detail-facts-heading"><span>YAPIM BİLGİLERİ</span><h2>Yapım künyesi</h2></div>
+                <div class="detail-facts-grid">
+                    <div class="detail-fact"><span><i class="fa-solid fa-chair"></i> Yönetmen</span><b id="detail-director"></b></div>
+                    <div class="detail-fact"><span><i class="fa-solid fa-globe"></i> Ülke</span><div id="detail-country-list" class="detail-country-list"></div></div>
+                    <div class="detail-fact"><span><i class="fa-solid fa-masks-theater"></i> Tür</span><b id="detail-info-genre"></b></div>
+                    <div class="detail-fact"><span><i class="fa-solid fa-calendar-days"></i> Yayın yılı</span><b id="detail-info-year"></b></div>
+                </div>
+            </section>
             <div class="detail-lower detail-cast-inline">
                 <div class="detail-info-card detail-cast-card">
                     <div class="detail-cast-heading"><h3><i class="fa-solid fa-users text-amber-400 mr-2"></i>Oyuncu Kadrosu</h3><div id="detail-cast-controls" class="detail-cast-controls hidden"><button type="button" onclick="changeCastPage(-1)" aria-label="Önceki oyuncular"><i class="fa-solid fa-chevron-left"></i></button><span id="detail-cast-page-label">1 / 2</span><button type="button" onclick="changeCastPage(1)" aria-label="Sonraki oyuncular"><i class="fa-solid fa-chevron-right"></i></button></div></div>
