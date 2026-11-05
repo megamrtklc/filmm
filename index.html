@@ -38,7 +38,7 @@
         }
     </script>
 
-        <link rel="stylesheet" href="assets/css/style.css?v=20261105-profile-banner-bg">
+        <link rel="stylesheet" href="assets/css/style.css?v=20261105-gallery-modern">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -302,7 +302,7 @@
         </section>
         <section class="actor-gallery-section">
             <div class="actor-section-heading"><div><span>FOTOĞRAF ARŞİVİ</span><h2>Oyuncudan kareler</h2></div><i class="fa-regular fa-images"></i></div>
-            <div class="actor-gallery-toolbar"><span id="actor-gallery-count">Fotoğraflar yükleniyor…</span><div class="actor-gallery-controls"><button type="button" onclick="changeActorGalleryPage(-1)" aria-label="Önceki fotoğraflar"><i class="fa-solid fa-chevron-left"></i></button><button type="button" onclick="changeActorGalleryPage(1)" aria-label="Sonraki fotoğraflar"><i class="fa-solid fa-chevron-right"></i></button></div></div>
+            <div class="actor-gallery-toolbar"><span id="actor-gallery-count">Fotoğraflar yükleniyor…</span><button type="button" id="actor-gallery-more" class="actor-gallery-more" onclick="changeActorGalleryPage()" hidden>Daha fazla fotoğraf göster <i class="fa-solid fa-arrow-down"></i></button></div>
             <div id="actor-gallery-grid" class="actor-gallery-grid"></div>
         </section>
     </div>
@@ -364,6 +364,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-actor-collage"></script>
+    <script src="assets/js/bundle.js?v=20261105-gallery-modern"></script>
 </body>
 </html>
