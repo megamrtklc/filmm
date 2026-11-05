@@ -3722,3 +3722,34 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-cast-person img{transition:none!important}
  #detail-page-view .detail-cast-grid{scroll-behavior:auto!important}
 }
+
+
+/* FILMM · Oyuncu portrelerini daha kompakt tut */
+#detail-page-view .detail-cast-person img{
+  width:100%!important;
+  max-width:104px!important;
+  height:auto!important;
+  aspect-ratio:3/4!important;
+  align-self:center!important;
+  transform:scale(1)!important;
+}
+#detail-page-view .detail-cast-person:hover img,
+#detail-page-view .detail-cast-person:focus-visible img{
+  transform:scale(1.08)!important;
+}
+#detail-page-view .detail-cast-person-copy{
+  width:100%!important;
+  max-width:104px!important;
+  align-self:center!important;
+  text-align:left!important;
+}
+@media(max-width:560px){
+  #detail-page-view .detail-cast-person img,
+  #detail-page-view .detail-cast-person-copy{
+    max-width:100%!important;
+  }
+  #detail-page-view .detail-cast-person:hover img,
+  #detail-page-view .detail-cast-person:focus-visible img{
+    transform:scale(1.04)!important;
+  }
+}
