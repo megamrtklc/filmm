@@ -99,6 +99,16 @@ function fitHeroTitleToWidth() {
             heroIndex=(heroIndex+direction+heroItems.length)%heroItems.length;
             setHeroMedia(heroItems[heroIndex].id,true);
         }
+        // Manşet oklarını doğrudan bağla; otomatik ve manuel geçiş aynı fonksiyonu kullanır.
+        window.stepHero = stepHero;
+        document.querySelectorAll('#hero-section [data-hero-direction]').forEach(button => {
+            button.addEventListener('click', event => {
+                event.preventDefault();
+                event.stopPropagation();
+                const direction = Number(button.getAttribute('data-hero-direction'));
+                if (heroItems.length > 1 && (direction === -1 || direction === 1)) stepHero(direction);
+            });
+        });
         function restartHeroTimer() {
             if(heroTimer) clearInterval(heroTimer);
             heroTimer=setInterval(()=>{if(!document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},6500);
