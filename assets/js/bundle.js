@@ -96,19 +96,25 @@ function fitHeroTitleToWidth() {
                 </button>`).join('');
         }
         function stepHero(direction) {
-            heroIndex=(heroIndex+direction+heroItems.length)%heroItems.length;
-            setHeroMedia(heroItems[heroIndex].id,true);
+            if (!Array.isArray(heroItems) || heroItems.length < 2) return;
+            const step = Number(direction);
+            if (step !== -1 && step !== 1) return;
+            heroIndex = (heroIndex + step + heroItems.length) % heroItems.length;
+            const nextItem = heroItems[heroIndex];
+            if (nextItem) setHeroMedia(nextItem.id, true);
         }
-        // Manşet oklarını doğrudan bağla; otomatik ve manuel geçiş aynı fonksiyonu kullanır.
+        // Ok tıklamalarını belge seviyesinde yakala: DOM yeniden çizilse de olay bağlantısı kaybolmaz.
         window.stepHero = stepHero;
-        document.querySelectorAll('#hero-section [data-hero-direction]').forEach(button => {
-            button.addEventListener('click', event => {
+        if (!window.__heroArrowDelegationBound) {
+            document.addEventListener('click', event => {
+                const button = event.target.closest('#hero-section [data-hero-direction]');
+                if (!button) return;
                 event.preventDefault();
                 event.stopPropagation();
-                const direction = Number(button.getAttribute('data-hero-direction'));
-                if (heroItems.length > 1 && (direction === -1 || direction === 1)) stepHero(direction);
-            });
-        });
+                stepHero(button.getAttribute('data-hero-direction'));
+            }, true);
+            window.__heroArrowDelegationBound = true;
+        }
         function restartHeroTimer() {
             if(heroTimer) clearInterval(heroTimer);
             heroTimer=setInterval(()=>{if(!document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},6500);
