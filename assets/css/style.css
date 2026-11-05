@@ -2442,3 +2442,38 @@ body.actor-modal-open{overflow:hidden}
  opacity:.3!important
 }
 #detail-page-view .detail-cast-heading:before{opacity:.38!important}
+\n
+/* NY7 Light Mode — tüm sayfalarda ortak tema katmanı */
+:root{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+body[data-theme="light"]{background:#f3f5f8!important;color:#202633!important;--bg-current:#f3f5f8;--surface-current:#fff;--text-current:#202633;--muted-current:#687386}
+body[data-theme="light"] #theme-body{background:#f3f5f8!important;color:#202633!important}
+body[data-theme="light"] .site-header{background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(255,255,255,.88))!important;border-bottom:1px solid #e5e9ef;box-shadow:0 5px 24px rgba(28,39,56,.07)}
+body[data-theme="light"] .main-nav a,body[data-theme="light"] .header-actions{color:#344054}
+body[data-theme="light"] .main-nav a:hover,body[data-theme="light"] .main-nav a.active{color:#b8860b}
+body[data-theme="light"] .search-wrap,body[data-theme="light"] .glass-search{background:#fff!important;border-color:#dce2ea!important;color:#344054!important;box-shadow:0 4px 16px rgba(20,32,50,.06)}
+body[data-theme="light"] #search-input{color:#202633!important}
+body[data-theme="light"] #search-input::placeholder{color:#8792a2}
+body[data-theme="light"] .theme-toggle{background:#fff;color:#b8860b;border-color:#e3e7ed}
+body[data-theme="light"] .theme-toggle:hover{background:#fff8e5;border-color:#e5b93f}
+body[data-theme="light"] .nav-menu,body[data-theme="light"] .header-search-results{background:#fff!important;color:#202633!important;border:1px solid #e4e8ef;box-shadow:0 16px 38px rgba(20,32,50,.14)}
+body[data-theme="light"] .nav-menu button,body[data-theme="light"] .header-search-results *{color:#344054}
+body[data-theme="light"] [class*="bg-[#0b0c10"],body[data-theme="light"] [class*="bg-[#0f1015"],body[data-theme="light"] [class*="bg-[#111318"],body[data-theme="light"] [class*="bg-[#14161d"],body[data-theme="light"] [class*="bg-[#181a22"],body[data-theme="light"] [class*="bg-gray-900"],body[data-theme="light"] [class*="bg-slate-900"]{background-color:#fff!important}
+body[data-theme="light"] [class*="text-slate-100"],body[data-theme="light"] [class*="text-slate-200"],body[data-theme="light"] [class*="text-gray-100"],body[data-theme="light"] [class*="text-white"]{color:#263244}
+body[data-theme="light"] [class*="text-slate-300"],body[data-theme="light"] [class*="text-slate-400"],body[data-theme="light"] [class*="text-gray-400"]{color:#687386}
+body[data-theme="light"] [class*="border-white/"],body[data-theme="light"] [class*="border-slate-700"],body[data-theme="light"] [class*="border-gray-800"]{border-color:#e2e7ee!important}
+body[data-theme="light"] .site-header .brand-tv{color:#596273}
+body[data-theme="light"] .media-card,body[data-theme="light"] .movie-card,body[data-theme="light"] .series-card,body[data-theme="light"] .info-card,body[data-theme="light"] .content-card,body[data-theme="light"] .actor-profile-card,body[data-theme="light"] .director-profile-card{background-color:#fff!important;color:#263244;border-color:#e4e8ef;box-shadow:0 8px 26px rgba(25,38,58,.07)}
+body[data-theme="light"] .catalog-section,body[data-theme="light"] .catalog-page,body[data-theme="light"] #catalog-view,body[data-theme="light"] #actor-page-view,body[data-theme="light"] #director-page-view{background:#f3f5f8!important;color:#263244}
+body[data-theme="light"] #detail-page-view{background:#f3f5f8!important;color:#263244}
+body[data-theme="light"] #detail-page-view .detail-main{background:#f3f5f8!important;color:#263244}
+body[data-theme="light"] #detail-page-view .detail-description-panel,body[data-theme="light"] #detail-page-view .detail-cast-card,body[data-theme="light"] #detail-page-view .detail-facts-card{background-color:#fff!important;color:#263244;border-color:#e4e8ef}
+body[data-theme="light"] #detail-page-view .detail-copy h1,body[data-theme="light"] #detail-page-view .detail-main h2,body[data-theme="light"] #detail-page-view .detail-main h3{color:#202633}
+body[data-theme="light"] #detail-page-view .detail-subline,body[data-theme="light"] #detail-page-view .detail-description-panel p{color:#586477}
+body[data-theme="light"] .hero-section .hero-vignette{background:linear-gradient(90deg,rgba(12,16,24,.88),rgba(12,16,24,.62) 38%,rgba(12,16,24,.12) 78%),linear-gradient(0deg,#f3f5f8 0%,rgba(243,245,248,.55) 12%,transparent 48%)}
+body[data-theme="light"] .hero-section{color:#fff}
+body[data-theme="light"] .hero-thumb{border-color:rgba(255,255,255,.5)}
+body[data-theme="light"] .footer,body[data-theme="light"] footer{background:#e9edf3!important;color:#536074;border-color:#dce2ea}
+.theme-toggle{width:40px;height:40px;flex:0 0 40px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:rgba(255,255,255,.08);color:#facc15;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.theme-toggle:hover{transform:translateY(-1px);background:rgba(255,255,255,.15);border-color:rgba(250,204,21,.55)}
+@media(max-width:767px){.theme-toggle{width:36px;height:36px;flex-basis:36px}.header-actions{gap:8px}}
