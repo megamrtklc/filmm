@@ -1164,7 +1164,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-title').innerText=item.title;
  let detailOriginal=document.getElementById('detail-original-title');if(!detailOriginal){detailOriginal=document.createElement('small');detailOriginal.id='detail-original-title';detailOriginal.className='media-original-title detail-original-title';document.getElementById('detail-title').after(detailOriginal);}detailOriginal.dataset.mediaId=String(item.id);detailOriginal.textContent=item.originalTitle||'';detailOriginal.hidden=!item.originalTitle;
  document.getElementById('detail-category').innerText=item.category||item.genre||'';
- document.getElementById('detail-rating').innerHTML='<i class="fa-solid fa-star"></i> '+(item.rating||'—')+' IMDb';
+ // IMDb puanı alt değerlendirme satırında tek kez gösterilir.
  document.getElementById('detail-year').innerText=item.year||'';
  document.getElementById('detail-duration').innerText=item.duration||'';
  const detailKind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
@@ -1179,7 +1179,14 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-info-year').innerText=item.year||'—';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
  document.getElementById('detail-director').innerHTML=directors.map(director=>'<button type="button" class="detail-taxonomy-chip" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('')||'<span>—</span>';
- document.getElementById('detail-score-row').innerHTML='<span class="detail-score-pill"><b>IMDb</b><strong>★ '+(item.rating||'—')+'</strong></span><span class="detail-score-pill"><b>TMDB</b><strong>'+(item.tmdbRating||'—')+'</strong></span><span class="detail-score-pill"><b>RT</b><strong>'+(item.rottenTomatoes||'—')+'</strong></span><span class="detail-score-pill"><b>Popcorn</b><strong>'+(item.popcornmeter||'—')+'</strong></span>';
+ const readScore=(...values)=>{for(const value of values){const candidate=value&&typeof value==='object'?(value.value??value.score??value.rating):value;if(candidate!==undefined&&candidate!==null&&String(candidate).trim()!==''&&String(candidate).trim().toLowerCase()!=='n/a')return String(candidate).trim();}return '';};
+ const scoreItems=[
+  {key:'imdb',logo:'IMDb',value:readScore(item.rating,item.imdbRating,item.imdb_rating),suffix:''},
+  {key:'tmdb',logo:'TMDB',value:readScore(item.tmdbRating,item.tmdb_rating,item.tmdb?.value,item.tmdb?.rating,item.vote_average),suffix:''},
+  {key:'rt',logo:'RT',value:readScore(item.rottenTomatoes,item.rtRating,item.rotten_tomatoes?.value,item.rotten_tomatoes),suffix:'%'},
+  {key:'popcorn',logo:'POPCORN',value:readScore(item.popcornmeter,item.popcornMeter,item.popcorn_rating),suffix:'%'}
+ ];
+ document.getElementById('detail-score-row').innerHTML=scoreItems.map(score=>'<span class="detail-score-pill score-'+score.key+'"><span class="score-brand score-brand-'+score.key+'" aria-label="'+score.logo+'">'+score.logo+'</span><strong>'+(score.value?escapeCountryHtml(score.value)+(score.suffix&&!String(score.value).includes('%')?score.suffix:''):'—')+'</strong></span>').join('');
  updateDetailButtons(item.id);
  currentCastNames=(item.cast||[]).slice(0,15).map(name=>({name,image:''}));currentCastItemId=String(item.id);activeCastPage=0;renderCastPage();loadVerifiedCast(item);
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
