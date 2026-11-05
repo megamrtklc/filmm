@@ -1953,3 +1953,7 @@ body.actor-modal-open{overflow:hidden}
  .actor-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
  .actor-gallery-section{margin-top:24px!important}
 }
+
+
+/* Oyuncu profili: vefat bilgisi doğum tarihinin altında */
+.actor-death-date{display:block;margin-top:5px;color:#aeb5c5;font-size:.88em;font-weight:500;line-height:1.4}
