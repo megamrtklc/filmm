@@ -2161,3 +2161,19 @@ body.actor-modal-open{overflow:hidden}
  .actor-profile-facts-horizontal #actor-country .actor-country-value{gap:7px!important;padding:4px 8px!important}
  .actor-profile-facts-horizontal #actor-country .actor-country-value .actor-country-flag{font-size:19px!important}
 }
+
+
+/* Ülke bayrakları: emoji yerine platformdan bağımsız gerçek görseller */
+.detail-country-chip .flag-image{
+ display:block!important;width:22px!important;height:15px!important;flex:0 0 22px!important;
+ object-fit:cover!important;border-radius:3px!important;border:1px solid rgba(255,255,255,.2)!important;
+ box-shadow:0 1px 3px rgba(0,0,0,.25)!important
+}
+.actor-profile-facts-horizontal #actor-country .actor-country-value .actor-country-flag{
+ display:block!important;width:27px!important;height:19px!important;flex:0 0 27px!important;
+ object-fit:cover!important;border-radius:3px!important;border:1px solid rgba(255,255,255,.22)!important;
+ box-shadow:0 1px 3px rgba(0,0,0,.3)!important;filter:none!important
+}
+@media(max-width:600px){
+ .actor-profile-facts-horizontal #actor-country .actor-country-value .actor-country-flag{width:24px!important;height:17px!important;flex-basis:24px!important}
+}
