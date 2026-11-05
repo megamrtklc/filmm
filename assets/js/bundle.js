@@ -89,76 +89,107 @@ function setHeroMedia(id, userAction = false) {
 
 
 
-// Günlük film/dizi önerisi ve ruh haline göre mini keşif kartı
-function renderDailyPick(item) {
-    const card = document.getElementById('daily-pick-card');
-    if (!card || !item) return;
-    const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
-    const image = escapeCountryHtml(item.backdrop || item.image || '');
+// Moduna göre keşfet: ilk açılışta tüm katalogdan, kategori seçilince ilgili türden rastgele öneri.
+const moodCategoryOptions = [
+    { value:'Aksiyon', label:'Aksiyon', icon:'fa-bolt', terms:['aksiyon'] },
+    { value:'Komedi', label:'Komedi', icon:'fa-face-laugh', terms:['komedi','comedy'] },
+    { value:'Romantik', label:'Romantik', icon:'fa-heart', terms:['romantik','romance'] },
+    { value:'Korku', label:'Korku', icon:'fa-ghost', terms:['korku','horror'] },
+    { value:'Gerilim', label:'Gerilim', icon:'fa-eye', terms:['gerilim','thriller'] },
+    { value:'Gizem', label:'Gizem', icon:'fa-magnifying-glass', terms:['gizem','mystery'] },
+    { value:'Bilim Kurgu', label:'Bilim Kurgu', icon:'fa-robot', terms:['bilim kurgu','bilim-kurgu','science fiction','sci-fi'] },
+    { value:'Macera', label:'Macera', icon:'fa-compass', terms:['macera','adventure'] },
+    { value:'Dram', label:'Dram', icon:'fa-masks-theater', terms:['dram','drama'] },
+    { value:'Fantastik', label:'Fantastik', icon:'fa-wand-magic-sparkles', terms:['fantastik','fantasy','fantazi'] },
+    { value:'Tarih', label:'Tarih', icon:'fa-landmark', terms:['tarih','history'] },
+    { value:'Belgesel', label:'Belgesel', icon:'fa-clapperboard', terms:['belgesel','documentary'] },
+    { value:'Animasyon', label:'Animasyon', icon:'fa-wand-magic', terms:['animasyon','animation'] },
+    { value:'Aile', label:'Aile', icon:'fa-people-group', terms:['aile','family'] },
+    { value:'Suç', label:'Suç', icon:'fa-user-secret', terms:['suç','crime'] },
+    { value:'Savaş & Politik', label:'Savaş & Politik', icon:'fa-shield-halved', terms:['savaş','politik','war'] },
+    { value:'Müzik', label:'Müzik', icon:'fa-music', terms:['müzik','music'] },
+    { value:'Vahşi Batı', label:'Vahşi Batı', icon:'fa-hat-cowboy', terms:['vahşi batı','western'] }
+];
+let activeMoodCategory = '';
+let lastMoodRecommendationId = null;
+
+function getMoodCandidates(category) {
+    const valid = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
+    if (!category) return valid;
+    const config = moodCategoryOptions.find(option => option.value === category);
+    if (!config) return [];
+    return valid.filter(item => {
+        const tags = ((item.genre || '') + ' / ' + (item.category || '')).toLocaleLowerCase('tr-TR');
+        return config.terms.some(term => tags.includes(term.toLocaleLowerCase('tr-TR')));
+    });
+}
+
+function renderMoodRecommendation(item, category) {
+    const result = document.getElementById('mood-discovery-result');
+    if (!result || !item) return;
     const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
-    const category = escapeCountryHtml(item.category || item.genre || typeLabel);
-    card.innerHTML = `
-        <div class="daily-pick-backdrop" style="background-image:url('${image}')"></div>
-        <div class="daily-pick-shade"></div>
-        <div class="mini-card-topline">
-            <span><i class="fa-solid fa-wand-magic-sparkles"></i> BUGÜN NE İZLESEM?</span>
-            <button type="button" onclick="chooseAnotherDailyPick()" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i></button>
+    const backdrop = escapeCountryHtml(item.backdrop || item.image || '');
+    const poster = escapeCountryHtml(item.image || item.backdrop || '');
+    const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
+    const categoryLabel = category || (item.genre || (item.type === 'tv' ? 'Dizi' : 'Film'));
+    const rating = escapeCountryHtml(item.rating || '—');
+    const description = escapeCountryHtml(item.desc || 'Bu yapımı keşfetmek için detaylarına göz at.');
+    const id = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const options = moodCategoryOptions.map(option =>
+        '<option value="' + option.value + '"' + (category === option.value ? ' selected' : '') + '> ' +
+        option.label + '</option>'
+    ).join('');
+    result.innerHTML = `
+        <div class="mood-discovery-backdrop" style="background-image:url('${backdrop}')"></div>
+        <div class="mood-discovery-overlay"></div>
+        <div class="mood-discovery-head">
+            <div class="mood-discovery-heading">
+                <span class="mood-discovery-eyebrow"><i class="fa-solid fa-clapperboard"></i> MODUNA GÖRE KEŞFET</span>
+                <h2>Bir ruh hali seç</h2>
+                <p>Sana uygun yapımı bulalım</p>
+            </div>
+            <label class="mood-category-select">
+                <i class="fa-solid fa-layer-group"></i>
+                <select aria-label="Film veya dizi kategorisi" onchange="chooseMoodPick(this.value)">
+                    <option value="">Tüm kategoriler</option>${options}
+                </select>
+                <i class="fa-solid fa-chevron-down mood-select-chevron"></i>
+            </label>
         </div>
-        <div class="daily-pick-mini-copy">
-            <span class="daily-pick-tag"><i class="fa-solid fa-sparkles"></i> BUGÜNÜN ÖNERİSİ</span>
-            <h2>${title}</h2>
-            <div class="daily-pick-meta"><span>${escapeCountryHtml(item.year || '—')}</span><i></i><span>${typeLabel}</span><i></i><span>${category}</span></div>
-            <div class="daily-pick-rating"><span>★</span> ${escapeCountryHtml(item.rating || '—')} IMDb</div>
-            <div class="daily-pick-actions">
-                <button type="button" class="daily-pick-primary" onclick="openDetailPage('${String(item.id).replace(/'/g, "\\'")}')"><i class="fa-solid fa-circle-info"></i> İncele</button>
-                <button type="button" class="daily-pick-secondary" onclick="launchPlayer('${String(item.title).replace(/'/g, "\\'")}')"><i class="fa-solid fa-play"></i> İzle</button>
+        <div class="mood-discovery-feature">
+            <div class="mood-discovery-poster"><img src="${poster}" alt="${title}" loading="eager"></div>
+            <div class="mood-discovery-copy">
+                <span class="mood-discovery-tag">${escapeCountryHtml(categoryLabel)} <b>•</b> ${typeLabel}</span>
+                <h3>${title}</h3>
+                <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span><span><i class="fa-solid fa-star"></i> ${rating} IMDb</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}</div>
+                <p class="mood-discovery-description">${description}</p>
+                <div class="mood-discovery-actions">
+                    <button type="button" class="mood-discovery-primary" onclick="openDetailPage('${id}')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button>
+                    <button type="button" class="mood-discovery-again" onclick="chooseMoodPick(activeMoodCategory)" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i> Başka Öner</button>
+                </div>
             </div>
         </div>`;
 }
-function chooseAnotherDailyPick() {
-    const candidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-    if (!candidates.length) return;
-    const key = 'ny7_daily_pick_' + new Date().toLocaleDateString('en-CA');
-    const currentId = localStorage.getItem(key);
-    let options = candidates.filter(item => String(item.id) !== String(currentId));
-    if (!options.length) options = candidates;
-    const chosen = options[Math.floor(Math.random() * options.length)];
-    localStorage.setItem(key, String(chosen.id));
-    renderDailyPick(chosen);
-}
-function initializeDailyPick() {
-    const candidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-    if (!candidates.length) return;
-    const key = 'ny7_daily_pick_' + new Date().toLocaleDateString('en-CA');
-    const savedId = localStorage.getItem(key);
-    const saved = candidates.find(item => String(item.id) === String(savedId));
-    if (saved) renderDailyPick(saved);
-    else chooseAnotherDailyPick();
-}
-const moodPickConfig = {
-    action: { label: 'Aksiyon dolu', terms: ['aksiyon', 'macera', 'bilim kurgu'] },
-    fun: { label: 'Eğlenceli', terms: ['komedi', 'animasyon', 'aile'] },
-    mystery: { label: 'Gizemli', terms: ['gizem', 'gerilim', 'suç'] }
-};
-function chooseMoodPick(mood) {
-    const config = moodPickConfig[mood];
-    const result = document.getElementById('mood-pick-result');
-    if (!config || !result) return;
-    const matches = mediaDatabase.filter(item => {
-        const tags = ((item.genre || '') + ' ' + (item.category || '')).toLocaleLowerCase('tr-TR');
-        return config.terms.some(term => tags.includes(term));
-    });
-    const pool = matches.length ? matches : mediaDatabase;
-    if (!pool.length) {
-        result.innerHTML = '<p>Şu an bu ruh haline uygun bir öneri bulamadık.</p>';
+
+function chooseMoodPick(category) {
+    activeMoodCategory = category || '';
+    const result = document.getElementById('mood-discovery-result');
+    if (!result) return;
+    const candidates = getMoodCandidates(activeMoodCategory);
+    if (!candidates.length) {
+        result.innerHTML = '<div class="mood-discovery-empty">Bu kategoride henüz önerilebilecek bir yapım bulunamadı. Başka bir kategori deneyebilirsin.</div>';
         return;
     }
+    let pool = candidates.filter(item => String(item.id) !== String(lastMoodRecommendationId));
+    if (!pool.length) pool = candidates;
     const chosen = pool[Math.floor(Math.random() * pool.length)];
-    const title = escapeCountryHtml(chosen.title || 'İsimsiz yapım');
-    result.innerHTML = `
-        <div class="mood-result-line"><span>${config.label} moduna önerimiz</span><strong>${title}</strong></div>
-        <button type="button" class="mood-result-open" onclick="openDetailPage('${String(chosen.id).replace(/'/g, "\\'")}')">Yapımı keşfet <i class="fa-solid fa-arrow-right"></i></button>`;
-    document.querySelectorAll('.mood-options button').forEach(button => button.classList.toggle('is-selected', button.getAttribute('onclick') === "chooseMoodPick('" + mood + "')"));
+    lastMoodRecommendationId = chosen.id;
+    renderMoodRecommendation(chosen, activeMoodCategory);
+}
+
+function initializeMoodDiscovery() {
+    activeMoodCategory = '';
+    chooseMoodPick('');
 }
 
 function renderHomeCollections() {
@@ -728,10 +759,10 @@ function launchPlayer(title) {
             if (catalogInitialized) return;
             catalogInitialized = true;
             try {
-                const catalogUrl = new URL('data/catalog.json?v=20261105-recovery', document.baseURI);
+                const catalogUrl = new URL('data/catalog.json?v=20261105-mood-hero', document.baseURI);
                 let response = await fetch(catalogUrl.href, { cache: 'no-store' });
                 if (!response.ok) {
-                    response = await fetch('https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-recovery', { cache: 'no-store' });
+                    response = await fetch('https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-mood-hero', { cache: 'no-store' });
                 }
                 if (!response.ok) throw new Error('Katalog isteği başarısız: ' + response.status);
                 const loadedCatalog = await response.json();
@@ -741,7 +772,7 @@ function launchPlayer(title) {
                 setHeroMedia(mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
-                initializeDailyPick();
+                initializeMoodDiscovery();
                 renderMediaGrid();
                 renderLiveTv();
                 renderHeaderSearchResults(headerSearchInput?.value || '');
