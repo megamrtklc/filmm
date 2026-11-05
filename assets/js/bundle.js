@@ -862,14 +862,6 @@ async function fetchActorSummary(name,fullBiography=true){
   title:page.title
  };
 }
-async function loadCastPortraits(){
- const imgs=[...document.querySelectorAll('#detail-cast-list img[data-cast-name]')];
- await Promise.all(imgs.map(async img=>{
-  const name=img.dataset.castName;
-  try{const data=await fetchActorSummary(name,false);if(data.thumbnail?.source)img.src=data.thumbnail.source;}
-  catch(e){img.classList.add('cast-photo-fallback');}
- }));
-}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
