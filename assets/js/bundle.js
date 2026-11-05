@@ -684,6 +684,7 @@ function launchPlayer(title) {
                 });
             }
         }
-        window.addEventListener('load', initializeCatalog, { once: true });
-        if (document.readyState === 'complete') initializeCatalog();
+        // Script sayfanin en altinda yuklendigi icin katalogu beklemeden baslat.
+        // Boylece load olayi kacirilsa bile ana sayfa koleksiyonlari bos kalmaz.
+        initializeCatalog();
     
