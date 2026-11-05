@@ -38,7 +38,7 @@
         }
     </script>
 
-        <link rel="stylesheet" href="assets/css/style.css?v=20261105-hero-bottom-tight">
+        <link rel="stylesheet" href="assets/css/style.css?v=20261105-live-search">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -70,10 +70,13 @@
             </div>
         </nav>
         <div class="header-actions">
-            <label class="search-wrap glass-search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara">
-            </label>
+            <div class="header-search-shell">
+                <label class="search-wrap glass-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara" autocomplete="off">
+                </label>
+                <div id="header-search-results" class="header-search-results" role="listbox" aria-label="Arama sonuçları" hidden></div>
+            </div>
             <div class="nav-dropdown user-dropdown" id="user-menu">
                 <button type="button" class="user-trigger" onclick="toggleHeaderMenu('user-menu')" aria-label="Kullanıcı menüsü" aria-expanded="false">
                     <img class="user-avatar" src="https://i.pravatar.cc/80?img=12" alt="Temsili profil resmi">
@@ -344,6 +347,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-data-refresh"></script>
+    <script src="assets/js/bundle.js?v=20261105-live-search"></script>
 </body>
 </html>
