@@ -1,17 +1,3 @@
-// Tema tercihi: koyu/açık mod
-function applySiteTheme(theme){
- const next=theme==="light"?"light":"dark";
- document.documentElement.dataset.theme=next;
- document.documentElement.classList.toggle("dark",next==="dark");
- document.documentElement.classList.toggle("light",next==="light");
- document.body?.setAttribute("data-theme",next);
- try{localStorage.setItem("ny7_theme",next);}catch(_){}
- const button=document.getElementById("theme-toggle");
- if(button){button.innerHTML=next==="dark"?'<i class="fa-solid fa-sun" aria-hidden="true"></i>':'<i class="fa-solid fa-moon" aria-hidden="true"></i>';button.setAttribute("aria-label",next==="dark"?"Açık moda geç":"Koyu moda geç");button.title=next==="dark"?"Açık moda geç":"Koyu moda geç";}
-}
-function toggleSiteTheme(){applySiteTheme(document.documentElement.dataset.theme==="light"?"dark":"light");}
-document.addEventListener("DOMContentLoaded",()=>applySiteTheme(document.documentElement.dataset.theme||"dark"));
-
 // Favoriler ve izleme listesi yönetimi
 let favorites = JSON.parse(localStorage.getItem('ny7_favorites') || '[]');
         let watchlist = JSON.parse(localStorage.getItem('ny7_watchlist') || '[]');
