@@ -2639,3 +2639,21 @@ body.trailer-popup-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
  .trailer-popup-card,.trailer-popup-head button{transition:none}
 }
+
+
+/* Synopsis card directly beneath the trailer */
+.trailer-popup-video-column{display:flex;flex-direction:column;gap:14px;min-width:0}
+.trailer-popup-summary{position:relative;isolation:isolate;overflow:hidden;min-width:0;padding:17px 19px 18px;border:1px solid rgba(215,184,94,.2);border-radius:13px;background:linear-gradient(135deg,rgba(215,184,94,.085),rgba(255,255,255,.035) 48%,rgba(8,9,13,.82));box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.trailer-popup-summary:before{content:"“";position:absolute;z-index:-1;top:-35px;right:15px;color:rgba(215,184,94,.12);font-family:Georgia,serif;font-size:190px;line-height:1;pointer-events:none}
+.trailer-popup-summary:after{content:"”";position:absolute;z-index:-1;right:34px;bottom:-102px;color:rgba(215,184,94,.075);font-family:Georgia,serif;font-size:170px;line-height:1;pointer-events:none}
+.trailer-popup-summary-heading{display:flex;align-items:center;gap:9px;margin-bottom:9px;color:#d7b85e}
+.trailer-popup-summary-heading i{font-size:12px;opacity:.9}
+.trailer-popup-summary-heading span{font-size:10px;font-weight:900;letter-spacing:.18em}
+.trailer-popup-summary p{position:relative;z-index:1;color:#c9cad1;font-size:12px;line-height:1.75;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:700px){
+ .trailer-popup-video-column{order:0;gap:10px}
+ .trailer-popup-summary{padding:13px 14px 14px;border-radius:10px}
+ .trailer-popup-summary:before{top:-23px;right:7px;font-size:145px}
+ .trailer-popup-summary:after{right:20px;bottom:-82px;font-size:125px}
+ .trailer-popup-summary p{-webkit-line-clamp:5;font-size:11px}
+}
