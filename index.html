@@ -136,6 +136,17 @@
 
         <!-- KATALOG VE FİLTRELER -->
         <main class="p-6 lg:p-12 space-y-10">
+            <!-- BUGÜN NE İZLESEM ÖNERİ KARTI -->
+            <section id="daily-pick-section" class="daily-pick-section" aria-label="Bugün ne izlesem önerisi">
+                <div class="daily-pick-heading">
+                    <div><p class="daily-pick-eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> SANA ÖZEL SEÇİM</p><h2>Bugün Ne İzlesem?</h2><p>Kararsızlığı bırak, bugünün önerisine göz at.</p></div>
+                    <button type="button" class="daily-pick-refresh" onclick="chooseAnotherDailyPick()"><i class="fa-solid fa-shuffle"></i><span>Başka Öner</span></button>
+                </div>
+                <div id="daily-pick-card" class="daily-pick-card">
+                    <div class="daily-pick-loading">Bugünün önerisi hazırlanıyor...</div>
+                </div>
+            </section>
+
             <!-- ANA SAYFA KOLEKSİYONLARI -->
             <section id="home-collections" class="home-collections space-y-10" aria-label="Öne çıkan film ve dizi koleksiyonları">
                 <div id="collection-featured" class="collection-section space-y-4">
