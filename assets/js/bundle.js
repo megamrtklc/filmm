@@ -100,6 +100,10 @@ function renderDailyPick(item) {
     card.innerHTML = `
         <div class="daily-pick-backdrop" style="background-image:url('${image}')"></div>
         <div class="daily-pick-shade"></div>
+        <div class="mini-card-topline">
+            <span><i class="fa-solid fa-wand-magic-sparkles"></i> BUGÜN NE İZLESEM?</span>
+            <button type="button" onclick="chooseAnotherDailyPick()" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i></button>
+        </div>
         <div class="daily-pick-mini-copy">
             <span class="daily-pick-tag"><i class="fa-solid fa-sparkles"></i> BUGÜNÜN ÖNERİSİ</span>
             <h2>${title}</h2>
