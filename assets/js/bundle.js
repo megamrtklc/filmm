@@ -955,7 +955,7 @@ function renderCastPage(){
  controls.querySelector('button:last-child').disabled=activeCastPage===1||secondPage.length===0;
 }
 function changeCastPage(direction){
- if(currentCastNames.length<=6)return;
+ if(currentCastNames.length<=8)return;
  activeCastPage=direction>0?1:0;
  renderCastPage();
 }
