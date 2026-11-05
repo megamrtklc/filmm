@@ -1092,13 +1092,17 @@ function resetPosterAtmosphere(){
  view.style.setProperty('--poster-tone-1-rgb','213,166,63');
  view.style.setProperty('--poster-tone-2-rgb','116,75,160');
  view.style.setProperty('--poster-tone-3-rgb','176,68,72');
+ view.style.setProperty('--poster-atmosphere-image','none');
 }
 function applyPosterAtmosphere(item){
  const view=document.getElementById('detail-page-view');if(!view)return;
  const mediaId=String(item.id);
  view.dataset.atmosphereMediaId=mediaId;
  resetPosterAtmosphere();
- if(!item.image)return;
+ const imageUrl=item.image||item.backdrop;
+ if(!imageUrl)return;
+ const safeUrl=String(imageUrl).split('\\').join('%5C').split('"').join('%22').split('\n').join('').split('\r').join('');
+ view.style.setProperty('--poster-atmosphere-image','url("'+safeUrl+'")');
  const poster=new Image();
  poster.crossOrigin='anonymous';
  poster.onload=()=>{
@@ -1106,22 +1110,22 @@ function applyPosterAtmosphere(item){
   try{
    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
    if(!ctx)return;
-   canvas.width=56;canvas.height=56;ctx.drawImage(poster,0,0,56,56);
-   const pixels=ctx.getImageData(0,0,56,56).data,buckets=new Map();
+   canvas.width=48;canvas.height=48;ctx.drawImage(poster,0,0,48,48);
+   const pixels=ctx.getImageData(0,0,48,48).data,buckets=new Map();
    for(let i=0;i<pixels.length;i+=16){
     const r=pixels[i],g=pixels[i+1],b=pixels[i+2],a=pixels[i+3];
     if(a<180)continue;
     const max=Math.max(r,g,b),min=Math.min(r,g,b),sat=max?((max-min)/max):0;
-    if(max<34||max>247||sat<.16)continue;
+    if(max<24||max>250||sat<.12)continue;
     const key=[r>>4,g>>4,b>>4].join(',');
     let bucket=buckets.get(key);
     if(!bucket){bucket={r:0,g:0,b:0,count:0,score:0};buckets.set(key,bucket);}
-    bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.count++;bucket.score+=.35+sat;
+    bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.count++;bucket.score+=.4+sat;
    }
    const ranked=[...buckets.values()].sort((a,b)=>b.score-a.score),chosen=[];
    for(const bucket of ranked){
     const color={r:Math.round(bucket.r/bucket.count),g:Math.round(bucket.g/bucket.count),b:Math.round(bucket.b/bucket.count)};
-    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>72))chosen.push(color);
+    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>65))chosen.push(color);
     if(chosen.length===3)break;
    }
    if(!chosen.length)return;
@@ -1129,11 +1133,11 @@ function applyPosterAtmosphere(item){
    chosen.forEach((color,index)=>view.style.setProperty('--poster-tone-'+(index+1)+'-rgb',[color.r,color.g,color.b].join(',')));
    for(let i=chosen.length;i<3;i++)view.style.setProperty('--poster-tone-'+(i+1)+'-rgb',defaults[i].join(','));
   }catch(error){
-   // CORS izni yoksa güvenli varsayılan atmosfer korunur.
+   // CORS engelinde bulanık afiş katmanı atmosferi yine de gösterir.
   }
  };
  poster.onerror=()=>{};
- poster.src=item.image;
+ poster.src=imageUrl;
 }
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
