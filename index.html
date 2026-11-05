@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-streaming-v2">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-trailer-controls-v3">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -123,8 +123,8 @@
                 </p>
 
                 <div class="flex items-center gap-3 pt-4 flex-wrap">
-                    <button id="hero-preview-btn" type="button" class="hero-preview-toggle" onclick="toggleHeroPreview()" aria-pressed="false"><i class="fa-solid fa-film"></i><span>Önizlemeyi Aç</span></button>
-                    <button id="hero-watch-btn" onclick="launchPlayer(heroCurrentTitle)" class="px-7 py-3 rounded-full bg-brand-red hover:bg-brand-redHover text-white font-extrabold text-xs flex items-center gap-2.5 shadow-xl shadow-red-600/30 transition-transform transform hover:scale-105 active:scale-95">
+                    
+                    <button id="hero-watch-btn" onclick="openDetailPage(heroCurrentId)" class="px-7 py-3 rounded-full bg-brand-red hover:bg-brand-redHover text-white font-extrabold text-xs flex items-center gap-2.5 shadow-xl shadow-red-600/30 transition-transform transform hover:scale-105 active:scale-95">
                         <i class="fa-solid fa-play text-xs"></i>
                         <span>Şimdi İzle</span>
                     </button>
@@ -135,6 +135,11 @@
                 </div>
             </div>
 
+            <div class="hero-preview-controls" role="group" aria-label="Fragman önizleme kontrolleri">
+                <button id="hero-preview-play" type="button" onclick="playHeroPreview()" aria-label="Fragmanı oynat" title="Oynat"><i class="fa-solid fa-play"></i></button>
+                <button id="hero-preview-pause" type="button" onclick="pauseHeroPreview()" aria-label="Fragmanı duraklat" title="Duraklat" hidden><i class="fa-solid fa-pause"></i></button>
+                <button id="hero-preview-volume" type="button" onclick="toggleHeroPreviewMute()" aria-label="Sesi aç" title="Sesi aç"><i class="fa-solid fa-volume-xmark"></i></button>
+            </div>
             <div id="hero-thumbnails-rail" class="hero-thumbnails no-scrollbar" aria-label="Son eklenen içerikler"></div>
             <div class="hero-arrows" role="group" aria-label="Manşet gezinme">
                 <button class="hero-arrow" type="button" data-hero-direction="-1" aria-label="Önceki yapım" title="Önceki yapım"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
@@ -222,9 +227,7 @@
     </div>
 
     <!-- SİNEMATİK FİLM / DİZİ DETAY SAYFASI -->
-    <div id="detail-page-view" class="detail-modal hidden" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabindex="-1">
-        <div class="detail-modal-backdrop" data-detail-dismiss></div>
-        <div class="detail-modal-panel">
+    <div id="detail-page-view" class="hidden min-h-screen flex-1 transition-all duration-500">
         <section class="detail-visual">
             <img id="detail-backdrop" src="" alt="Yapım arka plan görseli">
             <div class="detail-topbar">
@@ -326,6 +329,14 @@
         <div id="actor-photo-modal-caption" class="actor-photo-modal-caption"></div>
     </div>
 
+    <div id="trailer-popup" class="trailer-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="trailer-popup-title">
+        <div class="trailer-popup-backdrop" data-trailer-dismiss></div>
+        <div class="trailer-popup-card">
+            <div class="trailer-popup-head"><div><span>NY7 • FRAGMAN</span><h2 id="trailer-popup-title">Fragmanı İzle</h2></div><button type="button" onclick="closeTrailerPopup()" aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button></div>
+            <div id="trailer-popup-player" class="trailer-popup-player"><div class="trailer-popup-empty">Fragman yükleniyor...</div></div>
+        </div>
+    </div>
+
     <!-- OYNATICI MODAL -->
     <div id="player-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6">
         <div class="flex items-center justify-between text-white z-10">
@@ -376,6 +387,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-streaming-v2"></script>
+    <script src="assets/js/bundle.js?v=20261105-trailer-controls-v3"></script>
 </body>
 </html>
