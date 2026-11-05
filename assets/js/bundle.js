@@ -45,7 +45,21 @@ let heroImageSwapTimer = null;
 
 
 // Ana sayfa öne çıkan içerik ve slider işlemleri
-function setHeroMedia(id, userAction = false) {
+function fitHeroTitleToWidth() {
+            const title = document.getElementById('hero-title');
+            if (!title) return;
+            title.style.removeProperty('font-size');
+            title.style.whiteSpace = 'nowrap';
+            const baseSize = parseFloat(window.getComputedStyle(title).fontSize) || 36;
+            let size = baseSize;
+            while (title.scrollWidth > title.clientWidth && size > 16) {
+                size -= 1;
+                title.style.fontSize = size + 'px';
+            }
+        }
+        window.addEventListener('resize', fitHeroTitleToWidth);
+
+        function setHeroMedia(id, userAction = false) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
             const idx = heroItems.findIndex(m => m.id === item.id);
             if (idx >= 0) heroIndex = idx;
@@ -56,6 +70,7 @@ function setHeroMedia(id, userAction = false) {
             section.classList.add('is-changing');
             heroImageSwapTimer = window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
             document.getElementById('hero-title').innerText = item.title;
+            fitHeroTitleToWidth();
             const ratings = document.getElementById('hero-ratings');
             const ratingValue = value => value !== undefined && value !== null && String(value).trim() !== '' ? value : '—';
             ratings.innerHTML = `
