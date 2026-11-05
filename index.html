@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-trailer-premium-v2">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-trailer-synopsis-card-v3">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -336,9 +336,14 @@
                     <div id="trailer-popup-category" class="trailer-popup-category"></div>
                     <div class="trailer-popup-imdb"><i class="fa-solid fa-star"></i><b>IMDb</b><strong id="trailer-popup-rating">—</strong></div>
                     <div id="trailer-popup-credits" class="trailer-popup-credits"></div>
-                    <div class="trailer-popup-summary"><span>KONU</span><p id="trailer-popup-desc"></p></div>
                 </aside>
-                <div id="trailer-popup-player" class="trailer-popup-player"><div class="trailer-popup-empty">Fragman yükleniyor...</div></div>
+                <div class="trailer-popup-video-column">
+                    <div id="trailer-popup-player" class="trailer-popup-player"><div class="trailer-popup-empty">Fragman yükleniyor...</div></div>
+                    <section class="trailer-popup-summary" aria-label="Yapımın konusu">
+                        <div class="trailer-popup-summary-heading"><i class="fa-solid fa-quote-left" aria-hidden="true"></i><span>KONUSU</span></div>
+                        <p id="trailer-popup-desc"></p>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
@@ -393,6 +398,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-trailer-premium-v2"></script>
+    <script src="assets/js/bundle.js?v=20261105-trailer-synopsis-card-v3"></script>
 </body>
 </html>
