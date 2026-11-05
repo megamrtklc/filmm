@@ -494,20 +494,85 @@ function ensureDirectorProfilePanel(){
  else catalog?.prepend(panel);
  return panel;
 }
+function directorEntityValue(claims,property){
+ return (claims[property]||[]).map(row=>row.mainsnak?.datavalue?.value).filter(Boolean);
+}
+async function fetchDirectorProfileData(name){
+ const searchUrl='https://www.wikidata.org/w/api.php?action=wbsearchentities&search='+encodeURIComponent(name)+'&language=tr&uselang=tr&type=item&limit=10&format=json&origin=*';
+ const searchResponse=await fetch(searchUrl);
+ if(!searchResponse.ok)throw new Error('Yönetmen eşleştirmesi alınamadı');
+ const searchData=await searchResponse.json();
+ const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').replace(/[^a-z0-9]+/g,' ').trim();
+ const exact=(searchData.search||[]).find(row=>normalize(row.label)===normalize(name)||normalize(row.label+' '+(row.description||''))===normalize(name));
+ if(!exact)throw new Error('Tam isim eşleşmesi bulunamadı');
+ const entityResponse=await fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&ids='+encodeURIComponent(exact.id)+'&props=claims|labels|descriptions|sitelinks&languages=tr|en&sitefilter=trwiki|enwiki&format=json&origin=*');
+ if(!entityResponse.ok)throw new Error('Yönetmen bilgileri alınamadı');
+ const entityData=await entityResponse.json();
+ const entity=entityData.entities?.[exact.id];
+ if(!entity)throw new Error('Yönetmen kaydı bulunamadı');
+ const claims=entity.claims||{};
+ const getTime=prop=>directorEntityValue(claims,prop)[0]?.time||'';
+ const dateLabel=value=>{
+  if(!value)return '';
+  const parts=String(value).replace(/^\+/,'').slice(1,11).split('-').map(Number);
+  if(!parts[0])return '';
+  return parts.length===3&&parts[1]&&parts[2]?[String(parts[2]).padStart(2,'0'),String(parts[1]).padStart(2,'0'),parts[0]].join('.'):String(parts[0]);
+ };
+ const birth=getTime('P569'),death=getTime('P570');
+ const born=dateLabel(birth),died=dateLabel(death);
+ let age='';
+ if(birth){
+  const b=new Date(birth.slice(1,11)+'T00:00:00Z'),e=death?new Date(death.slice(1,11)+'T00:00:00Z'):new Date();
+  if(!Number.isNaN(b.getTime())&&!Number.isNaN(e.getTime())){
+   age=e.getUTCFullYear()-b.getUTCFullYear();
+   if(e.getUTCMonth()<b.getUTCMonth()||(e.getUTCMonth()===b.getUTCMonth()&&e.getUTCDate()<b.getUTCDate()))age--;
+  }
+ }
+ const educationIds=directorEntityValue(claims,'P69').map(v=>v.id).filter(Boolean);
+ const awardIds=directorEntityValue(claims,'P166').map(v=>v.id).filter(Boolean);
+ const labelFor=async id=>{
+  const response=await fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&ids='+encodeURIComponent(id)+'&props=labels&languages=tr|en&format=json&origin=*');
+  const json=await response.json(),labels=json.entities?.[id]?.labels||{};
+  return labels.tr?.value||labels.en?.value||'';
+ };
+ const [education,awards]=await Promise.all([
+  Promise.all(educationIds.slice(0,5).map(labelFor)),
+  Promise.all(awardIds.slice(0,8).map(labelFor))
+ ]);
+ const imageFile=directorEntityValue(claims,'P18')[0];
+ const image=imageFile?'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(imageFile.replace(/ /g,'_'))+'?width=520':'';
+ const sitelink=entity.sitelinks?.trwiki?.title||entity.sitelinks?.enwiki?.title||'';
+ let bio=entity.descriptions?.tr?.value||entity.descriptions?.en?.value||'Bu yönetmen için doğrulanmış kısa biyografi bulunamadı.';
+ let wikiUrl='';
+ if(sitelink){
+  const params=new URLSearchParams({action:'query',titles:sitelink,prop:'extracts|info',explaintext:'1',exchars:'2400',inprop:'url',format:'json',origin:'*'});
+  const wikiResponse=await fetch('https://'+(entity.sitelinks?.trwiki?'tr':'en')+'.wikipedia.org/w/api.php?'+params.toString());
+  if(wikiResponse.ok){
+   const wikiData=await wikiResponse.json(),page=Object.values(wikiData.query?.pages||{})[0];
+   if(page?.extract){bio=cleanActorBiography(page.extract).replace(/\s+/g,' ').trim();wikiUrl=page.fullurl||'';}
+  }
+ }
+ return {image,born,age,died,education:education.filter(Boolean),awards:awards.filter(Boolean),bio,wikiUrl};
+}
 async function loadDirectorProfile(name){
  const panel=ensureDirectorProfilePanel();if(!panel)return;
  const request=++directorProfileRequest;
  panel.hidden=false;
- panel.innerHTML='<div class="director-profile-loading"><span class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></span><div><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>Fotoğraf ve biyografi yükleniyor…</p></div></div>';
+ panel.innerHTML='<div class="director-profile-loading"><span class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></span><div><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>Doğrulanmış bilgiler yükleniyor…</p></div></div>';
  try{
-  const info=await fetchActorSummary(name,false);
+  const info=await fetchDirectorProfileData(name);
   if(request!==directorProfileRequest||activeCatalogDirector!==countryKey(name))return;
-  const image=info.thumbnail?.source||'';
-  const bio=String(info.extract||'Bu yönetmen için Türkçe biyografi bilgisi bulunamadı.').replace(/\s+/g,' ').trim();
-  panel.innerHTML='<div class="director-profile-content">'+(image?'<img class="director-profile-photo" src="'+escapeCountryHtml(image)+'" alt="'+escapeCountryHtml(name)+'" loading="eager">':'<div class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></div>')+'<div class="director-profile-copy"><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>'+escapeCountryHtml(bio)+'</p>'+(info.content_urls?.desktop?.page?'<a href="'+escapeCountryHtml(info.content_urls.desktop.page)+'" target="_blank" rel="noopener">Wikipedia’da devamını oku <i class="fa-solid fa-arrow-up-right-from-square"></i></a>':'')+'</div></div>';
+  const image=info.image?'<img class="director-profile-photo" src="'+escapeCountryHtml(info.image)+'" alt="'+escapeCountryHtml(name)+'" loading="eager">':'<div class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></div>';
+  const facts=[
+   ['Doğum tarihi',info.born?(info.age!==''?info.born+' ('+info.age+' yaşında)':info.born):'Bilgi bulunamadı'],
+   ...(info.died?[['Vefat tarihi',info.died]]:[]),
+   ['Eğitim',info.education.length?info.education.join(', '):'Bilgi bulunamadı'],
+   ['Aldığı ödüller',info.awards.length?info.awards.join(' · '):'Kayıtlı ödül bilgisi bulunamadı']
+  ];
+  panel.innerHTML='<div class="director-profile-content"><section class="director-profile-facts"><div class="director-profile-identity">'+image+'<h2>'+escapeCountryHtml(name)+'</h2></div><div class="director-profile-fact-list">'+facts.map(([label,value])=>'<div class="director-profile-fact"><span>'+escapeCountryHtml(label)+'</span><b>'+escapeCountryHtml(value)+'</b></div>').join('')+'</div></section><section class="director-profile-biography"><small>HAYATI VE KARİYERİ</small><p>'+escapeCountryHtml(info.bio)+'</p>'+(info.wikiUrl?'<a href="'+escapeCountryHtml(info.wikiUrl)+'" target="_blank" rel="noopener">Kaynağı görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>':'')+'</section></div>';
  }catch(error){
   if(request!==directorProfileRequest)return;
-  panel.innerHTML='<div class="director-profile-loading"><span class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></span><div><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>Bu yönetmen için fotoğraf veya biyografi şu anda bulunamadı.</p></div></div>';
+  panel.innerHTML='<div class="director-profile-loading"><span class="director-profile-avatar"><i class="fa-solid fa-circle-exclamation"></i></span><div><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>Bu isim için güvenilir ve tam eşleşen bir yönetmen kaydı bulunamadı. Yanlış kişiye ait bilgi gösterilmedi.</p></div></div>';
  }
 }
 function hideDirectorProfile(){
