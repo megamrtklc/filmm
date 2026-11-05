@@ -624,25 +624,23 @@ function openDetailPage(id,update=true){
 
 let actorGalleryPhotos=[];
 let actorGalleryPage=0;
+let actorGalleryVisibleCount=5;
 let activeActorPhoto=0;
 let activeActorPhotoName='';
 function renderActorGallery(){
  const grid=document.getElementById('actor-gallery-grid');
- const start=actorGalleryPage*10;
- const visible=actorGalleryPhotos.slice(start,start+10);
- grid.innerHTML=visible.map((photo,index)=>'<button type="button" class="actor-gallery-photo" data-gallery-index="'+(start+index)+'" aria-label="Fotoğrafı büyüt"><img src="'+escapeCastHtml(photo.thumb||photo.url)+'" alt="'+escapeCastHtml(activeActorPhotoName)+'" loading="lazy"><span><i class="fa-solid fa-expand"></i></span></button>').join('')||'<p class="actor-gallery-empty">Bu oyuncu için fotoğraf bulunamadı.</p>';
- document.getElementById('actor-gallery-count').textContent=actorGalleryPhotos.length+' fotoğraf · '+(actorGalleryPhotos.length?((actorGalleryPage*10)+1)+'–'+Math.min((actorGalleryPage+1)*10,actorGalleryPhotos.length):'0')+' gösteriliyor';
- const controls=document.querySelector('.actor-gallery-controls');
- controls.querySelector('button:first-child').disabled=actorGalleryPage===0;
- controls.querySelector('button:last-child').disabled=(actorGalleryPage+1)*10>=actorGalleryPhotos.length;
+ const visible=actorGalleryPhotos.slice(0,actorGalleryVisibleCount);
+ grid.innerHTML=visible.map((photo,index)=>'<button type="button" class="actor-gallery-photo'+(index===0?' actor-gallery-photo-featured':'')+'" data-gallery-index="'+index+'" aria-label="Fotoğrafı büyüt"><img src="'+escapeCastHtml(photo.thumb||photo.url)+'" alt="'+escapeCastHtml(activeActorPhotoName)+' fotoğraf '+(index+1)+'" loading="'+(index<5?'eager':'lazy')+'"><span><i class="fa-solid fa-expand"></i></span><small>'+(index+1).toString().padStart(2,'0')+'</small></button>').join('')||'<p class="actor-gallery-empty">Bu oyuncu için fotoğraf bulunamadı.</p>';
+ document.getElementById('actor-gallery-count').textContent=actorGalleryPhotos.length?Math.min(actorGalleryVisibleCount,actorGalleryPhotos.length)+' / '+actorGalleryPhotos.length+' fotoğraf gösteriliyor':'Fotoğraf bulunamadı';
+ const more=document.getElementById('actor-gallery-more');
+ if(more){more.hidden=actorGalleryVisibleCount>=actorGalleryPhotos.length;more.textContent='Daha fazla fotoğraf göster';}
 }
-function changeActorGalleryPage(direction){
- const pages=Math.max(1,Math.ceil(actorGalleryPhotos.length/10));
- actorGalleryPage=Math.max(0,Math.min(pages-1,actorGalleryPage+direction));
+function changeActorGalleryPage(){
+ actorGalleryVisibleCount=Math.min(actorGalleryVisibleCount+5,actorGalleryPhotos.length);
  renderActorGallery();
 }
 async function loadActorGallery(name){
- actorGalleryPhotos=[];actorGalleryPage=0;activeActorPhotoName=name;
+ actorGalleryPhotos=[];actorGalleryPage=0;actorGalleryVisibleCount=5;activeActorPhotoName=name;
  renderActorGallery();
  try{
   const query='filetype:bitmap "'+name.replace(/"/g,'')+'"';
