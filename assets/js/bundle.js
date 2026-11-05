@@ -129,6 +129,7 @@ function updateHeaderActiveState(){
         if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
     });
     // Kategoriler tetikleyicisi diğer gezinme bağlantıları gibi aktif çizgi/parlama almaz.
+    const categoryActive=route==='kategori';
     const category=document.querySelector('#categories-menu .nav-trigger');
     if(category)category.classList.remove('is-active');
     document.querySelectorAll('#categories-menu .nav-menu button').forEach(button=>{
