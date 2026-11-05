@@ -1169,7 +1169,6 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-duration').innerText=item.duration||'';
  const detailKind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
  document.getElementById('detail-type-label').innerText=detailKind;
- document.querySelector('#detail-page-view .detail-facts-heading h2').innerText=detailKind+' künyesi';
  const countries=countryTokens(item.country);
  const directors=countryTokens(item.director);
  const countryMarkup=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'" aria-label="'+escapeCountryHtml(info.name)+' yapımlarını göster">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('');
