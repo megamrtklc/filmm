@@ -455,7 +455,7 @@ function countryIdentity(value){
  return info.iso||countryKey(value);
 }
 function filterByCountry(country,update=true){
- activeCatalogDirector='';activeCatalogGenreTag='';
+ hideDirectorProfile();activeCatalogDirector='';activeCatalogGenreTag='';
  const selected=String(country||'').trim();
  if(!selected)return;
  activeCatalogCountry=countryIdentity(selected);
@@ -479,6 +479,42 @@ function filterByCountry(country,update=true){
  renderFilteredCatalog();
 }
 document.addEventListener('click',function(event){const chip=event.target.closest('.detail-country-chip');if(chip)filterByCountry(chip.dataset.country);});
+
+let directorProfileRequest=0;
+function ensureDirectorProfilePanel(){
+ let panel=document.getElementById('director-profile-panel');
+ if(panel)return panel;
+ panel=document.createElement('section');
+ panel.id='director-profile-panel';
+ panel.className='director-profile-panel';
+ panel.hidden=true;
+ const catalog=document.getElementById('catalog-page');
+ const genreBar=catalog?.querySelector('.catalog-genre-scroller');
+ if(genreBar)catalog.insertBefore(panel,genreBar);
+ else catalog?.prepend(panel);
+ return panel;
+}
+async function loadDirectorProfile(name){
+ const panel=ensureDirectorProfilePanel();if(!panel)return;
+ const request=++directorProfileRequest;
+ panel.hidden=false;
+ panel.innerHTML='<div class="director-profile-loading"><span class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></span><div><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>Fotoğraf ve biyografi yükleniyor…</p></div></div>';
+ try{
+  const info=await fetchActorSummary(name,false);
+  if(request!==directorProfileRequest||activeCatalogDirector!==countryKey(name))return;
+  const image=info.thumbnail?.source||'';
+  const bio=String(info.extract||'Bu yönetmen için Türkçe biyografi bilgisi bulunamadı.').replace(/\s+/g,' ').trim();
+  panel.innerHTML='<div class="director-profile-content">'+(image?'<img class="director-profile-photo" src="'+escapeCountryHtml(image)+'" alt="'+escapeCountryHtml(name)+'" loading="eager">':'<div class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></div>')+'<div class="director-profile-copy"><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>'+escapeCountryHtml(bio)+'</p>'+(info.content_urls?.desktop?.page?'<a href="'+escapeCountryHtml(info.content_urls.desktop.page)+'" target="_blank" rel="noopener">Wikipedia’da devamını oku <i class="fa-solid fa-arrow-up-right-from-square"></i></a>':'')+'</div></div>';
+ }catch(error){
+  if(request!==directorProfileRequest)return;
+  panel.innerHTML='<div class="director-profile-loading"><span class="director-profile-avatar"><i class="fa-solid fa-clapperboard"></i></span><div><small>YÖNETMEN PROFİLİ</small><h2>'+escapeCountryHtml(name)+'</h2><p>Bu yönetmen için fotoğraf veya biyografi şu anda bulunamadı.</p></div></div>';
+ }
+}
+function hideDirectorProfile(){
+ directorProfileRequest++;
+ const panel=document.getElementById('director-profile-panel');
+ if(panel)panel.hidden=true;
+}
 function filterByDirector(director,update=true){
  const selected=String(director||'').trim();if(!selected)return;
  activeCatalogCountry='';activeCatalogGenre='all';activeCatalogGenreTag='';activeCatalogDirector=countryKey(selected);activeCatalogType='all';activeCatalogQuery='';
@@ -487,11 +523,12 @@ function filterByDirector(director,update=true){
  document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('actor-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');
  document.getElementById('theme-body').style.backgroundColor='#0b0c10';
  showCatalogView(selected+' — Yönetmen Filmografisi');
+ loadDirectorProfile(selected);
  if(update)goRoute('#/yonetmen/'+encodeURIComponent(selected));
  updateHeaderActiveState();renderFilteredCatalog();
 }
 function filterByGenreTag(genre,update=true){
- const selected=String(genre||'').trim();if(!selected)return;
+ hideDirectorProfile();const selected=String(genre||'').trim();if(!selected)return;
  activeCatalogCountry='';activeCatalogGenre='all';activeCatalogDirector='';activeCatalogGenreTag=countryKey(selected);activeCatalogType='all';activeCatalogQuery='';
  const search=document.getElementById('search-input');if(search)search.value='';
  document.getElementById('dashboard-view').classList.remove('hidden');
@@ -525,7 +562,7 @@ function renderFilteredCatalog() {
         }
 
         function filterGenre(genre,update=true) {
-            activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
+            hideDirectorProfile();activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
             activeCatalogGenre = genre;
             if(update)goRoute('#/kategori/'+encodeURIComponent(genre));
             updateHeaderActiveState();
@@ -561,7 +598,7 @@ function renderFilteredCatalog() {
             window.scrollTo({top:0,behavior:'smooth'});
         }
         function switchTab(tab,update=true) {
-            closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery=''; activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
+            hideDirectorProfile();closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery=''; activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
             if(update)goRoute(tab==='movie'?'#/filmler':tab==='tv'?'#/diziler':tab==='watchlist'?'#/listem':'#/kesfet');
             updateHeaderActiveState();
             document.getElementById('search-input').value='';
@@ -640,6 +677,7 @@ function routeFromHash(){
  showDashboard(false);
 }
 function showDashboard(update=true){
+ hideDirectorProfile();
  document.getElementById('theme-body').style.backgroundColor='#0b0c10';
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');
