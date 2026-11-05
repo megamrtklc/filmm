@@ -1448,13 +1448,26 @@ function launchPlayer(title) {
             catalogInitialized = true;
             showCatalogSkeletons();
             try {
-                const catalogUrl = new URL('data/catalog.json?v=20261105-streaming-v2', document.baseURI);
-                let response = await fetch(catalogUrl.href, { cache: 'no-store' });
-                if (!response.ok) {
-                    response = await fetch('https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-streaming-v2', { cache: 'no-store' });
+                const catalogUrls = [
+                    new URL('data/catalog.json?v=20261105-recovery-v1', document.baseURI).href,
+                    'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-recovery-v1'
+                ];
+                let loadedCatalog = null;
+                let lastCatalogError = null;
+                for (const catalogUrl of catalogUrls) {
+                    try {
+                        const response = await fetch(catalogUrl, { cache: 'no-store' });
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
+                        const candidate = await response.json();
+                        if (!Array.isArray(candidate) || candidate.length === 0) throw new Error('Katalog boş veya geçersiz.');
+                        loadedCatalog = candidate;
+                        break;
+                    } catch (requestError) {
+                        lastCatalogError = requestError;
+                        console.warn('Katalog kaynağı denenemedi:', catalogUrl, requestError);
+                    }
                 }
-                if (!response.ok) throw new Error('Katalog isteği başarısız: ' + response.status);
-                const loadedCatalog = await response.json();
+                if (!loadedCatalog) throw new Error('Katalog kaynaklarının hiçbiri yanıt vermedi: ' + (lastCatalogError?.message || 'bilinmeyen hata'));
                 if (!Array.isArray(loadedCatalog) || loadedCatalog.length === 0) throw new Error('Katalog dosyası boş veya geçersiz.');
                 mediaDatabase = loadedCatalog;
                 heroItems = [...mediaDatabase].sort((a,b) => Number(b.year)-Number(a.year)).slice(0,10);
