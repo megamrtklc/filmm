@@ -1099,7 +1099,7 @@ function applyPosterAtmosphere(item){
  const imageUrl=item.image;
  if(!imageUrl)return;
  // Afişin tamamını, en-boy oranını koruyarak örnekle; kare kırpma baskın renkleri yanıltmasın.
- const source=imageUrl.replace(/^https?:\\/\\//,'');
+ const source=imageUrl.replace(/^https?:\/\//,'');
  const sampleUrl='https://images.weserv.nl/?url='+encodeURIComponent(source)+'&w=96&h=144&fit=inside&output=jpg';
  const poster=new Image();
  poster.crossOrigin='anonymous';
