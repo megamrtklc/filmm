@@ -2024,3 +2024,36 @@ body.actor-modal-open{overflow:hidden}
   .actor-profile-facts-horizontal .actor-facts span{font-size:8px!important}
   .actor-profile-facts-horizontal .actor-facts b{font-size:10px!important}
 }
+
+
+/* Oyuncu bilgi kartları: manşetle aynı genişlik ve sinematik arka plan */
+.actor-profile-layout{
+  width:calc(100% - 2 * clamp(16px,4vw,58px))!important;
+  max-width:1320px!important;padding:0!important;
+  margin:24px auto 12px!important;box-sizing:border-box!important
+}
+.actor-profile-layout .actor-biography{
+  width:100%!important;box-sizing:border-box!important;
+  background:
+    linear-gradient(100deg,rgba(9,12,18,.97) 0%,rgba(9,12,18,.91) 58%,rgba(9,12,18,.74) 100%),
+    url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=80") center 48%/cover no-repeat!important;
+  border-color:rgba(255,255,255,.11)!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.22)!important
+}
+.actor-profile-facts-horizontal{
+  width:calc(100% - 2 * clamp(16px,4vw,58px))!important;
+  max-width:1320px!important;margin:0 auto 34px!important;
+  background:
+    linear-gradient(100deg,rgba(9,12,18,.97) 0%,rgba(9,12,18,.91) 58%,rgba(9,12,18,.76) 100%),
+    url("https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1800&q=80") center 48%/cover no-repeat!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.2)!important
+}
+.actor-profile-facts-horizontal .actor-facts>div{
+  background:rgba(5,8,13,.66)!important;
+  backdrop-filter:blur(3px)!important
+}
+@media(max-width:600px){
+  .actor-profile-layout{width:calc(100% - 24px)!important;margin:16px auto 10px!important;padding:0!important}
+  .actor-profile-layout .actor-biography{padding:16px!important}
+  .actor-profile-facts-horizontal{width:calc(100% - 24px)!important}
+}
