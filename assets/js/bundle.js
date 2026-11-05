@@ -991,18 +991,23 @@ async function loadVerifiedCast(item){
  }
 }
 function cleanActorBiography(text){
- return String(text||'')
-  .replace(/\\r/g,'')
-  .replace(/(?:^|\\n)(Kaynakça|Kaynaklar|Dış bağlantılar|Ayrıca bakınız|Notlar|Dipnotlar)\\s*\\n[\\s\\S]*$/i,'')
-  .replace(/\\n{3,}/g,'\\n\\n')
-  .trim();
+ let value=String(text||'').replace(/\r/g,'').replace(/\u00a0/g,' ');
+ // Biyografi dışındaki ansiklopedik dizin/bağlantı bölümlerini tamamen çıkar.
+ value=value.replace(/(?:^|\n)\s*={0,3}\s*(?:Filmografi|Filmography|Sinema|Televizyon|Müzik videoları|Kaynakça|Kaynaklar|Dış bağlantılar|External links|References|Film)\s*={0,3}\s*(?:\n|$)[\s\S]*$/i,'');
+ value=value.replace(/^\s*={2,}.*?={2,}\s*$/gm,'');
+ value=value.replace(/^\s*(?:IMDb['’]de|IMDb'de)\s+.*$/gim,'');
+ value=value.replace(/^\s*(?:Kaynakça|Kaynaklar|Dış bağlantılar|External links|References)\s*$/gim,'');
+ value=value.replace(/\n{3,}/g,'\n\n').trim();
+ // Kaynak sayfadan kalan tek satırlık kategori/bağlantı kalıntılarını temizle.
+ value=value.split('\n').filter(line=>!/^\s*(?:IMDb|Filmografi|Filmography|Sinema|Televizyon|Müzik videoları)\b/i.test(line.trim())).join('\n');
+ return value.replace(/\s+/g,' ').trim();
 }
 async function fetchActorSummary(name,fullBiography=true){
  const title=String(name||'').trim().replace(/_/g,' ');
  const params=new URLSearchParams({
   action:'query',titles:title,redirects:'1',
   prop:'extracts|pageimages|info|pageprops',
-  explaintext:'1',exchars:fullBiography?'20000':'1200',
+  explaintext:'1',exchars:fullBiography?'20000':'2600',
   piprop:'thumbnail',pithumbsize:'1200',inprop:'url',
   format:'json',origin:'*'
  });
@@ -1309,7 +1314,7 @@ function openActorPage(name,update=true){
  closeActorPhoto();
  loadActorGallery(actorName);
  window.scrollTo({top:0,behavior:'smooth'});
- fetchActorSummary(actorName).then(async data=>{
+ fetchActorSummary(actorName,false).then(async data=>{
   if(document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-banner-name').textContent!==actorName)return;
   document.getElementById('actor-biography-text').textContent=data.extract||'Oyuncu hakkında biyografi bilgisi bulunamadı.';
   document.getElementById('actor-profile-image').src=data.thumbnail?.source||avatar;
