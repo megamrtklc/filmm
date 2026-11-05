@@ -59,7 +59,7 @@ async function loadOriginalTitles(){
             } else {
                 favorites.push(id);
             }
-            localStorage.setItem('ny7_favorites', JSON.stringify(favorites));
+            writeNY7Storage('ny7_favorites',favorites);
             renderMediaGrid();
             if (document.getElementById('detail-fav-btn')) updateDetailButtons(id);
         }
@@ -71,7 +71,7 @@ async function loadOriginalTitles(){
             } else {
                 watchlist.push(id);
             }
-            localStorage.setItem('ny7_watchlist', JSON.stringify(watchlist));
+            writeNY7Storage('ny7_watchlist',watchlist);
             renderMediaGrid();
             if (document.getElementById('detail-watch-btn')) updateDetailButtons(id);
         }
@@ -111,6 +111,7 @@ function fitHeroTitleToWidth() {
             const idx = heroItems.findIndex(m => m.id === item.id);
             if (idx >= 0) heroIndex = idx;
             heroCurrentId = item.id; heroCurrentTitle = item.title;
+            stopHeroPreview();
             const section = document.getElementById('hero-section');
             const bg = document.getElementById('hero-bg');
             if (heroImageSwapTimer) window.clearTimeout(heroImageSwapTimer);
@@ -139,6 +140,30 @@ function fitHeroTitleToWidth() {
             });
             if (userAction) restartHeroTimer();
         }
+        function getHeroTrailerId(url){
+            const value=String(url||'');
+            const match=value.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+            return match?match[1]:'';
+        }
+        function stopHeroPreview(){
+            const layer=document.getElementById('hero-preview-layer'),button=document.getElementById('hero-preview-btn');
+            if(layer)layer.innerHTML='';
+            if(button){button.setAttribute('aria-pressed','false');button.innerHTML='<i class="fa-solid fa-film"></i><span>Önizlemeyi Aç</span>';}
+            document.getElementById('hero-section')?.classList.remove('has-preview');
+        }
+        function toggleHeroPreview(){
+            const item=mediaDatabase.find(entry=>String(entry.id)===String(heroCurrentId));
+            const layer=document.getElementById('hero-preview-layer');
+            if(!item||!layer)return;
+            if(layer.querySelector('iframe')){stopHeroPreview();return;}
+            const videoId=getHeroTrailerId(item.trailerUrl);
+            if(!videoId){window.alert('Bu yapım için kullanılabilir bir YouTube fragman bağlantısı bulunamadı.');return;}
+            layer.innerHTML='<iframe title="'+escapeCountryHtml(item.title)+' fragman önizlemesi" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&mute=1&controls=0&loop=1&playlist='+videoId+'&playsinline=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+            document.getElementById('hero-section')?.classList.add('has-preview');
+            const button=document.getElementById('hero-preview-btn');
+            if(button){button.setAttribute('aria-pressed','true');button.innerHTML='<i class="fa-solid fa-pause"></i><span>Önizlemeyi Kapat</span>';}
+        }
+        window.toggleHeroPreview=toggleHeroPreview;
         function renderHeroThumbnails() {
             document.getElementById('hero-thumbnails-rail').innerHTML = heroItems.map((m,i) => `
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
@@ -283,7 +308,14 @@ function chooseMoodPick(category) {
     }
     let pool = candidates.filter(item => String(item.id) !== String(lastMoodRecommendationId));
     if (!pool.length) pool = candidates;
-    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    const weights=pool.map(item=>{
+        const rating=Math.max(0,Math.min(10,Number.parseFloat(item.rating)||0));
+        const year=Math.max(0,Math.min(2026,Number.parseInt(item.year,10)||0));
+        return 1+(rating*0.18)+(year>=2020?0.7:0);
+    });
+    const total=weights.reduce((sum,value)=>sum+value,0);
+    let ticket=Math.random()*total,chosen=pool[0];
+    for(let i=0;i<pool.length;i++){ticket-=weights[i];if(ticket<=0){chosen=pool[i];break;}}
     lastMoodRecommendationId = chosen.id;
     renderMoodRecommendation(chosen, activeMoodCategory);
 }
@@ -318,6 +350,14 @@ function renderHomeCollections() {
     fill('featured-rail', featured);
     fill('top-movies-rail', movies);
     fill('top-series-rail', series);
+    [['featured-rail','Öne çıkan yapımlarda'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
+        const rail=document.getElementById(railId),heading=rail?.previousElementSibling;
+        if(!rail||!heading||heading.querySelector('.rail-controls'))return;
+        const controls=document.createElement('div');controls.className='rail-controls';
+        controls.innerHTML='<button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Öncekiler" title="Öncekiler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonrakiler" title="Sonrakiler"><i class="fa-solid fa-chevron-right"></i></button>';
+        controls.setAttribute('aria-label',label+' kaydırma kontrolleri');
+        heading.appendChild(controls);
+    });
     document.getElementById('collection-movies').hidden = movies.length === 0;
     document.getElementById('collection-series').hidden = series.length === 0;
 }
@@ -756,6 +796,7 @@ function renderHeaderSearchResults(value) {
         const exactB=normalizeMediaSearchText(b.title)===normalizedQuery||normalizeMediaSearchText(b.originalTitle)===normalizedQuery;
         return Number(exactB)-Number(exactA);
     }).slice(0, 8);
+    activeSearchResultIndex=-1;
     headerSearchResults.innerHTML = matches.length ? matches.map(item => {
         const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
         const image = escapeCountryHtml(item.image || '');
@@ -796,8 +837,25 @@ headerSearchResults.addEventListener('click', event => {
 document.addEventListener('click', event => {
     if (!event.target.closest('.header-search-shell') && headerSearchResults) headerSearchResults.hidden = true;
 });
+let activeSearchResultIndex=-1;
+function setActiveSearchResult(index){
+    const rows=[...headerSearchResults.querySelectorAll('[data-search-result-id]')];
+    if(!rows.length){activeSearchResultIndex=-1;return;}
+    activeSearchResultIndex=Math.max(0,Math.min(index,rows.length-1));
+    rows.forEach((row,i)=>{row.classList.toggle('is-keyboard-active',i===activeSearchResultIndex);row.setAttribute('aria-selected',String(i===activeSearchResultIndex));});
+    rows[activeSearchResultIndex].scrollIntoView({block:'nearest'});
+}
 headerSearchInput.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && headerSearchResults) headerSearchResults.hidden = true;
+    if(!headerSearchResults||headerSearchResults.hidden)return;
+    const rows=headerSearchResults.querySelectorAll('[data-search-result-id]');
+    if(event.key==='ArrowDown'&&rows.length){event.preventDefault();setActiveSearchResult(activeSearchResultIndex+1);}
+    else if(event.key==='ArrowUp'&&rows.length){event.preventDefault();setActiveSearchResult(activeSearchResultIndex<=0?0:activeSearchResultIndex-1);}
+    else if(event.key==='Enter'&&activeSearchResultIndex>=0&&rows[activeSearchResultIndex]){event.preventDefault();rows[activeSearchResultIndex].click();}
+    else if(event.key==='Escape'){headerSearchResults.hidden=true;activeSearchResultIndex=-1;}
+});
+headerSearchResults.addEventListener('mousemove',event=>{
+    const row=event.target.closest('[data-search-result-id]');
+    if(row){const rows=[...headerSearchResults.querySelectorAll('[data-search-result-id]')];setActiveSearchResult(rows.indexOf(row));}
 });
 
 
@@ -821,6 +879,9 @@ function routeFromHash(){
 }
 function showDashboard(update=true){
  hideDirectorProfile();
+ document.body.classList.remove('ny7-detail-open');
+ document.documentElement.classList.remove('ny7-modal-lock');
+ stopHeroPreview();
  document.getElementById('theme-body').style.backgroundColor='#0b0c10';
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');
@@ -1025,9 +1086,13 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
- document.getElementById('detail-page-view').classList.remove('hidden');
+ const detailView=document.getElementById('detail-page-view');
+ detailView.classList.remove('hidden');
+ document.body.classList.add('ny7-detail-open');
+ document.documentElement.classList.add('ny7-modal-lock');
  document.getElementById('detail-related').classList.remove('hidden');
- window.scrollTo({top:0,behavior:'smooth'});
+ detailView.focus({preventScroll:true});
+ window.scrollTo({top:0,behavior:'instant'});
 }
 
 let actorGalleryPhotos=[];
@@ -1282,10 +1347,10 @@ function launchPlayer(title) {
             catalogInitialized = true;
             showCatalogSkeletons();
             try {
-                const catalogUrl = new URL('data/catalog.json?v=20261105-mood-hero', document.baseURI);
+                const catalogUrl = new URL('data/catalog.json?v=20261105-streaming-v2', document.baseURI);
                 let response = await fetch(catalogUrl.href, { cache: 'no-store' });
                 if (!response.ok) {
-                    response = await fetch('https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-mood-hero', { cache: 'no-store' });
+                    response = await fetch('https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-streaming-v2', { cache: 'no-store' });
                 }
                 if (!response.ok) throw new Error('Katalog isteği başarısız: ' + response.status);
                 const loadedCatalog = await response.json();
@@ -1321,3 +1386,22 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
             .catch(error => console.warn('NY7 çevrimdışı desteği etkinleştirilemedi:',error));
     });
 }
+
+
+// NY7 interaction layer: carousels, modal dismissal and keyboard focus behavior.
+document.addEventListener('click',event=>{
+ const control=event.target.closest('[data-rail-target][data-rail-direction]');
+ if(control){
+  const rail=document.getElementById(control.dataset.railTarget);
+  if(rail)rail.scrollBy({left:Number(control.dataset.railDirection)*Math.max(260,rail.clientWidth*.82),behavior:'smooth'});
+  return;
+ }
+ if(event.target.matches('[data-detail-dismiss]')&&document.body.classList.contains('ny7-detail-open'))showDashboard();
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&document.body.classList.contains('ny7-detail-open')){showDashboard();return;}
+ if((event.key==='ArrowRight'||event.key==='ArrowLeft')&&!event.target.closest('input,textarea,select,button,[contenteditable="true"]')){
+  const rail=document.activeElement?.closest('.collection-rail');
+  if(rail)rail.scrollBy({left:(event.key==='ArrowRight'?1:-1)*Math.max(180,rail.clientWidth*.65),behavior:'smooth'});
+ }
+});
