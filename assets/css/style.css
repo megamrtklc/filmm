@@ -4075,3 +4075,41 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-cast-grid{scroll-behavior:auto!important}
  #detail-page-view .detail-cast-person,#detail-page-view .detail-cast-person img{transition:none!important}
 }
+
+
+/* FILMM · Oyuncu alanı: konu metni gibi sade, başlıksız ve düz */
+#detail-page-view .detail-cast-inline{margin-top:18px!important}
+#detail-page-view .detail-cast-card{
+ padding:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+}
+#detail-page-view .detail-cast-heading{
+ display:flex!important;justify-content:flex-end!important;align-items:center!important;
+ min-height:0!important;margin:0 0 7px!important;padding:0!important;
+ border:0!important;background:transparent!important;box-shadow:none!important;
+}
+#detail-page-view .detail-cast-heading h3{display:none!important}
+#detail-page-view .detail-cast-controls{margin:0!important}
+#detail-page-view .detail-cast-grid{padding:0 0 5px!important;gap:14px!important}
+#detail-page-view .detail-cast-person{
+ border:0!important;border-radius:0!important;background:transparent!important;
+ padding:4px 2px 7px!important;box-shadow:none!important;
+}
+#detail-page-view .detail-cast-person:hover,
+#detail-page-view .detail-cast-person:focus-visible{
+ border:0!important;background:transparent!important;
+}
+#detail-page-view .detail-cast-person img{
+ border:0!important;border-radius:8px!important;box-shadow:none!important;
+}
+#detail-page-view .detail-cast-person:hover img,
+#detail-page-view .detail-cast-person:focus-visible img{
+ border:0!important;box-shadow:0 4px 12px rgba(0,0,0,.22)!important;
+}
+#detail-page-view .detail-cast-person b{font-size:11px!important;font-weight:650!important}
+#detail-page-view .detail-cast-person small{font-size:10px!important}
+@media(max-width:560px){
+ #detail-page-view .detail-cast-inline{margin-top:15px!important}
+ #detail-page-view .detail-cast-grid{gap:9px!important}
+ #detail-page-view .detail-cast-person{padding:3px 1px 6px!important}
+}
