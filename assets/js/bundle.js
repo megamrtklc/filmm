@@ -655,8 +655,9 @@ async function loadActorGallery(name){
   renderActorGallery();
   const hero=document.getElementById('actor-featured-photos');
   if(actorGalleryPhotos.length){
-   const bannerPhoto=actorGalleryPhotos.find(p=>p.width>p.height)||actorGalleryPhotos[0];
-   hero.innerHTML='<img class="actor-banner-image" src="'+escapeCastHtml(bannerPhoto.thumb||bannerPhoto.url)+'" alt="'+escapeCastHtml(name)+' yatay oyuncu afişi" loading="eager"><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
+   const collagePhotos=actorGalleryPhotos.slice(0,5);
+   const collage=collagePhotos.map((photo,index)=>'<div class="actor-banner-tile actor-banner-tile-'+(index+1)+'"><img src="'+escapeCastHtml(photo.thumb||photo.url)+'" alt="'+escapeCastHtml(name)+' fotoğraf '+(index+1)+'" loading="'+(index===0?'eager':'lazy')+'"></div>').join('');
+   hero.innerHTML='<div class="actor-banner-collage" aria-label="'+escapeCastHtml(name)+' fotoğraf kolajı">'+collage+'</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
   }else{
    hero.innerHTML='<div class="actor-banner-placeholder">Bu oyuncu için yatay görsel bulunamadı</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
   }
