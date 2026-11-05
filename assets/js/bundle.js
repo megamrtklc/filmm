@@ -364,6 +364,8 @@ let activeCatalogGenre = 'all';
         let activeCatalogType = 'all';
         let activeCatalogQuery = '';
         let activeCatalogCountry = '';
+let activeCatalogDirector = '';
+let activeCatalogGenreTag = '';
 
         
 const countryAliases={
@@ -453,6 +455,7 @@ function countryIdentity(value){
  return info.iso||countryKey(value);
 }
 function filterByCountry(country,update=true){
+ activeCatalogDirector='';activeCatalogGenreTag='';
  const selected=String(country||'').trim();
  if(!selected)return;
  activeCatalogCountry=countryIdentity(selected);
@@ -476,6 +479,32 @@ function filterByCountry(country,update=true){
  renderFilteredCatalog();
 }
 document.addEventListener('click',function(event){const chip=event.target.closest('.detail-country-chip');if(chip)filterByCountry(chip.dataset.country);});
+function filterByDirector(director,update=true){
+ const selected=String(director||'').trim();if(!selected)return;
+ activeCatalogCountry='';activeCatalogGenre='all';activeCatalogGenreTag='';activeCatalogDirector=countryKey(selected);activeCatalogType='all';activeCatalogQuery='';
+ const search=document.getElementById('search-input');if(search)search.value='';
+ document.getElementById('dashboard-view').classList.remove('hidden');
+ document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('actor-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');
+ document.getElementById('theme-body').style.backgroundColor='#0b0c10';
+ showCatalogView(selected+' — Yönetmen Filmografisi');
+ if(update)goRoute('#/yonetmen/'+encodeURIComponent(selected));
+ updateHeaderActiveState();renderFilteredCatalog();
+}
+function filterByGenreTag(genre,update=true){
+ const selected=String(genre||'').trim();if(!selected)return;
+ activeCatalogCountry='';activeCatalogGenre='all';activeCatalogDirector='';activeCatalogGenreTag=countryKey(selected);activeCatalogType='all';activeCatalogQuery='';
+ const search=document.getElementById('search-input');if(search)search.value='';
+ document.getElementById('dashboard-view').classList.remove('hidden');
+ document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('actor-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');
+ document.getElementById('theme-body').style.backgroundColor='#0b0c10';
+ showCatalogView(selected+' Türündeki Yapımlar');
+ if(update)goRoute('#/tur/'+encodeURIComponent(selected));
+ updateHeaderActiveState();renderFilteredCatalog();
+}
+document.addEventListener('click',function(event){
+ const director=event.target.closest('[data-director]');if(director){filterByDirector(director.dataset.director);return;}
+ const genre=event.target.closest('[data-genre]');if(genre){filterByGenreTag(genre.dataset.genre);return;}
+});
 
 function renderFilteredCatalog() {
             const query = activeCatalogQuery.trim().toLocaleLowerCase('tr-TR');
@@ -486,13 +515,17 @@ function renderFilteredCatalog() {
                 const genreMatch = activeCatalogGenre === 'all' || genre.includes(needle) || category.includes(needle);
                 const typeMatch = activeCatalogType === 'all' || m.type === activeCatalogType;
                 const countryMatch = !activeCatalogCountry || countryTokens(m.country).some(x=>countryIdentity(x)===activeCatalogCountry);
+                const directorMatch = !activeCatalogDirector || countryKey(m.director)===activeCatalogDirector || countryTokens(m.director).some(x=>countryKey(x)===activeCatalogDirector);
+                const itemGenres = [...new Set([...countryTokens(m.category),...countryTokens(m.genre)])];
+                const genreTagMatch = !activeCatalogGenreTag || itemGenres.some(x=>countryKey(x)===activeCatalogGenreTag);
                 const searchMatch = !query || (m.title || '').toLocaleLowerCase('tr-TR').includes(query) || category.includes(query) || genre.includes(query);
-                return genreMatch && typeMatch && searchMatch && countryMatch;
+                return genreMatch && typeMatch && searchMatch && countryMatch && directorMatch && genreTagMatch;
             });
             renderMediaGrid(filtered);
         }
 
         function filterGenre(genre,update=true) {
+            activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
             activeCatalogGenre = genre;
             if(update)goRoute('#/kategori/'+encodeURIComponent(genre));
             updateHeaderActiveState();
@@ -528,7 +561,7 @@ function renderFilteredCatalog() {
             window.scrollTo({top:0,behavior:'smooth'});
         }
         function switchTab(tab,update=true) {
-            closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery='';
+            closeHeaderMenus(); activeCatalogGenre='all'; activeCatalogQuery=''; activeCatalogCountry='';activeCatalogDirector='';activeCatalogGenreTag='';
             if(update)goRoute(tab==='movie'?'#/filmler':tab==='tv'?'#/diziler':tab==='watchlist'?'#/listem':'#/kesfet');
             updateHeaderActiveState();
             document.getElementById('search-input').value='';
@@ -602,6 +635,8 @@ function routeFromHash(){
  if(p[0]==='listem'){switchTab('watchlist',false);return;}
  if(p[0]==='kategori'){activeCatalogCountry='';filterGenre(p.slice(1).join('/')||'all',false);return;}
  if(p[0]==='ulke'){filterByCountry(p.slice(1).join('/'),false);return;}
+ if(p[0]==='yonetmen'){filterByDirector(p.slice(1).join('/'),false);return;}
+ if(p[0]==='tur'){filterByGenreTag(p.slice(1).join('/'),false);return;}
  showDashboard(false);
 }
 function showDashboard(update=true){
@@ -714,12 +749,14 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-duration').innerText=item.duration||'';
  document.getElementById('detail-type-label').innerText=item.type==='tv'?'Dizi':'Film';
  const countries=countryTokens(item.country);
+ const directors=countryTokens(item.director);
+ const genres=[...new Set([...countryTokens(item.category),...countryTokens(item.genre)])];
  document.getElementById('detail-country').innerText=countries.map(country=>countryDisplay(country).name).join(', ')||'Ülke bilgisi yok';
  document.getElementById('detail-country-list').innerHTML=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('')||'<span>—</span>';
- document.getElementById('detail-info-genre').innerText=item.category||item.genre||'—';
+ document.getElementById('detail-info-genre').innerHTML=genres.map(genre=>'<button type="button" class="detail-taxonomy-chip" data-genre="'+escapeCountryHtml(genre)+'">'+escapeCountryHtml(genre)+'</button>').join('')||'<span>—</span>';
  document.getElementById('detail-info-year').innerText=item.year||'—';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
- document.getElementById('detail-director').innerText=item.director||'—';
+ document.getElementById('detail-director').innerHTML=directors.map(director=>'<button type="button" class="detail-taxonomy-chip" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('')||'<span>—</span>';
  document.getElementById('detail-score-row').innerHTML='<span class="detail-score-pill"><b>IMDb</b><strong>★ '+(item.rating||'—')+'</strong></span><span class="detail-score-pill"><b>TMDB</b><strong>'+(item.tmdbRating||'—')+'</strong></span><span class="detail-score-pill"><b>RT</b><strong>'+(item.rottenTomatoes||'—')+'</strong></span><span class="detail-score-pill"><b>Popcorn</b><strong>'+(item.popcornmeter||'—')+'</strong></span>';
  updateDetailButtons(item.id);
  currentCastNames=(item.cast||[]).slice(0,15);activeCastPage=0;renderCastPage();
