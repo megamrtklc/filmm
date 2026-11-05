@@ -2712,3 +2712,91 @@ body.trailer-popup-open{overflow:hidden}
 /* Detay sayfası üst manşetini sabit/absolute header alanının altından başlat */
 #detail-page-view{padding-top:88px!important}
 @media(max-width:767px){#detail-page-view{padding-top:100px!important}}
+
+
+/* NY7 detay sayfasi — afis, konu ve bilgi kartlari son gorsel duzenlemeleri */
+#detail-page-view .detail-visual>img{
+ object-fit:cover!important;
+ object-position:center 34%!important;
+ transform:none!important;
+ scale:1!important;
+ filter:saturate(.94) brightness(.88)!important;
+}
+#detail-page-view .detail-visual:after{
+ background:linear-gradient(90deg,rgba(5,6,9,.36),rgba(5,6,9,.06) 70%),linear-gradient(0deg,#090b10 0%,rgba(9,11,16,.05) 58%,rgba(0,0,0,.08))!important;
+}
+#detail-page-view .detail-description-panel{
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ padding:20px 24px!important;margin:16px 0 22px!important;
+ border:1px solid rgba(215,173,85,.2)!important;border-radius:14px!important;
+ background:linear-gradient(135deg,rgba(20,20,22,.96),rgba(12,14,18,.92))!important;
+ box-shadow:0 14px 36px rgba(0,0,0,.22)!important;
+}
+#detail-page-view .detail-description-panel:before{
+ content:"“"!important;position:absolute!important;z-index:0!important;
+ inset:-28px auto auto 14px!important;width:auto!important;height:auto!important;
+ background:none!important;opacity:.13!important;transform:none!important;
+ color:#d9ad54!important;font-family:Georgia,serif!important;
+ font-size:clamp(150px,20vw,230px)!important;line-height:1!important;
+ pointer-events:none!important;
+}
+#detail-page-view .detail-description-panel:after{
+ content:"”"!important;position:absolute!important;z-index:0!important;
+ inset:auto 18px -88px auto!important;width:auto!important;height:auto!important;
+ background:none!important;opacity:.11!important;
+ color:#d9ad54!important;font-family:Georgia,serif!important;
+ font-size:clamp(150px,20vw,230px)!important;line-height:1!important;
+ pointer-events:none!important;
+}
+#detail-page-view .detail-description-panel h2,
+#detail-page-view .detail-description-panel p,
+#detail-page-view .detail-description-panel .detail-actions{position:relative!important;z-index:1!important}
+#detail-page-view .detail-description-panel h2{margin-bottom:9px!important}
+#detail-page-view .detail-description-panel h2:before{display:none!important}
+#detail-page-view .detail-description-panel p{max-width:980px!important;color:#e0e3e9!important;text-shadow:none!important;line-height:1.8!important}
+#detail-page-view .detail-fact{
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ background:#11151d!important;border-color:rgba(255,255,255,.12)!important;
+}
+#detail-page-view .detail-fact:before{
+ content:""!important;position:absolute!important;inset:0!important;z-index:-2!important;
+ background-size:cover!important;background-position:center!important;
+ opacity:.27!important;filter:saturate(.68) contrast(1.05)!important;
+}
+#detail-page-view .detail-fact:after{
+ content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;
+ background:linear-gradient(90deg,rgba(8,10,14,.86),rgba(8,10,14,.52))!important;
+}
+#detail-page-view .detail-fact:nth-child(1):before{
+ background-image:url("https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=900&q=80")!important;
+}
+#detail-page-view .detail-fact:nth-child(2):before{
+ background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=900&q=80")!important;
+}
+#detail-page-view .detail-fact:nth-child(3):before{
+ background-image:url("https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=900&q=80")!important;
+}
+#detail-page-view .detail-fact:nth-child(4):before{
+ background-image:url("https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=900&q=80")!important;
+}
+#detail-page-view .detail-fact>span,
+#detail-page-view .detail-fact>b,
+#detail-page-view .detail-fact>div{position:relative!important;z-index:1!important}
+#detail-page-view .detail-cast-card:before{background-image:none!important;opacity:0!important}
+#detail-page-view .detail-cast-card:after{background:linear-gradient(145deg,rgba(17,20,27,.96),rgba(10,12,17,.94))!important}
+#detail-page-view .detail-cast-heading{
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ background:linear-gradient(90deg,rgba(8,10,14,.88),rgba(8,10,14,.62))!important;
+}
+#detail-page-view .detail-cast-heading:before{
+ background-image:url("https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1400&q=85")!important;
+ background-size:cover!important;background-position:center 42%!important;
+ opacity:.2!important;filter:grayscale(.35) saturate(.55)!important;
+}
+#detail-page-view .detail-cast-heading h3{position:relative!important;z-index:1!important}
+@media(max-width:700px){
+ #detail-page-view .detail-description-panel{padding:17px!important;margin:12px 0 18px!important}
+ #detail-page-view .detail-description-panel:before{font-size:145px!important;inset:-15px auto auto 8px!important}
+ #detail-page-view .detail-description-panel:after{font-size:145px!important;inset:auto 8px -62px auto!important}
+ #detail-page-view .detail-visual>img{object-position:center 30%!important}
+}
