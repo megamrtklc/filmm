@@ -1945,7 +1945,7 @@ body.actor-modal-open{overflow:hidden}
  .actor-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px}
  .actor-facts div{padding:9px 0!important}
  .actor-facts b{font-size:10px!important}
- .actor-filmography,.actor-gallery-section{padding-left:12px!important;padding-right:12px!important}
+ .actor-filmography,.actor-gallery-section{width:calc(100% - 24px)!important;padding-left:0!important;padding-right:0!important}
  .actor-section-heading h2{font-size:18px}
  .actor-filmography-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
  .actor-work-card span{padding:7px}
@@ -1966,7 +1966,7 @@ body.actor-modal-open{overflow:hidden}
 .actor-banner-tile img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 28%;filter:saturate(.82);transform:none}
 .actor-banner-shade{z-index:-1}
 .actor-banner-copy{bottom:clamp(18px,3.5vw,38px)!important}
-.actor-filmography,.actor-gallery-section{width:100%!important;max-width:none!important;box-sizing:border-box!important;padding-left:clamp(16px,4vw,58px)!important;padding-right:clamp(16px,4vw,58px)!important}
+.actor-filmography,.actor-gallery-section{width:calc(100% - 2 * clamp(16px,4vw,58px))!important;max-width:1320px!important;box-sizing:border-box!important;padding-left:0!important;padding-right:0!important;margin-left:auto!important;margin-right:auto!important}
 @media(max-width:600px){
  .actor-banner{height:155px!important}
  .actor-banner-collage{gap:2px}
