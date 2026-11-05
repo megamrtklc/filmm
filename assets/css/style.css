@@ -3043,3 +3043,12 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-facts-wrap{margin-top:16px!important;padding:15px 14px 12px!important}
  #detail-page-view .detail-copy{min-width:0!important}
 }
+
+
+/* Detay sayfası: afişi üst manşetle yarı yarıya bindir. */
+@media(min-width:768px){
+ #detail-page-view .detail-overlap{margin-top:-165px!important}
+}
+@media(max-width:767px){
+ #detail-page-view .detail-overlap{margin-top:-78px!important}
+}
