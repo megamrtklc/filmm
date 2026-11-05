@@ -361,7 +361,7 @@ function renderHomeCollections() {
     fill('personalized-rail',personalized.length?personalized:featured.slice(0,12));
     fill('top-movies-rail', movies);
     fill('top-series-rail', series);
-    [['featured-rail','Öne çıkan yapımlarda'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
+    [['featured-rail','öne çıkan yapımlarda'],['personalized-rail','sana özel seçkilerde'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
         const rail=document.getElementById(railId),heading=rail?.previousElementSibling;
         if(!rail||!heading||heading.querySelector('.rail-controls'))return;
         const controls=document.createElement('div');controls.className='rail-controls';
@@ -1101,7 +1101,7 @@ function openDetailPage(id,update=true){
  document.documentElement.classList.add('ny7-modal-lock');
  document.getElementById('detail-related').classList.remove('hidden');
  detailView.focus({preventScroll:true});
- window.scrollTo({top:0,behavior:'instant'});
+ window.scrollTo({top:0,behavior:'auto'});
 }
 
 let actorGalleryPhotos=[];
@@ -1348,7 +1348,7 @@ function launchPlayer(title) {
         let catalogInitialized = false;
         function showCatalogSkeletons() {
             const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
-            ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id => {
+            ['media-grid','featured-rail','personalized-rail','top-movies-rail','top-series-rail'].forEach(id => {
                 const target = document.getElementById(id);
                 if (target) target.innerHTML = Array.from({length:id==='media-grid'?8:5},()=>skeleton).join('');
             });
