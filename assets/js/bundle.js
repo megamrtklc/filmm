@@ -514,7 +514,7 @@ async function fetchDirectorProfileData(name){
  const getTime=prop=>directorEntityValue(claims,prop)[0]?.time||'';
  const dateLabel=value=>{
   if(!value)return '';
-  const parts=String(value).replace(/^\+/,'').slice(1,11).split('-').map(Number);
+  const parts=String(value).replace(/^\+/,'').slice(0,10).split('-').map(Number);
   if(!parts[0])return '';
   return parts.length===3&&parts[1]&&parts[2]?[String(parts[2]).padStart(2,'0'),String(parts[1]).padStart(2,'0'),parts[0]].join('.'):String(parts[0]);
  };
