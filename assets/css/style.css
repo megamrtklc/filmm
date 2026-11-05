@@ -2299,3 +2299,33 @@ body.actor-modal-open{overflow:hidden}
 #daily-pick-section .mood-original-title{font-size:12px;color:rgba(226,232,240,.78);font-weight:600;margin-top:-7px;margin-bottom:7px}
 .hero-thumb-original{font-size:9px;color:#aab2c0;font-weight:550;margin-top:2px;display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .actor-work-card .actor-work-original-title{font-size:10px;color:#aab4c3;font-weight:550;margin-top:2px}
+
+
+/* Yönetmen profil kartı - kompakt bilgi satırları ve okunaklı biyografi */
+.director-profile-panel{margin:8px 0 14px!important;overflow:visible!important}
+.director-profile-content{overflow:visible}
+.director-profile-facts,.director-profile-identity,.director-profile-heading{overflow:visible}
+.director-profile-photo-wrap{position:relative;display:block;flex:0 0 76px;width:76px;height:84px;z-index:2}
+.director-profile-photo-wrap .director-profile-photo{display:block;width:76px;height:84px;max-width:none;object-fit:cover;transform:scale(1);transform-origin:left center;transition:transform .42s cubic-bezier(.2,.75,.25,1),box-shadow .42s ease;will-change:transform}
+.director-profile-photo-wrap:hover{z-index:8}
+.director-profile-photo-wrap:hover .director-profile-photo{transform:scale(1.5);box-shadow:0 12px 30px rgba(0,0,0,.55);border-color:rgba(234,191,72,.8)}
+.director-profile-dates{display:flex;align-items:center;flex-wrap:wrap;gap:12px 16px;min-width:0}
+.director-profile-birth,.director-profile-death{display:inline-flex;flex-direction:row;align-items:center;gap:5px;min-width:0;margin:0}
+.director-profile-birth i,.director-profile-death i,.director-profile-inline-fact>i{color:#d7b66b;font-size:11px;flex:0 0 auto}
+.director-profile-death span,.director-profile-birth span,.director-profile-inline-fact span{white-space:nowrap}
+.director-profile-death b,.director-profile-birth b{font-size:11px;line-height:1.4}
+.director-profile-inline-fact{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0}
+.director-profile-fact span{display:flex;align-items:center;gap:7px}
+.director-profile-fact span i,.director-profile-biography>small i{color:#d7b66b;font-size:11px}
+.director-profile-biography{padding:15px 19px}
+.director-profile-biography>small{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:10px}
+.director-profile-biography p{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.85;letter-spacing:.012em;color:#d9dee8;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;line-clamp:4;max-height:calc(1.85em * 4);overflow:hidden;padding:0}
+@media(max-width:700px){
+ .director-profile-panel{margin:6px 0 12px!important}
+ .director-profile-photo-wrap{flex-basis:70px;width:70px;height:78px}
+ .director-profile-photo-wrap .director-profile-photo{width:70px;height:78px}
+ .director-profile-dates{gap:7px 10px}
+ .director-profile-birth,.director-profile-death{gap:4px}
+ .director-profile-birth b,.director-profile-death b{font-size:10px}
+ .director-profile-biography p{font-size:13px;line-height:1.75;-webkit-line-clamp:4;line-clamp:4;max-height:7em}
+}
