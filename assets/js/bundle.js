@@ -719,6 +719,7 @@ function openActorPage(name,update=true){
  document.getElementById('actor-birth-date').textContent='Bilgi bulunamadı';
  document.getElementById('actor-birth-place').textContent='Bilgi bulunamadı';
  document.getElementById('actor-country').textContent='Bilgi bulunamadı';
+ document.getElementById('actor-education').textContent='Bilgi bulunamadı';
  const avatar='https://ui-avatars.com/api/?name='+encodeURIComponent(actorName)+'&background=252936&color=ffffff&size=512&bold=true';
  document.getElementById('actor-profile-image').src=avatar;
  document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
@@ -739,14 +740,36 @@ function openActorPage(name,update=true){
     const entityData=await entityResponse.json();
     const claims=entityData.entities?.[data.wikibase_item]?.claims||{};
     const birth=claims.P569?.[0]?.mainsnak?.datavalue?.value?.time;
+    const death=claims.P570?.[0]?.mainsnak?.datavalue?.value?.time;
     const citizenship=claims.P27?.[0]?.mainsnak?.datavalue?.value?.id;
     const birthplace=claims.P19?.[0]?.mainsnak?.datavalue?.value?.id;
     const birthName=claims.P1477?.[0]?.mainsnak?.datavalue?.value?.text;
-    if(birth)document.getElementById('actor-birth-date').textContent=birth.slice(1,11);
+    const formatActorDate=value=>{
+     const parts=String(value||'').slice(1,11).split('-').map(Number);
+     return parts.length===3&&parts.every(Number.isFinite)?{year:parts[0],month:parts[1],day:parts[2],label:[String(parts[2]).padStart(2,'0'),String(parts[1]).padStart(2,'0'),parts[0]].join('.')} : null;
+    };
+    if(birth){
+     const born=formatActorDate(birth);
+     const died=death?formatActorDate(death):null;
+     if(born){
+      const ageEnd=died?new Date(Date.UTC(died.year,died.month-1,died.day)):new Date();
+      let age=ageEnd.getUTCFullYear()-born.year;
+      if(ageEnd.getUTCMonth()<born.month-1||(ageEnd.getUTCMonth()===born.month-1&&ageEnd.getUTCDate()<born.day))age--;
+      const deathLine=died?'<small class="actor-death-date">Vefat: '+died.label+'</small>':'';
+      document.getElementById('actor-birth-date').innerHTML=born.label+' ('+age+' yaşında)'+deathLine;
+     }
+    }
     if(birthName)document.getElementById('actor-banner-name').textContent=birthName;
-    const [countryLabel,placeLabel]=await Promise.all([fetchWikidataLabel(citizenship),fetchWikidataLabel(birthplace)]);
+    const educationIds=[...new Set((claims.P69||[]).map(item=>item.mainsnak?.datavalue?.value?.id).filter(Boolean))];
+    const [countryLabel,placeLabel,educationLabels]=await Promise.all([
+     fetchWikidataLabel(citizenship),
+     fetchWikidataLabel(birthplace),
+     Promise.all(educationIds.map(fetchWikidataLabel))
+    ]);
     if(countryLabel){const country=countryDisplay(countryLabel);document.getElementById('actor-country').innerHTML='<span class="actor-country-value">'+country.flag+' '+escapeCastHtml(country.name)+'</span>';}
     if(placeLabel)document.getElementById('actor-birth-place').textContent=placeLabel;
+    const education=educationLabels.filter(Boolean);
+    if(education.length)document.getElementById('actor-education').textContent=education.join(', ');
    }
   }catch(e){}
  }).catch(()=>{
