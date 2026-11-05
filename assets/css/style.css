@@ -2329,3 +2329,94 @@ body.actor-modal-open{overflow:hidden}
  .director-profile-birth b,.director-profile-death b{font-size:10px}
  .director-profile-biography p{font-size:13px;line-height:1.75;-webkit-line-clamp:4;line-clamp:4;max-height:7em}
 }
+
+
+/* Film detay: yapima ozel sinematik arka plan katmanlari */
+#detail-page-view{--detail-scene-image:none}
+#detail-page-view .detail-description-panel{
+ position:relative;isolation:isolate;overflow:hidden;
+ padding:20px 22px!important;margin:18px 0 24px!important;
+ border:1px solid rgba(255,255,255,.16);border-radius:15px;
+ background:linear-gradient(105deg,rgba(8,9,12,.94) 0%,rgba(8,9,12,.78) 48%,rgba(8,9,12,.38) 100%);
+ box-shadow:0 16px 38px rgba(0,0,0,.28)
+}
+#detail-page-view .detail-description-panel:before{
+ content:"";position:absolute;inset:0;z-index:-2;
+ background-image:var(--detail-scene-image);background-size:cover;background-position:center 42%;
+ opacity:.62;transform:scale(1.025)
+}
+#detail-page-view .detail-description-panel:after{
+ content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(90deg,rgba(5,6,9,.94),rgba(5,6,9,.72) 58%,rgba(5,6,9,.35)),
+ linear-gradient(0deg,rgba(5,6,9,.58),transparent 75%)
+}
+#detail-page-view .detail-description-panel h2,
+#detail-page-view .detail-description-panel p,
+#detail-page-view .detail-description-panel .detail-actions{position:relative;z-index:1}
+#detail-page-view .detail-description-panel h2{display:flex;align-items:center;gap:9px;color:#fff}
+#detail-page-view .detail-description-panel h2:before{content:"";width:4px;height:19px;border-radius:4px;background:linear-gradient(#f5c84b,#d7a33b)}
+#detail-page-view .detail-description-panel p{max-width:940px;color:#f0f1f4;text-shadow:0 1px 8px #000}
+#detail-page-view .detail-facts-wrap{position:relative;isolation:isolate}
+#detail-page-view .detail-facts-heading{position:relative;z-index:1}
+#detail-page-view .detail-facts-grid{gap:11px!important}
+#detail-page-view .detail-fact{
+ position:relative;isolation:isolate;overflow:hidden;
+ border:1px solid rgba(255,255,255,.13)!important;border-radius:12px!important;
+ background:linear-gradient(135deg,rgba(17,19,25,.94),rgba(10,11,15,.83))!important;
+ box-shadow:0 9px 24px rgba(0,0,0,.2);
+ transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease
+}
+#detail-page-view .detail-fact:before{
+ content:"";position:absolute;inset:0;z-index:-2;
+ background-image:var(--detail-scene-image);background-size:cover;
+ background-position:center;opacity:.22;filter:saturate(.65)
+}
+#detail-page-view .detail-fact:after{
+ content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(115deg,rgba(7,8,12,.88),rgba(7,8,12,.55))
+}
+#detail-page-view .detail-fact:hover{transform:translateY(-3px);border-color:rgba(245,200,75,.42)!important;box-shadow:0 14px 28px rgba(0,0,0,.3)}
+#detail-page-view .detail-fact>span,#detail-page-view .detail-fact>b,
+#detail-page-view .detail-fact>div{position:relative;z-index:1}
+#detail-page-view .detail-fact>span{color:#e9c477!important}
+#detail-page-view .detail-cast-card{
+ position:relative;isolation:isolate;overflow:hidden;
+ border:1px solid rgba(255,255,255,.14)!important;
+ background:linear-gradient(120deg,rgba(7,9,13,.94),rgba(9,11,16,.82))!important;
+ box-shadow:0 18px 42px rgba(0,0,0,.26)
+}
+#detail-page-view .detail-cast-card:before{
+ content:"";position:absolute;inset:0;z-index:-2;
+ background-image:var(--detail-scene-image);background-size:cover;background-position:center 36%;
+ opacity:.25;filter:saturate(.7)
+}
+#detail-page-view .detail-cast-card:after{
+ content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(110deg,rgba(5,7,11,.93),rgba(5,7,11,.72))
+}
+#detail-page-view .detail-cast-heading{
+ position:relative;isolation:isolate;overflow:hidden;
+ display:flex;align-items:center;justify-content:space-between;
+ min-height:48px;padding:9px 13px;margin:-2px -2px 15px!important;
+ border:1px solid rgba(255,255,255,.12);border-radius:9px;
+ background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.38))
+}
+#detail-page-view .detail-cast-heading:before{
+ content:"";position:absolute;inset:0;z-index:-1;
+ background-image:var(--detail-scene-image);background-size:cover;background-position:center 24%;
+ opacity:.34
+}
+#detail-page-view .detail-cast-heading h3{font-size:15px!important;letter-spacing:.01em}
+#detail-page-view .detail-cast-person{
+ background:linear-gradient(145deg,rgba(18,21,28,.88),rgba(7,9,13,.92))!important;
+ border-color:rgba(255,255,255,.14)!important;
+ box-shadow:0 7px 18px rgba(0,0,0,.2);
+ transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease
+}
+#detail-page-view .detail-cast-person:hover{transform:translateY(-4px);border-color:rgba(245,200,75,.5)!important;box-shadow:0 13px 25px rgba(0,0,0,.36)}
+#detail-page-view .detail-cast-person img{box-shadow:0 5px 15px rgba(0,0,0,.28)}
+@media(max-width:700px){
+ #detail-page-view .detail-description-panel{padding:15px!important;margin:13px 0 18px!important}
+ #detail-page-view .detail-fact{min-height:76px!important}
+ #detail-page-view .detail-cast-heading{min-height:42px;padding:7px 9px}
+}
