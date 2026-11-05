@@ -2204,3 +2204,17 @@ body.actor-modal-open{overflow:hidden}
 .director-profile-copy a{display:inline-flex;align-items:center;gap:7px;margin-top:10px;color:#f2c64d;font-size:11px;font-weight:700}
 .director-profile-copy a:hover{color:#fff}
 @media(max-width:600px){.director-profile-content,.director-profile-loading{align-items:flex-start;gap:13px;padding:13px}.director-profile-photo,.director-profile-avatar{width:84px;height:104px;flex-basis:84px;border-radius:11px}.director-profile-copy p,.director-profile-loading p{-webkit-line-clamp:4;font-size:11px}.director-profile-copy h2,.director-profile-loading h2{font-size:17px}}
+
+
+/* Modernize header brand and shift it slightly inward */
+.header-brand{margin-left:12px;display:inline-flex;align-items:center;flex:0 0 auto;text-decoration:none}
+.brand-mark{display:inline-flex;align-items:center;gap:9px;padding:0!important;background:none!important;box-shadow:none!important;color:#fff!important;letter-spacing:normal!important}
+.brand-icon{position:relative;width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:12px;background:linear-gradient(145deg,#252833 0%,#11131a 100%);border:1px solid rgba(255,255,255,.14);box-shadow:0 7px 20px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.08);color:#f4c84b;font-size:19px}
+.brand-icon:after{content:"";position:absolute;left:7px;right:7px;bottom:-2px;height:2px;border-radius:3px;background:linear-gradient(90deg,#e11d48 0 52%,#f4c84b 52% 100%)}
+.brand-word{display:flex;align-items:baseline;gap:1px;line-height:1}
+.brand-word b{font-size:25px;font-weight:900;letter-spacing:-1.8px;color:#f7f7f8}
+.brand-word strong{font-size:27px;font-weight:950;letter-spacing:-2px;color:#f4c84b;text-shadow:0 2px 14px rgba(244,200,75,.18)}
+.brand-word small{align-self:flex-end;margin:0 0 2px 5px;font-size:9px;font-weight:800;letter-spacing:2px;color:#e11d48}
+.header-brand:hover .brand-icon{transform:translateY(-1px);border-color:rgba(244,200,75,.45)}
+.header-brand .brand-icon{transition:transform .2s ease,border-color .2s ease}
+@media(max-width:700px){.header-brand{margin-left:8px}.brand-icon{width:37px;height:37px;flex-basis:37px;border-radius:10px;font-size:17px}.brand-word b{font-size:22px}.brand-word strong{font-size:24px}.brand-word small{font-size:8px}}
