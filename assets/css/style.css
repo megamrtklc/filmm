@@ -2545,13 +2545,26 @@ body.ny7-detail-open #dashboard-view,body.ny7-detail-open>.site-header{filter:no
 html.ny7-modal-lock,html.ny7-modal-lock body{overflow:visible}.trailer-popup{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
 .trailer-popup.is-open{opacity:1;visibility:visible;pointer-events:auto}
 .trailer-popup-backdrop{position:absolute;inset:0;background:rgba(2,3,6,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.trailer-popup-card{position:relative;width:min(850px,100%);overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:#0b0c10;box-shadow:0 30px 100px rgba(0,0,0,.65);transform:translateY(12px) scale(.985);transition:transform .22s ease}
+.trailer-popup-card{position:relative;width:min(1120px,100%);overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:#0b0c10;box-shadow:0 30px 100px rgba(0,0,0,.65);transform:translateY(12px) scale(.985);transition:transform .22s ease}
 .trailer-popup.is-open .trailer-popup-card{transform:translateY(0) scale(1)}
 .trailer-popup-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 20px}
 .trailer-popup-head span{display:block;margin-bottom:4px;color:#d7b85e;font-size:9px;font-weight:900;letter-spacing:.2em}
 .trailer-popup-head h2{color:#fff;font-size:15px;font-weight:800}
 .trailer-popup-head button{width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);border-radius:50%;color:#fff;background:rgba(255,255,255,.05)}
 .trailer-popup-head button:hover{background:rgba(255,255,255,.13)}
+.trailer-popup-content{display:grid;grid-template-columns:250px minmax(0,1fr);gap:20px;padding:0 20px 20px;align-items:start}
+.trailer-popup-info{min-width:0;display:flex;flex-direction:column;gap:12px}
+.trailer-popup-poster{display:block;width:100%;max-height:230px;object-fit:contain;object-position:left center;border-radius:10px;background:#15171d}
+.trailer-popup-meta{display:flex;flex-wrap:wrap;gap:6px;color:#b9bac2;font-size:11px;font-weight:700}
+.trailer-popup-meta span{padding:5px 8px;border:1px solid rgba(255,255,255,.09);border-radius:6px;background:rgba(255,255,255,.035)}
+.trailer-popup-category{color:#d7b85e;font-size:11px;font-weight:800;line-height:1.5}
+.trailer-popup-imdb{display:flex;align-items:center;gap:8px;color:#f4c84b;font-size:12px}
+.trailer-popup-imdb b{color:#d6d6dc;font-size:10px;letter-spacing:.08em}
+.trailer-popup-imdb strong{font-size:17px;color:#fff}
+.trailer-popup-summary{padding-top:10px;border-top:1px solid rgba(255,255,255,.09)}
+.trailer-popup-summary>span{display:block;margin-bottom:6px;color:#d7b85e;font-size:9px;font-weight:900;letter-spacing:.18em}
+.trailer-popup-summary p{color:#b8bac4;font-size:12px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
+.trailer-popup-player{position:relative;aspect-ratio:16/9;min-width:0;background:#030405;display:grid;place-items:center;border-radius:10px;overflow:hidden}
 .trailer-popup-player{position:relative;aspect-ratio:16/9;background:#030405;display:grid;place-items:center}
 .trailer-popup-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .trailer-popup-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:30px;color:#a7a7ad;text-align:center;font-size:13px}
@@ -2561,6 +2574,16 @@ body.trailer-popup-open{overflow:hidden}
  .trailer-popup{padding:12px}
  .trailer-popup-card{border-radius:13px}
  .trailer-popup-head{padding:13px 15px}
+ .trailer-popup-content{grid-template-columns:1fr;gap:12px;padding:0 13px 13px}
+ .trailer-popup-player{order:0}
+ .trailer-popup-info{order:1;display:grid;grid-template-columns:88px minmax(0,1fr);gap:8px 12px;align-items:start}
+ .trailer-popup-poster{grid-row:span 4;width:88px;height:132px;object-fit:cover}
+ .trailer-popup-meta{gap:4px}
+ .trailer-popup-meta span{font-size:9px;padding:4px 6px}
+ .trailer-popup-category,.trailer-popup-imdb,.trailer-popup-summary{grid-column:2}
+ .trailer-popup-summary{padding-top:6px}
+ .trailer-popup-summary p{-webkit-line-clamp:4;font-size:11px}
+
  .detail-modal-panel .detail-visual{height:260px}
  .detail-modal-panel .detail-overlap{margin-top:-75px;grid-template-columns:104px minmax(0,1fr);gap:14px}
  .detail-modal-panel .detail-poster-column{width:104px}
