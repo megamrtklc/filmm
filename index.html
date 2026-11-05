@@ -38,7 +38,7 @@
         }
     </script>
 
-        <link rel="stylesheet" href="assets/css/style.css?v=20261105-imdb-dropdown">
+        <link rel="stylesheet" href="assets/css/style.css?v=20261105-split-hero">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -93,6 +93,7 @@
     <!-- DASHBOARD VIEW -->
     <div id="dashboard-view" class="flex-1 flex flex-col transition-opacity duration-300">
         <!-- HERO SPOTLIGHT -->
+        <div class="home-feature-row">
         <section id="hero-section" class="hero-section relative min-h-[640px] flex items-center overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <img id="hero-bg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1920&q=80" 
@@ -135,15 +136,16 @@
             </div>
         </section>
 
-        <!-- KATALOG VE FİLTRELER -->
-        <main class="p-6 lg:p-12 space-y-10">
             <!-- MODUNA GÖRE KEŞFET MANŞETİ -->
             <section id="daily-pick-section" class="mood-discovery-hero" aria-label="Moduna göre film ve dizi keşfet">
                 <div id="mood-discovery-result" class="mood-discovery-result" aria-live="polite">
                     <div class="mood-discovery-loading">Sana özel bir yapım seçiliyor...</div>
                 </div>
             </section>
+        </div>
 
+        <!-- KATALOG VE FİLTRELER -->
+        <main class="p-6 lg:p-12 space-y-10">
             <!-- ANA SAYFA KOLEKSİYONLARI -->
             <section id="home-collections" class="home-collections space-y-10" aria-label="Öne çıkan film ve dizi koleksiyonları">
                 <div id="collection-featured" class="collection-section space-y-4">
@@ -355,6 +357,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-imdb-dropdown"></script>
+    <script src="assets/js/bundle.js?v=20261105-split-hero"></script>
 </body>
 </html>
