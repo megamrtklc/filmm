@@ -2177,3 +2177,7 @@ body.actor-modal-open{overflow:hidden}
 @media(max-width:600px){
  .actor-profile-facts-horizontal #actor-country .actor-country-value .actor-country-flag{width:24px!important;height:17px!important;flex-basis:24px!important}
 }
+
+/* Ülke kataloğu başlığında bayrak ve ülke adı */
+#catalog-heading{display:flex;align-items:center;gap:10px}
+.catalog-country-heading-flag{width:30px;height:21px;object-fit:cover;border-radius:4px;border:1px solid rgba(255,255,255,.2);box-shadow:0 2px 7px rgba(0,0,0,.25)}
