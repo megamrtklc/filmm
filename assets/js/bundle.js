@@ -350,6 +350,15 @@ function renderHomeCollections() {
     const movies = valid.filter(item => item.type === 'movie').sort((a,b) => score(b)-score(a)).slice(0,12);
     const series = valid.filter(item => item.type === 'tv').sort((a,b) => score(b)-score(a)).slice(0,12);
     fill('featured-rail', featured);
+    const savedItems=valid.filter(item=>favorites.some(id=>String(id)===String(item.id)));
+    const favoriteGenres=[...new Set(savedItems.flatMap(item=>[...(item.genre||'').split('/'),...(item.category||'').split('/')]).map(value=>value.trim().toLocaleLowerCase('tr-TR')).filter(Boolean))];
+    const personalized=valid.filter(item=>!savedItems.some(saved=>String(saved.id)===String(item.id))).map(item=>{
+        const tags=((item.genre||'')+' / '+(item.category||'')).toLocaleLowerCase('tr-TR');
+        const affinity=favoriteGenres.reduce((sum,genre)=>sum+(tags.includes(genre)?5:0),0);
+        const rating=Math.max(0,Math.min(10,Number.parseFloat(item.rating)||0));
+        return {item,score:affinity+rating*.45+(item.type==='movie'?0.2:0)};
+    }).sort((a,b)=>b.score-a.score).slice(0,12).map(row=>row.item);
+    fill('personalized-rail',personalized.length?personalized:featured.slice(0,12));
     fill('top-movies-rail', movies);
     fill('top-series-rail', series);
     [['featured-rail','Öne çıkan yapımlarda'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
@@ -1086,8 +1095,6 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-trailer-btn').onclick=()=>item.trailerUrl?window.open(item.trailerUrl,'_blank','noopener'):window.alert('Fragman bağlantısı bulunmuyor.');
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
- document.getElementById('dashboard-view').classList.add('hidden');
- document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
  detailView.classList.remove('hidden');
  document.body.classList.add('ny7-detail-open');
