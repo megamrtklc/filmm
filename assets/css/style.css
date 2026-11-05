@@ -2856,3 +2856,118 @@ body.trailer-popup-open{overflow:hidden}
 @media(max-width:560px){
  #detail-page-view .detail-fact:before{width:40px!important;height:40px!important;font-size:32px!important;right:8px!important;bottom:4px!important}
 }
+
+
+/* NY7 Ambilight: poster tones stay on the title hero, never on the page or global navigation */
+#detail-page-view:before,
+#detail-page-view:after{
+ content:none!important;
+ display:none!important;
+}
+#detail-page-view>.detail-visual{
+ position:relative!important;
+ isolation:isolate!important;
+ overflow:hidden!important;
+ background:#090b10!important;
+}
+#detail-page-view .detail-visual>img{
+ z-index:0!important;
+ object-fit:cover!important;
+ object-position:center 8%!important;
+}
+#detail-page-view .detail-visual:before{
+ content:""!important;
+ position:absolute!important;
+ z-index:1!important;
+ inset:-24px!important;
+ pointer-events:none!important;
+ background-image:var(--poster-atmosphere-image);
+ background-position:center 22%!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+ filter:blur(34px) saturate(2.2)!important;
+ opacity:.42!important;
+ mix-blend-mode:screen!important;
+ transform:scale(1.06)!important;
+}
+#detail-page-view .detail-visual:after{
+ content:""!important;
+ position:absolute!important;
+ z-index:2!important;
+ inset:0!important;
+ pointer-events:none!important;
+ background:
+  radial-gradient(ellipse at 0% 48%,rgba(var(--poster-tone-1-rgb),.58),transparent 38%),
+  radial-gradient(ellipse at 100% 42%,rgba(var(--poster-tone-2-rgb),.52),transparent 39%),
+  radial-gradient(ellipse at 52% 0%,rgba(var(--poster-tone-3-rgb),.3),transparent 44%),
+  linear-gradient(90deg,rgba(5,7,11,.32),rgba(5,7,11,.02) 72%),
+  linear-gradient(0deg,rgba(9,11,16,.5),rgba(9,11,16,.02) 58%,rgba(0,0,0,.08))!important;
+}
+#detail-page-view .detail-topbar{z-index:5!important}
+#detail-page-view>.detail-main{
+ background:#090b10!important;
+ box-shadow:none!important;
+}
+#detail-page-view .detail-info-card,
+#detail-page-view .detail-description-panel{
+ box-shadow:0 12px 32px rgba(0,0,0,.22)!important;
+}
+
+/* Yapım künyesi: filigran yerine sade, kolay tanınan ikon rozetleri */
+#detail-page-view .detail-fact{
+ position:relative!important;
+ display:flex!important;
+ flex-direction:column!important;
+ justify-content:center!important;
+ gap:10px!important;
+ background:#11151d!important;
+}
+#detail-page-view .detail-fact:before,
+#detail-page-view .detail-fact:after{
+ content:none!important;
+ display:none!important;
+ background:none!important;
+}
+#detail-page-view .detail-fact>span{
+ display:flex!important;
+ align-items:center!important;
+ gap:9px!important;
+ color:#aeb5c2!important;
+ font-size:10px!important;
+ font-weight:750!important;
+}
+#detail-page-view .detail-fact>span i{
+ display:grid!important;
+ flex:0 0 30px!important;
+ width:30px!important;
+ height:30px!important;
+ place-items:center!important;
+ border:1px solid rgba(224,184,94,.2)!important;
+ border-radius:8px!important;
+ background:rgba(224,184,94,.1)!important;
+ color:#e7bd69!important;
+ font-size:15px!important;
+}
+#detail-page-view .detail-fact>b,
+#detail-page-view .detail-fact>div{
+ position:relative!important;
+ z-index:1!important;
+}
+#detail-page-view .detail-fact>b{padding-left:39px!important}
+#detail-page-view .detail-fact .detail-country-list{padding-left:39px!important}
+@media(max-width:767px){
+ #detail-page-view .detail-visual>img{object-position:center 5%!important}
+ #detail-page-view .detail-visual:before{inset:-16px!important;filter:blur(26px) saturate(2)!important;opacity:.38!important}
+}
+@media(max-width:560px){
+ #detail-page-view .detail-fact{gap:7px!important}
+ #detail-page-view .detail-fact>span{font-size:9px!important;gap:7px!important}
+ #detail-page-view .detail-fact>span i{flex-basis:26px!important;width:26px!important;height:26px!important;font-size:13px!important}
+ #detail-page-view .detail-fact>b,
+ #detail-page-view .detail-fact .detail-country-list{padding-left:33px!important}
+}
+
+/* Tüm alt sayfalar ana sayfanın ortak header/nav katmanını kullanır */
+.site-header{z-index:100!important}
+#actor-page-view{padding-top:88px!important}
+@media(max-width:767px){#actor-page-view{padding-top:100px!important}}
