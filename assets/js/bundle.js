@@ -933,38 +933,53 @@ let activeCastPage=0;
 let currentCastNames=[];
 let currentCastItemId='';
 function escapeCastHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function renderCastPage(){
+function updateCastCarouselControls(){
  const list=document.getElementById('detail-cast-list');
  const controls=document.getElementById('detail-cast-controls');
  const label=document.getElementById('detail-cast-page-label');
- const firstPage=currentCastNames.slice(0,8);
- const secondPage=currentCastNames.slice(8,16);
- const visible=activeCastPage===0?firstPage:secondPage;
+ if(!list||!controls||!label)return;
+ const maxScroll=Math.max(0,list.scrollWidth-list.clientWidth);
+ const previous=controls.querySelector('button:first-child');
+ const next=controls.querySelector('button:last-child');
+ if(previous)previous.disabled=list.scrollLeft<=4;
+ if(next)next.disabled=maxScroll<=4||list.scrollLeft>=maxScroll-4;
+ const pages=Math.max(1,Math.ceil(list.scrollWidth/Math.max(1,list.clientWidth)));
+ const page=Math.min(pages,Math.floor((list.scrollLeft+list.clientWidth*.35)/Math.max(1,list.clientWidth))+1);
+ label.textContent=page+' / '+pages;
+}
+function renderCastPage(){
+ const list=document.getElementById('detail-cast-list');
+ const controls=document.getElementById('detail-cast-controls');
+ if(!list||!controls)return;
+ const visible=currentCastNames.slice(0,10);
  list.innerHTML=visible.map(member=>{
   const name=typeof member==='string'?member:member.name;
-  const character=typeof member==='string'?'':member.character||'';
+  const character=typeof member==='string'?'':member.character||member.role||'';
   const photo=typeof member==='string'?'':member.image||'';
   const safe=escapeCastHtml(name);
   const role=escapeCastHtml(character);
-  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=160&bold=true';
+  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=320&bold=true';
   return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></button>';
  }).join('')||'<p class="detail-cast-empty">Oyuncu bilgisi bulunmuyor.</p>';
- controls.classList.toggle('hidden',currentCastNames.length<=8);
- label.textContent=activeCastPage===0?'1 / 2':'2 / 2';
- controls.querySelector('button:first-child').disabled=activeCastPage===0;
- controls.querySelector('button:last-child').disabled=activeCastPage===1||secondPage.length===0;
+ list.scrollLeft=0;
+ controls.classList.toggle('hidden',currentCastNames.length<=5);
+ if(!list.dataset.castScrollBound){
+  list.addEventListener('scroll',updateCastCarouselControls,{passive:true});
+  list.dataset.castScrollBound='1';
+ }
+ updateCastCarouselControls();
 }
 function changeCastPage(direction){
- if(currentCastNames.length<=8)return;
- activeCastPage=direction>0?1:0;
- renderCastPage();
+ const list=document.getElementById('detail-cast-list');
+ if(!list||currentCastNames.length<=5)return;
+ list.scrollBy({left:direction*list.clientWidth,behavior:'smooth'});
 }
 // Oyuncu kimliği isimden tahmin edilmez: yapımın TMDB kimliğiyle Wikidata'daki
 // doğrudan oyuncu kadrosu (P161) alınır. Böylece aynı isimli kişiler karışmaz.
 async function loadVerifiedCast(item){
  const requestId=String(item.id);
  currentCastItemId=requestId;
- const fallback=(item.cast||[]).slice(0,16).map(member=>typeof member==='string'?({name:member,image:'',character:''}):({name:member.name||'',image:member.image||'',character:member.character||member.role||''}));
+ const fallback=(item.cast||[]).slice(0,10).map(member=>typeof member==='string'?({name:member,image:'',character:''}):({name:member.name||'',image:member.image||'',character:member.character||member.role||''}));
  if(!item.tmdbId){currentCastNames=fallback;renderCastPage();return;}
  const property=item.type==='tv'?'P4983':'P4947';
  const query='SELECT ?actor ?actorLabel ?image ?order ?characterLabel WHERE { ?work wdt:'+property+' "'+String(item.tmdbId).replace(/[^0-9]/g,'')+'". ?work p:P161 ?statement. ?statement ps:P161 ?actor. OPTIONAL { ?statement pq:P1545 ?order. } OPTIONAL { ?statement pq:P453 ?character. } OPTIONAL { ?actor wdt:P18 ?image. } SERVICE wikibase:label { bd:serviceParam wikibase:language "tr,en". } } ORDER BY (IF(BOUND(?order), xsd:integer(?order), 999)) LIMIT 30';
@@ -980,12 +995,12 @@ async function loadVerifiedCast(item){
    if(person.name&&person.qid&&!seenActors.has(person.qid)){seenActors.add(person.qid);verified.push(person);}
   }
   if(currentCastItemId!==requestId)return;
-  currentCastNames=verified.length?verified.slice(0,15):fallback;
+  currentCastNames=(verified.length?verified:fallback).slice(0,10);
   activeCastPage=0;
   renderCastPage();
  }catch(error){
   if(currentCastItemId!==requestId)return;
-  currentCastNames=fallback;
+  currentCastNames=fallback.slice(0,10);
   activeCastPage=0;
   renderCastPage();
  }
