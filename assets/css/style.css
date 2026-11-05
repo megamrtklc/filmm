@@ -2659,14 +2659,14 @@ body.trailer-popup-open{overflow:hidden}
 }
 
 
-/* Stable trailer close control with a visible text label */
-.trailer-popup-close{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:8px;width:auto;min-width:88px;height:40px;padding:0 13px;white-space:nowrap;overflow:visible;border-radius:999px}
-.trailer-popup-close i{display:block;flex:0 0 auto;width:14px;text-align:center;line-height:1}
-.trailer-popup-close span{display:block;flex:0 0 auto;color:inherit;font-size:11px;font-weight:800;letter-spacing:.01em;line-height:1}
-.trailer-popup-close:hover{transform:none}
+
+/* Separate, unobtrusive close action at the bottom of the trailer popup */
+.trailer-popup-footer{display:flex;justify-content:flex-end;padding:0 22px 18px}
+.trailer-popup-footer-close{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:104px;height:38px;padding:0 16px;border:1px solid rgba(215,184,94,.34);border-radius:999px;background:linear-gradient(135deg,rgba(215,184,94,.14),rgba(215,184,94,.055));color:#f1dfaa;font-size:11px;font-weight:800;letter-spacing:.02em;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.trailer-popup-footer-close i{font-size:10px;opacity:.9}
+.trailer-popup-footer-close:hover{background:rgba(215,184,94,.2);border-color:rgba(215,184,94,.62);transform:translateY(-1px)}
 @media(max-width:700px){
- .trailer-popup-head{gap:12px;padding:12px 13px}
- .trailer-popup-head>div{min-width:0}
- .trailer-popup-close{min-width:82px;height:36px;gap:7px;padding:0 11px}
- .trailer-popup-close span{font-size:10px}
+ .trailer-popup-footer{padding:0 13px 13px}
+ .trailer-popup-footer-close{min-width:96px;height:36px}
 }
+@media(prefers-reduced-motion:reduce){.trailer-popup-footer-close{transition:none}}
