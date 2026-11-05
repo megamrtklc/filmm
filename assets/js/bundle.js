@@ -128,9 +128,9 @@ function updateHeaderActiveState(){
         link.classList.toggle('is-active',active);
         if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
     });
-    const categoryActive=route==='kategori';
+    // Kategoriler tetikleyicisi diğer gezinme bağlantıları gibi aktif çizgi/parlama almaz.
     const category=document.querySelector('#categories-menu .nav-trigger');
-    if(category)category.classList.toggle('is-active',categoryActive);
+    if(category)category.classList.remove('is-active');
     document.querySelectorAll('#categories-menu .nav-menu button').forEach(button=>{
         const selected=categoryActive && button.getAttribute('onclick')?.includes("filterGenre('"+(parts.slice(1).join('/')||'all')+"')");
         button.classList.toggle('is-selected',!!selected);
@@ -328,10 +328,8 @@ headerSearchInput.addEventListener('focus', () => {
     renderHeaderSearchResults(headerSearchInput.value);
 });
 headerSearchInput.addEventListener('input', function(e) {
-    activeCatalogQuery = e.target.value || '';
-    renderHeaderSearchResults(activeCatalogQuery);
-    if (activeCatalogQuery.trim()) showCatalogView('Arama Sonuçları');
-    renderFilteredCatalog();
+    // Arama yalnızca üst menüdeki sonuç panelini günceller; katalog görünümünü değiştirmez.
+    renderHeaderSearchResults(e.target.value || '');
 });
 headerSearchResults.addEventListener('click', event => {
     const result = event.target.closest('[data-search-result-id]');
