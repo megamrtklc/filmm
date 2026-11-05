@@ -2676,3 +2676,17 @@ body[data-theme="light"] .footer *,
 body[data-theme="light"] footer *{color:inherit}
 body[data-theme="light"] .hero-section{color:#fff!important}
 body[data-theme="light"] .hero-section .hero-vignette{background:linear-gradient(90deg,rgba(12,16,24,.88),rgba(12,16,24,.62) 38%,rgba(12,16,24,.12) 78%),linear-gradient(0deg,#f4f6fa 0%,rgba(244,246,250,.5) 12%,transparent 48%)!important}
+
+
+/* Açık temada sinematik manşet görselinin kendi kontrastını koru */
+body[data-theme="light"] .hero-section [class*="text-white"],
+body[data-theme="light"] .hero-section [class*="text-slate-"],
+body[data-theme="light"] .hero-section [class*="text-gray-"]{color:#fff!important}
+body[data-theme="light"] .hero-section .hero-copy p{color:rgba(255,255,255,.82)!important}
+body[data-theme="light"] .hero-section a:not(.bg-brand-red),
+body[data-theme="light"] .hero-section button:not(.bg-brand-red){
+ background:rgba(8,12,20,.48)!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important;
+}
+body[data-theme="light"] .hero-section .hero-arrow{
+ background:rgba(8,12,20,.62)!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important;
+}
