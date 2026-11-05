@@ -375,10 +375,77 @@ const countryAliases={
 };
 function countryTokens(value){return String(value||'').split(/[,\u002f;|\n]+/).map(x=>x.trim()).filter(Boolean)}
 function countryKey(value){return String(value||'').trim().toLocaleLowerCase('tr-TR').replace(/\s+/g,' ')}
+const countryIsoLookup={
+ 'es':'ES','spain':'ES','ispanya':'ES',
+ 'fr':'FR','france':'FR','fransa':'FR',
+ 'de':'DE','germany':'DE','almanya':'DE',
+ 'us':'US','usa':'US','u.s.a.':'US','united states':'US','united states of america':'US','abd':'US',
+ 'gb':'GB','uk':'GB','u.k.':'GB','united kingdom':'GB','great britain':'GB','birleşik krallık':'GB','ingiltere':'GB','england':'GB',
+ 'it':'IT','italy':'IT','italya':'IT',
+ 'tr':'TR','turkey':'TR','türkiye':'TR',
+ 'ca':'CA','canada':'CA','kanada':'CA',
+ 'au':'AU','australia':'AU','avustralya':'AU',
+ 'jp':'JP','japan':'JP','japonya':'JP',
+ 'kr':'KR','south korea':'KR','korea, republic of':'KR','güney kore':'KR',
+ 'cn':'CN','china':'CN','çin':'CN',
+ 'in':'IN','india':'IN','hindistan':'IN',
+ 'ru':'RU','russia':'RU','rusya':'RU',
+ 'br':'BR','brazil':'BR','brezilya':'BR',
+ 'mx':'MX','mexico':'MX','meksika':'MX',
+ 'ar':'AR','argentina':'AR','arjantin':'AR',
+ 'pt':'PT','portugal':'PT','portekiz':'PT',
+ 'nl':'NL','netherlands':'NL','hollanda':'NL',
+ 'be':'BE','belgium':'BE','belçika':'BE',
+ 'ch':'CH','switzerland':'CH','isviçre':'CH',
+ 'se':'SE','sweden':'SE','isveç':'SE',
+ 'no':'NO','norway':'NO','norveç':'NO',
+ 'dk':'DK','denmark':'DK','danimarka':'DK',
+ 'fi':'FI','finland':'FI','finlandiya':'FI',
+ 'ie':'IE','ireland':'IE','irlanda':'IE',
+ 'pl':'PL','poland':'PL','polonya':'PL',
+ 'gr':'GR','greece':'GR','yunanistan':'GR',
+ 'ua':'UA','ukraine':'UA','ukrayna':'UA',
+ 'nz':'NZ','new zealand':'NZ','yeni zelanda':'NZ',
+ 'za':'ZA','south africa':'ZA','güney afrika':'ZA',
+ 'eg':'EG','egypt':'EG','mısır':'EG',
+ 'ma':'MA','morocco':'MA','fas':'MA',
+ 'lb':'LB','lebanon':'LB','lübnan':'LB',
+ 'kw':'KW','kuwait':'KW','kuveyt':'KW',
+ 'ly':'LY','libya':'LY','libyan arab jamahiriya':'LY',
+ 'ae':'AE','united arab emirates':'AE','uae':'AE','bae':'AE','birleşik arap emirlikleri':'AE',
+ 'cz':'CZ','czech republic':'CZ','czechia':'CZ','çekya':'CZ',
+ 'ro':'RO','romania':'RO','romanya':'RO',
+ 'is':'IS','iceland':'IS','izlanda':'IS',
+ 'th':'TH','thailand':'TH','tayland':'TH',
+ 'id':'ID','indonesia':'ID','endonezya':'ID',
+ 'co':'CO','colombia':'CO','kolombiya':'CO',
+ 'cl':'CL','chile':'CL','şili':'CL',
+ 'pe':'PE','peru':'PE',
+ 'rs':'RS','serbia':'RS','sırbistan':'RS',
+ 'hr':'HR','croatia':'HR','hırvatistan':'HR',
+ 'hu':'HU','hungary':'HU','macaristan':'HU',
+ 'bg':'BG','bulgaria':'BG','bulgaristan':'BG',
+ 'lu':'LU','luxembourg':'LU','lüksemburg':'LU',
+ 'ir':'IR','iran':'IR','iran, islamic republic of':'IR','iran':'IR','iran islamic republic':'IR',
+ 'hk':'HK','hong kong':'HK',
+ 'sg':'SG','singapore':'SG','singapur':'SG',
+ 'at':'AT','austria':'AT','avusturya':'AT',
+ 'ua':'UA','taiwan':'TW','tw':'TW'
+};
 function countryDisplay(value){
- const key=countryKey(value);
+ const raw=String(value||'').trim();
+ const key=countryKey(raw);
  const entry=Object.entries(countryAliases).find(([name,info])=>countryKey(name)===key||countryKey(info[0])===key);
- return entry?{name:entry[1][0],flag:entry[1][1]}:{name:String(value||'').trim(),flag:'🌐'};
+ const iso=countryIsoLookup[key]||countryIsoLookup[key.replace(/\\./g,'')]||'';
+ if(entry)return {name:entry[1][0],iso};
+ if(iso){
+  const names={IR:'İran',HK:'Hong Kong',SG:'Singapur',AT:'Avusturya',TW:'Tayvan'};
+  return {name:names[iso]||raw,iso};
+ }
+ return {name:raw==='Bilinmiyor'?'Ülke bilgisi yok':raw,iso:''};
+}
+function countryFlagImage(iso,className){
+ return iso?'<img class="'+className+'" src="https://flagcdn.com/w40/'+iso.toLowerCase()+'.png" srcset="https://flagcdn.com/w80/'+iso.toLowerCase()+'.png 2x" alt="'+iso+' bayrağı" loading="lazy" decoding="async">':'';
 }
 function escapeCountryHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function filterByCountry(country,update=true){
@@ -628,7 +695,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-type-label').innerText=item.type==='tv'?'Dizi':'Film';
  const countries=countryTokens(item.country);
  document.getElementById('detail-country').innerText=countries.map(country=>countryDisplay(country).name).join(', ')||'Ülke bilgisi yok';
- document.getElementById('detail-country-list').innerHTML=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'"><span class="flag">'+info.flag+'</span><span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('')||'<span>—</span>';
+ document.getElementById('detail-country-list').innerHTML=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('')||'<span>—</span>';
  document.getElementById('detail-info-genre').innerText=item.category||item.genre||'—';
  document.getElementById('detail-info-year').innerText=item.year||'—';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
@@ -790,7 +857,7 @@ function openActorPage(name,update=true){
      fetchWikidataLabel(birthplace),
      Promise.all(educationIds.map(fetchWikidataLabel))
     ]);
-    if(countryLabel){const country=countryDisplay(countryLabel);document.getElementById('actor-country').innerHTML='<span class="actor-country-value"><span class="actor-country-flag" aria-hidden="true">'+country.flag+'</span><span>'+escapeCastHtml(country.name)+'</span></span>';}
+    if(countryLabel){const country=countryDisplay(countryLabel);document.getElementById('actor-country').innerHTML='<span class="actor-country-value">'+countryFlagImage(country.iso,'actor-country-flag')+'<span>'+escapeCastHtml(country.name)+'</span></span>';}
     if(placeLabel)document.getElementById('actor-birth-place').textContent=placeLabel;
     const education=educationLabels.filter(Boolean);
     if(education.length)document.getElementById('actor-education').textContent=education.join(', ');
