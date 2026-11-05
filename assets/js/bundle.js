@@ -89,6 +89,50 @@ function setHeroMedia(id, userAction = false) {
 
 
 
+// Günlük film/dizi önerisi
+function renderDailyPick(item) {
+    const card = document.getElementById('daily-pick-card');
+    if (!card || !item) return;
+    const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
+    const runtime = item.type === 'tv'
+        ? [item.seasons ? item.seasons + ' sezon' : '', item.episodes ? item.episodes + ' bölüm' : ''].filter(Boolean).join(' • ')
+        : (item.duration || '');
+    const description = item.desc || 'Bugün keşfetmen için seçtiğimiz yapım.';
+    card.innerHTML = `
+        <div class="daily-pick-poster"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async"></div>
+        <div class="daily-pick-copy">
+            <span class="daily-pick-tag"><i class="fa-solid fa-sparkles"></i> BUGÜNÜN ÖNERİSİ</span>
+            <h3>${item.title}</h3>
+            <div class="daily-pick-meta"><span>${item.year || '—'}</span><i></i><span>${typeLabel}</span>${item.category ? '<i></i><span>'+item.category+'</span>' : ''}${runtime ? '<i></i><span>'+runtime+'</span>' : ''}</div>
+            <div class="daily-pick-rating"><span>★</span> IMDb ${item.rating || '—'}</div>
+            <p class="daily-pick-description">${description}</p>
+            <div class="daily-pick-actions">
+                <button type="button" class="daily-pick-primary" onclick="openDetailPage('${String(item.id).replace(/'/g, "\\'")}')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button>
+                <button type="button" class="daily-pick-secondary" onclick="launchPlayer('${String(item.title).replace(/'/g, "\\'")}')"><i class="fa-solid fa-play"></i> Şimdi İzle</button>
+            </div>
+        </div>`;
+}
+function chooseAnotherDailyPick() {
+    const candidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
+    if (!candidates.length) return;
+    const key = 'ny7_daily_pick_' + new Date().toLocaleDateString('en-CA');
+    const currentId = localStorage.getItem(key);
+    let options = candidates.filter(item => String(item.id) !== String(currentId));
+    if (!options.length) options = candidates;
+    const chosen = options[Math.floor(Math.random() * options.length)];
+    localStorage.setItem(key, String(chosen.id));
+    renderDailyPick(chosen);
+}
+function initializeDailyPick() {
+    const candidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
+    if (!candidates.length) return;
+    const key = 'ny7_daily_pick_' + new Date().toLocaleDateString('en-CA');
+    const savedId = localStorage.getItem(key);
+    const saved = candidates.find(item => String(item.id) === String(savedId));
+    if (saved) renderDailyPick(saved);
+    else chooseAnotherDailyPick();
+}
+
 function renderHomeCollections() {
     const score = item => {
         const value = Number.parseFloat(item.rating);
@@ -669,6 +713,7 @@ function launchPlayer(title) {
                 setHeroMedia(mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
+                initializeDailyPick();
                 renderMediaGrid();
                 renderLiveTv();
                 renderHeaderSearchResults(headerSearchInput?.value || '');
