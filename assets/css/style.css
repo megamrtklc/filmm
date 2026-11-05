@@ -1441,3 +1441,24 @@ body.actor-modal-open{overflow:hidden}
 .home-feature-row #daily-pick-section .mood-discovery-meta .mood-discovery-imdb-inline>i{color:#ffd45a!important;font-size:10px!important;filter:none!important}
 .home-feature-row #daily-pick-section .mood-discovery-meta .mood-discovery-imdb-inline strong{color:#fff!important;font-size:inherit!important;font-weight:850!important;letter-spacing:0!important}
 .home-feature-row #daily-pick-section .mood-discovery-meta .mood-discovery-imdb-inline span{padding:0!important;border:0!important;color:#ddd!important;font-size:inherit!important;font-weight:700!important;letter-spacing:0!important}
+
+/* Kategori secicisi: "Tum kategoriler" etiketi kesilmeden gorunsun */
+.home-feature-row #daily-pick-section .mood-category-select{
+  flex-basis:145px!important;width:145px!important;
+}
+.home-feature-row #daily-pick-section .mood-category-trigger{
+  padding-inline:8px!important;gap:6px!important;
+}
+.home-feature-row #daily-pick-section .mood-category-trigger span{
+  overflow:visible!important;text-overflow:clip!important;
+}
+@media(max-width:560px){
+  .home-feature-row #daily-pick-section .mood-category-select{
+    flex-basis:138px!important;width:138px!important;
+  }
+}
+@media(max-width:360px){
+  .home-feature-row #daily-pick-section .mood-category-select{
+    flex-basis:128px!important;width:128px!important;
+  }
+}
