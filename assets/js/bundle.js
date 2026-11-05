@@ -799,7 +799,12 @@ async function loadVerifiedCast(item){
   if(!response.ok)throw new Error('Doğrulanmış oyuncu listesi alınamadı');
   const data=await response.json();
   const rows=data.results?.bindings||[];
-  const verified=rows.map(row=>({name:row.actorLabel?.value||'',qid:(row.actor?.value||'').split('/').pop(),image:row.image?.value||''})).filter(person=>person.name);
+  const verified=[];
+  const seenActors=new Set();
+  for(const row of rows){
+   const person={name:row.actorLabel?.value||'',qid:(row.actor?.value||'').split('/').pop(),image:row.image?.value||''};
+   if(person.name&&person.qid&&!seenActors.has(person.qid)){seenActors.add(person.qid);verified.push(person);}
+  }
   if(currentCastItemId!==requestId)return;
   currentCastNames=verified.length?verified.slice(0,15):fallback;
   activeCastPage=0;
