@@ -1,6 +1,8 @@
 // Favoriler ve izleme listesi yönetimi
-let favorites = JSON.parse(localStorage.getItem('ny7_favorites') || '[]');
-        let watchlist = JSON.parse(localStorage.getItem('ny7_watchlist') || '[]');
+function readNY7Storage(key,fallback=[]){try{const value=JSON.parse(localStorage.getItem(key)||'null');return Array.isArray(value)?value:fallback;}catch(_){return fallback;}}
+function writeNY7Storage(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true;}catch(error){console.warn('NY7 yerel kayıt yapılamadı:',error);return false;}}
+let favorites = readNY7Storage('ny7_favorites');
+        let watchlist = readNY7Storage('ny7_watchlist');
         let heroCurrentId = 1;
         let heroCurrentTitle = 'THE BATMAN';
 let heroImageSwapTimer = null;
