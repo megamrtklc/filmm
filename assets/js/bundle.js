@@ -5,6 +5,38 @@ let favorites = JSON.parse(localStorage.getItem('ny7_favorites') || '[]');
         let heroCurrentTitle = 'THE BATMAN';
 let heroImageSwapTimer = null;
 
+// Orijinal/İngilizce yapım adları: TMDB kimlikleri üzerinden Wikidata'dan doğrulanarak yüklenir.
+function normalizeMediaSearchText(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[ıİ]/g,'i').toLocaleLowerCase('en-US').replace(/[^a-z0-9]+/g,' ').trim();}
+function mediaSearchText(item){return [item?.title,item?.originalTitle,item?.englishTitle,item?.original_name,item?.original_title,...(item?.searchAliases||[]),...(item?.aliases||[])].filter(Boolean).map(normalizeMediaSearchText).join(' | ');}
+function originalTitleMarkup(item,extraClass=''){const id=escapeCountryHtml(item?.id??'');return '<small class="media-original-title '+extraClass+'" data-original-title-for="'+id+'"'+(item?.originalTitle?'':' hidden')+'>'+escapeCountryHtml(item?.originalTitle||'')+'</small>';}
+function syncOriginalTitleLabels(){
+ document.querySelectorAll('[data-original-title-for]').forEach(node=>{const item=mediaDatabase.find(entry=>String(entry.id)===String(node.dataset.originalTitleFor));node.textContent=item?.originalTitle||'';node.hidden=!item?.originalTitle;});
+ const heroItem=mediaDatabase.find(item=>String(item.id)===String(heroCurrentId)),heroOriginal=document.getElementById('hero-original-title');
+ if(heroOriginal){heroOriginal.textContent=heroItem?.originalTitle||'';heroOriginal.hidden=!heroItem?.originalTitle;}
+ const detailTitle=document.getElementById('detail-original-title');
+ if(detailTitle){const item=mediaDatabase.find(entry=>String(entry.id)===String(detailTitle.dataset.mediaId));detailTitle.textContent=item?.originalTitle||'';detailTitle.hidden=!item?.originalTitle;}
+}
+async function loadOriginalTitles(){
+ if(!Array.isArray(mediaDatabase)||!mediaDatabase.length)return;
+ let cached={};try{cached=JSON.parse(localStorage.getItem('ny7_original_titles_v1')||'{}')||{};}catch(_){}
+ const apply=(id,title,aliases=[])=>{const item=mediaDatabase.find(entry=>String(entry.tmdbId)===String(id));if(!item)return;const candidate=String(title||'').trim();item.searchAliases=[...new Set([...(item.searchAliases||[]),...aliases].filter(Boolean))];if(candidate&&normalizeMediaSearchText(candidate)!==normalizeMediaSearchText(item.title)){item.originalTitle=candidate;item.searchAliases=[...new Set([...item.searchAliases,candidate])];}};
+ Object.entries(cached).forEach(([id,value])=>apply(id,value.title,value.aliases||[]));syncOriginalTitleLabels();
+ const missing=mediaDatabase.filter(item=>item.tmdbId&&!cached[String(item.tmdbId)]);
+ for(let start=0;start<missing.length;start+=30){
+  const ids=[...new Set(missing.slice(start,start+30).map(item=>String(item.tmdbId)))],values=ids.map(id=>'"'+id.replace(/[^0-9]/g,'')+'"').join(' ');
+  const query='SELECT ?id ?title ?label ?alias WHERE { VALUES ?id { '+values+' } ?item (wdt:P4947|wdt:P4983) ?id . OPTIONAL { ?item wdt:P1476 ?title . } OPTIONAL { ?item rdfs:label ?label . FILTER(LANG(?label)="en") } OPTIONAL { ?item skos:altLabel ?alias . FILTER(LANG(?alias)="en") } }';
+  try{
+   const response=await fetch('https://query.wikidata.org/sparql?query='+encodeURIComponent(query)+'&format=json',{headers:{Accept:'application/sparql-results+json'}});if(!response.ok)throw new Error('Wikidata HTTP '+response.status);
+   const payload=await response.json(),grouped={};
+   (payload.results?.bindings||[]).forEach(row=>{const id=row.id?.value;if(!id)return;const g=grouped[id]||(grouped[id]={titles:[],aliases:[]});if(row.title?.value)g.titles.push(row.title.value);if(row.label?.value)g.aliases.push(row.label.value);if(row.alias?.value)g.aliases.push(row.alias.value);});
+   Object.entries(grouped).forEach(([id,g])=>{const item=mediaDatabase.find(entry=>String(entry.tmdbId)===String(id));if(!item)return;const choices=[...new Set([...g.titles,...g.aliases])],chosen=choices.find(v=>normalizeMediaSearchText(v)!==normalizeMediaSearchText(item.title))||'';if(chosen){cached[id]={title:chosen,aliases:choices};apply(id,chosen,choices);}});
+   try{localStorage.setItem('ny7_original_titles_v1',JSON.stringify(cached));}catch(_){}
+   syncOriginalTitleLabels();if(headerSearchInput?.value)renderHeaderSearchResults(headerSearchInput.value);
+  }catch(error){console.warn('Orijinal yapım adları yüklenemedi:',error);}
+ }
+}
+
+
         function toggleFavorite(id, e) {
             if (e) e.stopPropagation();
             if (favorites.includes(id)) {
@@ -70,6 +102,9 @@ function fitHeroTitleToWidth() {
             section.classList.add('is-changing');
             heroImageSwapTimer = window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
             document.getElementById('hero-title').innerText = item.title;
+            let heroOriginal = document.getElementById('hero-original-title');
+            if (!heroOriginal) { heroOriginal = document.createElement('small'); heroOriginal.id = 'hero-original-title'; heroOriginal.className = 'media-original-title hero-original-title'; document.getElementById('hero-title').after(heroOriginal); }
+            heroOriginal.textContent = item.originalTitle || ''; heroOriginal.hidden = !item.originalTitle;
             fitHeroTitleToWidth();
             const ratings = document.getElementById('hero-ratings');
             const ratingValue = value => value !== undefined && value !== null && String(value).trim() !== '' ? value : '—';
@@ -92,7 +127,7 @@ function fitHeroTitleToWidth() {
         function renderHeroThumbnails() {
             document.getElementById('hero-thumbnails-rail').innerHTML = heroItems.map((m,i) => `
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
-                    <img src="${m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>
+                    <img src="${m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>${originalTitleMarkup(m,'hero-thumb-original')}
                 </button>`).join('');
         }
         function stepHero(direction) {
@@ -196,6 +231,7 @@ function renderMoodRecommendation(item, category) {
             <div class="mood-discovery-copy">
                 <span class="mood-discovery-tag">${escapeCountryHtml(categoryLabel)} <b>•</b> ${typeLabel}</span>
                 <h3>${title}</h3>
+                ${originalTitleMarkup(item,'mood-original-title')}
                 <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}<span class="mood-discovery-imdb mood-discovery-imdb-inline"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb</span></span></div>
                 <p class="mood-discovery-description">${description}</p>
                 <div class="mood-discovery-actions">
@@ -253,7 +289,7 @@ function renderHomeCollections() {
                 <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
                 <span class="collection-rating">★ ${item.rating || '—'}</span>
             </div>
-            <div class="collection-card-copy"><h3>${item.title}</h3><p>${item.year || ''} <span>•</span> ${item.type === 'tv' ? 'Dizi' : 'Film'}</p></div>
+            <div class="collection-card-copy"><h3>${item.title}</h3>${originalTitleMarkup(item,'collection-original-title')}<p>${item.year || ''} <span>•</span> ${item.type === 'tv' ? 'Dizi' : 'Film'}</p></div>
         </article>`;
     const fill = (id, items) => {
         const rail = document.getElementById(id);
@@ -336,6 +372,7 @@ function renderMediaGrid(items = mediaDatabase) {
                                 ${m.category}
                             </span>
                             <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
+                            ${originalTitleMarkup(m,'grid-original-title')}
                             <p class="text-[10px] text-slate-400 font-medium">${m.year} • ${m.duration}</p>
                         </div>
                     </div>
@@ -620,7 +657,7 @@ function renderFilteredCatalog() {
                 const directorMatch = !activeCatalogDirector || countryKey(m.director)===activeCatalogDirector || countryTokens(m.director).some(x=>countryKey(x)===activeCatalogDirector);
                 const itemGenres = [...new Set([...countryTokens(m.category),...countryTokens(m.genre)])];
                 const genreTagMatch = !activeCatalogGenreTag || itemGenres.some(x=>countryKey(x)===activeCatalogGenreTag);
-                const searchMatch = !query || (m.title || '').toLocaleLowerCase('tr-TR').includes(query) || category.includes(query) || genre.includes(query);
+                const searchMatch = !query || mediaSearchText(m).includes(normalizeMediaSearchText(query)) || category.includes(query) || genre.includes(query);
                 return genreMatch && typeMatch && searchMatch && countryMatch && directorMatch && genreTagMatch;
             });
             renderMediaGrid(filtered);
@@ -683,9 +720,12 @@ function renderHeaderSearchResults(value) {
         headerSearchResults.innerHTML = '';
         return;
     }
-    const matches = mediaDatabase.filter(item =>
-        String(item.title || '').toLocaleLowerCase('tr-TR').includes(query)
-    ).slice(0, 8);
+    const normalizedQuery = normalizeMediaSearchText(query);
+    const matches = mediaDatabase.filter(item => mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
+        const exactA=normalizeMediaSearchText(a.title)===normalizedQuery||normalizeMediaSearchText(a.originalTitle)===normalizedQuery;
+        const exactB=normalizeMediaSearchText(b.title)===normalizedQuery||normalizeMediaSearchText(b.originalTitle)===normalizedQuery;
+        return Number(exactB)-Number(exactA);
+    }).slice(0, 8);
     headerSearchResults.innerHTML = matches.length ? matches.map(item => {
         const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
         const image = escapeCountryHtml(item.image || '');
@@ -693,7 +733,7 @@ function renderHeaderSearchResults(value) {
         const type = item.type === 'tv' ? 'Dizi' : 'Film';
         return `<button type="button" class="header-search-result" role="option" data-search-result-id="${escapeCountryHtml(item.id)}">
             <img src="${image}" alt="" loading="lazy">
-            <span class="header-search-result-copy"><strong>${title}</strong><small>${year} · ${type}</small></span>
+            <span class="header-search-result-copy"><strong>${title}</strong>${originalTitleMarkup(item,'search-original-title')}<small>${year} · ${type}</small></span>
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
         </button>`;
     }).join('') : '<div class="header-search-empty">Eşleşen film veya dizi bulunamadı.</div>';
@@ -874,6 +914,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-backdrop').src=item.backdrop||item.image;
  document.getElementById('detail-poster').src=item.image;
  document.getElementById('detail-title').innerText=item.title;
+ let detailOriginal=document.getElementById('detail-original-title');if(!detailOriginal){detailOriginal=document.createElement('small');detailOriginal.id='detail-original-title';detailOriginal.className='media-original-title detail-original-title';document.getElementById('detail-title').after(detailOriginal);}detailOriginal.dataset.mediaId=String(item.id);detailOriginal.textContent=item.originalTitle||'';detailOriginal.hidden=!item.originalTitle;
  document.getElementById('detail-category').innerText=item.category||item.genre||'';
  document.getElementById('detail-rating').innerHTML='<i class="fa-solid fa-star"></i> '+(item.rating||'—')+' IMDb';
  document.getElementById('detail-year').innerText=item.year||'';
@@ -894,7 +935,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
  document.getElementById('detail-trailer-btn').onclick=()=>item.trailerUrl?window.open(item.trailerUrl,'_blank','noopener'):window.alert('Fragman bağlantısı bulunmuyor.');
  const related=mediaDatabase.filter(m=>m.id!==item.id&&(m.type===item.type||m.genre===item.genre)).sort((x,y)=>Number(y.rating||0)-Number(x.rating||0)).slice(0,10);
- document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3><p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
+ document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  document.getElementById('detail-page-view').classList.remove('hidden');
@@ -1004,7 +1045,7 @@ function openActorPage(name,update=true){
  document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
  document.getElementById('actor-gallery-grid').innerHTML='';
  document.getElementById('actor-filmography-title').textContent=actorName+' — '+works.length+' yapım';
- document.getElementById('actor-filmography-grid').innerHTML=works.map(m=>'<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span><b>'+escapeCastHtml(m.title)+'</b><small>'+escapeCastHtml(m.year||'')+' · '+(m.type==='tv'?'Dizi':'Film')+'</small></span></button>').join('')||'<p>Bu oyuncunun yer aldığı bir yapım henüz katalogda bulunmuyor.</p>';
+ document.getElementById('actor-filmography-grid').innerHTML=works.map(m=>'<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span><b>'+escapeCastHtml(m.title)+'</b>'+originalTitleMarkup(m,'actor-work-original-title')+'<small>'+escapeCastHtml(m.year||'')+' · '+(m.type==='tv'?'Dizi':'Film')+'</small></span></button>').join('')||'<p>Bu oyuncunun yer aldığı bir yapım henüz katalogda bulunmuyor.</p>';
  closeActorPhoto();
  loadActorGallery(actorName);
  window.scrollTo({top:0,behavior:'smooth'});
@@ -1149,6 +1190,7 @@ function launchPlayer(title) {
                 renderMediaGrid();
                 renderLiveTv();
                 renderHeaderSearchResults(headerSearchInput?.value || '');
+                loadOriginalTitles();
                 if(location.hash) routeFromHash();
             } catch (error) {
                 catalogInitialized = false;
