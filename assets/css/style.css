@@ -3196,3 +3196,36 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-score-pill{padding:4px 5px!important}
 }
 @media(prefers-reduced-motion:reduce){#detail-page-view *{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Detail page: poster aligned with rating row; metadata directly beneath */
+#detail-page-view .detail-overlap{grid-template-columns:220px minmax(0,1fr)!important;align-items:start!important;gap:34px!important}
+#detail-page-view .detail-poster-column{display:flex!important;flex-direction:column!important;align-items:stretch!important;width:220px!important;align-self:start!important}
+#detail-page-view .detail-facts-wrap{width:100%!important;margin:18px 0 0!important;padding:16px 15px!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:10px!important;background:#10131a!important}
+#detail-page-view .detail-facts-heading{margin:0 0 13px!important}
+#detail-page-view .detail-facts-heading>span{display:none!important}
+#detail-page-view .detail-facts-heading h2{font-size:15px!important;line-height:1.25!important}
+#detail-page-view .detail-facts-grid{display:flex!important;flex-direction:column!important;gap:0!important}
+#detail-page-view .detail-fact{display:grid!important;grid-template-columns:18px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:start!important;column-gap:8px!important;row-gap:3px!important;padding:10px 0!important;border:0!important;border-bottom:1px solid rgba(255,255,255,.075)!important}
+#detail-page-view .detail-fact:first-child{padding-top:2px!important;padding-left:0!important}
+#detail-page-view .detail-fact:last-child{padding-bottom:2px!important;padding-right:0!important;border-bottom:0!important}
+#detail-page-view .detail-fact>span{grid-column:2!important;grid-row:1!important;display:flex!important;align-items:center!important;color:#9299a6!important;font-size:10px!important;line-height:1.35!important}
+#detail-page-view .detail-fact>span i{grid-column:1!important;grid-row:1 / span 2!important;width:16px!important;height:16px!important;flex:0 0 16px!important;color:#d9b56b!important;font-size:11px!important}
+#detail-page-view .detail-fact>b,#detail-page-view .detail-fact .detail-country-list{grid-column:2!important;grid-row:2!important;display:flex!important;flex-wrap:wrap!important;gap:5px!important;min-width:0!important;margin:0!important;padding:0!important;color:#f1f2f4!important;font-size:11px!important;font-weight:700!important;line-height:1.45!important}
+#detail-page-view .detail-taxonomy-chip,#detail-page-view .detail-country-chip{display:inline-flex!important;align-items:center!important;gap:5px!important;color:#f1f2f4!important;font-size:11px!important;line-height:1.45!important}
+#detail-page-view .detail-country-chip .flag-image{width:15px!important;height:11px!important;object-fit:cover!important;border-radius:2px!important}
+@media(max-width:760px){
+ #detail-page-view .detail-overlap{grid-template-columns:104px minmax(0,1fr)!important;align-items:start!important;gap:16px!important}
+ #detail-page-view .detail-poster-column{width:104px!important}
+ #detail-page-view .detail-facts-wrap{width:calc(100vw - 32px)!important;max-width:calc(100vw - 32px)!important;margin-top:14px!important;padding:14px!important}
+ #detail-page-view .detail-facts-heading h2{font-size:14px!important}
+ #detail-page-view .detail-facts-grid{display:flex!important;flex-direction:column!important;gap:0!important}
+ #detail-page-view .detail-fact{padding:9px 0!important;border:0!important;border-bottom:1px solid rgba(255,255,255,.075)!important}
+ #detail-page-view .detail-fact:first-child{padding-top:1px!important}
+ #detail-page-view .detail-fact:last-child{padding-bottom:1px!important;border-bottom:0!important}
+ #detail-page-view .detail-fact:nth-child(3),#detail-page-view .detail-fact:nth-child(4){border-top:0!important;padding-top:9px!important}
+}
+@media(max-width:390px){
+ #detail-page-view .detail-overlap{grid-template-columns:88px minmax(0,1fr)!important;gap:12px!important}
+ #detail-page-view .detail-poster-column{width:88px!important}
+}
