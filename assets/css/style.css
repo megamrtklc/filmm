@@ -923,3 +923,45 @@ body.actor-modal-open{overflow:hidden}
 .main-nav>a.nav-daily-pick::after{display:none}
 .main-nav>a.nav-daily-pick:hover{background:linear-gradient(110deg,rgba(252,192,20,.3),rgba(225,29,72,.22));border-color:rgba(252,192,20,.85);color:#fff2c2;transform:translateY(-1px);box-shadow:0 5px 18px rgba(252,192,20,.12)}
 @media(max-width:760px){.main-nav>a.nav-daily-pick{height:30px;padding:0 11px;border-radius:8px;align-self:center}.main-nav>a.nav-daily-pick i{display:inline-block!important}}
+
+
+/* Ana sayfa: kompakt sinematik öneri kartları */
+.discovery-mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
+.daily-pick-mini,.mood-pick-mini{position:relative;isolation:isolate;min-width:0;min-height:310px;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#101218;box-shadow:0 16px 42px rgba(0,0,0,.22)}
+.daily-pick-mini{background:#0c0d12}
+.mini-card-topline{position:absolute;z-index:5;top:15px;left:17px;right:15px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.mini-card-topline>span{display:inline-flex;align-items:center;gap:7px;color:#f6d36c;font-size:9px;font-weight:900;letter-spacing:.15em;text-shadow:0 2px 8px #000}
+.mini-card-topline>button{pointer-events:auto;width:31px;height:31px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(0,0,0,.4);color:#fff;backdrop-filter:blur(8px);transition:.2s}
+.mini-card-topline>button:hover{background:#fcc014;color:#17130a}
+.daily-pick-card{position:absolute;inset:0;display:block;min-height:0;padding:0;border:0;border-radius:0;background:#101218}
+.daily-pick-backdrop{position:absolute;inset:0;background-size:cover;background-position:center 30%;transform:scale(1.02);filter:saturate(.78)}
+.daily-pick-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,5,8,.25) 0%,rgba(4,5,8,.2) 28%,rgba(4,5,8,.94) 100%),linear-gradient(90deg,rgba(4,5,8,.35),transparent)}
+.daily-pick-mini-copy{position:absolute;z-index:2;left:20px;right:20px;bottom:19px}
+.daily-pick-tag{font-size:9px;color:#f8d66f}
+.daily-pick-mini-copy h2{margin:9px 0 8px;color:#fff;font-size:clamp(19px,2vw,27px);font-weight:900;line-height:1.12;letter-spacing:-.035em;text-shadow:0 2px 12px #000}
+.daily-pick-meta{gap:7px;color:#d1d2d8;font-size:9px;line-height:1.4}
+.daily-pick-rating{margin-top:8px;color:#e6e7eb;font-size:10px}
+.daily-pick-rating span{font-size:14px;color:#fcc014}
+.daily-pick-actions{gap:7px;margin-top:12px}
+.daily-pick-actions button{min-height:33px;padding:0 11px;border-radius:8px;font-size:9px}
+.daily-pick-loading{position:absolute;inset:0;display:grid;place-items:center;padding:30px;text-align:center;color:#aeb1bb;font-size:11px}
+.mood-pick-mini{background:#11131a}
+.mood-mini-backdrop{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(105deg,rgba(7,8,12,.96),rgba(7,8,12,.78) 65%,rgba(7,8,12,.65)),url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=1200&q=80');background-size:cover;background-position:center}
+.mood-mini-content{position:relative;padding:23px;min-height:310px;display:flex;flex-direction:column;justify-content:center}
+.mood-mini-eyebrow{display:inline-flex;align-items:center;gap:7px;color:#f5c84b;font-size:9px;font-weight:900;letter-spacing:.16em}
+.mood-mini-content h2{margin:10px 0 6px;color:#fff;font-size:clamp(20px,2.3vw,29px);font-weight:900;line-height:1.12;letter-spacing:-.04em}
+.mood-mini-content>p{margin:0 0 15px;color:#aeb2bd;font-size:11px}
+.mood-options{display:grid;gap:7px;max-width:340px}
+.mood-options button{display:flex;align-items:center;gap:10px;min-height:37px;padding:0 11px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:rgba(255,255,255,.055);color:#e9eaf0;text-align:left;font-size:10px;font-weight:750;transition:.2s;backdrop-filter:blur(8px)}
+.mood-options button>i:first-child{width:15px;color:#f5c84b}
+.mood-options button>span{flex:1}
+.mood-options button>i:last-child{color:#8c909b;font-size:9px}
+.mood-options button:hover,.mood-options button.is-selected{border-color:rgba(252,192,20,.55);background:rgba(252,192,20,.12);color:#fff}
+.mood-pick-result{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:390px;margin-top:12px}
+.mood-result-line{display:grid;gap:3px;min-width:0}
+.mood-result-line span{font-size:8px;color:#aeb2bd}
+.mood-result-line strong{overflow:hidden;color:#fff;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.mood-result-open{flex:none;color:#f5d36c;font-size:9px;font-weight:800}
+.mood-result-open i{margin-left:4px}
+@media(max-width:760px){.discovery-mini-grid{gap:12px}.daily-pick-mini,.mood-pick-mini{min-height:280px;border-radius:16px}.daily-pick-mini-copy{left:14px;right:14px;bottom:14px}.mood-mini-content{min-height:280px;padding:16px}.mood-mini-content h2{font-size:19px}.mood-options button{min-height:34px;padding-inline:8px;font-size:9px}}
+@media(max-width:520px){.discovery-mini-grid{grid-template-columns:1fr;gap:12px}.daily-pick-mini,.mood-pick-mini{min-height:270px}.mood-mini-content{min-height:270px;padding:20px}.daily-pick-mini-copy{left:18px;right:18px;bottom:17px}}
