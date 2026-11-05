@@ -556,12 +556,30 @@ function changeCastPage(direction){
  renderCastPage();
 }
 async function fetchActorSummary(name){
- const url='https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(name.replace(/ /g,'_'));
- const response=await fetch(url,{headers:{'Accept':'application/json'}});
- if(!response.ok)throw new Error('Oyuncu profili bulunamadı');
- const data=await response.json();
- if(data.type==='disambiguation')throw new Error('Birden fazla eşleşme');
- return data;
+ const title=String(name||'').trim().replace(/ /g,'_');
+ const summaryUrl='https://tr.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title);
+ try{
+  const response=await fetch(summaryUrl,{headers:{'Accept':'application/json'}});
+  if(response.ok){
+   const data=await response.json();
+   if(data.type!=='disambiguation'&&data.extract)return data;
+  }
+ }catch(e){}
+ // Başlık birebir eşleşmezse Türkçe Wikipedia'da arama yap.
+ const searchUrl='https://tr.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&prop=extracts|pageimages|info|pageprops&exintro=1&explaintext=1&piprop=thumbnail&pithumbsize=1200&inprop=url&format=json&origin=*';
+ const searchResponse=await fetch(searchUrl,{headers:{'Accept':'application/json'}});
+ if(!searchResponse.ok)throw new Error('Türkçe oyuncu profili bulunamadı');
+ const searchData=await searchResponse.json();
+ const pages=Object.values(searchData.query?.pages||{});
+ const page=pages.find(item=>item.extract);
+ if(!page)throw new Error('Türkçe biyografi bulunamadı');
+ return {
+  extract:page.extract,
+  thumbnail:page.thumbnail?{source:page.thumbnail.source}:undefined,
+  content_urls:{desktop:{page:page.fullurl||('https://tr.wikipedia.org/wiki/'+encodeURIComponent(page.title.replace(/ /g,'_')))}},
+  wikibase_item:page.pageprops?.wikibase_item,
+  title:page.title
+ };
 }
 async function loadCastPortraits(){
  const imgs=[...document.querySelectorAll('#detail-cast-list img[data-cast-name]')];
