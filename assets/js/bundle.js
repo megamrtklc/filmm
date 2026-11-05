@@ -790,7 +790,7 @@ function openActorPage(name,update=true){
      fetchWikidataLabel(birthplace),
      Promise.all(educationIds.map(fetchWikidataLabel))
     ]);
-    if(countryLabel){const country=countryDisplay(countryLabel);document.getElementById('actor-country').innerHTML='<span class="actor-country-value">'+country.flag+' '+escapeCastHtml(country.name)+'</span>';}
+    if(countryLabel){const country=countryDisplay(countryLabel);document.getElementById('actor-country').innerHTML='<span class="actor-country-value"><span class="actor-country-flag" aria-hidden="true">'+country.flag+'</span><span>'+escapeCastHtml(country.name)+'</span></span>';}
     if(placeLabel)document.getElementById('actor-birth-place').textContent=placeLabel;
     const education=educationLabels.filter(Boolean);
     if(education.length)document.getElementById('actor-education').textContent=education.join(', ');
