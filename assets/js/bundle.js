@@ -89,26 +89,25 @@ function setHeroMedia(id, userAction = false) {
 
 
 
-// Günlük film/dizi önerisi
+// Günlük film/dizi önerisi ve ruh haline göre mini keşif kartı
 function renderDailyPick(item) {
     const card = document.getElementById('daily-pick-card');
     if (!card || !item) return;
     const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
-    const runtime = item.type === 'tv'
-        ? [item.seasons ? item.seasons + ' sezon' : '', item.episodes ? item.episodes + ' bölüm' : ''].filter(Boolean).join(' • ')
-        : (item.duration || '');
-    const description = item.desc || 'Bugün keşfetmen için seçtiğimiz yapım.';
+    const image = escapeCountryHtml(item.backdrop || item.image || '');
+    const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
+    const category = escapeCountryHtml(item.category || item.genre || typeLabel);
     card.innerHTML = `
-        <div class="daily-pick-poster"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async"></div>
-        <div class="daily-pick-copy">
+        <div class="daily-pick-backdrop" style="background-image:url('${image}')"></div>
+        <div class="daily-pick-shade"></div>
+        <div class="daily-pick-mini-copy">
             <span class="daily-pick-tag"><i class="fa-solid fa-sparkles"></i> BUGÜNÜN ÖNERİSİ</span>
-            <h3>${item.title}</h3>
-            <div class="daily-pick-meta"><span>${item.year || '—'}</span><i></i><span>${typeLabel}</span>${item.category ? '<i></i><span>'+item.category+'</span>' : ''}${runtime ? '<i></i><span>'+runtime+'</span>' : ''}</div>
-            <div class="daily-pick-rating"><span>★</span> IMDb ${item.rating || '—'}</div>
-            <p class="daily-pick-description">${description}</p>
+            <h2>${title}</h2>
+            <div class="daily-pick-meta"><span>${escapeCountryHtml(item.year || '—')}</span><i></i><span>${typeLabel}</span><i></i><span>${category}</span></div>
+            <div class="daily-pick-rating"><span>★</span> ${escapeCountryHtml(item.rating || '—')} IMDb</div>
             <div class="daily-pick-actions">
-                <button type="button" class="daily-pick-primary" onclick="openDetailPage('${String(item.id).replace(/'/g, "\\'")}')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button>
-                <button type="button" class="daily-pick-secondary" onclick="launchPlayer('${String(item.title).replace(/'/g, "\\'")}')"><i class="fa-solid fa-play"></i> Şimdi İzle</button>
+                <button type="button" class="daily-pick-primary" onclick="openDetailPage('${String(item.id).replace(/'/g, "\\'")}')"><i class="fa-solid fa-circle-info"></i> İncele</button>
+                <button type="button" class="daily-pick-secondary" onclick="launchPlayer('${String(item.title).replace(/'/g, "\\'")}')"><i class="fa-solid fa-play"></i> İzle</button>
             </div>
         </div>`;
 }
@@ -131,6 +130,31 @@ function initializeDailyPick() {
     const saved = candidates.find(item => String(item.id) === String(savedId));
     if (saved) renderDailyPick(saved);
     else chooseAnotherDailyPick();
+}
+const moodPickConfig = {
+    action: { label: 'Aksiyon dolu', terms: ['aksiyon', 'macera', 'bilim kurgu'] },
+    fun: { label: 'Eğlenceli', terms: ['komedi', 'animasyon', 'aile'] },
+    mystery: { label: 'Gizemli', terms: ['gizem', 'gerilim', 'suç'] }
+};
+function chooseMoodPick(mood) {
+    const config = moodPickConfig[mood];
+    const result = document.getElementById('mood-pick-result');
+    if (!config || !result) return;
+    const matches = mediaDatabase.filter(item => {
+        const tags = ((item.genre || '') + ' ' + (item.category || '')).toLocaleLowerCase('tr-TR');
+        return config.terms.some(term => tags.includes(term));
+    });
+    const pool = matches.length ? matches : mediaDatabase;
+    if (!pool.length) {
+        result.innerHTML = '<p>Şu an bu ruh haline uygun bir öneri bulamadık.</p>';
+        return;
+    }
+    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    const title = escapeCountryHtml(chosen.title || 'İsimsiz yapım');
+    result.innerHTML = `
+        <div class="mood-result-line"><span>${config.label} moduna önerimiz</span><strong>${title}</strong></div>
+        <button type="button" class="mood-result-open" onclick="openDetailPage('${String(chosen.id).replace(/'/g, "\\'")}')">Yapımı keşfet <i class="fa-solid fa-arrow-right"></i></button>`;
+    document.querySelectorAll('.mood-options button').forEach(button => button.classList.toggle('is-selected', button.getAttribute('onclick') === "chooseMoodPick('" + mood + "')"));
 }
 
 function renderHomeCollections() {
