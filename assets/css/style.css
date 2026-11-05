@@ -1670,3 +1670,28 @@ body.actor-modal-open{overflow:hidden}
   .home-feature-row #hero-section .hero-arrows{gap:7px!important;padding:5px!important}
   .home-feature-row #hero-section .hero-arrow{width:38px!important;height:38px!important;min-width:38px!important;font-size:13px!important}
 }
+
+
+/* Manşet okları: üst üste binen eski konum kurallarını geçersiz kıl ve tıklama alanını öne al */
+.home-feature-row #hero-section .hero-arrows{
+  position:absolute!important;
+  right:24px!important;
+  bottom:108px!important;
+  z-index:100!important;
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+.home-feature-row #hero-section .hero-arrow{
+  position:relative!important;
+  z-index:101!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+}
+@media(max-width:560px){
+  .home-feature-row #hero-section .hero-arrows{
+    right:14px!important;
+    bottom:104px!important;
+  }
+}
