@@ -2537,3 +2537,50 @@ html.ny7-modal-lock,html.ny7-modal-lock body{overflow:hidden}
 /* Personal discovery rail */
 #collection-personalized .collection-eyebrow{color:#f4cf62}
 body.ny7-detail-open #actor-page-view{filter:blur(5px);transform:scale(.995);transition:filter .25s ease}
+
+/* NY7 revision: detail is a regular page; trailer alone uses a compact popup. */
+.detail-modal{position:static;inset:auto;z-index:auto;display:block;padding:0}
+.detail-modal-backdrop,.detail-modal-panel{display:contents}
+.detail-modal-panel #detail-related{padding:0}
+.detail-modal-panel .detail-visual{height:clamp(300px,42vw,520px)}
+.detail-modal-panel .detail-overlap{margin-top:-105px;grid-template-columns:190px minmax(0,1fr);gap:26px}
+.detail-modal-panel .detail-poster-column{width:190px}
+.detail-modal-panel .detail-description-panel{padding-left:216px}
+.detail-modal-panel .detail-main{padding-bottom:22px}
+.detail-modal-panel .detail-topbar{position:absolute}
+body.ny7-detail-open #dashboard-view,body.ny7-detail-open>.site-header{filter:none;transform:none}
+html.ny7-modal-lock,html.ny7-modal-lock body{overflow:visible}
+.hero-preview-controls{position:absolute;z-index:8;top:34%;right:clamp(22px,5vw,76px);display:flex;align-items:center;gap:10px;padding:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(5,6,9,.56);backdrop-filter:blur(14px);box-shadow:0 12px 35px rgba(0,0,0,.28)}
+.hero-preview-controls button{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.13);border-radius:50%;background:rgba(255,255,255,.07);color:#fff;transition:background .2s,border-color .2s,transform .2s}
+.hero-preview-controls button:hover{background:rgba(212,164,59,.22);border-color:rgba(245,200,75,.65);color:#f5d36c;transform:scale(1.06)}
+.hero-preview-controls button[hidden]{display:none}
+.hero-preview-layer iframe{width:100%;height:100%;border:0;transform:scale(1.08)}
+.hero-section.has-preview #hero-bg{opacity:.12}
+.hero-section.has-preview .hero-preview-layer{opacity:.88}
+.trailer-popup{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
+.trailer-popup.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.trailer-popup-backdrop{position:absolute;inset:0;background:rgba(2,3,6,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.trailer-popup-card{position:relative;width:min(850px,100%);overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:#0b0c10;box-shadow:0 30px 100px rgba(0,0,0,.65);transform:translateY(12px) scale(.985);transition:transform .22s ease}
+.trailer-popup.is-open .trailer-popup-card{transform:translateY(0) scale(1)}
+.trailer-popup-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 20px}
+.trailer-popup-head span{display:block;margin-bottom:4px;color:#d7b85e;font-size:9px;font-weight:900;letter-spacing:.2em}
+.trailer-popup-head h2{color:#fff;font-size:15px;font-weight:800}
+.trailer-popup-head button{width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);border-radius:50%;color:#fff;background:rgba(255,255,255,.05)}
+.trailer-popup-head button:hover{background:rgba(255,255,255,.13)}
+.trailer-popup-player{position:relative;aspect-ratio:16/9;background:#030405;display:grid;place-items:center}
+.trailer-popup-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.trailer-popup-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:30px;color:#a7a7ad;text-align:center;font-size:13px}
+.trailer-popup-empty i{font-size:24px;color:#d7b85e}
+body.trailer-popup-open{overflow:hidden}
+@media(max-width:700px){
+ .hero-preview-controls{top:18%;right:16px;gap:6px;padding:6px}
+ .hero-preview-controls button{width:36px;height:36px}
+ .trailer-popup{padding:12px}
+ .trailer-popup-card{border-radius:13px}
+ .trailer-popup-head{padding:13px 15px}
+ .detail-modal-panel .detail-visual{height:260px}
+ .detail-modal-panel .detail-overlap{margin-top:-75px;grid-template-columns:104px minmax(0,1fr);gap:14px}
+ .detail-modal-panel .detail-poster-column{width:104px}
+ .detail-modal-panel .detail-copy h1{font-size:clamp(20px,6vw,30px)}
+ .detail-modal-panel .detail-description-panel{padding:18px 0 24px}
+}
