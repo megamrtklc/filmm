@@ -3229,3 +3229,8 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-overlap{grid-template-columns:88px minmax(0,1fr)!important;gap:12px!important}
  #detail-page-view .detail-poster-column{width:88px!important}
 }
+
+/* Keep the metadata card within the poster column on narrow screens */
+@media(max-width:760px){
+ #detail-page-view .detail-poster-column .detail-facts-wrap{width:100%!important;max-width:100%!important}
+}
