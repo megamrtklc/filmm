@@ -165,8 +165,7 @@ function renderMoodRecommendation(item, category) {
             <div class="mood-discovery-copy">
                 <span class="mood-discovery-tag">${escapeCountryHtml(categoryLabel)} <b>•</b> ${typeLabel}</span>
                 <h3>${title}</h3>
-                <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}</div>
-                <div class="mood-discovery-imdb"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb PUANI</span></div>
+                <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}<span class="mood-discovery-imdb mood-discovery-imdb-inline"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb</span></span></div>
                 <p class="mood-discovery-description">${description}</p>
                 <div class="mood-discovery-actions">
                     <button type="button" class="mood-discovery-primary" onclick="openDetailPage('${id}')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button>
