@@ -272,34 +272,38 @@
     <div id="actor-page-view" class="actor-page hidden min-h-screen flex-1">
         <section class="actor-hero">
             <div class="actor-hero-top"><button class="detail-back" onclick="showDashboard()"><i class="fa-solid fa-arrow-left"></i> Geri dön</button><span>OYUNCU PROFİLİ</span></div>
-            <div id="actor-featured-photos" class="actor-featured-photos" aria-label="Oyuncunun fotoğrafları"></div>
+            <div id="actor-featured-photos" class="actor-banner" aria-label="Oyuncu yatay afişi">
+                <div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div>
+                <div class="actor-banner-shade"></div>
+                <div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name"></h1></div>
+            </div>
         </section>
         <main class="actor-profile-layout">
-            <aside class="actor-profile-sidebar">
-                <div class="actor-profile-photo"><img id="actor-profile-image" src="" alt="Oyuncu fotoğrafı"></div>
-                <h1 id="actor-profile-name"></h1>
-                <div class="actor-facts">
-                    <div><span>Doğum tarihi</span><b id="actor-birth-date">Bilgi aranıyor…</b></div>
-                    <div><span>Doğum yeri</span><b id="actor-birth-place">Bilgi aranıyor…</b></div>
-                    <div><span>Ülke</span><b id="actor-country">Bilgi aranıyor…</b></div>
-                    <div><span>Meslek</span><b>Oyuncu</b></div>
-                </div>
-            </aside>
             <section class="actor-biography">
-                <div class="actor-section-kicker">HAYATI VE KARİYERİ</div>
+                <div class="actor-section-kicker"><i class="fa-solid fa-user"></i> HAYATI VE KARİYERİ</div>
                 <h2 id="actor-biography-title"></h2>
                 <p id="actor-biography-text">Oyuncu hakkında bilgiler yükleniyor…</p>
                 <a id="actor-wikipedia-link" href="#" target="_blank" rel="noopener">Kaynak ve daha fazla bilgi <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
             </section>
+            <aside class="actor-facts-panel">
+                <div class="actor-facts-heading"><span>PROFİL</span><h2>Temel bilgiler</h2></div>
+                <div class="actor-facts">
+                    <div><span><i class="fa-regular fa-calendar"></i> Doğum tarihi</span><b id="actor-birth-date">Bilgi aranıyor…</b></div>
+                    <div><span><i class="fa-solid fa-location-dot"></i> Doğum yeri</span><b id="actor-birth-place">Bilgi aranıyor…</b></div>
+                    <div><span><i class="fa-solid fa-flag"></i> Ülke</span><b id="actor-country">Bilgi aranıyor…</b></div>
+                    <div><span><i class="fa-solid fa-clapperboard"></i> Meslek</span><b>Oyuncu</b></div>
+                </div>
+                <img id="actor-profile-image" class="actor-profile-image-hidden" src="" alt="">
+            </aside>
         </main>
+        <section class="actor-filmography">
+            <div class="actor-section-heading"><div><span>EKRANDAKİ YOLCULUĞU</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div><i class="fa-solid fa-film"></i></div>
+            <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
+        </section>
         <section class="actor-gallery-section">
-            <div class="detail-related-heading"><span>FOTOĞRAF GALERİSİ</span><h2>Oyuncudan kareler</h2></div>
+            <div class="actor-section-heading"><div><span>FOTOĞRAF ARŞİVİ</span><h2>Oyuncudan kareler</h2></div><i class="fa-regular fa-images"></i></div>
             <div class="actor-gallery-toolbar"><span id="actor-gallery-count">Fotoğraflar yükleniyor…</span><div class="actor-gallery-controls"><button type="button" onclick="changeActorGalleryPage(-1)" aria-label="Önceki fotoğraflar"><i class="fa-solid fa-chevron-left"></i></button><button type="button" onclick="changeActorGalleryPage(1)" aria-label="Sonraki fotoğraflar"><i class="fa-solid fa-chevron-right"></i></button></div></div>
             <div id="actor-gallery-grid" class="actor-gallery-grid"></div>
-        </section>
-        <section class="actor-filmography">
-            <div class="detail-related-heading"><span>FİLMOGRAFİ</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div>
-            <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
         </section>
     </div>
     <div id="actor-photo-modal" class="actor-photo-modal hidden" role="dialog" aria-modal="true" aria-label="Oyuncu fotoğrafı">
