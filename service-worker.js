@@ -21,7 +21,7 @@ self.addEventListener('fetch',event=>{
 
   // HTML, JavaScript, CSS ve katalog önce ağdan alınır; ağ yoksa son sağlam kopya kullanılır.
   const isCatalog=url.pathname.endsWith('/data/catalog.json');
-  const isAppAsset=request.mode==='navigate'||/\\.(?:js|css|json|svg|webmanifest)$/.test(url.pathname);
+  const isAppAsset=request.mode==='navigate'||/\.(?:js|css|json|svg|webmanifest)$/.test(url.pathname);
   if(!isCatalog&&!isAppAsset)return;
 
   event.respondWith(
