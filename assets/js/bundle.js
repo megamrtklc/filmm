@@ -927,6 +927,7 @@ function openDetailPage(id,update=true){
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
  document.getElementById('theme-body').style.backgroundColor='#050505';
  document.getElementById('detail-backdrop').src=item.backdrop||item.image;
+ const detailScene=item.backdrop||item.image||'';document.getElementById('detail-page-view').style.setProperty('--detail-scene-image',detailScene?'url("'+String(detailScene).replace(/"/g,'%22')+'")':'none');
  document.getElementById('detail-poster').src=item.image;
  document.getElementById('detail-title').innerText=item.title;
  let detailOriginal=document.getElementById('detail-original-title');if(!detailOriginal){detailOriginal=document.createElement('small');detailOriginal.id='detail-original-title';detailOriginal.className='media-original-title detail-original-title';document.getElementById('detail-title').after(detailOriginal);}detailOriginal.dataset.mediaId=String(item.id);detailOriginal.textContent=item.originalTitle||'';detailOriginal.hidden=!item.originalTitle;
