@@ -160,6 +160,21 @@ function fitHeroTitleToWidth() {
             setText('trailer-popup-category',item.category||item.genre,'Kategori bilgisi yok');
             setText('trailer-popup-rating',item.rating,'—');
             setText('trailer-popup-desc',item.desc,'Bu yapım için konu özeti henüz eklenmemiş.');
+            const credits=document.getElementById('trailer-popup-credits');
+            if(credits){
+                credits.innerHTML='';
+                const addCredit=(label,names)=>{
+                    const values=(Array.isArray(names)?names:[names]).filter(value=>value!==undefined&&value!==null&&String(value).trim()).slice(0,label==='OYUNCULAR'?5:1);
+                    if(!values.length)return;
+                    const row=document.createElement('div');row.className='trailer-popup-credit-row';
+                    const heading=document.createElement('span');heading.textContent=label;row.appendChild(heading);
+                    const value=document.createElement('p');value.textContent=values.join(' · ');row.appendChild(value);
+                    credits.appendChild(row);
+                };
+                addCredit('YÖNETMEN',item.director);
+                addCredit('OYUNCULAR',item.cast);
+                credits.hidden=!credits.children.length;
+            }
             const videoId=getHeroTrailerId(item.trailerUrl);
             player.innerHTML=videoId?'<iframe title="'+escapeCountryHtml(item.title)+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>':'<div class="trailer-popup-empty"><i class="fa-solid fa-circle-exclamation"></i><span>Bu yapım için kullanılabilir bir fragman bağlantısı bulunamadı.</span></div>';
             popup.classList.add('is-open');popup.setAttribute('aria-hidden','false');document.body.classList.add('trailer-popup-open');
