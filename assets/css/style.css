@@ -965,3 +965,7 @@ body.actor-modal-open{overflow:hidden}
 .mood-result-open i{margin-left:4px}
 @media(max-width:760px){.discovery-mini-grid{gap:12px}.daily-pick-mini,.mood-pick-mini{min-height:280px;border-radius:16px}.daily-pick-mini-copy{left:14px;right:14px;bottom:14px}.mood-mini-content{min-height:280px;padding:16px}.mood-mini-content h2{font-size:19px}.mood-options button{min-height:34px;padding-inline:8px;font-size:9px}}
 @media(max-width:520px){.discovery-mini-grid{grid-template-columns:1fr;gap:12px}.daily-pick-mini,.mood-pick-mini{min-height:270px}.mood-mini-content{min-height:270px;padding:20px}.daily-pick-mini-copy{left:18px;right:18px;bottom:17px}}
+
+/* Kareye yakın kart oranı: geniş ekranlarda kompakt dikey görünüm */
+@media(min-width:761px){.daily-pick-mini,.mood-pick-mini{aspect-ratio:1.55/1;min-height:310px}}
+@media(max-width:760px){.daily-pick-mini,.mood-pick-mini{aspect-ratio:auto}}
