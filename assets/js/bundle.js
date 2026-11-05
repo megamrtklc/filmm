@@ -18,24 +18,39 @@ function syncOriginalTitleLabels(){
 }
 async function loadOriginalTitles(){
  if(!Array.isArray(mediaDatabase)||!mediaDatabase.length)return;
- let cached={};try{cached=JSON.parse(localStorage.getItem('ny7_original_titles_v1')||'{}')||{};}catch(_){}
- const apply=(id,title,aliases=[])=>{const item=mediaDatabase.find(entry=>String(entry.tmdbId)===String(id));if(!item)return;const candidate=String(title||'').trim();item.searchAliases=[...new Set([...(item.searchAliases||[]),...aliases].filter(Boolean))];if(candidate&&normalizeMediaSearchText(candidate)!==normalizeMediaSearchText(item.title)){item.originalTitle=candidate;item.searchAliases=[...new Set([...item.searchAliases,candidate])];}};
- Object.entries(cached).forEach(([id,value])=>apply(id,value.title,value.aliases||[]));syncOriginalTitleLabels();
- const missing=mediaDatabase.filter(item=>item.tmdbId&&!cached[String(item.tmdbId)]);
+ // v2 cache: eski Wikidata eşleşmeleri kullanılmaz; yalnızca eserin kendi dilindeki P1476 başlığı kabul edilir.
+ const cacheKey='ny7_original_titles_v2';
+ let cached={};try{cached=JSON.parse(localStorage.getItem(cacheKey)||'{}')||{};}catch(_){}
+ const apply=(id,value)=>{
+  const item=mediaDatabase.find(entry=>String(entry.tmdbId)===String(id));if(!item)return;
+  const candidate=String(value?.title||'').trim();
+  if(candidate&&normalizeMediaSearchText(candidate)!==normalizeMediaSearchText(item.title)){
+   item.originalTitle=candidate;
+   item.searchAliases=[...new Set([...(item.searchAliases||[]),candidate])];
+  }else delete item.originalTitle;
+ };
+ Object.entries(cached).forEach(([id,value])=>apply(id,value));syncOriginalTitleLabels();
+ const missing=mediaDatabase.filter(item=>item.tmdbId&&!Object.prototype.hasOwnProperty.call(cached,String(item.tmdbId)));
  for(let start=0;start<missing.length;start+=30){
   const ids=[...new Set(missing.slice(start,start+30).map(item=>String(item.tmdbId)))],values=ids.map(id=>'"'+id.replace(/[^0-9]/g,'')+'"').join(' ');
-  const query='SELECT ?id ?title ?label ?alias WHERE { VALUES ?id { '+values+' } ?item (wdt:P4947|wdt:P4983) ?id . OPTIONAL { ?item wdt:P1476 ?title . } OPTIONAL { ?item rdfs:label ?label . FILTER(LANG(?label)="en") } OPTIONAL { ?item skos:altLabel ?alias . FILTER(LANG(?alias)="en") } }';
+  // P407 eserin dili, P218 ISO 639-1 kodudur. P1476 yalnızca aynı dildeyse kabul edilir.
+  const query='SELECT ?id ?title WHERE { VALUES ?id { '+values+' } ?item (wdt:P4947|wdt:P4983) ?id . ?item wdt:P407 ?workLanguage . ?workLanguage wdt:P218 ?langCode . ?item wdt:P1476 ?title . FILTER(LANG(?title)=?langCode) }';
   try{
-   const response=await fetch('https://query.wikidata.org/sparql?query='+encodeURIComponent(query)+'&format=json',{headers:{Accept:'application/sparql-results+json'}});if(!response.ok)throw new Error('Wikidata HTTP '+response.status);
+   const response=await fetch('https://query.wikidata.org/sparql?query='+encodeURIComponent(query)+'&format=json',{headers:{Accept:'application/sparql-results+json'}});
+   if(!response.ok)throw new Error('Wikidata HTTP '+response.status);
    const payload=await response.json(),grouped={};
-   (payload.results?.bindings||[]).forEach(row=>{const id=row.id?.value;if(!id)return;const g=grouped[id]||(grouped[id]={titles:[],aliases:[]});if(row.title?.value)g.titles.push(row.title.value);if(row.label?.value)g.aliases.push(row.label.value);if(row.alias?.value)g.aliases.push(row.alias.value);});
-   Object.entries(grouped).forEach(([id,g])=>{const item=mediaDatabase.find(entry=>String(entry.tmdbId)===String(id));if(!item)return;const choices=[...new Set([...g.titles,...g.aliases])],chosen=choices.find(v=>normalizeMediaSearchText(v)!==normalizeMediaSearchText(item.title))||'';if(chosen){cached[id]={title:chosen,aliases:choices};apply(id,chosen,choices);}});
-   try{localStorage.setItem('ny7_original_titles_v1',JSON.stringify(cached));}catch(_){}
+   (payload.results?.bindings||[]).forEach(row=>{const id=row.id?.value;if(!id||!row.title?.value)return;const title=row.title.value.trim();if(title)(grouped[id]||(grouped[id]=[])).push(title);});
+   ids.forEach(id=>{
+    const titles=[...new Set(grouped[id]||[])];
+    const chosen=titles.length===1?titles[0]:'';
+    cached[id]=chosen?{title:chosen}:null;
+    apply(id,cached[id]);
+   });
+   try{localStorage.setItem(cacheKey,JSON.stringify(cached));}catch(_){}
    syncOriginalTitleLabels();if(headerSearchInput?.value)renderHeaderSearchResults(headerSearchInput.value);
-  }catch(error){console.warn('Orijinal yapım adları yüklenemedi:',error);}
+  }catch(error){console.warn('Doğrulanmış orijinal yapım adları yüklenemedi:',error);}
  }
 }
-
 
         function toggleFavorite(id, e) {
             if (e) e.stopPropagation();
