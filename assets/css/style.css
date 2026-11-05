@@ -605,7 +605,7 @@ body.actor-modal-open{overflow:hidden}
 .hero-copy{
     position:relative;
     z-index:10;
-    max-width:640px;
+    max-width:760px;
     padding:22px 26px 26px;
     margin-left:-26px;
     background:linear-gradient(90deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.24) 68%,rgba(0,0,0,0) 100%);
@@ -619,7 +619,7 @@ body.actor-modal-open{overflow:hidden}
     min-height:2.08em;
     max-height:2.08em;
     line-height:1.04!important;
-    font-size:clamp(2.35rem,4.8vw,4.65rem);
+    font-size:clamp(2.15rem,4.1vw,4.05rem);
     overflow-wrap:anywhere;
     text-wrap:pretty;
 }
@@ -641,7 +641,7 @@ body.actor-modal-open{overflow:hidden}
         background:linear-gradient(90deg,rgba(0,0,0,.48),rgba(0,0,0,.25) 78%,rgba(0,0,0,0));
     }
     .hero-copy h1{
-        font-size:clamp(1.9rem,8.2vw,3.15rem);
+        font-size:clamp(1.75rem,7.4vw,2.85rem);
         min-height:2.08em;
         max-height:2.08em;
         line-height:1.04!important;
