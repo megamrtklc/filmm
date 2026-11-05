@@ -682,3 +682,20 @@ body.actor-modal-open{overflow:hidden}
     line-height:1.25!important;
   }
 }
+
+
+/* Manşet sliderini aksiyon butonlarinin hemen altina yaklastir */
+#hero-section .hero-thumbnails{
+  bottom:clamp(170px,22vh,205px)!important;
+}
+#hero-section .hero-arrows{
+  bottom:clamp(255px,33vh,285px)!important;
+}
+@media(max-width:767px){
+  #hero-section .hero-thumbnails{
+    bottom:clamp(265px,36vh,305px)!important;
+  }
+  #hero-section .hero-arrows{
+    bottom:clamp(385px,51vh,425px)!important;
+  }
+}
