@@ -2682,16 +2682,16 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view:before{
  content:"";position:absolute;z-index:0;inset:-34px;pointer-events:none;
  background-image:
-  radial-gradient(ellipse at 12% 12%,rgba(var(--poster-tone-1-rgb),.42),transparent 43%),
-  radial-gradient(ellipse at 88% 22%,rgba(var(--poster-tone-2-rgb),.34),transparent 43%),
-  radial-gradient(ellipse at 54% 75%,rgba(var(--poster-tone-3-rgb),.26),transparent 48%);
- filter:blur(20px);opacity:1;transition:background-image 1s ease;
+  radial-gradient(ellipse at 12% 12%,rgba(var(--poster-tone-1-rgb),.68),transparent 43%),
+  radial-gradient(ellipse at 88% 22%,rgba(var(--poster-tone-2-rgb),.56),transparent 43%),
+  radial-gradient(ellipse at 54% 75%,rgba(var(--poster-tone-3-rgb),.44),transparent 48%);
+ filter:blur(13px) saturate(1.2);opacity:1;transition:background-image 1s ease;
 }
 #detail-page-view:after{
  content:"";position:absolute;z-index:0;inset:-55px;pointer-events:none;
  background-image:var(--poster-atmosphere-image);
  background-position:center 22%;background-size:cover;background-repeat:no-repeat;
- filter:blur(58px) saturate(1.75);opacity:.23;transform:scale(1.08);
+ filter:blur(48px) saturate(2.25);opacity:.46;mix-blend-mode:screen;transform:scale(1.1);
  transition:opacity .8s ease,background-image .8s ease;
 }
 #detail-page-view>.detail-visual,#detail-page-view>.detail-main{position:relative!important;z-index:1!important}
@@ -2702,9 +2702,13 @@ body.trailer-popup-open{overflow:hidden}
   linear-gradient(0deg,rgba(9,11,16,.68),rgba(9,11,16,.04) 58%,rgba(0,0,0,.14))!important;
 }
 #detail-page-view>.detail-main{
- background:linear-gradient(180deg,rgba(9,11,16,.70),rgba(9,11,16,.82) 30%,rgba(9,11,16,.91))!important;
+ background:linear-gradient(180deg,rgba(9,11,16,.48),rgba(9,11,16,.64) 30%,rgba(9,11,16,.80))!important;
 }
 #detail-page-view .detail-info-card,#detail-page-view .detail-description-panel{
  box-shadow:0 12px 38px rgba(var(--poster-tone-1-rgb),.07),0 10px 32px rgba(0,0,0,.2)
 }
 @media(prefers-reduced-motion:reduce){#detail-page-view:before,#detail-page-view:after{transition:none!important}}
+
+/* Detay sayfası üst manşetini sabit/absolute header alanının altından başlat */
+#detail-page-view{padding-top:88px!important}
+@media(max-width:767px){#detail-page-view{padding-top:100px!important}}
