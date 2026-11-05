@@ -2992,3 +2992,54 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view .detail-poster-frame img{display:block!important;position:relative!important;z-index:1!important}
 @media(max-width:767px){#detail-page-view .detail-visual>img{object-position:center 32%!important}#detail-page-view .detail-poster-column:before{inset:-22px -17px!important;filter:blur(22px) saturate(1.4)!important}}
 @media(prefers-reduced-motion:reduce){#detail-page-view .detail-poster-column:before{filter:blur(20px)!important}}
+
+
+/* Yapım künyesi afişin altında tek, bütünlüklü premium kart */
+#detail-page-view .detail-poster-column{width:100%;min-width:0}
+#detail-page-view .detail-facts-wrap{
+ position:relative!important;isolation:isolate!important;
+ width:100%!important;margin:20px 0 0!important;padding:17px 15px 15px!important;
+ overflow:hidden!important;border:1px solid rgba(224,184,94,.25)!important;
+ border-radius:16px!important;
+ background:linear-gradient(145deg,rgba(23,25,31,.97),rgba(10,12,17,.98))!important;
+ box-shadow:0 14px 32px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.045)!important;
+}
+#detail-page-view .detail-facts-wrap:before{
+ content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;pointer-events:none!important;
+ background:radial-gradient(ellipse at 0% 0%,rgba(224,184,94,.12),transparent 62%)!important;
+}
+#detail-page-view .detail-facts-heading{margin:0 0 13px!important}
+#detail-page-view .detail-facts-heading>span{
+ display:block!important;margin-bottom:5px!important;color:#d5ad5c!important;
+ font-size:8px!important;font-weight:850!important;letter-spacing:.2em!important
+}
+#detail-page-view .detail-facts-heading h2{
+ margin:0!important;color:#f5f2e9!important;font-size:17px!important;font-weight:800!important;letter-spacing:-.02em!important
+}
+#detail-page-view .detail-facts-grid{display:grid!important;grid-template-columns:1fr!important;gap:0!important}
+#detail-page-view .detail-fact{
+ min-height:0!important;display:grid!important;grid-template-columns:29px minmax(0,1fr)!important;
+ grid-template-rows:auto auto!important;align-items:center!important;column-gap:9px!important;row-gap:3px!important;
+ padding:11px 0!important;border:0!important;border-bottom:1px solid rgba(255,255,255,.075)!important;
+ border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important
+}
+#detail-page-view .detail-fact:last-child{border-bottom:0!important;padding-bottom:2px!important}
+#detail-page-view .detail-fact>span{grid-column:2!important;grid-row:1!important;gap:0!important;color:#9da5b3!important;font-size:9px!important;letter-spacing:.025em!important}
+#detail-page-view .detail-fact>span i{
+ grid-column:1!important;grid-row:1 / span 2!important;align-self:center!important;
+ width:29px!important;height:29px!important;flex-basis:29px!important;
+ border-radius:9px!important;background:rgba(224,184,94,.1)!important;
+ border:1px solid rgba(224,184,94,.2)!important;color:#e8c578!important;font-size:13px!important
+}
+#detail-page-view .detail-fact>b,#detail-page-view .detail-fact .detail-country-list{
+ grid-column:2!important;grid-row:2!important;padding:0!important;margin:0!important;
+ color:#f2f3f6!important;font-size:11px!important;font-weight:700!important;line-height:1.4!important
+}
+#detail-page-view .detail-fact .detail-country-list{display:flex!important;flex-wrap:wrap!important;gap:5px!important}
+#detail-page-view .detail-fact:hover{transform:none!important;box-shadow:none!important}
+@media(max-width:767px){
+ #detail-page-view .detail-overlap{grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
+ #detail-page-view .detail-poster-column{width:min(100%,260px)!important;margin:0 auto!important}
+ #detail-page-view .detail-facts-wrap{margin-top:16px!important;padding:15px 14px 12px!important}
+ #detail-page-view .detail-copy{min-width:0!important}
+}
