@@ -132,9 +132,9 @@
             </div>
 
             <div id="hero-thumbnails-rail" class="hero-thumbnails no-scrollbar" aria-label="Son eklenen içerikler"></div>
-            <div class="hero-arrows">
-                <button class="hero-arrow" type="button" aria-label="Önceki içerik" onclick="stepHero(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="hero-arrow" type="button" aria-label="Sonraki içerik" onclick="stepHero(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            <div class="hero-arrows" role="group" aria-label="Manşet gezinme">
+                <button class="hero-arrow" type="button" data-hero-direction="-1" aria-label="Önceki yapım" title="Önceki yapım"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                <button class="hero-arrow" type="button" data-hero-direction="1" aria-label="Sonraki yapım" title="Sonraki yapım"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
             </div>
         </section>
 
