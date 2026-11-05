@@ -2800,3 +2800,59 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-description-panel:after{font-size:145px!important;inset:auto 8px -62px auto!important}
  #detail-page-view .detail-visual>img{object-position:center 30%!important}
 }
+
+
+/* Detay ust bilgi seridi: gradyan ve blur tamamen kaldirildi */
+#detail-page-view .detail-topbar{
+ position:relative!important;z-index:5!important;
+ background:transparent!important;background-image:none!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ box-shadow:none!important;
+}
+#detail-page-view .detail-topbar .detail-back{
+ background:transparent!important;background-image:none!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ box-shadow:none!important;
+}
+#detail-page-view .detail-topbar>div{
+ background:transparent!important;background-image:none!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ text-shadow:0 1px 5px rgba(0,0,0,.5)!important;
+}
+/* Afişten örneklenen renkleri yalnızca detay içerik alanında tut; menü/topbar alanına taşırma */
+#detail-page-view:before{inset:88px -34px -34px!important}
+#detail-page-view:after{inset:88px -55px -55px!important}
+@media(max-width:767px){
+ #detail-page-view:before{inset:100px -34px -34px!important}
+ #detail-page-view:after{inset:100px -55px -55px!important}
+}
+/* Yapim bilgileri: fotoğraf arka planı yok; her bilgiye ait net, büyük ikon filigranı */
+#detail-page-view .detail-fact{
+ background:#11151d!important;
+}
+#detail-page-view .detail-fact:before{
+ content:""!important;position:absolute!important;
+ inset:auto 12px 5px auto!important;width:48px!important;height:48px!important;
+ z-index:0!important;background:none!important;background-image:none!important;
+ opacity:.3!important;filter:none!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ color:#e0b85e!important;font-family:"Font Awesome 6 Free"!important;
+ font-style:normal!important;font-weight:900!important;font-size:39px!important;
+ line-height:1!important;pointer-events:none!important;
+}
+#detail-page-view .detail-fact:after{content:none!important;display:none!important}
+#detail-page-view .detail-fact:nth-child(1):before{content:"\f6c0"!important}
+#detail-page-view .detail-fact:nth-child(2):before{content:"\f0ac"!important}
+#detail-page-view .detail-fact:nth-child(3):before{content:"\f630"!important}
+#detail-page-view .detail-fact:nth-child(4):before{content:"\f073"!important}
+#detail-page-view .detail-fact>span,
+#detail-page-view .detail-fact>b,
+#detail-page-view .detail-fact>div{position:relative!important;z-index:1!important}
+#detail-page-view .detail-fact>span i{color:#e0b85e!important}
+#detail-page-view .detail-fact:nth-child(1)>span i{font-size:12px!important}
+#detail-page-view .detail-fact:nth-child(2)>span i{font-size:12px!important}
+#detail-page-view .detail-fact:nth-child(3)>span i{font-size:12px!important}
+#detail-page-view .detail-fact:nth-child(4)>span i{font-size:12px!important}
+@media(max-width:560px){
+ #detail-page-view .detail-fact:before{width:40px!important;height:40px!important;font-size:32px!important;right:8px!important;bottom:4px!important}
+}
