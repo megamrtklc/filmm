@@ -922,6 +922,54 @@ async function fetchActorSummary(name,fullBiography=true){
   title:page.title
  };
 }
+function getRelatedMedia(item,limit=10){
+ const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
+ const tokens=value=>[...new Set(countryTokens(value).map(normalize).filter(Boolean))];
+ const itemGenres=tokens([item.genre,item.category].filter(Boolean).join(' / '));
+ const itemDirectors=tokens(item.director);
+ const itemCountries=tokens(item.country);
+ const itemCast=new Set((item.cast||[]).map(normalize).filter(Boolean));
+ const itemYear=Number.parseInt(item.year,10);
+ const sourceType=item.type;
+ const candidates=mediaDatabase.filter(candidate=>String(candidate.id)!==String(item.id)&&candidate.title&&candidate.image);
+ const ranked=candidates.map(candidate=>{
+  const genres=tokens([candidate.genre,candidate.category].filter(Boolean).join(' / '));
+  const sharedGenres=genres.filter(genre=>itemGenres.includes(genre));
+  const sharedDirectors=tokens(candidate.director).filter(name=>itemDirectors.includes(name));
+  const sharedCountries=tokens(candidate.country).filter(country=>itemCountries.includes(country));
+  const sharedCast=(candidate.cast||[]).map(normalize).filter(name=>itemCast.has(name));
+  const candidateYear=Number.parseInt(candidate.year,10);
+  let score=0;
+  score+=sharedGenres.reduce((sum,genre)=>sum+(genre.length>3?7:4),0);
+  score+=sharedDirectors.length*15;
+  score+=Math.min(sharedCast.length,4)*5;
+  score+=sharedCountries.length*2;
+  if(candidate.type===sourceType)score+=3;
+  if(Number.isFinite(itemYear)&&Number.isFinite(candidateYear)){
+   const gap=Math.abs(itemYear-candidateYear);
+   if(gap<=5)score+=4;
+   else if(gap<=12)score+=2;
+  }
+  const rating=Number.parseFloat(candidate.rating);
+  if(Number.isFinite(rating))score+=Math.min(Math.max(rating,0),10)*.12;
+  // Aynı puanlı sonuçlarda her yapım için farklı ama kararlı bir sıra oluştur.
+  const seed=normalize(item.id)+'|'+normalize(candidate.id);
+  let hash=2166136261;
+  for(let i=0;i<seed.length;i++){hash^=seed.charCodeAt(i);hash=Math.imul(hash,16777619);}
+  const tie=((hash>>>0)%1000)/100000;
+  return {item:candidate,score:score+tie,sharedGenres:sharedGenres.length};
+ }).filter(row=>row.score>0);
+ ranked.sort((a,b)=>b.score-a.score);
+ let selected=ranked.filter(row=>row.score>=3).slice(0,limit);
+ // Katalogdaki az bulunan türlerde de benzer yapım alanı boş kalmasın.
+ if(selected.length<Math.min(6,limit)){
+  const used=new Set(selected.map(row=>String(row.item.id)));
+  const fallback=ranked.filter(row=>!used.has(String(row.item.id))&&row.item.type===sourceType);
+  selected=selected.concat(fallback.slice(0,Math.min(6,limit)-selected.length));
+ }
+ return selected.slice(0,limit).map(row=>row.item);
+}
+
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -950,7 +998,7 @@ function openDetailPage(id,update=true){
  currentCastNames=(item.cast||[]).slice(0,15).map(name=>({name,image:''}));currentCastItemId=String(item.id);activeCastPage=0;renderCastPage();loadVerifiedCast(item);
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
  document.getElementById('detail-trailer-btn').onclick=()=>item.trailerUrl?window.open(item.trailerUrl,'_blank','noopener'):window.alert('Fragman bağlantısı bulunmuyor.');
- const related=mediaDatabase.filter(m=>m.id!==item.id&&(m.type===item.type||m.genre===item.genre)).sort((x,y)=>Number(y.rating||0)-Number(x.rating||0)).slice(0,10);
+ const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
