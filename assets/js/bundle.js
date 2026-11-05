@@ -448,11 +448,31 @@ function countryFlagImage(iso,className){
  return iso?'<img class="'+className+'" src="https://flagcdn.com/w40/'+iso.toLowerCase()+'.png" srcset="https://flagcdn.com/w80/'+iso.toLowerCase()+'.png 2x" alt="'+iso+' bayrağı" loading="lazy" decoding="async">':'';
 }
 function escapeCountryHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function countryIdentity(value){
+ const info=countryDisplay(value);
+ return info.iso||countryKey(value);
+}
 function filterByCountry(country,update=true){
- activeCatalogCountry=countryKey(country);activeCatalogGenre='all';activeCatalogType='all';activeCatalogQuery='';
- const search=document.getElementById('search-input');if(search)search.value='';
- showCatalogView(countryDisplay(country).name+' Yapımları');
- if(update)goRoute('#/ulke/'+encodeURIComponent(country));
+ const selected=String(country||'').trim();
+ if(!selected)return;
+ activeCatalogCountry=countryIdentity(selected);
+ activeCatalogGenre='all';
+ activeCatalogType='all';
+ activeCatalogQuery='';
+ const search=document.getElementById('search-input');
+ if(search){search.value='';}
+ const dashboard=document.getElementById('dashboard-view');
+ if(dashboard)dashboard.classList.remove('hidden');
+ document.getElementById('detail-page-view').classList.add('hidden');
+ document.getElementById('actor-page-view').classList.add('hidden');
+ document.getElementById('detail-related').classList.add('hidden');
+ document.getElementById('theme-body').style.backgroundColor='#0b0c10';
+ const info=countryDisplay(selected);
+ const heading=document.getElementById('catalog-heading');
+ if(heading)heading.innerHTML=countryFlagImage(info.iso,'catalog-country-heading-flag')+'<span>'+escapeCountryHtml(info.name)+' Yapımları</span>';
+ showCatalogView(info.name+' Yapımları');
+ if(update)goRoute('#/ulke/'+encodeURIComponent(selected));
+ updateHeaderActiveState();
  renderFilteredCatalog();
 }
 document.addEventListener('click',function(event){const chip=event.target.closest('.detail-country-chip');if(chip)filterByCountry(chip.dataset.country);});
@@ -465,7 +485,7 @@ function renderFilteredCatalog() {
                 const needle = activeCatalogGenre.toLocaleLowerCase('tr-TR');
                 const genreMatch = activeCatalogGenre === 'all' || genre.includes(needle) || category.includes(needle);
                 const typeMatch = activeCatalogType === 'all' || m.type === activeCatalogType;
-                const countryMatch = !activeCatalogCountry || countryTokens(m.country).some(x=>countryKey(x)===activeCatalogCountry);
+                const countryMatch = !activeCatalogCountry || countryTokens(m.country).some(x=>countryIdentity(x)===activeCatalogCountry);
                 const searchMatch = !query || (m.title || '').toLocaleLowerCase('tr-TR').includes(query) || category.includes(query) || genre.includes(query);
                 return genreMatch && typeMatch && searchMatch && countryMatch;
             });
