@@ -147,25 +147,71 @@ function fitHeroTitleToWidth() {
             const match=value.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
             return match?match[1]:'';
         }
-        function stopHeroPreview(){
-            const layer=document.getElementById('hero-preview-layer'),button=document.getElementById('hero-preview-btn');
-            if(layer)layer.innerHTML='';
-            if(button){button.setAttribute('aria-pressed','false');button.innerHTML='<i class="fa-solid fa-film"></i><span>Önizlemeyi Aç</span>';}
-            document.getElementById('hero-section')?.classList.remove('has-preview');
+        let heroPreviewPlaying=false;
+        let heroPreviewMuted=true;
+        function updateHeroPreviewControls(){
+            const play=document.getElementById('hero-preview-play'),pause=document.getElementById('hero-preview-pause'),volume=document.getElementById('hero-preview-volume');
+            if(play)play.hidden=heroPreviewPlaying;
+            if(pause)pause.hidden=!heroPreviewPlaying;
+            if(volume){volume.innerHTML=heroPreviewMuted?'<i class="fa-solid fa-volume-xmark"></i>':'<i class="fa-solid fa-volume-high"></i>';volume.setAttribute('aria-label',heroPreviewMuted?'Sesi aç':'Sesi kapat');volume.title=heroPreviewMuted?'Sesi aç':'Sesi kapat';}
         }
-        function toggleHeroPreview(){
+        function heroPreviewCommand(command){
+            const frame=document.querySelector('#hero-preview-layer iframe');
+            if(!frame)return false;
+            frame.contentWindow.postMessage(JSON.stringify({event:'command',func:command,args:[]}), 'https://www.youtube-nocookie.com');
+            return true;
+        }
+        function stopHeroPreview(){
+            const layer=document.getElementById('hero-preview-layer');
+            if(layer)layer.innerHTML='';
+            heroPreviewPlaying=false;heroPreviewMuted=true;
+            document.getElementById('hero-section')?.classList.remove('has-preview');
+            updateHeroPreviewControls();
+        }
+        function playHeroPreview(){
             const item=mediaDatabase.find(entry=>String(entry.id)===String(heroCurrentId));
             const layer=document.getElementById('hero-preview-layer');
             if(!item||!layer)return;
-            if(layer.querySelector('iframe')){stopHeroPreview();return;}
+            if(layer.querySelector('iframe')){
+                heroPreviewCommand('playVideo');heroPreviewPlaying=true;updateHeroPreviewControls();return;
+            }
             const videoId=getHeroTrailerId(item.trailerUrl);
             if(!videoId){window.alert('Bu yapım için kullanılabilir bir YouTube fragman bağlantısı bulunamadı.');return;}
-            layer.innerHTML='<iframe title="'+escapeCountryHtml(item.title)+' fragman önizlemesi" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&mute=1&controls=0&loop=1&playlist='+videoId+'&playsinline=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+            heroPreviewMuted=true;
+            layer.innerHTML='<iframe title="'+escapeCountryHtml(item.title)+' fragman önizlemesi" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&mute=1&controls=0&enablejsapi=1&playsinline=1&rel=0&origin='+encodeURIComponent(location.origin)+'" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
             document.getElementById('hero-section')?.classList.add('has-preview');
-            const button=document.getElementById('hero-preview-btn');
-            if(button){button.setAttribute('aria-pressed','true');button.innerHTML='<i class="fa-solid fa-pause"></i><span>Önizlemeyi Kapat</span>';}
+            heroPreviewPlaying=true;updateHeroPreviewControls();
         }
-        window.toggleHeroPreview=toggleHeroPreview;
+        function pauseHeroPreview(){
+            heroPreviewCommand('pauseVideo');heroPreviewPlaying=false;updateHeroPreviewControls();
+        }
+        function toggleHeroPreviewMute(){
+            if(!document.querySelector('#hero-preview-layer iframe'))return;
+            heroPreviewMuted=!heroPreviewMuted;
+            heroPreviewCommand(heroPreviewMuted?'mute':'unMute');
+            updateHeroPreviewControls();
+        }
+        window.playHeroPreview=playHeroPreview;
+        window.pauseHeroPreview=pauseHeroPreview;
+        window.toggleHeroPreviewMute=toggleHeroPreviewMute;
+        function openTrailerPopup(id){
+            const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
+            const popup=document.getElementById('trailer-popup'),player=document.getElementById('trailer-popup-player'),title=document.getElementById('trailer-popup-title');
+            if(!item||!popup||!player)return;
+            title.textContent=item.title+' — Fragman';
+            const videoId=getHeroTrailerId(item.trailerUrl);
+            player.innerHTML=videoId?'<iframe title="'+escapeCountryHtml(item.title)+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>':'<div class="trailer-popup-empty"><i class="fa-solid fa-circle-exclamation"></i><span>Bu yapım için kullanılabilir bir fragman bağlantısı bulunamadı.</span></div>';
+            popup.classList.add('is-open');popup.setAttribute('aria-hidden','false');document.body.classList.add('trailer-popup-open');
+            popup.querySelector('button[aria-label="Pencereyi kapat"]')?.focus();
+        }
+        function closeTrailerPopup(){
+            const popup=document.getElementById('trailer-popup');if(!popup)return;
+            popup.classList.remove('is-open');popup.setAttribute('aria-hidden','true');
+            const player=document.getElementById('trailer-popup-player');if(player)player.innerHTML='';
+            document.body.classList.remove('trailer-popup-open');
+        }
+        window.openTrailerPopup=openTrailerPopup;
+        window.closeTrailerPopup=closeTrailerPopup;
         function renderHeroThumbnails() {
             document.getElementById('hero-thumbnails-rail').innerHTML = heroItems.map((m,i) => `
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
@@ -890,6 +936,7 @@ function routeFromHash(){
 }
 function showDashboard(update=true){
  hideDirectorProfile();
+ closeTrailerPopup();
  document.body.classList.remove('ny7-detail-open');
  document.documentElement.classList.remove('ny7-modal-lock');
  stopHeroPreview();
@@ -1092,16 +1139,18 @@ function openDetailPage(id,update=true){
  updateDetailButtons(item.id);
  currentCastNames=(item.cast||[]).slice(0,15).map(name=>({name,image:''}));currentCastItemId=String(item.id);activeCastPage=0;renderCastPage();loadVerifiedCast(item);
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
- document.getElementById('detail-trailer-btn').onclick=()=>item.trailerUrl?window.open(item.trailerUrl,'_blank','noopener'):window.alert('Fragman bağlantısı bulunmuyor.');
+ document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
+ stopHeroPreview();
+ document.getElementById('dashboard-view').classList.add('hidden');
+ document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
  detailView.classList.remove('hidden');
- document.body.classList.add('ny7-detail-open');
- document.documentElement.classList.add('ny7-modal-lock');
+ document.body.classList.remove('ny7-detail-open');
+ document.documentElement.classList.remove('ny7-modal-lock');
  document.getElementById('detail-related').classList.remove('hidden');
- detailView.focus({preventScroll:true});
- window.scrollTo({top:0,behavior:'auto'});
+ window.scrollTo({top:0,behavior:'smooth'});
 }
 
 let actorGalleryPhotos=[];
@@ -1415,4 +1464,11 @@ document.addEventListener('keydown',event=>{
   const rail=document.activeElement?.closest('.collection-rail');
   if(rail)rail.scrollBy({left:(event.key==='ArrowRight'?1:-1)*Math.max(180,rail.clientWidth*.65),behavior:'smooth'});
  }
+});
+
+document.addEventListener('click',event=>{
+ if(event.target.matches('[data-trailer-dismiss]'))closeTrailerPopup();
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&document.getElementById('trailer-popup')?.classList.contains('is-open'))closeTrailerPopup();
 });
