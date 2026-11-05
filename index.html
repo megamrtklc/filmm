@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-hero-preview-removed-v1">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261105-trailer-info-v1">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -325,7 +325,20 @@
         <div class="trailer-popup-backdrop" data-trailer-dismiss></div>
         <div class="trailer-popup-card">
             <div class="trailer-popup-head"><div><span>NY7 • FRAGMAN</span><h2 id="trailer-popup-title">Fragmanı İzle</h2></div><button type="button" onclick="closeTrailerPopup()" aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button></div>
-            <div id="trailer-popup-player" class="trailer-popup-player"><div class="trailer-popup-empty">Fragman yükleniyor...</div></div>
+            <div class="trailer-popup-content">
+                <aside class="trailer-popup-info">
+                    <img id="trailer-popup-poster" class="trailer-popup-poster" src="" alt="Yapım afişi">
+                    <div class="trailer-popup-meta">
+                        <span id="trailer-popup-year"></span>
+                        <span id="trailer-popup-type"></span>
+                        <span id="trailer-popup-duration"></span>
+                    </div>
+                    <div id="trailer-popup-category" class="trailer-popup-category"></div>
+                    <div class="trailer-popup-imdb"><i class="fa-solid fa-star"></i><b>IMDb</b><strong id="trailer-popup-rating">—</strong></div>
+                    <div class="trailer-popup-summary"><span>KONU</span><p id="trailer-popup-desc"></p></div>
+                </aside>
+                <div id="trailer-popup-player" class="trailer-popup-player"><div class="trailer-popup-empty">Fragman yükleniyor...</div></div>
+            </div>
         </div>
     </div>
 
@@ -379,6 +392,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261105-hero-preview-removed-v1"></script>
+    <script src="assets/js/bundle.js?v=20261105-trailer-info-v1"></script>
 </body>
 </html>
