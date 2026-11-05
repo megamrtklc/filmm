@@ -2189,3 +2189,18 @@ body.actor-modal-open{overflow:hidden}
 .detail-taxonomy-chip:hover{background:#e11d4830;border-color:#e11d48;transform:translateY(-1px)}
 #detail-director,#detail-info-genre{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}
 @media(max-width:700px){#detail-director,#detail-info-genre{justify-content:flex-start}.detail-taxonomy-chip{font-size:10px;padding:6px 8px}}
+
+
+/* Yönetmen filmografisi üst profil kartı */
+.director-profile-panel{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:linear-gradient(115deg,rgba(30,34,45,.96),rgba(13,15,21,.96));box-shadow:0 14px 35px rgba(0,0,0,.18)}
+.director-profile-panel[hidden]{display:none!important}
+.director-profile-content,.director-profile-loading{display:flex;align-items:center;gap:22px;padding:20px}
+.director-profile-photo,.director-profile-avatar{width:116px;height:116px;flex:0 0 116px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:#242936}
+.director-profile-avatar{display:grid;place-items:center;color:#f5c542;font-size:32px}
+.director-profile-copy{min-width:0}
+.director-profile-copy>small,.director-profile-loading small{display:block;color:#eabf48;font-size:10px;font-weight:800;letter-spacing:.16em;margin-bottom:5px}
+.director-profile-copy h2,.director-profile-loading h2{font-size:clamp(18px,2vw,24px);font-weight:800;color:#fff;margin:0 0 7px}
+.director-profile-copy p,.director-profile-loading p{font-size:13px;line-height:1.65;color:#c2c5ce;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.director-profile-copy a{display:inline-flex;align-items:center;gap:7px;margin-top:10px;color:#f2c64d;font-size:11px;font-weight:700}
+.director-profile-copy a:hover{color:#fff}
+@media(max-width:600px){.director-profile-content,.director-profile-loading{align-items:flex-start;gap:13px;padding:13px}.director-profile-photo,.director-profile-avatar{width:84px;height:104px;flex-basis:84px;border-radius:11px}.director-profile-copy p,.director-profile-loading p{-webkit-line-clamp:4;font-size:11px}.director-profile-copy h2,.director-profile-loading h2{font-size:17px}}
