@@ -609,7 +609,7 @@ function launchPlayer(title) {
         let heroTimer = null;
         window.onload = async function() {
             try {
-                const response = await fetch('data/catalog.json');
+                const response = await fetch('./data/catalog.json?v=20261105', { cache: 'no-store' });
                 if (!response.ok) throw new Error('Katalog dosyası yüklenemedi: ' + response.status);
                 mediaDatabase = await response.json();
                 heroItems = [...mediaDatabase].sort((a,b) => Number(b.year)-Number(a.year)).slice(0,10);
