@@ -650,14 +650,22 @@ body.actor-modal-open{overflow:hidden}
 }
 
 
-/* Manşet başlığı: mümkün olduğunda tek satır ve daha kompakt punto */
+/* Manşet: üst menünün altında, daha küçük ve tek satırlık başlık */
+#hero-section{
+  padding-top:132px!important;
+}
+#hero-section .hero-copy{
+  align-self:flex-start;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
 #hero-section .hero-copy h1{
   display:block!important;
   width:100%;
-  min-height:1.15em!important;
-  max-height:1.15em!important;
-  font-size:clamp(1.75rem,3.25vw,3.25rem)!important;
-  line-height:1.12!important;
+  min-height:1.2em!important;
+  max-height:1.2em!important;
+  font-size:clamp(1.45rem,2.45vw,2.35rem)!important;
+  line-height:1.2!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis;
@@ -665,10 +673,12 @@ body.actor-modal-open{overflow:hidden}
   text-wrap:nowrap!important;
 }
 @media(max-width:767px){
+  #hero-section{padding-top:94px!important}
+  #hero-section .hero-copy{margin-top:0!important}
   #hero-section .hero-copy h1{
-    font-size:clamp(1.35rem,5.4vw,2.1rem)!important;
-    min-height:1.2em!important;
-    max-height:1.2em!important;
-    line-height:1.2!important;
+    font-size:clamp(1.15rem,4.8vw,1.65rem)!important;
+    min-height:1.25em!important;
+    max-height:1.25em!important;
+    line-height:1.25!important;
   }
 }
