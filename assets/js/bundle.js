@@ -1167,7 +1167,9 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-rating').innerHTML='<i class="fa-solid fa-star"></i> '+(item.rating||'—')+' IMDb';
  document.getElementById('detail-year').innerText=item.year||'';
  document.getElementById('detail-duration').innerText=item.duration||'';
- document.getElementById('detail-type-label').innerText=item.type==='tv'?'Dizi':'Film';
+ const detailKind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
+ document.getElementById('detail-type-label').innerText=detailKind;
+ document.querySelector('#detail-page-view .detail-facts-heading h2').innerText=detailKind+' künyesi';
  const countries=countryTokens(item.country);
  const directors=countryTokens(item.director);
  const genres=[...new Set([...countryTokens(item.category),...countryTokens(item.genre)])];
