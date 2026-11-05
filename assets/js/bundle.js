@@ -1087,10 +1087,59 @@ function getRelatedMedia(item,limit=10){
  return selected.slice(0,limit).map(row=>row.item);
 }
 
+function resetPosterAtmosphere(){
+ const view=document.getElementById('detail-page-view');if(!view)return;
+ view.style.setProperty('--poster-tone-1-rgb','213,166,63');
+ view.style.setProperty('--poster-tone-2-rgb','116,75,160');
+ view.style.setProperty('--poster-tone-3-rgb','176,68,72');
+}
+function applyPosterAtmosphere(item){
+ const view=document.getElementById('detail-page-view');if(!view)return;
+ const mediaId=String(item.id);
+ view.dataset.atmosphereMediaId=mediaId;
+ resetPosterAtmosphere();
+ if(!item.image)return;
+ const poster=new Image();
+ poster.crossOrigin='anonymous';
+ poster.onload=()=>{
+  if(view.dataset.atmosphereMediaId!==mediaId)return;
+  try{
+   const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
+   if(!ctx)return;
+   canvas.width=56;canvas.height=56;ctx.drawImage(poster,0,0,56,56);
+   const pixels=ctx.getImageData(0,0,56,56).data,buckets=new Map();
+   for(let i=0;i<pixels.length;i+=16){
+    const r=pixels[i],g=pixels[i+1],b=pixels[i+2],a=pixels[i+3];
+    if(a<180)continue;
+    const max=Math.max(r,g,b),min=Math.min(r,g,b),sat=max?((max-min)/max):0;
+    if(max<34||max>247||sat<.16)continue;
+    const key=[r>>4,g>>4,b>>4].join(',');
+    let bucket=buckets.get(key);
+    if(!bucket){bucket={r:0,g:0,b:0,count:0,score:0};buckets.set(key,bucket);}
+    bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.count++;bucket.score+=.35+sat;
+   }
+   const ranked=[...buckets.values()].sort((a,b)=>b.score-a.score),chosen=[];
+   for(const bucket of ranked){
+    const color={r:Math.round(bucket.r/bucket.count),g:Math.round(bucket.g/bucket.count),b:Math.round(bucket.b/bucket.count)};
+    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>72))chosen.push(color);
+    if(chosen.length===3)break;
+   }
+   if(!chosen.length)return;
+   const defaults=[[213,166,63],[116,75,160],[176,68,72]];
+   chosen.forEach((color,index)=>view.style.setProperty('--poster-tone-'+(index+1)+'-rgb',[color.r,color.g,color.b].join(',')));
+   for(let i=chosen.length;i<3;i++)view.style.setProperty('--poster-tone-'+(i+1)+'-rgb',defaults[i].join(','));
+  }catch(error){
+   // CORS izni yoksa güvenli varsayılan atmosfer korunur.
+  }
+ };
+ poster.onerror=()=>{};
+ poster.src=item.image;
+}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
  document.getElementById('theme-body').style.backgroundColor='#050505';
+ applyPosterAtmosphere(item);
  document.getElementById('detail-backdrop').src=item.backdrop||item.image;
  const detailScene=item.backdrop||item.image||'';document.getElementById('detail-page-view').style.setProperty('--detail-scene-image',detailScene?'url("'+String(detailScene).replace(/"/g,'%22')+'")':'none');
  document.getElementById('detail-poster').src=item.image;
