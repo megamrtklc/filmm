@@ -1089,7 +1089,6 @@ function getRelatedMedia(item,limit=10){
 
 function resetPosterAtmosphere(){
  const posterColumn=document.querySelector('#detail-page-view .detail-poster-column');if(!posterColumn)return;
- // Önceki yapımdan kalan renkleri temizle; sabit renk paleti kullanma.
  ['--poster-tone-1-rgb','--poster-tone-2-rgb','--poster-tone-3-rgb'].forEach(name=>posterColumn.style.removeProperty(name));
 }
 function applyPosterAtmosphere(item){
@@ -1099,9 +1098,9 @@ function applyPosterAtmosphere(item){
  resetPosterAtmosphere();
  const imageUrl=item.image;
  if(!imageUrl)return;
- // TMDB görselini CORS destekli görsel proxy üzerinden küçük örnek olarak al.
- const source=imageUrl.replace(/^https?:\/\//,'');
- const sampleUrl='https://images.weserv.nl/?url='+encodeURIComponent(source)+'&w=72&h=72&fit=cover&output=jpg';
+ // Afişin tamamını, en-boy oranını koruyarak örnekle; kare kırpma baskın renkleri yanıltmasın.
+ const source=imageUrl.replace(/^https?:\\/\\//,'');
+ const sampleUrl='https://images.weserv.nl/?url='+encodeURIComponent(source)+'&w=96&h=144&fit=inside&output=jpg';
  const poster=new Image();
  poster.crossOrigin='anonymous';
  poster.onload=()=>{
@@ -1109,37 +1108,37 @@ function applyPosterAtmosphere(item){
   try{
    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
    if(!ctx)throw new Error('Canvas context unavailable');
-   canvas.width=72;canvas.height=72;ctx.drawImage(poster,0,0,72,72);
-   const pixels=ctx.getImageData(0,0,72,72).data,buckets=new Map();
-   for(let i=0;i<pixels.length;i+=16){
+   const width=96,height=144;
+   canvas.width=width;canvas.height=height;
+   const scale=Math.min(width/poster.naturalWidth,height/poster.naturalHeight);
+   const drawWidth=Math.max(1,Math.round(poster.naturalWidth*scale));
+   const drawHeight=Math.max(1,Math.round(poster.naturalHeight*scale));
+   ctx.fillStyle='#777';ctx.fillRect(0,0,width,height);
+   ctx.drawImage(poster,Math.round((width-drawWidth)/2),Math.round((height-drawHeight)/2),drawWidth,drawHeight);
+   const pixels=ctx.getImageData(0,0,width,height).data,buckets=new Map();
+   // Her piksel hesaba katılır; sıralama doygunluğa değil, afişteki gerçek yaygınlığa dayanır.
+   for(let i=0;i<pixels.length;i+=4){
     const r=pixels[i],g=pixels[i+1],b=pixels[i+2],a=pixels[i+3];
     if(a<180)continue;
-    const max=Math.max(r,g,b),min=Math.min(r,g,b),sat=max?((max-min)/max):0;
-    if(max<18||max>252)continue;
-    const key=[r>>4,g>>4,b>>4].join(',');
+    const max=Math.max(r,g,b),min=Math.min(r,g,b),brightness=(r+g+b)/3;
+    if(brightness<13||brightness>247)continue;
+    const saturation=max?((max-min)/max):0;
+    const key=[r>>5,g>>5,b>>5].join(',');
     let bucket=buckets.get(key);
     if(!bucket){bucket={r:0,g:0,b:0,count:0,score:0};buckets.set(key,bucket);}
     bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.count++;
-    bucket.score+=.35+sat*1.4+(max-min)/255;
+    bucket.score+=.88+saturation*.24;
    }
    const ranked=[...buckets.values()].sort((a,b)=>b.score-a.score),chosen=[];
    for(const bucket of ranked){
     const color={r:Math.round(bucket.r/bucket.count),g:Math.round(bucket.g/bucket.count),b:Math.round(bucket.b/bucket.count)};
-    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>48))chosen.push(color);
+    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>42))chosen.push(color);
     if(chosen.length===3)break;
    }
-   if(!chosen.length)throw new Error('No poster colors found');
+   if(!chosen.length)throw new Error('No dominant poster colors found');
    chosen.forEach((color,index)=>posterColumn.style.setProperty('--poster-tone-'+(index+1)+'-rgb',[color.r,color.g,color.b].join(',')));
-   // İki renkli afişlerde üçüncü ışığı ilk rengin tonundan türet.
-   if(chosen.length===1){
-    const c=chosen[0];posterColumn.style.setProperty('--poster-tone-2-rgb',[Math.round(c.r*.72),Math.round(c.g*.72),Math.round(c.b*.72)].join(','));
-    posterColumn.style.setProperty('--poster-tone-3-rgb',[Math.min(255,Math.round(c.r*1.12)),Math.min(255,Math.round(c.g*1.12)),Math.min(255,Math.round(c.b*1.12))].join(','));
-   }else if(chosen.length===2){
-    const c=chosen[1];posterColumn.style.setProperty('--poster-tone-3-rgb',[Math.round(c.r*.78),Math.round(c.g*.78),Math.round(c.b*.78)].join(','));
-   }
    posterColumn.dataset.atmosphereReady='true';
   }catch(error){
-   // Okuma başarısızsa yanlış/sabit renk göstermek yerine ışığı nötr bırak.
    if(posterColumn.dataset.atmosphereMediaId===mediaId){
     ['--poster-tone-1-rgb','--poster-tone-2-rgb','--poster-tone-3-rgb'].forEach(name=>posterColumn.style.removeProperty(name));
     posterColumn.dataset.atmosphereReady='false';
