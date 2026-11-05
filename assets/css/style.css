@@ -2976,3 +2976,19 @@ body.trailer-popup-open{overflow:hidden}
 /* Oyuncu yüzlerini korumak için detay manşetinde daha geniş dikey kadraj */
 #detail-page-view .detail-visual{height:clamp(360px,46vw,540px)!important}
 @media(max-width:767px){#detail-page-view .detail-visual{height:290px!important}}
+
+
+/* 2026-11-05: Ambilight yalnızca soldaki posterin çevresinde */
+#detail-page-view .detail-visual:before{content:none!important;display:none!important}
+#detail-page-view .detail-visual>img{object-fit:cover!important;object-position:center 34%!important;filter:none!important;transform:none!important;image-rendering:auto!important}
+#detail-page-view .detail-visual:after{inset:0!important;background:linear-gradient(0deg,#090b10 0%,rgba(9,11,16,.78) 9%,rgba(9,11,16,.24) 29%,rgba(9,11,16,0) 56%)!important}
+#detail-page-view .detail-poster-column{position:relative!important;isolation:isolate!important;z-index:1!important}
+#detail-page-view .detail-poster-column:before{
+ content:""!important;position:absolute!important;z-index:-1!important;inset:-34px -27px!important;border-radius:28px!important;pointer-events:none!important;
+ background:radial-gradient(ellipse at 12% 48%,rgba(var(--poster-tone-1-rgb,213,166,63),.82),transparent 58%),radial-gradient(ellipse at 88% 50%,rgba(var(--poster-tone-2-rgb,116,75,160),.78),transparent 58%),radial-gradient(ellipse at 50% 8%,rgba(var(--poster-tone-3-rgb,176,68,72),.58),transparent 62%)!important;
+ filter:blur(28px) saturate(1.45)!important;opacity:.88!important
+}
+#detail-page-view .detail-poster-frame{position:relative!important;z-index:1!important;overflow:hidden!important;box-shadow:0 18px 48px rgba(0,0,0,.68),0 0 0 1px rgba(255,255,255,.13)!important}
+#detail-page-view .detail-poster-frame img{display:block!important;position:relative!important;z-index:1!important}
+@media(max-width:767px){#detail-page-view .detail-visual>img{object-position:center 32%!important}#detail-page-view .detail-poster-column:before{inset:-22px -17px!important;filter:blur(22px) saturate(1.4)!important}}
+@media(prefers-reduced-motion:reduce){#detail-page-view .detail-poster-column:before{filter:blur(20px)!important}}
