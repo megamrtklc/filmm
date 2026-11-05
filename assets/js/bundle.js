@@ -1089,9 +1089,8 @@ function getRelatedMedia(item,limit=10){
 
 function resetPosterAtmosphere(){
  const posterColumn=document.querySelector('#detail-page-view .detail-poster-column');if(!posterColumn)return;
- posterColumn.style.setProperty('--poster-tone-1-rgb','213,166,63');
- posterColumn.style.setProperty('--poster-tone-2-rgb','116,75,160');
- posterColumn.style.setProperty('--poster-tone-3-rgb','176,68,72');
+ // Önceki yapımdan kalan renkleri temizle; sabit renk paleti kullanma.
+ ['--poster-tone-1-rgb','--poster-tone-2-rgb','--poster-tone-3-rgb'].forEach(name=>posterColumn.style.removeProperty(name));
 }
 function applyPosterAtmosphere(item){
  const posterColumn=document.querySelector('#detail-page-view .detail-poster-column');if(!posterColumn)return;
@@ -1100,43 +1099,61 @@ function applyPosterAtmosphere(item){
  resetPosterAtmosphere();
  const imageUrl=item.image;
  if(!imageUrl)return;
+ // TMDB görselini CORS destekli görsel proxy üzerinden küçük örnek olarak al.
+ const source=imageUrl.replace(/^https?:\/\//,'');
+ const sampleUrl='https://images.weserv.nl/?url='+encodeURIComponent(source)+'&w=72&h=72&fit=cover&output=jpg';
  const poster=new Image();
  poster.crossOrigin='anonymous';
  poster.onload=()=>{
   if(posterColumn.dataset.atmosphereMediaId!==mediaId)return;
   try{
    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
-   if(!ctx)return;
-   canvas.width=48;canvas.height=48;ctx.drawImage(poster,0,0,48,48);
-   const pixels=ctx.getImageData(0,0,48,48).data,buckets=new Map();
+   if(!ctx)throw new Error('Canvas context unavailable');
+   canvas.width=72;canvas.height=72;ctx.drawImage(poster,0,0,72,72);
+   const pixels=ctx.getImageData(0,0,72,72).data,buckets=new Map();
    for(let i=0;i<pixels.length;i+=16){
     const r=pixels[i],g=pixels[i+1],b=pixels[i+2],a=pixels[i+3];
     if(a<180)continue;
     const max=Math.max(r,g,b),min=Math.min(r,g,b),sat=max?((max-min)/max):0;
-    if(max<24||max>250||sat<.12)continue;
+    if(max<18||max>252)continue;
     const key=[r>>4,g>>4,b>>4].join(',');
     let bucket=buckets.get(key);
     if(!bucket){bucket={r:0,g:0,b:0,count:0,score:0};buckets.set(key,bucket);}
-    bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.count++;bucket.score+=.4+sat;
+    bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.count++;
+    bucket.score+=.35+sat*1.4+(max-min)/255;
    }
    const ranked=[...buckets.values()].sort((a,b)=>b.score-a.score),chosen=[];
    for(const bucket of ranked){
     const color={r:Math.round(bucket.r/bucket.count),g:Math.round(bucket.g/bucket.count),b:Math.round(bucket.b/bucket.count)};
-    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>65))chosen.push(color);
+    if(chosen.every(other=>Math.hypot(color.r-other.r,color.g-other.g,color.b-other.b)>48))chosen.push(color);
     if(chosen.length===3)break;
    }
-   if(!chosen.length)return;
-   const defaults=[[213,166,63],[116,75,160],[176,68,72]];
+   if(!chosen.length)throw new Error('No poster colors found');
    chosen.forEach((color,index)=>posterColumn.style.setProperty('--poster-tone-'+(index+1)+'-rgb',[color.r,color.g,color.b].join(',')));
-   for(let i=chosen.length;i<3;i++)posterColumn.style.setProperty('--poster-tone-'+(i+1)+'-rgb',defaults[i].join(','));
+   // İki renkli afişlerde üçüncü ışığı ilk rengin tonundan türet.
+   if(chosen.length===1){
+    const c=chosen[0];posterColumn.style.setProperty('--poster-tone-2-rgb',[Math.round(c.r*.72),Math.round(c.g*.72),Math.round(c.b*.72)].join(','));
+    posterColumn.style.setProperty('--poster-tone-3-rgb',[Math.min(255,Math.round(c.r*1.12)),Math.min(255,Math.round(c.g*1.12)),Math.min(255,Math.round(c.b*1.12))].join(','));
+   }else if(chosen.length===2){
+    const c=chosen[1];posterColumn.style.setProperty('--poster-tone-3-rgb',[Math.round(c.r*.78),Math.round(c.g*.78),Math.round(c.b*.78)].join(','));
+   }
+   posterColumn.dataset.atmosphereReady='true';
   }catch(error){
-   // CORS engelinde varsayılan Ambilight tonları korunur.
+   // Okuma başarısızsa yanlış/sabit renk göstermek yerine ışığı nötr bırak.
+   if(posterColumn.dataset.atmosphereMediaId===mediaId){
+    ['--poster-tone-1-rgb','--poster-tone-2-rgb','--poster-tone-3-rgb'].forEach(name=>posterColumn.style.removeProperty(name));
+    posterColumn.dataset.atmosphereReady='false';
+   }
   }
  };
- poster.onerror=()=>{};
- poster.src=imageUrl;
+ poster.onerror=()=>{
+  if(posterColumn.dataset.atmosphereMediaId===mediaId){
+   posterColumn.dataset.atmosphereReady='false';
+   ['--poster-tone-1-rgb','--poster-tone-2-rgb','--poster-tone-3-rgb'].forEach(name=>posterColumn.style.removeProperty(name));
+  }
+ };
+ poster.src=sampleUrl;
 }
-
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
