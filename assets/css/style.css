@@ -648,3 +648,27 @@ body.actor-modal-open{overflow:hidden}
     }
     .hero-copy #hero-desc{min-height:4.5em;max-height:4.5em}
 }
+
+
+/* Manşet başlığı: mümkün olduğunda tek satır ve daha kompakt punto */
+#hero-section .hero-copy h1{
+  display:block!important;
+  width:100%;
+  min-height:1.15em!important;
+  max-height:1.15em!important;
+  font-size:clamp(1.75rem,3.25vw,3.25rem)!important;
+  line-height:1.12!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis;
+  overflow-wrap:normal!important;
+  text-wrap:nowrap!important;
+}
+@media(max-width:767px){
+  #hero-section .hero-copy h1{
+    font-size:clamp(1.35rem,5.4vw,2.1rem)!important;
+    min-height:1.2em!important;
+    max-height:1.2em!important;
+    line-height:1.2!important;
+  }
+}
