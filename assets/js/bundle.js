@@ -1186,7 +1186,7 @@ function openDetailPage(id,update=true){
   {key:'rt',logo:'RT',value:readScore(item.rottenTomatoes,item.rtRating,item.rotten_tomatoes?.value,item.rotten_tomatoes),suffix:'%'},
   {key:'popcorn',logo:'POPCORN',value:readScore(item.popcornmeter,item.popcornMeter,item.popcorn_rating),suffix:'%'}
  ];
- document.getElementById('detail-score-row').innerHTML=scoreItems.map(score=>'<span class="detail-score-pill score-'+score.key+'"><span class="score-brand score-brand-'+score.key+'" aria-label="'+score.logo+'">'+score.logo+'</span><strong>'+(score.value?escapeCountryHtml(score.value)+(score.suffix&&!String(score.value).includes('%')?score.suffix:''):'—')+'</strong></span>').join('');
+ document.getElementById('detail-score-row').innerHTML=scoreItems.map(score=>'<span class="detail-score-pill score-'+score.key+(score.value?'':' is-unavailable')+'"><span class="score-brand score-brand-'+score.key+'" aria-label="'+score.logo+'">'+(score.key==='imdb'?'<b>IMDb</b>':score.key==='tmdb'?'<i class="score-tmdb-symbol">T</i><b>TMDB</b>':score.key==='rt'?'<i class="score-rt-symbol" aria-hidden="true">🍅</i><b>RT</b>':'<i class="score-popcorn-symbol" aria-hidden="true">🍿</i><b>POPCORNMETER</b>')+'</span><strong>'+(score.value?escapeCountryHtml(score.value)+(score.suffix&&!String(score.value).includes('%')?score.suffix:''):'Veri yok')+'</strong></span>').join('');
  updateDetailButtons(item.id);
  currentCastNames=(item.cast||[]).slice(0,15).map(name=>({name,image:''}));currentCastItemId=String(item.id);activeCastPage=0;renderCastPage();loadVerifiedCast(item);
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
