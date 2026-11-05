@@ -119,7 +119,7 @@ function renderHomeCollections() {
 }
 
 function updateHeaderActiveState(){
-    const raw=decodeURIComponent((location.hash||'#/anasayfa').replace(/^#\\/?/,''));
+    const raw=decodeURIComponent((location.hash||'#/anasayfa').replace(/^#\/?/,''));
     const parts=raw.split('/');
     const route=parts[0]||'anasayfa';
     const routeMap={anasayfa:'.nav-home',filmler:'a[href="#/filmler"]',diziler:'a[href="#/diziler"]',kesfet:'a[href="#/kesfet"]',listem:'a[href="#/listem"]'};
