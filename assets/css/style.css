@@ -2487,8 +2487,6 @@ body.actor-modal-open{overflow:hidden}
 
 
 /* NY7 Streaming Experience — cinematic preview, modal and refined rails */
-.hero-section.has-preview #hero-bg{opacity:.14}
-.hero-section.has-preview .hero-vignette{z-index:2}
 .hero-section .hero-copy,.hero-section .hero-thumbnails,.hero-section .hero-arrows{z-index:5}
 .collection-heading{gap:16px}
 .rail-controls{display:flex;gap:7px;flex:0 0 auto}
@@ -2525,7 +2523,7 @@ html.ny7-modal-lock,html.ny7-modal-lock body{overflow:hidden}
  .rail-controls button{width:30px;height:30px}
 }
 @media(prefers-reduced-motion:reduce){
- .detail-modal-panel,.detail-modal-backdrop,.hero-preview-layer,.rail-controls button{animation:none!important;transition:none!important}
+ .detail-modal-panel,.detail-modal-backdrop,.rail-controls button{animation:none!important;transition:none!important}
  .collection-rail{scroll-behavior:auto}
 }
 
@@ -2544,12 +2542,7 @@ body.ny7-detail-open #actor-page-view{filter:blur(5px);transform:scale(.995);tra
 .detail-modal-panel .detail-main{padding-bottom:22px}
 .detail-modal-panel .detail-topbar{position:absolute}
 body.ny7-detail-open #dashboard-view,body.ny7-detail-open>.site-header{filter:none;transform:none}
-html.ny7-modal-lock,html.ny7-modal-lock body{overflow:visible}.hero-preview-controls button:hover{background:rgba(212,164,59,.22);border-color:rgba(245,200,75,.65);color:#f5d36c;transform:scale(1.06)}
-.hero-preview-controls button[hidden]{display:none}
-.hero-preview-layer iframe{width:100%;height:100%;border:0;transform:scale(1.08)}
-.hero-section.has-preview #hero-bg{opacity:.12}
-.hero-section.has-preview .hero-preview-layer{opacity:.88}
-.trailer-popup{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
+html.ny7-modal-lock,html.ny7-modal-lock body{overflow:visible}.trailer-popup{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
 .trailer-popup.is-open{opacity:1;visibility:visible;pointer-events:auto}
 .trailer-popup-backdrop{position:absolute;inset:0;background:rgba(2,3,6,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .trailer-popup-card{position:relative;width:min(850px,100%);overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:#0b0c10;box-shadow:0 30px 100px rgba(0,0,0,.65);transform:translateY(12px) scale(.985);transition:transform .22s ease}
@@ -2565,8 +2558,6 @@ html.ny7-modal-lock,html.ny7-modal-lock body{overflow:visible}.hero-preview-cont
 .trailer-popup-empty i{font-size:24px;color:#d7b85e}
 body.trailer-popup-open{overflow:hidden}
 @media(max-width:700px){
- .hero-preview-controls{top:18%;right:16px;gap:6px;padding:6px}
- .hero-preview-controls button{width:36px;height:36px}
  .trailer-popup{padding:12px}
  .trailer-popup-card{border-radius:13px}
  .trailer-popup-head{padding:13px 15px}
