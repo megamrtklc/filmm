@@ -744,3 +744,30 @@ body.actor-modal-open{overflow:hidden}
   .main-nav>a,.main-nav .nav-trigger{font-size:12px!important}
   .main-nav>a::after,.main-nav .nav-trigger::after{bottom:3px}
 }
+
+
+/* Manşet alanını sliderin hemen altında bitir */
+#hero-section.hero-section{
+  height:650px!important;
+  min-height:650px!important;
+  padding-bottom:0!important;
+}
+#hero-section .hero-thumbnails{
+  bottom:18px!important;
+}
+#hero-section .hero-arrows{
+  bottom:132px!important;
+}
+@media(max-width:767px){
+  #hero-section.hero-section{
+    height:650px!important;
+    min-height:650px!important;
+    padding-bottom:0!important;
+  }
+  #hero-section .hero-thumbnails{
+    bottom:14px!important;
+  }
+  #hero-section .hero-arrows{
+    bottom:142px!important;
+  }
+}
