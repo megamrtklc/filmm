@@ -2124,3 +2124,40 @@ body.actor-modal-open{overflow:hidden}
 @media(max-width:600px){
  .actor-biography p{display:block!important;-webkit-line-clamp:unset!important;max-height:none!important;overflow:visible!important;font-size:12px!important;line-height:1.85!important}
 }
+
+
+/* Profil temel bilgileri: daha okunaklı tipografi ve ülke bayrağı */
+.actor-profile-facts-horizontal .actor-facts>div{
+  padding:14px 16px!important;min-height:76px!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;gap:8px!important
+}
+.actor-profile-facts-horizontal .actor-facts>div>span{
+  display:flex!important;align-items:center!important;gap:8px!important;
+  color:#b8c1d0!important;font-size:clamp(11px,.82vw,13px)!important;
+  line-height:1.35!important;font-weight:650!important
+}
+.actor-profile-facts-horizontal .actor-facts>div>b{
+  display:block!important;color:#fff!important;
+  font-size:clamp(14px,1.05vw,17px)!important;line-height:1.5!important;
+  font-weight:750!important;overflow-wrap:anywhere!important
+}
+.actor-profile-facts-horizontal .actor-facts>div>b .actor-death-date{
+  font-size:.88em!important;line-height:1.5!important
+}
+.actor-profile-facts-horizontal #actor-country .actor-country-value{
+  display:inline-flex!important;align-items:center!important;gap:9px!important;
+  width:max-content!important;max-width:100%!important;
+  padding:5px 10px!important;border:1px solid rgba(255,255,255,.13)!important;
+  border-radius:999px!important;background:rgba(255,255,255,.07)!important
+}
+.actor-profile-facts-horizontal #actor-country .actor-country-value .actor-country-flag{
+  display:inline-grid!important;place-items:center!important;font-size:21px!important;
+  line-height:1!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))!important
+}
+@media(max-width:600px){
+ .actor-profile-facts-horizontal .actor-facts>div{min-height:70px!important;padding:10px!important;gap:7px!important}
+ .actor-profile-facts-horizontal .actor-facts>div>span{font-size:10px!important}
+ .actor-profile-facts-horizontal .actor-facts>div>b{font-size:13px!important;line-height:1.45!important}
+ .actor-profile-facts-horizontal #actor-country .actor-country-value{gap:7px!important;padding:4px 8px!important}
+ .actor-profile-facts-horizontal #actor-country .actor-country-value .actor-country-flag{font-size:19px!important}
+}
