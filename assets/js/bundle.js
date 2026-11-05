@@ -652,25 +652,38 @@ function launchPlayer(title) {
         let heroItems = [];
         let heroIndex = 0;
         let heroTimer = null;
-        window.onload = async function() {
+        let catalogInitialized = false;
+        async function initializeCatalog() {
+            if (catalogInitialized) return;
+            catalogInitialized = true;
             try {
-                const response = await fetch('./data/catalog.json?v=20261105', { cache: 'no-store' });
-                if (!response.ok) throw new Error('Katalog dosyası yüklenemedi: ' + response.status);
-                mediaDatabase = await response.json();
-                heroItems = [...mediaDatabase].sort((a,b) => Number(b.year)-Number(a.year)).slice(0,10);
-                if (!Array.isArray(mediaDatabase) || mediaDatabase.length === 0) {
-                    throw new Error('Katalog dosyası boş veya geçersiz.');
+                const catalogUrl = new URL('data/catalog.json?v=20261105-recovery', document.baseURI);
+                let response = await fetch(catalogUrl.href, { cache: 'no-store' });
+                if (!response.ok) {
+                    response = await fetch('https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-recovery', { cache: 'no-store' });
                 }
+                if (!response.ok) throw new Error('Katalog isteği başarısız: ' + response.status);
+                const loadedCatalog = await response.json();
+                if (!Array.isArray(loadedCatalog) || loadedCatalog.length === 0) throw new Error('Katalog dosyası boş veya geçersiz.');
+                mediaDatabase = loadedCatalog;
+                heroItems = [...mediaDatabase].sort((a,b) => Number(b.year)-Number(a.year)).slice(0,10);
                 setHeroMedia(mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
                 renderMediaGrid();
                 renderLiveTv();
-                if(location.hash)routeFromHash();
+                renderHeaderSearchResults(headerSearchInput?.value || '');
+                if(location.hash) routeFromHash();
             } catch (error) {
+                catalogInitialized = false;
                 console.error('Katalog yükleme hatası:', error);
-                const grid = document.getElementById('media-grid');
-                if (grid) grid.innerHTML = '<div class="col-span-full py-12 text-center text-red-400">Film ve dizi kataloğu yüklenemedi. Lütfen sayfayı yenileyin.</div>';
+                const message = '<div class="col-span-full py-12 text-center text-red-400">Film ve dizi kataloğu yüklenemedi. Lütfen biraz sonra yeniden deneyin.</div>';
+                ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id => {
+                    const target = document.getElementById(id);
+                    if (target) target.innerHTML = message;
+                });
             }
-        };
+        }
+        window.addEventListener('load', initializeCatalog, { once: true });
+        if (document.readyState === 'complete') initializeCatalog();
     
