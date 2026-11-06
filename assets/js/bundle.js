@@ -1275,7 +1275,7 @@ function renderDetailCast(item){
   const safeName=escapeCountryHtml(person.name);
   const safeCharacter=escapeCountryHtml(person.character);
   const suppliedImage=person.image&&/^https?:\/\//i.test(person.image)?person.image:'';
-  return '<button type="button" class="detail-cast-card" data-cast-actor="'+safeName+'" aria-label="'+safeName+' oyuncu profilini aç"><span class="detail-cast-photo"><img '+(suppliedImage?'src="'+escapeCountryHtml(suppliedImage)+'"':'')+' data-cast-image="'+safeName+'" alt="'+safeName+'" loading="lazy" class="'+(suppliedImage?'':'is-placeholder')+'"><span class="detail-cast-avatar" aria-hidden="true"><i class="fa-solid fa-user"></i></span></span><span class="detail-cast-person"><strong>'+safeName+'</strong>'+(safeCharacter?'<small>'+safeCharacter+'</small>':'<small>Oyuncu</small>')+'</span></button>';
+  return '<button type="button" class="detail-cast-card" data-cast-actor="'+safeName+'" aria-label="'+safeName+' oyuncu profilini aç"><span class="detail-cast-photo"><img '+(suppliedImage?'src="'+escapeCountryHtml(suppliedImage)+'"':'')+(!suppliedImage?' data-cast-image="'+safeName+'"':'')+' alt="'+safeName+'" loading="lazy" class="'+(suppliedImage?'':'is-placeholder')+'"><span class="detail-cast-avatar" aria-hidden="true"><i class="fa-solid fa-user"></i></span></span><span class="detail-cast-person"><strong>'+safeName+'</strong>'+(safeCharacter?'<small>'+safeCharacter+'</small>':'<small>Oyuncu</small>')+'</span></button>';
  }).join('');
  loadDetailCastImages(people.filter(person=>!person.image).map(person=>person.name),item.id);
 }
