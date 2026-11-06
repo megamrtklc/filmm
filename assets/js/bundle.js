@@ -1521,7 +1521,7 @@ function applyPlayerResume(){
 function readPlayerMarkers(){return playerStoreRead(NY7_PLAYER_MARKERS_KEY)[String(activePlayerMediaId)]||{};}
 function savePlayerMarkers(){
  if(!activePlayerMediaId)return;
- const read=id=>{const v=Number(document.getElementById(id)?.value);return Number.isFinite(v)&&v>=0?v:null;};
+ const read=id=>{const raw=String(document.getElementById(id)?.value??'').trim();if(!raw)return null;const v=Number(raw);return Number.isFinite(v)&&v>=0?v:null;};
  const introStart=read('player-intro-start'),introEnd=read('player-intro-end'),creditsStart=read('player-credits-start');
  const markers=playerStoreRead(NY7_PLAYER_MARKERS_KEY);markers[String(activePlayerMediaId)]={introStart,introEnd,creditsStart};playerStoreWrite(NY7_PLAYER_MARKERS_KEY,markers);
  setPlayerError('Atlama zamanları bu cihaz için kaydedildi.');
@@ -1620,10 +1620,20 @@ function attachPlayerSubtitle(){
  const urls=[];
  files.forEach((file,index)=>{
   const isVtt=/\.vtt$/i.test(file.name)||file.type==='text/vtt';
-  if(!isVtt){setPlayerError('Bu sürümde altyazı dosyası WebVTT (.vtt) olmalı. SRT dosyasını VTT biçimine dönüştür.');return;}
-  const url=URL.createObjectURL(file);urls.push(url);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\.vtt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=url;video.appendChild(track);
+  const isSrt=/\.srt$/i.test(file.name)||file.type==='application/x-subrip';
+  if(!isVtt&&!isSrt){setPlayerError('Altyazı dosyası .vtt veya .srt biçiminde olmalı.');return;}
+  const sourceUrl=URL.createObjectURL(file);
+  if(isSrt){
+   const reader=new FileReader();reader.onload=()=>{const converted='WEBVTT\\n\\n'+String(reader.result||'').replace(/^\\uFEFF/,'').replace(/(\\d{2}:\\d{2}:\\d{2}),(\d{3})/g,'$1.$2').replace(/\\r?\\n/g,'\\n');const blob=new Blob([converted],{type:'text/vtt'});const url=URL.createObjectURL(blob);urls.push(url);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\\.srt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=url;video.appendChild(track);refreshSubtitleTrackOptions();};reader.readAsText(file);URL.revokeObjectURL(sourceUrl);return;
+  }
+  urls.push(sourceUrl);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\\.vtt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=sourceUrl;video.appendChild(track);
  });
  activeSubtitleObjectUrl=urls[0]||null;refreshSubtitleTrackOptions();
+}
+function refreshNativeAudioTracks(){
+ const video=document.getElementById('player-video'),tracks=video?.audioTracks;
+ if(!tracks||!tracks.length)return;
+ setSelectOptions('player-audio-track',Array.from(tracks).map((t,i)=>({value:i,label:t.label||t.language||('Ses '+(i+1))})),'Ses parçası');
 }
 function refreshSubtitleTrackOptions(){
  const video=document.getElementById('player-video'),tracks=Array.from(video?.textTracks||[]);
@@ -1655,6 +1665,7 @@ document.getElementById('player-audio-track')?.addEventListener('change',e=>{
  const value=Number(e.target.value);if(value<0)return;
  if(activeHls)activeHls.audioTrack=value;
  else if(activeDash){const tracks=activeDash.getTracksFor('audio')||[];if(tracks[value])activeDash.setCurrentTrack(tracks[value]);}
+ else if(document.getElementById('player-video')?.audioTracks){const tracks=document.getElementById('player-video').audioTracks;for(let i=0;i<tracks.length;i++)tracks[i].enabled=i===value;}
 });
 document.getElementById('player-subtitle-track')?.addEventListener('change',e=>{
  const video=document.getElementById('player-video'),selected=Number(e.target.value);
@@ -1689,8 +1700,8 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
  $('player-fullscreen')?.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else stage.requestFullscreen?.();});
  $('player-pip')?.addEventListener('click',async()=>{try{if(document.pictureInPictureElement)await document.exitPictureInPicture();else if(document.pictureInPictureEnabled&&video.requestPictureInPicture)await video.requestPictureInPicture();}catch(error){setPlayerError('Resim içinde resim bu tarayıcıda kullanılamıyor.');}});
  video.addEventListener('play',()=>{syncPlay();reveal();lastStatsTick=Date.now();});video.addEventListener('pause',()=>{syncPlay();savePlayerProgress();lastStatsTick=0;reveal();});
- video.addEventListener('timeupdate',()=>{syncTime();savePlayerProgress();const now=Date.now();if(lastStatsTick){const delta=(now-lastStatsTick)/1000;if(delta>=1)updatePlayerStats(Math.min(delta,5));}lastStatsTick=now;});
- video.addEventListener('loadedmetadata',()=>{syncTime();syncPlay();applyPlayerResume();refreshSubtitleTrackOptions();});
+ video.addEventListener('timeupdate',()=>{syncTime();savePlayerProgress();const now=Date.now();if(lastStatsTick){const delta=(now-lastStatsTick)/1000;if(delta>0)updatePlayerStats(Math.min(delta,2));}lastStatsTick=now;});
+ video.addEventListener('loadedmetadata',()=>{syncTime();syncPlay();applyPlayerResume();refreshSubtitleTrackOptions();refreshNativeAudioTracks();});
  video.addEventListener('durationchange',syncTime);video.addEventListener('volumechange',syncVolume);
  video.addEventListener('ended',()=>{const all=playerStoreRead(NY7_PLAYER_STATS_KEY),key=String(activePlayerMediaId),stats=all[key]||{seconds:0,completed:0};stats.completed=(stats.completed||0)+1;all[key]=stats;playerStoreWrite(NY7_PLAYER_STATS_KEY,all);refreshPlayerStats();savePlayerProgress();});
  video.addEventListener('waiting',()=>$('player-loading')?.classList.add('is-visible'));video.addEventListener('playing',()=>$('player-loading')?.classList.remove('is-visible'));video.addEventListener('canplay',()=>$('player-loading')?.classList.remove('is-visible'));
