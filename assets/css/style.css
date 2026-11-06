@@ -4950,3 +4950,24 @@ body.detail-synopsis-open{overflow:hidden}
 .series-episode-navigation button:hover{background:#c51b2b;transform:scale(1.04)}
 .series-episode-navigation button:focus-visible{outline:2px solid #e5b94b;outline-offset:3px}
 @media(max-width:600px){.series-episode-navigation{padding:0 7px}.series-episode-navigation button{width:38px;height:38px;justify-content:center;padding:0}.series-episode-navigation button span{display:none}}
+
+
+/* Film ve dizi detayları — sade oyuncu kadrosu */
+#detail-page-view .detail-cast-section{margin:30px 0 0;padding:0 0 8px}
+#detail-page-view .detail-cast-section[hidden]{display:none!important}
+#detail-page-view .detail-cast-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+#detail-page-view .detail-cast-heading>div>span{display:block;margin-bottom:5px;color:#d8b96b;font-size:9px;font-weight:850;letter-spacing:.2em}
+#detail-page-view .detail-cast-heading h2{margin:0;color:#f5f5f5;font-size:clamp(18px,2.2vw,23px);font-weight:800;letter-spacing:-.025em}
+#detail-page-view .detail-cast-count{color:#858995;font-size:11px;font-weight:650}
+#detail-page-view .detail-cast-rail{display:flex;gap:13px;overflow-x:auto;padding:2px 2px 12px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:rgba(216,185,107,.45) transparent}
+#detail-page-view .detail-cast-card{display:flex;flex:0 0 112px;flex-direction:column;gap:9px;min-width:0;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;scroll-snap-align:start}
+#detail-page-view .detail-cast-photo{position:relative;display:block;overflow:hidden;width:112px;height:132px;border:1px solid rgba(255,255,255,.09);border-radius:11px;background:linear-gradient(145deg,#252833,#11131a)}
+#detail-page-view .detail-cast-photo img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 25%;transition:transform .3s ease,opacity .2s ease}
+#detail-page-view .detail-cast-photo img.is-placeholder{opacity:0}
+#detail-page-view .detail-cast-avatar{position:absolute;inset:0;display:grid;place-items:center;color:#747b8a;font-size:25px}
+#detail-page-view .detail-cast-person{display:flex;flex-direction:column;gap:3px;min-width:0}
+#detail-page-view .detail-cast-person strong{overflow:hidden;color:#f1f2f4;font-size:12px;font-weight:750;line-height:1.35;text-overflow:ellipsis;white-space:nowrap}
+#detail-page-view .detail-cast-person small{overflow:hidden;color:#9297a3;font-size:10px;line-height:1.35;text-overflow:ellipsis;white-space:nowrap}
+#detail-page-view .detail-cast-card:hover .detail-cast-photo img{transform:scale(1.055)}
+#detail-page-view .detail-cast-card:hover .detail-cast-person strong{color:#e8c875}
+@media(max-width:600px){#detail-page-view .detail-cast-section{margin-top:23px}#detail-page-view .detail-cast-card{flex-basis:94px}#detail-page-view .detail-cast-photo{width:94px;height:116px}#detail-page-view .detail-cast-rail{gap:11px}}
