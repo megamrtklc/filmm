@@ -4276,3 +4276,50 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-diary-footer button{width:100%}
  #detail-page-view .detail-related{margin-top:22px!important}
 }
+
+
+/* 2026-11: Oyuncu kadrosu — sinematik portre şeridi */
+#detail-page-view .detail-lower.detail-cast-inline{display:block!important;width:100%!important;max-width:1320px!important;margin:28px auto 0!important;padding:0 clamp(20px,6vw,90px)!important}
+#detail-page-view .detail-cast-card{width:100%!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#detail-page-view .detail-cast-card:before,#detail-page-view .detail-cast-card:after{display:none!important;content:none!important}
+#detail-page-view .detail-cast-heading{display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:18px!important;margin:0 0 17px!important;padding:0 0 13px!important;border-bottom:1px solid rgba(255,255,255,.11)!important}
+#detail-page-view .detail-cast-title-group{min-width:0!important}
+#detail-page-view .detail-cast-title-group .detail-section-eyebrow{display:block!important;margin:0 0 6px!important;color:#c5a66a!important;font-size:9px!important;font-weight:800!important;letter-spacing:.24em!important}
+#detail-page-view .detail-cast-title-group h3{margin:0!important;color:#f5f5f6!important;font-size:clamp(20px,2vw,26px)!important;font-weight:750!important;letter-spacing:-.035em!important;line-height:1.1!important;text-transform:none!important}
+#detail-page-view .detail-cast-title-group p{margin:6px 0 0!important;color:#9298a4!important;font-size:11px!important;line-height:1.5!important}
+#detail-page-view .detail-cast-count{margin-left:auto!important;padding-bottom:3px!important;color:#9298a4!important;font-size:11px!important;font-weight:650!important;white-space:nowrap!important}
+#detail-page-view .detail-cast-controls{display:flex!important;align-items:center!important;gap:8px!important;margin:0 0 0 4px!important;color:#aeb4bf!important;font-size:10px!important}
+#detail-page-view .detail-cast-controls.hidden{display:none!important}
+#detail-page-view .detail-cast-controls button{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:50%!important;background:#ffffff08!important;color:#f1f2f4!important;cursor:pointer!important;transition:background .2s,border-color .2s,transform .2s!important}
+#detail-page-view .detail-cast-controls button:not(:disabled):hover{transform:translateY(-2px)!important;border-color:rgba(197,166,106,.65)!important;background:rgba(197,166,106,.13)!important}
+#detail-page-view .detail-cast-controls button:disabled{opacity:.25!important;cursor:default!important}
+#detail-page-view .detail-cast-grid{display:flex!important;flex-wrap:nowrap!important;gap:15px!important;width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 14px!important;margin:0!important;scroll-snap-type:x mandatory!important;scroll-behavior:smooth!important;scrollbar-width:thin!important;scrollbar-color:#55504a transparent!important}
+#detail-page-view .detail-cast-person{display:flex!important;flex:0 0 clamp(142px,14.5vw,184px)!important;flex-direction:column!important;align-items:stretch!important;gap:10px!important;min-width:0!important;padding:0!important;overflow:hidden!important;border:0!important;border-radius:0!important;background:transparent!important;color:#f4f4f5!important;text-align:left!important;cursor:pointer!important;scroll-snap-align:start!important;box-shadow:none!important;transform:none!important;transition:opacity .2s!important}
+#detail-page-view .detail-cast-photo{position:relative!important;display:block!important;width:100%!important;overflow:hidden!important;aspect-ratio:3/4!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:9px!important;background:linear-gradient(145deg,#242832,#11141a)!important}
+#detail-page-view .detail-cast-photo:after{content:""!important;position:absolute!important;inset:48% 0 0!important;background:linear-gradient(0deg,rgba(0,0,0,.48),transparent)!important;pointer-events:none!important}
+#detail-page-view .detail-cast-person img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 22%!important;filter:saturate(.88)!important;transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .35s!important}
+#detail-page-view .detail-cast-person:hover,#detail-page-view .detail-cast-person:focus-visible{outline:none!important;opacity:1!important;background:transparent!important;border:0!important;transform:none!important}
+#detail-page-view .detail-cast-person:hover .detail-cast-photo,#detail-page-view .detail-cast-person:focus-visible .detail-cast-photo{border-color:rgba(197,166,106,.62)!important}
+#detail-page-view .detail-cast-person:hover img,#detail-page-view .detail-cast-person:focus-visible img{transform:scale(1.055)!important;filter:saturate(1.04) brightness(1.04)!important}
+#detail-page-view .detail-cast-index{position:absolute!important;z-index:2!important;left:10px!important;bottom:9px!important;color:rgba(255,255,255,.9)!important;font-size:10px!important;font-weight:800!important;letter-spacing:.08em!important;text-shadow:0 1px 6px #000!important}
+#detail-page-view .detail-cast-person-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important;padding:0 2px!important}
+#detail-page-view .detail-cast-person-copy b{display:block!important;padding:0!important;color:#f1f2f4!important;font-size:12px!important;font-weight:700!important;line-height:1.35!important;overflow-wrap:anywhere!important}
+#detail-page-view .detail-cast-person-copy small{display:block!important;padding:0!important;color:#99918a!important;font-size:10px!important;font-weight:450!important;line-height:1.4!important;overflow-wrap:anywhere!important}
+#detail-page-view .detail-cast-empty{width:100%!important;margin:0!important;padding:22px 0!important;color:#9298a4!important;font-size:12px!important}
+@media(max-width:700px){
+ #detail-page-view .detail-lower.detail-cast-inline{margin:19px auto 0!important;padding:0 18px!important}
+ #detail-page-view .detail-cast-heading{gap:8px!important;margin-bottom:12px!important;padding-bottom:10px!important}
+ #detail-page-view .detail-cast-title-group .detail-section-eyebrow{font-size:8px!important}
+ #detail-page-view .detail-cast-title-group h3{font-size:19px!important}
+ #detail-page-view .detail-cast-title-group p{font-size:10px!important}
+ #detail-page-view .detail-cast-count{font-size:10px!important}
+ #detail-page-view .detail-cast-controls{gap:5px!important}
+ #detail-page-view .detail-cast-controls button{width:28px!important;height:28px!important}
+ #detail-page-view .detail-cast-grid{gap:11px!important;padding-bottom:12px!important}
+ #detail-page-view .detail-cast-person{flex-basis:clamp(112px,37vw,145px)!important;gap:8px!important}
+ #detail-page-view .detail-cast-photo{border-radius:7px!important}
+ #detail-page-view .detail-cast-person-copy b{font-size:11px!important}
+ #detail-page-view .detail-cast-person-copy small{font-size:9px!important}
+}
+@media(max-width:380px){#detail-page-view .detail-cast-title-group p{display:none!important}#detail-page-view .detail-cast-person{flex-basis:112px!important}}
+@media(prefers-reduced-motion:reduce){#detail-page-view .detail-cast-person,#detail-page-view .detail-cast-person img{transition:none!important}#detail-page-view .detail-cast-grid{scroll-behavior:auto!important}}
