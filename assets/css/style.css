@@ -4529,3 +4529,67 @@ body.trailer-popup-open{overflow:hidden}
   #detail-page-view .detail-series-stat strong{font-size:21px!important}
   #detail-page-view .detail-series-stat span{font-size:10px!important}
 }
+
+
+/* Inline TV season summary — visible only for series */
+#detail-page-view .detail-series-panel{
+  display:block;
+  margin:13px 0 0;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+#detail-page-view .detail-series-panel[hidden]{display:none!important}
+#detail-page-view .detail-series-stats{
+  display:flex!important;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px 28px!important;
+}
+#detail-page-view .detail-series-group{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  min-width:0;
+}
+#detail-page-view .detail-series-label{
+  color:#9da3af;
+  font-size:9px;
+  font-weight:750;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+#detail-page-view .detail-series-values{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px 17px;
+}
+#detail-page-view .detail-series-value{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  color:#e9ebef;
+  font-size:12px;
+  white-space:nowrap;
+}
+#detail-page-view .detail-series-value i{
+  color:#c5a66a;
+  font-size:12px;
+}
+#detail-page-view .detail-series-value strong{font-weight:700}
+#detail-page-view .detail-series-average{
+  padding-left:24px;
+  border-left:1px solid #ffffff20;
+}
+@media(max-width:700px){
+  #detail-page-view .detail-series-panel{margin-top:11px}
+  #detail-page-view .detail-series-stats{gap:12px 18px!important}
+  #detail-page-view .detail-series-label{font-size:8px}
+  #detail-page-view .detail-series-value{font-size:11px;gap:6px}
+  #detail-page-view .detail-series-average{padding-left:15px}
+}
+@media(max-width:380px){
+  #detail-page-view .detail-series-stats{align-items:flex-start;gap:12px!important}
+  #detail-page-view .detail-series-average{padding-left:0;border-left:0}
+}

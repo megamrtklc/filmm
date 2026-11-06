@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261106-series-info-v1">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261106-series-inline-v1">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -235,7 +235,10 @@
                         <span id="detail-category" class="text-[10px] uppercase tracking-wider font-extrabold text-amber-400"></span>
                     </div>
                     <h1 id="detail-title"></h1>
-                    <div class="detail-subline"><span id="detail-year"></span><span class="detail-meta-separator">•</span><span id="detail-duration"></span><span class="detail-meta-separator">•</span><span id="detail-type-label"></span><span class="detail-meta-separator">•</span><span id="detail-country" class="detail-inline-countries"></span><span id="detail-director-inline" class="detail-inline-director"></span></div>
+                    <div class="detail-subline"><span id="detail-year"></span><span class="detail-meta-separator">•</span><span id="detail-duration"></span><span id="detail-duration-separator" class="detail-meta-separator">•</span><span id="detail-type-label"></span><span class="detail-meta-separator">•</span><span id="detail-country" class="detail-inline-countries"></span><span id="detail-director-inline" class="detail-inline-director"></span></div>
+                    <section id="detail-series-panel" class="detail-series-panel" hidden aria-label="Dizi sezon ve bölüm özeti">
+                        <div id="detail-series-stats" class="detail-series-stats"></div>
+                    </section>
                     <div id="detail-score-row" class="detail-score-row"></div>
                     <div class="detail-description-panel">
                         <h2>Detay</h2>
@@ -251,14 +254,7 @@
                 </div>
             </div>
 
-            <section id="detail-series-panel" class="detail-series-panel" hidden aria-label="Dizi sezon bilgileri">
-                <div class="detail-series-heading">
-                    <span>SEZON REHBERİ</span>
-                    <h2>Dizi bilgileri</h2>
-                </div>
-                <div id="detail-series-stats" class="detail-series-stats"></div>
-                <p class="detail-series-note">Sezon ve bölüm bilgileri katalogdaki mevcut kayıtlara göre gösterilir.</p>
-            </section>
+            
             <section id="detail-related" class="detail-related hidden"><div class="detail-related-heading"><span>DAHA FAZLASI</span><h2>Benzer yapımlar</h2></div><div id="detail-related-rail" class="collection-rail"></div></section>
         </section>
     </div>
@@ -389,6 +385,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261106-series-info-v1"></script>
+    <script src="assets/js/bundle.js?v=20261106-series-inline-v1"></script>
 </body>
 </html>

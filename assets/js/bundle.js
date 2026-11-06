@@ -1100,13 +1100,32 @@ function applyPosterAtmosphere(item){
  poster.src=sampleUrl;
 }
 function renderDetailSeries(item){
- const panel=document.getElementById('detail-series-panel'),stats=document.getElementById('detail-series-stats');
+ const panel=document.getElementById('detail-series-panel');
+ const stats=document.getElementById('detail-series-stats');
+ const duration=document.getElementById('detail-duration');
+ const durationSeparator=document.getElementById('detail-duration-separator');
  if(!panel||!stats)return;
  const isSeries=item.type==='tv';
  panel.hidden=!isSeries;
- if(!isSeries)return;
- const values=[['Sezon',item.seasons?String(item.seasons):'Bilgi yok'],['Bölüm',item.episodes?String(item.episodes):'Bilgi yok'],['Yayın başlangıcı',item.year||'Bilgi yok']];
- stats.innerHTML=values.map(([label,value])=>'<div class="detail-series-stat"><strong>'+escapeCountryHtml(value)+'</strong><span>'+escapeCountryHtml(label)+'</span></div>').join('');
+ if(duration)duration.hidden=isSeries||!item.duration;
+ if(durationSeparator)durationSeparator.hidden=isSeries||!item.duration;
+ if(!isSeries){stats.innerHTML='';return;}
+ const seasons=item.seasons?String(item.seasons):'Bilgi yok';
+ const episodes=item.episodes?String(item.episodes):'Bilgi yok';
+ const averageRaw=String(item.duration||'Bilgi yok');
+ const average=/bölüm/i.test(averageRaw)?averageRaw:averageRaw+' / Bölüm';
+ stats.innerHTML=
+  '<div class="detail-series-group detail-series-total">'+
+   '<span class="detail-series-label">Toplam sezon bilgisi</span>'+
+   '<div class="detail-series-values">'+
+    '<span class="detail-series-value"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><strong>'+escapeCountryHtml(seasons)+' Sezon</strong></span>'+
+    '<span class="detail-series-value"><i class="fa-solid fa-film" aria-hidden="true"></i><strong>'+escapeCountryHtml(episodes)+' Bölüm</strong></span>'+
+   '</div>'+
+  '</div>'+
+  '<div class="detail-series-group detail-series-average">'+
+   '<span class="detail-series-label">Ortalama</span>'+
+   '<span class="detail-series-value"><i class="fa-regular fa-clock" aria-hidden="true"></i><strong>'+escapeCountryHtml(average)+' / Bölüm</strong></span>'+
+  '</div>';
 }
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
