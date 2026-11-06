@@ -1503,7 +1503,7 @@ function launchPlayer(title) {
                 const payload = await response.json();
                 let candidate = payload;
                 if (!Array.isArray(payload) && typeof payload?.content === 'string') {
-                    const binary = atob(payload.content.replace(/\\s/g, ''));
+                    const binary = atob(payload.content.replace(/\s/g, ''));
                     const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
                     candidate = JSON.parse(new TextDecoder().decode(bytes));
                 }
