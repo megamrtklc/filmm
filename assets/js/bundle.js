@@ -943,7 +943,7 @@ function renderCastPage(){
   const safe=escapeCastHtml(name);
   const role=escapeCastHtml(character);
   const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=160&bold=true';
-  return '<div class="detail-cast-person"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></div>';
+  return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></button>';
  }).join('')||'<p class="detail-cast-empty">Oyuncu bilgisi bulunmuyor.</p>';
 }
 // Oyuncu kimliği isimden tahmin edilmez: yapımın TMDB kimliğiyle Wikidata'daki
