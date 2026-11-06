@@ -956,7 +956,7 @@ function renderCastPage(){
  if(count)count.textContent=currentCastNames.length?currentCastNames.length+' oyuncu':'';
  list.innerHTML=visible.map((member,index)=>{
   const name=typeof member==='string'?member:member.name;
-  const character=typeof member==='string?'':member.character||member.role||'';
+  const character=typeof member==='string'?'':member.character||member.role||'';
   const photo=typeof member==='string'?'':member.image||'';
   const safe=escapeCastHtml(name);
   const role=escapeCastHtml(character);
