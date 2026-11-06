@@ -1187,7 +1187,7 @@ function ensureDetailSynopsisPopup(){
  popup.setAttribute('role','dialog');
  popup.setAttribute('aria-modal','true');
  popup.setAttribute('aria-labelledby','detail-synopsis-popup-title');
- popup.innerHTML='<div class="detail-synopsis-backdrop" data-synopsis-close></div><section class="detail-synopsis-dialog"><header><div><span>DİZİ KONUSU</span><h2 id="detail-synopsis-popup-title"></h2></div><button type="button" class="detail-synopsis-close" data-synopsis-close aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button></header><p id="detail-synopsis-popup-text"></p></section>';
+ popup.innerHTML='<div class="detail-synopsis-backdrop" data-synopsis-close></div><section class="detail-synopsis-dialog"><header><div><span>KONU DETAYI</span><h2 id="detail-synopsis-popup-title"></h2></div><button type="button" class="detail-synopsis-close" data-synopsis-close aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button></header><p id="detail-synopsis-popup-text"></p></section>';
  document.body.appendChild(popup);
  popup.addEventListener('click',event=>{if(event.target.closest('[data-synopsis-close]'))closeDetailSynopsisPopup();});
  return popup;
@@ -1200,7 +1200,7 @@ function closeDetailSynopsisPopup(){
 }
 function openDetailSynopsisPopup(){
  const popup=ensureDetailSynopsisPopup();
- const title=document.getElementById('detail-title')?.textContent||'Dizi konusu';
+ const title=document.getElementById('detail-title')?.textContent||'Yapım konusu';
  const description=document.getElementById('detail-desc')?.textContent||'';
  document.getElementById('detail-synopsis-popup-title').textContent=title;
  document.getElementById('detail-synopsis-popup-text').textContent=description;
@@ -1218,10 +1218,9 @@ function updateDetailSynopsis(item){
   button.textContent='Tamamını Oku';button.addEventListener('click',openDetailSynopsisPopup);
   description.insertAdjacentElement('afterend',button);
  }
- const isSeries=item.type==='tv';
- description.classList.toggle('detail-synopsis-clamped',isSeries);
+ // Film ve dizi açıklamalarını aynı şekilde dört satırla sınırla.
+ description.classList.add('detail-synopsis-clamped');
  button.hidden=true;
- if(!isSeries)return;
  requestAnimationFrame(()=>{
   if(!description.isConnected)return;
   const style=window.getComputedStyle(description);
