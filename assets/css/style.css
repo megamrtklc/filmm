@@ -4593,3 +4593,20 @@ body.trailer-popup-open{overflow:hidden}
   #detail-page-view .detail-series-stats{align-items:flex-start;gap:12px!important}
   #detail-page-view .detail-series-average{padding-left:0;border-left:0}
 }
+
+
+/* Compact series summary without redundant labels */
+#detail-page-view .detail-series-group{
+  flex-direction:row;
+  align-items:center;
+  gap:7px 17px;
+}
+#detail-page-view .detail-series-total{
+  flex-direction:row;
+  align-items:center;
+}
+#detail-page-view .detail-series-average{
+  flex-direction:row;
+  align-items:center;
+}
+#detail-page-view .detail-series-label{display:none!important}
