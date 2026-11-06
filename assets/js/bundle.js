@@ -1469,114 +1469,22 @@ async function getNY7LocalVideo(id){
 function setPlayerError(message){
  const error=document.getElementById('player-error');if(error){error.textContent=message||'';error.hidden=!message;}
 }
-const NY7_PLAYER_PROGRESS_KEY='perde_player_progress_v2';
-const NY7_PLAYER_STATS_KEY='perde_player_stats_v2';
-const NY7_PLAYER_MARKERS_KEY='perde_player_markers_v1';
-let activeHls=null,activeDash=null,activePlayerSourceUrl='',playerStatsTimer=null,lastStatsTick=0,resumeApplied=false;
-function playerStoreRead(key){try{return JSON.parse(localStorage.getItem(key)||'{}')||{};}catch(_){return {};}}
-function playerStoreWrite(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch(error){console.warn('Oynatıcı verisi kaydedilemedi:',error);}}
 function releasePlayerUrls(){
  if(activePlayerObjectUrl){URL.revokeObjectURL(activePlayerObjectUrl);activePlayerObjectUrl=null;}
  if(activeSubtitleObjectUrl){URL.revokeObjectURL(activeSubtitleObjectUrl);activeSubtitleObjectUrl=null;}
 }
-function destroyAdaptivePlayers(){
- if(activeHls){try{activeHls.destroy();}catch(_){}activeHls=null;}
- if(activeDash){try{activeDash.reset();}catch(_){}activeDash=null;}
-}
-function setSelectOptions(id,items,placeholder){
- const select=document.getElementById(id);if(!select)return;
- select.innerHTML='';
- const first=document.createElement('option');first.value='';first.disabled=true;first.selected=true;first.textContent=placeholder;select.appendChild(first);
- items.forEach(item=>{const option=document.createElement('option');option.value=String(item.value);option.textContent=item.label;select.appendChild(option);});
- select.disabled=items.length===0;
-}
-function refreshPlayerStats(){
- const stats=playerStoreRead(NY7_PLAYER_STATS_KEY)[String(activePlayerMediaId)]||{seconds:0,completed:0};
- const minutes=document.getElementById('player-stat-minutes'),completed=document.getElementById('player-stat-completed');
- if(minutes)minutes.textContent=Math.floor((stats.seconds||0)/60)+' dk';
- if(completed)completed.textContent=String(stats.completed||0);
-}
-function updatePlayerStats(delta){
- if(!activePlayerMediaId||!Number.isFinite(delta)||delta<=0||delta>8)return;
- const all=playerStoreRead(NY7_PLAYER_STATS_KEY),key=String(activePlayerMediaId),stats=all[key]||{seconds:0,completed:0};
- stats.seconds=(stats.seconds||0)+delta;all[key]=stats;playerStoreWrite(NY7_PLAYER_STATS_KEY,all);refreshPlayerStats();
-}
-function savePlayerProgress(){
- const video=document.getElementById('player-video');if(!activePlayerMediaId||!video||!Number.isFinite(video.duration)||video.duration<=0)return;
- const all=playerStoreRead(NY7_PLAYER_PROGRESS_KEY),key=String(activePlayerMediaId);
- if(video.ended||video.duration-video.currentTime<25)delete all[key];
- else all[key]={time:video.currentTime,duration:video.duration,updatedAt:Date.now()};
- playerStoreWrite(NY7_PLAYER_PROGRESS_KEY,all);
-}
-function applyPlayerResume(){
- const video=document.getElementById('player-video');if(resumeApplied||!activePlayerMediaId||!video||!Number.isFinite(video.duration))return;
- resumeApplied=true;
- const saved=playerStoreRead(NY7_PLAYER_PROGRESS_KEY)[String(activePlayerMediaId)];
- if(saved&&saved.time>15&&saved.time<video.duration-25&&Math.abs(saved.duration-video.duration)<Math.max(120,video.duration*.08)){
-  video.currentTime=saved.time;
-  const note=document.getElementById('player-resume-note');
-  if(note){note.textContent='Kaldığın yerden devam ediyorsun · '+Math.floor(saved.time/60)+' dk';note.hidden=false;setTimeout(()=>{note.hidden=true;},4200);}
- }
-}
-function readPlayerMarkers(){return playerStoreRead(NY7_PLAYER_MARKERS_KEY)[String(activePlayerMediaId)]||{};}
-function savePlayerMarkers(){
- if(!activePlayerMediaId)return;
- const read=id=>{const raw=String(document.getElementById(id)?.value??'').trim();if(!raw)return null;const v=Number(raw);return Number.isFinite(v)&&v>=0?v:null;};
- const introStart=read('player-intro-start'),introEnd=read('player-intro-end'),creditsStart=read('player-credits-start');
- const markers=playerStoreRead(NY7_PLAYER_MARKERS_KEY);markers[String(activePlayerMediaId)]={introStart,introEnd,creditsStart};playerStoreWrite(NY7_PLAYER_MARKERS_KEY,markers);
- setPlayerError('Atlama zamanları bu cihaz için kaydedildi.');
-}
-function loadPlayerMarkers(){
- const m=readPlayerMarkers();
- [['player-intro-start',m.introStart],['player-intro-end',m.introEnd],['player-credits-start',m.creditsStart]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v??'';});
-}
-function updateSkipButtons(){
- const video=document.getElementById('player-video'),m=readPlayerMarkers(),intro=document.getElementById('player-skip-intro'),credits=document.getElementById('player-skip-credits');
- if(intro)intro.hidden=!(m.introStart!=null&&m.introEnd!=null&&m.introEnd>m.introStart&&video.currentTime>=m.introStart&&video.currentTime<m.introEnd);
- if(credits)credits.hidden=!(m.creditsStart!=null&&video.currentTime>=m.creditsStart&&Number.isFinite(video.duration));
-}
-function attachAdaptiveSource(url){
- const video=document.getElementById('player-video'),quality=document.getElementById('player-quality'),audio=document.getElementById('player-audio-track');
- destroyAdaptivePlayers();activePlayerSourceUrl=url;
- setSelectOptions('player-quality',[],'Kaynak kalitesi');setSelectOptions('player-audio-track',[],'Ses parçası');
- if(/\.m3u8(?:$|\?)/i.test(url)){
-  if(window.Hls&&Hls.isSupported()){
-   activeHls=new Hls({enableWorker:true,capLevelToPlayerSize:true, startLevel:-1});
-   activeHls.loadSource(url);activeHls.attachMedia(video);
-   activeHls.on(Hls.Events.MANIFEST_PARSED,()=>{
-    const levels=activeHls.levels.map((l,i)=>({value:i,label:(l.height?l.height+'p':Math.round((l.bitrate||0)/1000)+' kbps')}));
-    setSelectOptions('player-quality',[{value:-1,label:'Otomatik'},...levels],'Kalite');
-    const tracks=activeHls.audioTracks.map((t,i)=>({value:i,label:t.name||t.lang||('Ses '+(i+1))}));
-    setSelectOptions('player-audio-track',tracks,'Ses parçası');
-    video.play().catch(()=>{});
-   });
-   activeHls.on(Hls.Events.ERROR,(_event,data)=>{if(data.fatal){setPlayerError('HLS yayını açılamadı. Kaynak adresini ve yayın izinlerini kontrol et.');}});
-  }else if(video.canPlayType('application/vnd.apple.mpegurl')){video.src=url;setSelectOptions('player-quality',[],'Otomatik kalite (tarayıcı)');video.play().catch(()=>{});}
-  else setPlayerError('Bu tarayıcı HLS yayınını desteklemiyor.');
- }else if(/\.mpd(?:$|\?)/i.test(url)&&window.dashjs){
-  activeDash=dashjs.MediaPlayer().create();activeDash.initialize(video,url,true);
-  activeDash.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED,()=>{
-   const levels=activeDash.getBitrateInfoListFor('video')||[];
-   setSelectOptions('player-quality',[{value:-1,label:'Otomatik'},...levels.map((l,i)=>({value:i,label:(l.height?l.height+'p':Math.round((l.bitrate||0)/1000)+' kbps')}))],'Kalite');
-   const tracks=activeDash.getTracksFor('audio')||[];
-   setSelectOptions('player-audio-track',tracks.map((t,i)=>({value:i,label:t.lang||t.labels?.[0]?.text||('Ses '+(i+1))})),'Ses parçası');
-  });
-  activeDash.on(dashjs.MediaPlayer.events.ERROR,()=>setPlayerError('DASH yayını yüklenemedi. Kaynağı kontrol et.'));
- }else{
-  video.src=url;video.load();setSelectOptions('player-quality',[],'Tek kalite');video.play().catch(()=>{});
- }
-}
 function attachPlayerSource(url,label){
  const video=document.getElementById('player-video'),empty=document.getElementById('player-empty-state');
  if(!video||!url)return;
- video.pause();video.removeAttribute('src');video.innerHTML='';video.load();
+ video.pause();video.innerHTML='';video.src=url;video.load();
  if(empty)empty.hidden=true;
- setPlayerError('');resumeApplied=false;
+ setPlayerError('');
  const subtitleInput=document.getElementById('player-subtitle-file');if(subtitleInput)subtitleInput.value='';
- attachAdaptiveSource(url);
+ video.play().catch(()=>{});
 }
 async function loadSavedPlayerSource(id){
- const source=readPlayerSources()[String(id)],urlInput=document.getElementById('player-stream-url');
+ const source=readPlayerSources()[String(id)];
+ const urlInput=document.getElementById('player-stream-url');
  if(urlInput)urlInput.value=source?.type==='url'?source.url:'';
  if(source?.type==='local'){
   try{const file=await getNY7LocalVideo(id);if(file){activePlayerObjectUrl=URL.createObjectURL(file);attachPlayerSource(activePlayerObjectUrl,file.name);return;}}
@@ -1585,110 +1493,198 @@ async function loadSavedPlayerSource(id){
  if(source?.type==='url'&&source.url)attachPlayerSource(source.url,'Harici yayın');
 }
 function openPlayerForMedia(id){
- const item=mediaDatabase.find(entry=>String(entry.id)===String(id));if(!item)return;
+ const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
+ if(!item)return;
  if(item.type==='tv'){alert('Dizi bölümleri için bölüm bazlı oynatıcı henüz etkin değil.');return;}
- closePlayer(false);activePlayerMediaId=String(item.id);
+ activePlayerMediaId=String(item.id);
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
  document.getElementById('player-media-title').textContent=item.title+' · '+(item.year||'');
- modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.documentElement.classList.add('ny7-modal-lock');
+ modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
+ document.documentElement.classList.add('ny7-modal-lock');
  if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.poster=item.image||'';video.load();}
  document.getElementById('player-empty-state').hidden=false;
- document.getElementById('player-local-file').value='';document.getElementById('player-subtitle-file').value='';
- const settings=document.getElementById('player-settings-panel');if(settings)settings.hidden=true;
- loadPlayerMarkers();refreshPlayerStats();resumeApplied=false;loadSavedPlayerSource(activePlayerMediaId);
+ document.getElementById('player-local-file').value='';
+ document.getElementById('player-subtitle-file').value='';
+ setPlayerError('');
+ loadSavedPlayerSource(activePlayerMediaId);
 }
 async function saveAndPlayLocalVideo(){
  if(!activePlayerMediaId)return;
  const input=document.getElementById('player-local-file'),file=input?.files?.[0];
  if(!file){setPlayerError('Önce bilgisayarından bir video dosyası seç.');return;}
  if(file.type&&!file.type.startsWith('video/')){setPlayerError('Lütfen geçerli bir video dosyası seç.');return;}
- try{await saveNY7LocalVideo(activePlayerMediaId,file);writePlayerSource(activePlayerMediaId,{type:'local',name:file.name});destroyAdaptivePlayers();releasePlayerUrls();activePlayerObjectUrl=URL.createObjectURL(file);attachPlayerSource(activePlayerObjectUrl,file.name);}
- catch(error){setPlayerError(error.message||'Dosya kaydedilemedi. Tarayıcı depolama alanını kontrol et.');}
+ try{
+  await saveNY7LocalVideo(activePlayerMediaId,file);
+  writePlayerSource(activePlayerMediaId,{type:'local',name:file.name});
+  releasePlayerUrls();
+  activePlayerObjectUrl=URL.createObjectURL(file);
+  attachPlayerSource(activePlayerObjectUrl,file.name);
+ }catch(error){setPlayerError(error.message||'Dosya kaydedilemedi. Tarayıcı depolama alanını kontrol et.');}
 }
 function saveAndPlayStream(){
  if(!activePlayerMediaId)return;
- const input=document.getElementById('player-stream-url'),raw=String(input?.value||'').trim();let url;
- try{url=new URL(raw);}catch(_){setPlayerError('Geçerli bir http veya https video bağlantısı gir.');return;}
+ const input=document.getElementById('player-stream-url'),raw=String(input?.value||'').trim();
+ let url;try{url=new URL(raw);}catch(_){setPlayerError('Geçerli bir http veya https video bağlantısı gir.');return;}
  if(!['http:','https:'].includes(url.protocol)){setPlayerError('Yalnızca http veya https bağlantıları kullanılabilir.');return;}
  if(!writePlayerSource(activePlayerMediaId,{type:'url',url:url.href})){setPlayerError('Bağlantı bu tarayıcıya kaydedilemedi.');return;}
- destroyAdaptivePlayers();releasePlayerUrls();attachPlayerSource(url.href,'Harici yayın');
+ releasePlayerUrls();
+ attachPlayerSource(url.href,'Harici yayın');
 }
 function attachPlayerSubtitle(){
- const input=document.getElementById('player-subtitle-file'),files=Array.from(input?.files||[]),video=document.getElementById('player-video');if(!files.length||!video)return;
- Array.from(video.querySelectorAll('track[data-user-subtitle]')).forEach(track=>track.remove());
+ const input=document.getElementById('player-subtitle-file'),file=input?.files?.[0],video=document.getElementById('player-video');
+ if(!file||!video)return;
  if(activeSubtitleObjectUrl)URL.revokeObjectURL(activeSubtitleObjectUrl);
- const urls=[];
- files.forEach((file,index)=>{
-  const isVtt=/\.vtt$/i.test(file.name)||file.type==='text/vtt';
-  const isSrt=/\.srt$/i.test(file.name)||file.type==='application/x-subrip';
-  if(!isVtt&&!isSrt){setPlayerError('Altyazı dosyası .vtt veya .srt biçiminde olmalı.');return;}
-  const sourceUrl=URL.createObjectURL(file);
-  if(isSrt){
-   const reader=new FileReader();reader.onload=()=>{const converted='WEBVTT\n\n'+String(reader.result||'').replace(/^\uFEFF/,'').replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g,'$1.$2').replace(/\r?\n/g,'\n');const blob=new Blob([converted],{type:'text/vtt'});const url=URL.createObjectURL(blob);urls.push(url);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\.srt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=url;video.appendChild(track);refreshSubtitleTrackOptions();};reader.readAsText(file);URL.revokeObjectURL(sourceUrl);return;
-  }
-  urls.push(sourceUrl);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\.vtt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=sourceUrl;video.appendChild(track);
- });
- activeSubtitleObjectUrl=urls[0]||null;refreshSubtitleTrackOptions();
+ activeSubtitleObjectUrl=URL.createObjectURL(file);
+ const track=document.createElement('track');track.kind='subtitles';track.label='Altyazı';track.srclang='tr';track.src=activeSubtitleObjectUrl;track.default=true;
+ video.appendChild(track);
 }
-function refreshNativeAudioTracks(){
- const video=document.getElementById('player-video'),tracks=video?.audioTracks;
- if(!tracks||!tracks.length)return;
- setSelectOptions('player-audio-track',Array.from(tracks).map((t,i)=>({value:i,label:t.label||t.language||('Ses '+(i+1))})),'Ses parçası');
-}
-function refreshSubtitleTrackOptions(){
- const video=document.getElementById('player-video'),tracks=Array.from(video?.textTracks||[]);
- setSelectOptions('player-subtitle-track',tracks.map((t,i)=>({value:i,label:t.label||t.language||('Altyazı '+(i+1))})),'Altyazı kapalı');
- if(video){tracks.forEach(t=>{t.mode='disabled';});}
-}
-function applySubtitleStyle(){
- const size=document.getElementById('player-subtitle-size')?.value||'22px',color=document.getElementById('player-subtitle-color')?.value||'#ffffff',bg=document.getElementById('player-subtitle-bg')?.value||'0.65';
- let style=document.getElementById('player-subtitle-dynamic-style');if(!style){style=document.createElement('style');style.id='player-subtitle-dynamic-style';document.head.appendChild(style);}
- style.textContent='#player-video::cue{font-size:'+size+';color:'+color+';background:rgba(0,0,0,'+bg+');}';
-}
-function closePlayer(keepActive=true){
+function closePlayer(){
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
- if(video){savePlayerProgress();video.pause();video.removeAttribute('src');video.innerHTML='';video.load();}
- destroyAdaptivePlayers();releasePlayerUrls();activePlayerSourceUrl='';
+ if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.load();}
+ releasePlayerUrls();activePlayerMediaId=null;
  if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}
  document.documentElement.classList.remove('ny7-modal-lock');
- if(keepActive)activePlayerMediaId=null;
 }
 document.getElementById('player-save-local')?.addEventListener('click',saveAndPlayLocalVideo);
 document.getElementById('player-save-stream')?.addEventListener('click',saveAndPlayStream);
 document.getElementById('player-subtitle-file')?.addEventListener('change',attachPlayerSubtitle);
-document.getElementById('player-quality')?.addEventListener('change',e=>{
- const value=Number(e.target.value);
- if(activeHls)activeHls.currentLevel=value;
- else if(activeDash){if(value<0)activeDash.setAutoSwitchQualityFor('video',true);else{activeDash.setAutoSwitchQualityFor('video',false);activeDash.setQualityFor('video',value);}}
-});
-document.getElementById('player-audio-track')?.addEventListener('change',e=>{
- const value=Number(e.target.value);if(value<0)return;
- if(activeHls)activeHls.audioTrack=value;
- else if(activeDash){const tracks=activeDash.getTracksFor('audio')||[];if(tracks[value])activeDash.setCurrentTrack(tracks[value]);}
- else if(document.getElementById('player-video')?.audioTracks){const tracks=document.getElementById('player-video').audioTracks;for(let i=0;i<tracks.length;i++)tracks[i].enabled=i===value;}
-});
-document.getElementById('player-subtitle-track')?.addEventListener('change',e=>{
- const video=document.getElementById('player-video'),selected=Number(e.target.value);
- Array.from(video?.textTracks||[]).forEach((track,index)=>track.mode=selected===index?'showing':'disabled');
-});
-document.getElementById('player-settings-toggle')?.addEventListener('click',()=>{const panel=document.getElementById('player-settings-panel');if(panel)panel.hidden=!panel.hidden;});
-document.getElementById('player-settings-close')?.addEventListener('click',()=>{const panel=document.getElementById('player-settings-panel');if(panel)panel.hidden=true;});
-['player-subtitle-size','player-subtitle-color','player-subtitle-bg'].forEach(id=>document.getElementById(id)?.addEventListener('change',applySubtitleStyle));
-document.getElementById('player-save-markers')?.addEventListener('click',savePlayerMarkers);
-document.getElementById('player-skip-intro')?.addEventListener('click',()=>{const v=document.getElementById('player-video'),m=readPlayerMarkers();if(m.introEnd!=null)v.currentTime=m.introEnd;});
-document.getElementById('player-skip-credits')?.addEventListener('click',()=>{const v=document.getElementById('player-video');if(Number.isFinite(v.duration))v.currentTime=v.duration;});
 document.getElementById('player-video')?.addEventListener('error',()=>setPlayerError('Bu video kaynağı açılamadı. Bağlantıyı, dosya biçimini veya erişim iznini kontrol et.'));
+
+
+
+
+        let mediaDatabase = [];
+;
+
+        const liveTvChannels = [
+            { name: 'Disney Channel', icon: 'fa-tv', tag: 'Çocuk 24/7' },
+            { name: 'HBO HD Live', icon: 'fa-film', tag: 'Sinema Kuşağı' },
+            { name: 'ESPN Sports', icon: 'fa-trophy', tag: 'Canlı Maç Yayını' },
+            { name: 'Discovery HD', icon: 'fa-earth-americas', tag: 'Belgesel' }
+        ];
+
+        let heroItems = [];
+        let heroIndex = 0;
+        let heroTimer = null;
+        let catalogInitialized = false;
+        function showCatalogSkeletons() {
+            const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
+            ['media-grid','featured-rail','personalized-rail','top-movies-rail','top-series-rail'].forEach(id => {
+                const target = document.getElementById(id);
+                if (target) target.innerHTML = Array.from({length:id==='media-grid'?8:5},()=>skeleton).join('');
+            });
+        }
+        async function initializeCatalog() {
+            if (catalogInitialized) return;
+            catalogInitialized = true;
+            showCatalogSkeletons();
+            const parseCatalogResponse = async (response, source) => {
+                if (!response.ok) throw new Error(source + ' HTTP ' + response.status);
+                const payload = await response.json();
+                let candidate = payload;
+                if (!Array.isArray(payload) && typeof payload?.content === 'string') {
+                    const binary = atob(payload.content.replace(/\s/g, ''));
+                    const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
+                    candidate = JSON.parse(new TextDecoder().decode(bytes));
+                }
+                if (!Array.isArray(candidate) || candidate.length === 0) throw new Error(source + ': katalog boş veya geçersiz.');
+                return candidate;
+            };
+            const fetchCatalog = async (url, source) => {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 12000);
+                try {
+                    const response = await fetch(url, {cache:'no-store',mode:'cors',credentials:'omit',signal:controller.signal});
+                    return await parseCatalogResponse(response, source);
+                } finally { clearTimeout(timeout); }
+            };
+            try {
+                const localUrl = new URL('./data/catalog.json?v=20261106-catalog-recovery-v4', document.baseURI).href;
+                const rootUrl = new URL('/data/catalog.json?v=20261106-catalog-recovery-v4', location.origin).href;
+                const rawUrl = 'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261106-catalog-recovery-v4';
+                const apiUrl = 'https://api.github.com/repos/megamrtklc/filmm/contents/data/catalog.json?ref=main';
+                const sources = [[localUrl,'Yayınlanan katalog'],[rootUrl,'Kök katalog yolu'],[rawUrl,'GitHub ham katalog'],[apiUrl,'GitHub API kataloğu']];
+                let loadedCatalog = null;
+                const errors = [];
+                for (const [url,label] of sources) {
+                    try {
+                        loadedCatalog = await fetchCatalog(url,label);
+                        console.info('Katalog yüklendi:',label,loadedCatalog.length+' kayıt');
+                        break;
+                    } catch (requestError) {
+                        errors.push(label+': '+(requestError?.message||requestError));
+                        console.warn('Katalog kaynağı denenemedi:',label,requestError);
+                    }
+                }
+                if (!loadedCatalog) throw new Error(errors.join(' | ')||'Hiçbir katalog kaynağı yanıt vermedi.');
+                mediaDatabase = loadedCatalog;
+                heroItems = [...mediaDatabase].sort((a,b)=>Number(b.year)-Number(a.year)).slice(0,10);
+                setHeroMedia(mediaDatabase[0].id);
+                renderHeroThumbnails();
+                renderHomeCollections();
+                initializeMoodDiscovery();
+                renderMediaGrid();
+                renderLiveTv();
+                renderHeaderSearchResults(headerSearchInput?.value||'');
+                loadOriginalTitles();
+                if (location.hash) routeFromHash();
+            } catch (error) {
+                catalogInitialized = false;
+                console.error('Katalog yükleme hatası:',error);
+                const message = '<div class="col-span-full ny7-error-state"><i class="fa-solid fa-triangle-exclamation"></i><b>İçerikler şu anda yüklenemedi</b><p>Katalog kaynaklarına erişilemedi. Bağlantını kontrol edip yeniden deneyebilirsin.</p><button type="button" onclick="initializeCatalog()"><i class="fa-solid fa-rotate-right"></i> Yeniden dene</button></div>';
+                ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id=>{const target=document.getElementById(id);if(target)target.innerHTML=message;});
+            }
+        }
+        // Script sayfanin en altinda yuklendigi icin katalogu beklemeden baslat.
+        // Boylece load olayi kacirilsa bile ana sayfa koleksiyonlari bos kalmaz.
+        initializeCatalog();
+    
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register(new URL('service-worker.js', document.baseURI).href, {scope:new URL('./',document.baseURI).pathname})
+            .catch(error => console.warn('NY7 çevrimdışı desteği etkinleştirilemedi:',error));
+    });
+}
+
+
+// NY7 interaction layer: carousels, modal dismissal and keyboard focus behavior.
+document.addEventListener('click',event=>{
+ const control=event.target.closest('[data-rail-target][data-rail-direction]');
+ if(control){
+  const rail=document.getElementById(control.dataset.railTarget);
+  if(rail)rail.scrollBy({left:Number(control.dataset.railDirection)*Math.max(260,rail.clientWidth*.82),behavior:'smooth'});
+  return;
+ }
+ if(event.target.matches('[data-detail-dismiss]')&&document.body.classList.contains('ny7-detail-open'))showDashboard();
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&document.body.classList.contains('ny7-detail-open')){showDashboard();return;}
+ if((event.key==='ArrowRight'||event.key==='ArrowLeft')&&!event.target.closest('input,textarea,select,button,[contenteditable="true"]')){
+  const rail=document.activeElement?.closest('.collection-rail');
+  if(rail)rail.scrollBy({left:(event.key==='ArrowRight'?1:-1)*Math.max(180,rail.clientWidth*.65),behavior:'smooth'});
+ }
+});
+
+document.addEventListener('click',event=>{
+ if(event.target.matches('[data-trailer-dismiss]'))closeTrailerPopup();
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&document.getElementById('trailer-popup')?.classList.contains('is-open'))closeTrailerPopup();
+});
+
 
 // Perde Cinema Player custom controls
 (function initPerdeCinemaControls(){
- const video=document.getElementById('player-video'),stage=document.getElementById('player-stage');if(!video||!stage)return;
- const $=id=>document.getElementById(id);let hideTimer=null,seeking=false;
+ const video=document.getElementById('player-video'),stage=document.getElementById('player-stage');
+ if(!video||!stage)return;
+ const $=id=>document.getElementById(id);
+ let hideTimer=null,seeking=false;
  const fmt=value=>{if(!Number.isFinite(value))return '00:00';const s=Math.floor(value),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),r=s%60;return h?[h,m,r].map(n=>String(n).padStart(2,'0')).join(':'):[m,r].map(n=>String(n).padStart(2,'0')).join(':');};
  const syncPlay=()=>{const paused=video.paused;stage.classList.toggle('is-paused',paused);stage.classList.toggle('has-source',!!video.currentSrc);const icon=paused?'fa-play':'fa-pause';['player-play-toggle','player-big-play'].forEach(id=>{const b=$(id);if(b){b.innerHTML='<i class="fa-solid '+icon+'"></i>';b.setAttribute('aria-label',paused?'Oynat':'Duraklat');}});};
- const syncTime=()=>{const duration=Number.isFinite(video.duration)?video.duration:0,current=video.currentTime||0;if($('player-current-time'))$('player-current-time').textContent=fmt(current);if($('player-duration'))$('player-duration').textContent=fmt(duration);if(!seeking&&$('player-seek'))$('player-seek').value=duration?Math.round(current/duration*1000):0;const pct=duration?current/duration*100:0;if($('player-seek'))$('player-seek').style.setProperty('--player-progress',pct+'%');updateSkipButtons();};
+ const syncTime=()=>{const duration=Number.isFinite(video.duration)?video.duration:0,current=video.currentTime||0;if($('player-current-time'))$('player-current-time').textContent=fmt(current);if($('player-duration'))$('player-duration').textContent=fmt(duration);if(!seeking&&$('player-seek'))$('player-seek').value=duration?Math.round(current/duration*1000):0;const pct=duration?current/duration*100:0;if($('player-seek'))$('player-seek').style.setProperty('--player-progress',pct+'%');};
  const syncVolume=()=>{const v=video.muted?0:video.volume;if($('player-volume'))$('player-volume').value=v;const b=$('player-volume-toggle');if(b)b.innerHTML='<i class="fa-solid '+(v===0?'fa-volume-xmark':v<.5?'fa-volume-low':'fa-volume-high')+'"></i>';};
  const reveal=()=>{stage.classList.remove('controls-hidden');clearTimeout(hideTimer);if(!video.paused&&!stage.matches(':fullscreen'))hideTimer=setTimeout(()=>stage.classList.add('controls-hidden'),2600);};
- const toggle=()=>{if(!video.currentSrc&&!activeHls&&!activeDash)return;if(video.paused)video.play().catch(()=>{});else video.pause();};
+ const toggle=()=>{if(!video.currentSrc)return;if(video.paused)video.play().catch(()=>{});else video.pause();};
  const seekBy=seconds=>{if(Number.isFinite(video.duration))video.currentTime=Math.max(0,Math.min(video.duration,video.currentTime+seconds));reveal();};
  $('player-play-toggle')?.addEventListener('click',toggle);$('player-big-play')?.addEventListener('click',toggle);
  $('player-rewind')?.addEventListener('click',()=>seekBy(-10));$('player-forward')?.addEventListener('click',()=>seekBy(10));
@@ -1699,11 +1695,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
  $('player-speed')?.addEventListener('change',e=>{video.playbackRate=Number(e.target.value)||1;reveal();});
  $('player-fullscreen')?.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else stage.requestFullscreen?.();});
  $('player-pip')?.addEventListener('click',async()=>{try{if(document.pictureInPictureElement)await document.exitPictureInPicture();else if(document.pictureInPictureEnabled&&video.requestPictureInPicture)await video.requestPictureInPicture();}catch(error){setPlayerError('Resim içinde resim bu tarayıcıda kullanılamıyor.');}});
- video.addEventListener('play',()=>{syncPlay();reveal();lastStatsTick=Date.now();});video.addEventListener('pause',()=>{syncPlay();savePlayerProgress();lastStatsTick=0;reveal();});
- video.addEventListener('timeupdate',()=>{syncTime();savePlayerProgress();const now=Date.now();if(lastStatsTick){const delta=(now-lastStatsTick)/1000;if(delta>0)updatePlayerStats(Math.min(delta,2));}lastStatsTick=now;});
- video.addEventListener('loadedmetadata',()=>{syncTime();syncPlay();applyPlayerResume();refreshSubtitleTrackOptions();refreshNativeAudioTracks();});
- video.addEventListener('durationchange',syncTime);video.addEventListener('volumechange',syncVolume);
- video.addEventListener('ended',()=>{const all=playerStoreRead(NY7_PLAYER_STATS_KEY),key=String(activePlayerMediaId),stats=all[key]||{seconds:0,completed:0};stats.completed=(stats.completed||0)+1;all[key]=stats;playerStoreWrite(NY7_PLAYER_STATS_KEY,all);refreshPlayerStats();savePlayerProgress();});
+ video.addEventListener('play',()=>{syncPlay();reveal();});video.addEventListener('pause',()=>{syncPlay();reveal();});video.addEventListener('timeupdate',syncTime);video.addEventListener('loadedmetadata',()=>{syncTime();syncPlay();});video.addEventListener('durationchange',syncTime);video.addEventListener('volumechange',syncVolume);
  video.addEventListener('waiting',()=>$('player-loading')?.classList.add('is-visible'));video.addEventListener('playing',()=>$('player-loading')?.classList.remove('is-visible'));video.addEventListener('canplay',()=>$('player-loading')?.classList.remove('is-visible'));
  stage.addEventListener('mousemove',reveal);stage.addEventListener('touchstart',reveal,{passive:true});stage.addEventListener('click',e=>{if(e.target===video)reveal();});
  video.addEventListener('dblclick',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else stage.requestFullscreen?.();});
@@ -1711,5 +1703,5 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
  const observer=new MutationObserver(()=>{if(!$('player-modal')||$('player-modal').classList.contains('hidden')){clearTimeout(hideTimer);stage.classList.remove('controls-hidden');}else{syncPlay();syncVolume();}});
  observer.observe($('player-modal'),{attributes:true,attributeFilter:['class']});
  const title=$('player-media-title'),under=$('player-underbar-title');if(title&&under){new MutationObserver(()=>under.textContent=title.textContent).observe(title,{childList:true,subtree:true,characterData:true});under.textContent=title.textContent;}
- syncPlay();syncVolume();syncTime();applySubtitleStyle();
+ syncPlay();syncVolume();syncTime();
 })();
