@@ -4390,3 +4390,32 @@ body.trailer-popup-open{overflow:hidden}
  .detail-cast-card .detail-cast-person b{font-size:12px!important}
  .detail-cast-card .detail-cast-person small{font-size:10px!important}
 }
+
+/* Detay afişi — afişten çıkarılan üç baskın renkle daha belirgin ambilight */
+#detail-page-view .detail-poster-column{
+ position:relative!important;
+ isolation:isolate!important;
+}
+#detail-page-view .detail-poster-column:before{
+ content:"";
+ position:absolute;
+ z-index:0;
+ inset:-34px -30px -30px;
+ pointer-events:none;
+ background:
+  radial-gradient(ellipse at 50% 28%,rgba(var(--poster-tone-1-rgb,213,166,63),.78),transparent 49%),
+  radial-gradient(ellipse at 12% 68%,rgba(var(--poster-tone-2-rgb,116,75,160),.66),transparent 48%),
+  radial-gradient(ellipse at 88% 72%,rgba(var(--poster-tone-3-rgb,176,68,72),.62),transparent 48%);
+ filter:blur(22px) saturate(1.45);
+ opacity:1;
+ transform:scale(1.04);
+}
+#detail-page-view .detail-poster-frame,
+#detail-page-view .detail-poster-credits{
+ position:relative!important;
+ z-index:1!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #detail-page-view .detail-poster-column:before{filter:blur(22px) saturate(1.2)}
+}
+
