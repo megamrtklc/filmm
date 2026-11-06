@@ -4448,3 +4448,84 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-score-actions{margin-left:auto}
  #detail-page-view .detail-score-actions .detail-icon-btn{width:36px;height:36px}
 }
+
+
+/* Series information — simple editorial layout, no separate card */
+#detail-page-view #detail-series-panel{
+  max-width:1240px!important;
+  margin:30px auto 0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#detail-page-view .detail-series-heading{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin:0 0 15px;
+  padding:0 0 12px;
+  border-bottom:1px solid #ffffff18;
+}
+#detail-page-view .detail-series-heading>span{
+  color:#c5a66a;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
+  white-space:nowrap;
+}
+#detail-page-view .detail-series-heading h2{
+  margin:0;
+  color:#f4f5f6;
+  font-size:20px;
+  font-weight:750;
+  letter-spacing:-.025em;
+}
+#detail-page-view .detail-series-stats{
+  display:flex!important;
+  flex-wrap:wrap;
+  gap:0!important;
+  align-items:stretch;
+}
+#detail-page-view .detail-series-stat{
+  display:flex!important;
+  flex:1 1 150px;
+  flex-direction:column;
+  gap:5px!important;
+  min-width:0;
+  padding:5px 24px 5px 0!important;
+  margin-right:24px;
+  border:0!important;
+  border-right:1px solid #ffffff18;
+  border-radius:0!important;
+  background:transparent!important;
+}
+#detail-page-view .detail-series-stat:last-child{
+  border-right:0;
+  margin-right:0;
+}
+#detail-page-view .detail-series-stat strong{
+  color:#f4f4f5!important;
+  font-size:24px!important;
+  font-weight:750!important;
+  line-height:1.1;
+}
+#detail-page-view .detail-series-stat span{
+  color:#969da8!important;
+  font-size:11px!important;
+}
+#detail-page-view .detail-series-note{
+  margin:14px 0 0;
+  color:#7f8793;
+  font-size:10px;
+  line-height:1.6;
+}
+@media(max-width:700px){
+  #detail-page-view #detail-series-panel{margin:22px 18px 0!important}
+  #detail-page-view .detail-series-heading{gap:9px;margin-bottom:12px;padding-bottom:10px}
+  #detail-page-view .detail-series-heading h2{font-size:18px}
+  #detail-page-view .detail-series-stat{flex:1 1 28%;padding-right:12px!important;margin-right:12px}
+  #detail-page-view .detail-series-stat strong{font-size:21px!important}
+  #detail-page-view .detail-series-stat span{font-size:10px!important}
+}
