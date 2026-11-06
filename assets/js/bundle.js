@@ -1231,6 +1231,60 @@ function updateDetailSynopsis(item){
 document.addEventListener('keydown',event=>{
  if(event.key==='Escape')closeDetailSynopsisPopup();
 });
+const detailCastImageCache=new Map();
+function normalizeDetailCast(item){
+ const cast=Array.isArray(item?.cast)?item.cast:[];
+ return cast.map(entry=>{
+  if(typeof entry==='string')return {name:entry.trim(),character:''};
+  if(!entry||typeof entry!=='object')return null;
+  return {name:String(entry.name||entry.actor||entry.original_name||'').trim(),character:String(entry.character||entry.role||entry.character_name||'').trim(),image:entry.profile_path||entry.image||entry.photo||''};
+ }).filter(person=>person?.name).slice(0,16);
+}
+async function loadDetailCastImages(names,itemId){
+ const missing=names.filter(name=>!detailCastImageCache.has(name));
+ if(missing.length){
+  try{
+   const params=new URLSearchParams({action:'query',titles:missing.join('|'),redirects:'1',prop:'pageimages',piprop:'thumbnail',pithumbsize:'320',format:'json',origin:'*'});
+   const response=await fetch('https://en.wikipedia.org/w/api.php?'+params.toString(),{headers:{Accept:'application/json'}});
+   if(!response.ok)throw new Error('Oyuncu görselleri alınamadı');
+   const data=await response.json();
+   const pages=Object.values(data.query?.pages||{});
+   const found=new Map(pages.filter(page=>page.thumbnail?.source).map(page=>[String(page.title||'').toLocaleLowerCase('en'),page.thumbnail.source]));
+   missing.forEach(name=>detailCastImageCache.set(name,found.get(name.toLocaleLowerCase('en'))||''));
+  }catch(error){missing.forEach(name=>detailCastImageCache.set(name,''));}
+ }
+ const section=document.getElementById('detail-cast-section');
+ if(!section||section.dataset.mediaId!==String(itemId))return;
+ section.querySelectorAll('[data-cast-image]').forEach(img=>{
+  const name=img.dataset.castImage;
+  const src=detailCastImageCache.get(name)||'';
+  if(src){img.src=src;img.classList.remove('is-placeholder');}
+ });
+}
+function renderDetailCast(item){
+ const section=document.getElementById('detail-cast-section');
+ const rail=document.getElementById('detail-cast-rail');
+ const count=document.getElementById('detail-cast-count');
+ if(!section||!rail)return;
+ const people=normalizeDetailCast(item);
+ section.dataset.mediaId=String(item.id);
+ section.hidden=!people.length;
+ if(!people.length){rail.innerHTML='';return;}
+ if(count)count.textContent=people.length+' oyuncu';
+ rail.innerHTML=people.map(person=>{
+  const safeName=escapeCountryHtml(person.name);
+  const safeCharacter=escapeCountryHtml(person.character);
+  const suppliedImage=person.image&&/^https?:\/\//i.test(person.image)?person.image:'';
+  return '<button type="button" class="detail-cast-card" data-cast-actor="'+safeName+'" aria-label="'+safeName+' oyuncu profilini aç"><span class="detail-cast-photo"><img '+(suppliedImage?'src="'+escapeCountryHtml(suppliedImage)+'"':'')+' data-cast-image="'+safeName+'" alt="'+safeName+'" loading="lazy" class="'+(suppliedImage?'':'is-placeholder')+'"><span class="detail-cast-avatar" aria-hidden="true"><i class="fa-solid fa-user"></i></span></span><span class="detail-cast-person"><strong>'+safeName+'</strong>'+(safeCharacter?'<small>'+safeCharacter+'</small>':'<small>Oyuncu</small>')+'</span></button>';
+ }).join('');
+ loadDetailCastImages(people.filter(person=>!person.image).map(person=>person.name),item.id);
+}
+document.addEventListener('click',event=>{
+ const actor=event.target.closest('[data-cast-actor]');
+ if(!actor)return;
+ openActorPage(actor.dataset.castActor);
+});
+
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -1266,6 +1320,7 @@ function openDetailPage(id,update=true){
  
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
  const watchPlayButton=document.getElementById('detail-watch-play-btn');if(watchPlayButton){watchPlayButton.hidden=item.type==='tv';watchPlayButton.onclick=()=>openPlayerForMedia(item.id);}
+ renderDetailCast(item);
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  renderDetailSeries(item);
