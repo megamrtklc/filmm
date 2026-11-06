@@ -1177,6 +1177,61 @@ function renderDetailSeries(item){
    '<span class="detail-series-value"><i class="fa-regular fa-clock" aria-hidden="true"></i><strong>'+escapeCountryHtml(average)+'</strong></span>'+
   '</div>';
 }
+function ensureDetailSynopsisPopup(){
+ let popup=document.getElementById('detail-synopsis-popup');
+ if(popup)return popup;
+ popup=document.createElement('div');
+ popup.id='detail-synopsis-popup';
+ popup.className='detail-synopsis-popup';
+ popup.hidden=true;
+ popup.setAttribute('role','dialog');
+ popup.setAttribute('aria-modal','true');
+ popup.setAttribute('aria-labelledby','detail-synopsis-popup-title');
+ popup.innerHTML='<div class="detail-synopsis-backdrop" data-synopsis-close></div><section class="detail-synopsis-dialog"><header><div><span>DİZİ KONUSU</span><h2 id="detail-synopsis-popup-title"></h2></div><button type="button" class="detail-synopsis-close" data-synopsis-close aria-label="Pencereyi kapat"><i class="fa-solid fa-xmark"></i></button></header><p id="detail-synopsis-popup-text"></p></section>';
+ document.body.appendChild(popup);
+ popup.addEventListener('click',event=>{if(event.target.closest('[data-synopsis-close]'))closeDetailSynopsisPopup();});
+ return popup;
+}
+function closeDetailSynopsisPopup(){
+ const popup=document.getElementById('detail-synopsis-popup');
+ if(!popup)return;
+ popup.hidden=true;
+ document.body.classList.remove('detail-synopsis-open');
+}
+function openDetailSynopsisPopup(){
+ const popup=ensureDetailSynopsisPopup();
+ const title=document.getElementById('detail-title')?.textContent||'Dizi konusu';
+ const description=document.getElementById('detail-desc')?.textContent||'';
+ document.getElementById('detail-synopsis-popup-title').textContent=title;
+ document.getElementById('detail-synopsis-popup-text').textContent=description;
+ popup.hidden=false;
+ document.body.classList.add('detail-synopsis-open');
+ popup.querySelector('.detail-synopsis-close')?.focus();
+}
+function updateDetailSynopsis(item){
+ const description=document.getElementById('detail-desc');
+ if(!description)return;
+ let button=document.getElementById('detail-synopsis-read-more');
+ if(!button){
+  button=document.createElement('button');
+  button.type='button';button.id='detail-synopsis-read-more';button.className='detail-synopsis-read-more';
+  button.textContent='Tamamını Oku';button.addEventListener('click',openDetailSynopsisPopup);
+  description.insertAdjacentElement('afterend',button);
+ }
+ const isSeries=item.type==='tv';
+ description.classList.toggle('detail-synopsis-clamped',isSeries);
+ button.hidden=true;
+ if(!isSeries)return;
+ requestAnimationFrame(()=>{
+  if(!description.isConnected)return;
+  const style=window.getComputedStyle(description);
+  const lineHeight=parseFloat(style.lineHeight)||20;
+  button.hidden=description.scrollHeight<=lineHeight*4+2;
+ });
+}
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape')closeDetailSynopsisPopup();
+});
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -1199,6 +1254,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-country').innerHTML=countryMarkup||'<span>Ülke bilgisi yok</span>';
  document.getElementById('detail-director-inline').innerHTML=directors.length?'<span class="detail-director-label">Yönetmen:</span> '+directors.map(director=>'<button type="button" class="detail-director-link" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('<span class="detail-director-comma">, </span>'):'';
  document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
+ updateDetailSynopsis(item);
  const readScore=(...values)=>{for(const value of values){const candidate=value&&typeof value==='object'?(value.value??value.score??value.rating):value;if(candidate!==undefined&&candidate!==null&&String(candidate).trim()!==''&&String(candidate).trim().toLowerCase()!=='n/a')return String(candidate).trim();}return '';};
  const scoreItems=[
   {key:'imdb',logo:'IMDb',value:readScore(item.rating,item.imdbRating,item.imdb_rating),suffix:''},

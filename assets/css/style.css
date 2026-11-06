@@ -4895,3 +4895,20 @@ body.trailer-popup-open{overflow:hidden}
  .ny7-player-skip{right:12px;bottom:78px;padding:9px 11px;font-size:11px}
  .player-skip-credits{bottom:124px}
 }
+
+/* Expandable TV synopsis in the detail panel */
+#detail-page-view #detail-desc.detail-synopsis-clamped{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+#detail-page-view .detail-synopsis-read-more{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:0;border:0;background:transparent;color:#e5c36e;font-size:12px;font-weight:800;cursor:pointer;transition:color .2s ease}
+#detail-page-view .detail-synopsis-read-more:hover{color:#ffe39a}
+#detail-page-view .detail-synopsis-read-more[hidden]{display:none}
+.detail-synopsis-popup[hidden]{display:none}
+.detail-synopsis-popup{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:22px}
+.detail-synopsis-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(9px)}
+.detail-synopsis-dialog{position:relative;z-index:1;width:min(100%,720px);max-height:min(82vh,760px);overflow:auto;padding:26px 28px 30px;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:linear-gradient(145deg,#1a1d26,#101218);box-shadow:0 24px 90px rgba(0,0,0,.55)}
+.detail-synopsis-dialog header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding-bottom:17px;border-bottom:1px solid rgba(255,255,255,.1)}
+.detail-synopsis-dialog header span{color:#d9b45c;font-size:9px;font-weight:850;letter-spacing:.2em}
+.detail-synopsis-dialog h2{margin:6px 0 0;color:#fff;font-size:clamp(18px,3vw,24px);font-weight:850}
+.detail-synopsis-close{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:rgba(255,255,255,.06);color:#eee;font-size:15px;cursor:pointer}
+.detail-synopsis-dialog>p{margin:20px 0 0;color:#d1d5db;font-size:14px;line-height:1.9;white-space:pre-wrap}
+body.detail-synopsis-open{overflow:hidden}
+@media(max-width:560px){.detail-synopsis-popup{padding:12px}.detail-synopsis-dialog{padding:20px 18px 24px;border-radius:14px;max-height:86vh}.detail-synopsis-dialog>p{font-size:13px;line-height:1.8}}
