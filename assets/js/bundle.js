@@ -1175,33 +1175,6 @@ function applyPosterAtmosphere(item){
  };
  poster.src=sampleUrl;
 }
-function renderDetailFacts(item){
- const grid=document.getElementById('detail-facts-grid');
- if(!grid)return;
- const rows=[
-  ['Yapım yılı',item.year],
-  ['Yapım türü',item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film')],
-  ['Süre',item.duration],
-  ['Yönetmen',item.director],
-  ['Ülke',item.country],
-  ['Tür',item.category||item.genre],
-  ['TMDB kimliği',item.tmdbId]
- ].filter(([,value])=>value!==undefined&&value!==null&&String(value).trim()!=='');
- grid.innerHTML=rows.map(([label,value])=>'<div class="detail-fact"><span>'+escapeCountryHtml(label)+'</span><b>'+escapeCountryHtml(value)+'</b></div>').join('')||'<p class="detail-data-note">Künye bilgisi henüz eklenmemiş.</p>';
-}
-function renderDetailSeries(item){
- const panel=document.getElementById('detail-series-panel'),stats=document.getElementById('detail-series-stats');
- if(!panel||!stats)return;
- const isSeries=item.type==='tv';
- panel.hidden=!isSeries;
- if(!isSeries)return;
- const values=[
-  ['Sezon',item.seasons?String(item.seasons):'Bilgi yok'],
-  ['Bölüm',item.episodes?String(item.episodes):'Bilgi yok'],
-  ['Yayın başlangıcı',item.year||'Bilgi yok']
- ];
- stats.innerHTML=values.map(([label,value])=>'<div class="detail-series-stat"><strong>'+escapeCountryHtml(value)+'</strong><span>'+escapeCountryHtml(label)+'</span></div>').join('');
-}
 function loadDetailDiary(item){
  const rating=document.getElementById('detail-diary-rating'),note=document.getElementById('detail-diary-note'),status=document.getElementById('detail-diary-status'),save=document.getElementById('detail-diary-save');
  if(!rating||!note||!save)return;
@@ -1252,7 +1225,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
- renderDetailFacts(item);renderDetailSeries(item);loadDetailDiary(item);
+ renderDetailSeries(item);loadDetailDiary(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
