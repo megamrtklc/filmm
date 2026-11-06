@@ -1116,15 +1116,11 @@ function renderDetailSeries(item){
  const average=/bölüm/i.test(averageRaw)?averageRaw:averageRaw+' / Bölüm';
  stats.innerHTML=
   '<div class="detail-series-group detail-series-total">'+
-   '<span class="detail-series-label">Toplam sezon bilgisi</span>'+
-   '<div class="detail-series-values">'+
-    '<span class="detail-series-value"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><strong>'+escapeCountryHtml(seasons)+' Sezon</strong></span>'+
-    '<span class="detail-series-value"><i class="fa-solid fa-film" aria-hidden="true"></i><strong>'+escapeCountryHtml(episodes)+' Bölüm</strong></span>'+
-   '</div>'+
+   '<span class="detail-series-value"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><strong>'+escapeCountryHtml(seasons)+' Sezon</strong></span>'+
+   '<span class="detail-series-value"><i class="fa-solid fa-film" aria-hidden="true"></i><strong>'+escapeCountryHtml(episodes)+' Bölüm</strong></span>'+
   '</div>'+
   '<div class="detail-series-group detail-series-average">'+
-   '<span class="detail-series-label">Ortalama</span>'+
-   '<span class="detail-series-value"><i class="fa-regular fa-clock" aria-hidden="true"></i><strong>'+escapeCountryHtml(average)+' / Bölüm</strong></span>'+
+   '<span class="detail-series-value"><i class="fa-regular fa-clock" aria-hidden="true"></i><strong>'+escapeCountryHtml(average)+'</strong></span>'+
   '</div>';
 }
 function openDetailPage(id,update=true){
