@@ -1112,7 +1112,8 @@ function renderDetailSeries(item){
  if(!isSeries){stats.innerHTML='';return;}
  const seasons=item.seasons?String(item.seasons):'Bilgi yok';
  const episodes=item.episodes?String(item.episodes):'Bilgi yok';
- const average=item.duration||'Bilgi yok';
+ const averageRaw=String(item.duration||'Bilgi yok');
+ const average=/bölüm/i.test(averageRaw)?averageRaw:averageRaw+' / Bölüm';
  stats.innerHTML=
   '<div class="detail-series-group detail-series-total">'+
    '<span class="detail-series-label">Toplam sezon bilgisi</span>'+
