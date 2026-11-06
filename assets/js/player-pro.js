@@ -210,7 +210,7 @@
   if (typeof originalOpen === 'function') {
     window.openPlayerForMedia = function (id) {
       clearOnlineSubtitles();
-      mediaId = String(id);
+      mediaId = String(window.perdeEpisodeContext?.playerId || id);
       resumedForSource = false;
       choicePending = false;
       if (choiceOverlay) choiceOverlay.hidden = true;
