@@ -1218,10 +1218,8 @@ function updateDetailSynopsis(item){
   button.textContent='Tamamını Oku';button.addEventListener('click',openDetailSynopsisPopup);
   description.insertAdjacentElement('afterend',button);
  }
- const isSeries=item.type==='tv';
- description.classList.toggle('detail-synopsis-clamped',isSeries);
+ description.classList.add('detail-synopsis-clamped');
  button.hidden=true;
- if(!isSeries)return;
  requestAnimationFrame(()=>{
   if(!description.isConnected)return;
   const style=window.getComputedStyle(description);
