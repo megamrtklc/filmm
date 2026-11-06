@@ -4610,3 +4610,28 @@ body.trailer-popup-open{overflow:hidden}
   align-items:center;
 }
 #detail-page-view .detail-series-label{display:none!important}
+
+
+/* Keep series facts inline with the director metadata */
+#detail-page-view .detail-series-panel,
+#detail-page-view .detail-series-stats{
+  display:contents!important;
+}
+#detail-page-view .detail-series-panel[hidden]{
+  display:none!important;
+}
+#detail-page-view .detail-series-group{
+  display:inline-flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:7px 14px!important;
+  margin:0!important;
+}
+#detail-page-view .detail-series-average{
+  padding-left:14px!important;
+  border-left:1px solid #ffffff20!important;
+}
+@media(max-width:700px){
+  #detail-page-view .detail-series-group{gap:6px 10px!important}
+  #detail-page-view .detail-series-average{padding-left:10px!important}
+}
