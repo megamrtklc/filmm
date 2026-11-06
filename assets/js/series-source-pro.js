@@ -85,7 +85,7 @@
     if (url.protocol !== 'https:') throw new Error('Güvenlik nedeniyle yalnızca HTTPS bağlantıları kullanılabilir.');
     const host = url.hostname.replace(/^www\./, '').toLowerCase();
     let id = '';
-    if (host === 'youtu.be' || host.endsWith('youtube.com') || host.endsWith('youtube-nocookie.com')) {
+    if (host === 'youtu.be' || (host === 'youtube.com' || host.endsWith('.youtube.com') || host === 'youtube-nocookie.com' || host.endsWith('.youtube-nocookie.com'))) {
       id = host === 'youtu.be' ? url.pathname.split('/').filter(Boolean)[0] : (url.searchParams.get('v') || (url.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/) || [])[1]);
       if (!id || !/^[\w-]{6,}$/.test(id)) throw new Error('YouTube video bağlantısı tanınamadı.');
       return 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0';
@@ -95,7 +95,7 @@
       if (!id) throw new Error('Vimeo video numarası bulunamadı.');
       return 'https://player.vimeo.com/video/' + id + '?autoplay=1';
     }
-    if (host === 'dai.ly' || host.endsWith('dailymotion.com')) {
+    if (host === 'dai.ly' || (host === 'dailymotion.com' || host.endsWith('.dailymotion.com'))) {
       id = host === 'dai.ly' ? url.pathname.split('/').filter(Boolean)[0] : (url.pathname.match(/\/video\/([^_/?]+)/) || [])[1];
       if (!id) throw new Error('Dailymotion video numarası bulunamadı.');
       return 'https://www.dailymotion.com/embed/video/' + encodeURIComponent(id) + '?autoplay=1';
