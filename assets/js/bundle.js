@@ -146,6 +146,58 @@ function fitHeroTitleToWidth() {
             const match=value.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
             return match?match[1]:'';
         }
+        function applyTrailerAmbilight(item){
+            const frame=document.querySelector('.trailer-popup-poster-frame');
+            const player=document.getElementById('trailer-popup-player');
+            if(!frame||!player)return;
+            const mediaId=String(item.id);
+            [frame,player].forEach(el=>{
+                el.dataset.ambilightMediaId=mediaId;
+                el.dataset.ambilightReady='false';
+                ['--trailer-tone-1','--trailer-tone-2','--trailer-tone-3'].forEach(name=>el.style.removeProperty(name));
+            });
+            const imageUrl=item.image||item.poster;
+            if(!imageUrl)return;
+            const source=String(imageUrl).replace(/^https?:\\/\\//,'');
+            const sample=new Image();
+            sample.crossOrigin='anonymous';
+            sample.onload=()=>{
+                if(frame.dataset.ambilightMediaId!==mediaId||player.dataset.ambilightMediaId!==mediaId)return;
+                try{
+                    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
+                    if(!ctx)throw new Error('Canvas unavailable');
+                    canvas.width=72;canvas.height=108;
+                    const scale=Math.min(72/sample.naturalWidth,108/sample.naturalHeight);
+                    const w=Math.max(1,Math.round(sample.naturalWidth*scale)),h=Math.max(1,Math.round(sample.naturalHeight*scale));
+                    ctx.fillStyle='#555';ctx.fillRect(0,0,72,108);
+                    ctx.drawImage(sample,Math.round((72-w)/2),Math.round((108-h)/2),w,h);
+                    const pixels=ctx.getImageData(0,0,72,108).data,buckets=new Map();
+                    for(let i=0;i<pixels.length;i+=4){
+                        const r=pixels[i],g=pixels[i+1],b=pixels[i+2],max=Math.max(r,g,b),min=Math.min(r,g,b),light=(r+g+b)/3;
+                        if(pixels[i+3]<180||light<12||light>248)continue;
+                        const key=[r>>5,g>>5,b>>5].join(',');
+                        let bucket=buckets.get(key);
+                        if(!bucket){bucket={r:0,g:0,b:0,n:0};buckets.set(key,bucket);}
+                        bucket.r+=r;bucket.g+=g;bucket.b+=b;bucket.n++;
+                    }
+                    const colors=[...buckets.values()].sort((a,b)=>b.n-a.n).map(v=>[Math.round(v.r/v.n),Math.round(v.g/v.n),Math.round(v.b/v.n)]);
+                    const chosen=[];
+                    for(const color of colors){
+                        if(chosen.every(other=>Math.hypot(color[0]-other[0],color[1]-other[1],color[2]-other[2])>48))chosen.push(color);
+                        if(chosen.length===3)break;
+                    }
+                    if(!chosen.length)throw new Error('No poster colors');
+                    [frame,player].forEach(el=>{
+                        chosen.forEach((color,index)=>el.style.setProperty('--trailer-tone-'+(index+1),color.join(',')));
+                        el.dataset.ambilightReady='true';
+                    });
+                }catch(error){
+                    [frame,player].forEach(el=>el.dataset.ambilightReady='false');
+                }
+            };
+            sample.onerror=()=>[frame,player].forEach(el=>el.dataset.ambilightReady='false');
+            sample.src='https://images.weserv.nl/?url='+encodeURIComponent(imageUrl.replace(/^https?:\\/\\//,''))+'&w=72&h=108&fit=inside&output=jpg';
+        }
         function openTrailerPopup(id){
             const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
             const popup=document.getElementById('trailer-popup'),player=document.getElementById('trailer-popup-player'),title=document.getElementById('trailer-popup-title');
@@ -154,6 +206,7 @@ function fitHeroTitleToWidth() {
             title.textContent=item.title+' — Fragman';
             const poster=document.getElementById('trailer-popup-poster');
             if(poster){poster.src=item.image||item.poster||'';poster.alt=item.title+' afişi';poster.onerror=()=>{poster.style.visibility='hidden';};poster.style.visibility='visible';}
+            applyTrailerAmbilight(item);
             setText('trailer-popup-year',item.year);
             setText('trailer-popup-type',item.type==='tv'?'Dizi':'Film');
             setText('trailer-popup-duration',item.type==='tv'?[item.seasons?item.seasons+' sezon':'',item.episodes?item.episodes+' bölüm':''].filter(Boolean).join(' • '):item.duration);
@@ -177,6 +230,7 @@ function fitHeroTitleToWidth() {
             }
             const videoId=getHeroTrailerId(item.trailerUrl);
             player.innerHTML=videoId?'<iframe title="'+escapeCountryHtml(item.title)+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>':'<div class="trailer-popup-empty"><i class="fa-solid fa-circle-exclamation"></i><span>Bu yapım için kullanılabilir bir fragman bağlantısı bulunamadı.</span></div>';
+            applyTrailerAmbilight(item);
             popup.classList.add('is-open');popup.setAttribute('aria-hidden','false');document.body.classList.add('trailer-popup-open');
             popup.querySelector('button[aria-label="Pencereyi kapat"]')?.focus();
         }
