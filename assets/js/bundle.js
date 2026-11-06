@@ -1177,40 +1177,6 @@ function applyPosterAtmosphere(item){
  };
  poster.src=sampleUrl;
 }
-function renderDetailFacts(item){
- const grid=document.getElementById('detail-facts-grid');
- if(!grid)return;
- const clean=value=>String(value??'').trim();
- const split=value=>countryTokens(value).filter(Boolean);
- const kind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(clean(item.type).toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
- const genres=[...new Set(split(item.category||item.genre).flatMap(value=>value.split('/')).map(value=>value.trim()).filter(Boolean))];
- const countries=split(item.country);
- const directors=split(item.director);
- const facts=[
-  {label:'Yapım yılı',value:item.year,icon:'fa-calendar'},
-  {label:'Yapım türü',value:kind,icon:'fa-clapperboard'},
-  {label:item.type==='tv'?'Bölüm süresi':'Süre',value:item.duration,icon:'fa-clock'},
-  {label:'Yönetmen',value:directors.join(', '),icon:'fa-bullhorn'},
-  {label:'Orijinal ad',value:item.originalTitle,icon:'fa-language'}
- ].filter(row=>clean(row.value));
- const factMarkup=facts.map(row=>'<div class="detail-fact"><span class="detail-fact-icon"><i class="fa-solid '+row.icon+'"></i></span><span class="detail-fact-copy"><small>'+escapeCountryHtml(row.label)+'</small><b>'+escapeCountryHtml(row.value)+'</b></span></div>').join('');
- const countryMarkup=countries.length?'<div class="detail-fact-wide"><span class="detail-fact-wide-label">Ülke / Bölge</span><div class="detail-fact-chips">'+countries.map(country=>{const info=countryDisplay(country);return '<span class="detail-fact-chip">'+countryFlagImage(info.iso,'detail-fact-flag')+escapeCountryHtml(info.name)+'</span>';}).join('')+'</div></div>':'';
- const genreMarkup=genres.length?'<div class="detail-fact-wide"><span class="detail-fact-wide-label">Türler</span><div class="detail-fact-chips">'+genres.map(genre=>'<span class="detail-fact-chip">'+escapeCountryHtml(genre)+'</span>').join('')+'</div></div>':'';
- grid.innerHTML=(factMarkup||'<p class="detail-data-note">Künye bilgisi henüz eklenmemiş.</p>')+countryMarkup+genreMarkup;
-}
-function renderDetailSeries(item){
- const panel=document.getElementById('detail-series-panel'),stats=document.getElementById('detail-series-stats');
- if(!panel||!stats)return;
- const isSeries=item.type==='tv';
- panel.hidden=!isSeries;
- if(!isSeries)return;
- const values=[
-  ['Sezon',item.seasons?String(item.seasons):'Bilgi yok'],
-  ['Bölüm',item.episodes?String(item.episodes):'Bilgi yok'],
-  ['Yayın başlangıcı',item.year||'Bilgi yok']
- ];
- stats.innerHTML=values.map(([label,value])=>'<div class="detail-series-stat"><strong>'+escapeCountryHtml(value)+'</strong><span>'+escapeCountryHtml(label)+'</span></div>').join('');
-}
 function loadDetailDiary(item){
  const rating=document.getElementById('detail-diary-rating'),note=document.getElementById('detail-diary-note'),status=document.getElementById('detail-diary-status'),save=document.getElementById('detail-diary-save');
  if(!rating||!note||!save)return;
@@ -1261,7 +1227,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
- renderDetailFacts(item);renderDetailSeries(item);loadDetailDiary(item);
+ renderDetailSeries(item);loadDetailDiary(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
