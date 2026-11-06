@@ -4431,7 +4431,7 @@ body.trailer-popup-open{overflow:hidden}
  box-shadow:0 8px 24px rgba(0,0,0,.22);
  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
 }
-#detail-page-view .detail-poster-trailer i{font-size:17px;color:#e11d48}
+#detail-page-view .detail-poster-trailer i{font-size:18px;color:#b08d57}
 #detail-page-view .detail-poster-trailer:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 12px 28px rgba(0,0,0,.3)}
 #detail-page-view .detail-score-row{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important}
 #detail-page-view .detail-score-items{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
