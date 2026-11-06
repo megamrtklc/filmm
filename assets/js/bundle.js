@@ -158,7 +158,7 @@ function fitHeroTitleToWidth() {
             });
             const imageUrl=item.image||item.poster;
             if(!imageUrl)return;
-            const source=String(imageUrl).replace(/^https?:\\/\\//,'');
+            const source=String(imageUrl).replace(/^https?:\/\//,'');
             const sample=new Image();
             sample.crossOrigin='anonymous';
             sample.onload=()=>{
@@ -196,7 +196,7 @@ function fitHeroTitleToWidth() {
                 }
             };
             sample.onerror=()=>[frame,player].forEach(el=>el.dataset.ambilightReady='false');
-            sample.src='https://images.weserv.nl/?url='+encodeURIComponent(imageUrl.replace(/^https?:\\/\\//,''))+'&w=72&h=108&fit=inside&output=jpg';
+            sample.src='https://images.weserv.nl/?url='+encodeURIComponent(imageUrl.replace(/^https?:\/\//,''))+'&w=72&h=108&fit=inside&output=jpg';
         }
         function openTrailerPopup(id){
             const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
