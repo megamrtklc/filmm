@@ -1498,7 +1498,7 @@ function openPlayerForMedia(id){
  if(item.type==='tv'){alert('Dizi bölümleri için bölüm bazlı oynatıcı henüz etkin değil.');return;}
  activePlayerMediaId=String(item.id);
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
- document.getElementById('player-media-title').textContent=item.title+' · '+(item.year||'');
+ document.getElementById('player-media-title').textContent=window.perdeEpisodeContext ? item.title+' · S'+window.perdeEpisodeContext.season+' B'+window.perdeEpisodeContext.episode+' — '+(window.perdeEpisodeContext.episodeTitle||'Bölüm') : item.title+' · '+(item.year||'');
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
  document.documentElement.classList.add('ny7-modal-lock');
  if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.poster=item.image||'';video.load();}
