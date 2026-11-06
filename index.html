@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261106-poster-ambilight-v2">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261106-detail-actions-v1">
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -228,6 +228,7 @@
             <div class="detail-overlap">
                 <div class="detail-poster-column">
                     <div class="detail-poster-frame"><img id="detail-poster" src="" alt="Film veya dizi afişi"></div>
+                    <button id="detail-trailer-btn" class="detail-poster-trailer" type="button"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span>Fragmanı izle</span></button>
                 </div>
                 <div class="detail-copy">
                     <div class="detail-rating-row flex items-center gap-2 flex-wrap">
@@ -239,11 +240,12 @@
                     <div class="detail-description-panel">
                         <h2>Detay</h2>
                         <p id="detail-desc"></p>
-                        <div class="detail-actions">
-                            <button id="detail-play-btn" class="detail-trailer"><i class="fa-solid fa-play mr-2"></i> İzlemeye Başla</button>
-                            <button id="detail-trailer-btn" class="detail-secondary-btn"><i class="fa-brands fa-youtube mr-2"></i> Fragmanı İzle</button>
-                            <button id="detail-fav-btn" class="detail-icon-btn" aria-label="Favorilere ekle"><i class="fa-regular fa-heart"></i></button>
-                            <button id="detail-watch-btn" class="detail-icon-btn" aria-label="İzleme listesine ekle"><i class="fa-regular fa-bookmark"></i></button>
+                        <div class="detail-score-row" id="detail-score-row">
+                            <div class="detail-score-items" id="detail-score-items"></div>
+                            <div class="detail-score-actions" aria-label="Kişisel listeler">
+                                <button id="detail-fav-btn" class="detail-icon-btn" aria-label="Favorilere ekle" title="Favorilere ekle"><i class="fa-regular fa-heart"></i></button>
+                                <button id="detail-watch-btn" class="detail-icon-btn" aria-label="İzleme listesine ekle" title="İzleme listesine ekle"><i class="fa-regular fa-bookmark"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -384,6 +386,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261106-remove-cast-diary-v1"></script>
+    <script src="assets/js/bundle.js?v=20261106-detail-actions-v1"></script>
 </body>
 </html>
