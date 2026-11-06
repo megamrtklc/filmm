@@ -4419,3 +4419,32 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-poster-column:before{filter:blur(22px) saturate(1.2)}
 }
 
+
+
+/* Detay sayfasi aksiyon yerlesimi: fragman afis altinda, listeler puan satirinin saginda */
+#detail-page-view .detail-poster-trailer{
+ width:100%;min-height:42px;margin-top:13px;padding:11px 14px;
+ display:flex;align-items:center;justify-content:center;gap:10px;
+ border:1px solid rgba(255,255,255,.2);border-radius:8px;
+ background:linear-gradient(135deg,#f5f5f5,#d9dce2);
+ color:#111318;font-size:12px;font-weight:850;letter-spacing:.01em;
+ box-shadow:0 8px 24px rgba(0,0,0,.22);
+ transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+}
+#detail-page-view .detail-poster-trailer i{font-size:17px;color:#e11d48}
+#detail-page-view .detail-poster-trailer:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 12px 28px rgba(0,0,0,.3)}
+#detail-page-view .detail-score-row{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important}
+#detail-page-view .detail-score-items{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+#detail-page-view .detail-score-actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+#detail-page-view .detail-score-actions .detail-icon-btn{
+ width:40px;height:40px;display:grid;place-items:center;border-radius:9px;
+ background:#171a21;border:1px solid rgba(255,255,255,.16);
+ color:#e8eaf0;font-size:15px;transition:background .18s,border-color .18s,transform .18s;
+}
+#detail-page-view .detail-score-actions .detail-icon-btn:hover{background:#252a34;border-color:#ffffff45;transform:translateY(-1px)}
+@media(max-width:760px){
+ #detail-page-view .detail-poster-trailer{min-height:38px;padding:9px 7px;font-size:10px;gap:7px}
+ #detail-page-view .detail-poster-trailer i{font-size:14px}
+ #detail-page-view .detail-score-actions{margin-left:auto}
+ #detail-page-view .detail-score-actions .detail-icon-btn{width:36px;height:36px}
+}
