@@ -929,28 +929,12 @@ function showDashboard(update=true){
  window.scrollTo({top:0,behavior:!update&&history.state?.ny7ScrollY!=null?'auto':'smooth'});
 }
 
-let activeCastPage=0;
 let currentCastNames=[];
 let currentCastItemId='';
 function escapeCastHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function updateCastCarouselControls(){
- const list=document.getElementById('detail-cast-list');
- const controls=document.getElementById('detail-cast-controls');
- const label=document.getElementById('detail-cast-page-label');
- if(!list||!controls||!label)return;
- const maxScroll=Math.max(0,list.scrollWidth-list.clientWidth);
- const previous=controls.querySelector('button:first-child');
- const next=controls.querySelector('button:last-child');
- if(previous)previous.disabled=list.scrollLeft<=4;
- if(next)next.disabled=maxScroll<=4||list.scrollLeft>=maxScroll-4;
- const pages=Math.max(1,Math.ceil(list.scrollWidth/Math.max(1,list.clientWidth)));
- const page=Math.min(pages,Math.floor((list.scrollLeft+list.clientWidth*.35)/Math.max(1,list.clientWidth))+1);
- label.textContent=page+' / '+pages;
-}
 function renderCastPage(){
  const list=document.getElementById('detail-cast-list');
- const controls=document.getElementById('detail-cast-controls');
- if(!list||!controls)return;
+ if(!list)return;
  const visible=currentCastNames.slice(0,10);
  list.innerHTML=visible.map(member=>{
   const name=typeof member==='string'?member:member.name;
@@ -958,21 +942,9 @@ function renderCastPage(){
   const photo=typeof member==='string'?'':member.image||'';
   const safe=escapeCastHtml(name);
   const role=escapeCastHtml(character);
-  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=320&bold=true';
+  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=160&bold=true';
   return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></button>';
  }).join('')||'<p class="detail-cast-empty">Oyuncu bilgisi bulunmuyor.</p>';
- list.scrollLeft=0;
- controls.classList.toggle('hidden',currentCastNames.length<=5);
- if(!list.dataset.castScrollBound){
-  list.addEventListener('scroll',updateCastCarouselControls,{passive:true});
-  list.dataset.castScrollBound='1';
- }
- updateCastCarouselControls();
-}
-function changeCastPage(direction){
- const list=document.getElementById('detail-cast-list');
- if(!list||currentCastNames.length<=5)return;
- list.scrollBy({left:direction*list.clientWidth,behavior:'smooth'});
 }
 // Oyuncu kimliği isimden tahmin edilmez: yapımın TMDB kimliğiyle Wikidata'daki
 // doğrudan oyuncu kadrosu (P161) alınır. Böylece aynı isimli kişiler karışmaz.
