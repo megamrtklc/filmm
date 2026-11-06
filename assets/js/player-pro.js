@@ -15,6 +15,12 @@
   let originalAttach = window.attachPlayerSource;
   let originalOpen = window.openPlayerForMedia;
   let originalClose = window.closePlayer;
+  let choicePending = false, choiceOverlay = null;
+  const nativeVideoPlay = video.play.bind(video);
+  video.play = function () {
+    if (choicePending) return Promise.resolve();
+    return nativeVideoPlay();
+  };
 
   function read(key) {
     try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
@@ -66,19 +72,57 @@
     else all[key] = { time: video.currentTime, duration: video.duration, savedAt: Date.now() };
     write(KEYS.progress, all);
   }
-  function resumeProgress() {
-    if (resumedForSource || !mediaId || !Number.isFinite(video.duration) || video.duration <= 0) return;
-    resumedForSource = true;
+  function savedResumePoint() {
+    if (!mediaId || !Number.isFinite(video.duration) || video.duration <= 0) return null;
     const saved = read(KEYS.progress)[String(mediaId)];
-    if (!saved || saved.time < 15 || saved.time >= video.duration - 25) return;
-    if (Math.abs((saved.duration || 0) - video.duration) > Math.max(120, video.duration * 0.08)) return;
-    video.currentTime = saved.time;
-    const note = $('player-resume-note');
-    if (note) {
-      note.textContent = 'Kaldığın yerden devam ediyorsun · ' + Math.floor(saved.time / 60) + ' dk';
-      note.hidden = false;
-      window.setTimeout(() => { note.hidden = true; }, 4500);
-    }
+    if (!saved || saved.time < 15 || saved.time >= video.duration - 25) return null;
+    if (Math.abs((saved.duration || 0) - video.duration) > Math.max(120, video.duration * 0.08)) return null;
+    return saved;
+  }
+  function ensureChoiceOverlay() {
+    if (choiceOverlay) return choiceOverlay;
+    const stage = $('player-stage');
+    if (!stage) return null;
+    choiceOverlay = document.createElement('section');
+    choiceOverlay.className = 'perde-playback-choice';
+    choiceOverlay.hidden = true;
+    choiceOverlay.setAttribute('role', 'dialog');
+    choiceOverlay.setAttribute('aria-label', 'İzleme seçimi');
+    choiceOverlay.innerHTML = '<div class="perde-playback-choice-card"><span class="perde-playback-choice-kicker">PERDE SİNEMA</span><h3>Nasıl izlemek istersin?</h3><p class="perde-playback-choice-progress"></p><div class="perde-playback-choice-actions"><button type="button" class="perde-playback-start"><i class="fa-solid fa-backward-step" aria-hidden="true"></i><span>Baştan izle</span></button><button type="button" class="perde-playback-continue"><i class="fa-solid fa-play" aria-hidden="true"></i><span>Kaldığın yerden devam et</span></button></div></div>';
+    stage.appendChild(choiceOverlay);
+    choiceOverlay.querySelector('.perde-playback-start').addEventListener('click', () => {
+      const all = read(KEYS.progress);
+      delete all[String(mediaId)];
+      write(KEYS.progress, all);
+      video.currentTime = 0;
+      beginChosenPlayback();
+    });
+    choiceOverlay.querySelector('.perde-playback-continue').addEventListener('click', () => {
+      const saved = savedResumePoint();
+      video.currentTime = saved ? saved.time : 0;
+      beginChosenPlayback();
+    });
+    return choiceOverlay;
+  }
+  function showPlaybackChoice() {
+    if (!choicePending || !mediaId || !Number.isFinite(video.duration) || video.duration <= 0) return;
+    const overlay = ensureChoiceOverlay();
+    if (!overlay) return;
+    const saved = savedResumePoint();
+    const continueButton = overlay.querySelector('.perde-playback-continue');
+    const progressText = overlay.querySelector('.perde-playback-choice-progress');
+    continueButton.disabled = !saved;
+    progressText.textContent = saved
+      ? 'Son izlediğin konum: ' + Math.floor(saved.time / 60) + ' dakika'
+      : 'Bu film için kayıtlı bir izleme konumu bulunamadı.';
+    overlay.hidden = false;
+    resumedForSource = true;
+    video.pause();
+  }
+  function beginChosenPlayback() {
+    choicePending = false;
+    if (choiceOverlay) choiceOverlay.hidden = true;
+    nativeVideoPlay().catch(() => {});
   }
   function updateSkipButtons() {
     const m = markerData(), now = video.currentTime || 0;
@@ -153,6 +197,8 @@
     window.attachPlayerSource = function (url, label) {
       clearOnlineSubtitles();
       resumedForSource = false;
+      choicePending = true;
+      if (choiceOverlay) choiceOverlay.hidden = true;
       const source = String(url || '');
       if (/\.m3u8(?:$|[?#])|\.mpd(?:$|[?#])/i.test(source) && attachAdaptive(source)) return;
       destroyAdaptive();
@@ -166,6 +212,8 @@
       clearOnlineSubtitles();
       mediaId = String(id);
       resumedForSource = false;
+      choicePending = false;
+      if (choiceOverlay) choiceOverlay.hidden = true;
       const result = originalOpen.apply(this, arguments);
       refreshStats();
       loadMarkers();
@@ -175,6 +223,8 @@
   if (typeof originalClose === 'function') {
     window.closePlayer = function () {
       saveProgress();
+      choicePending = false;
+      if (choiceOverlay) choiceOverlay.hidden = true;
       clearOnlineSubtitles();
       destroyAdaptive();
       lastTick = 0;
@@ -383,6 +433,14 @@
     }
   }
 
+  function installPlaybackChoiceStyles() {
+    if (document.getElementById('perde-playback-choice-style')) return;
+    const style = document.createElement('style');
+    style.id = 'perde-playback-choice-style';
+    style.textContent = '.perde-playback-choice{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:22px;background:rgba(5,7,12,.78);backdrop-filter:blur(7px)}.perde-playback-choice[hidden]{display:none}.perde-playback-choice-card{width:min(560px,100%);padding:clamp(22px,4vw,38px);border:1px solid rgba(255,255,255,.14);border-radius:18px;background:linear-gradient(145deg,rgba(28,31,40,.97),rgba(12,14,20,.98));box-shadow:0 24px 80px rgba(0,0,0,.45);text-align:center}.perde-playback-choice-kicker{color:#e5b94b;font-size:10px;font-weight:800;letter-spacing:.2em}.perde-playback-choice-card h3{margin:10px 0 7px;color:#fff;font-size:clamp(20px,3vw,27px);font-weight:800}.perde-playback-choice-progress{margin:0 0 23px;color:#aeb4c0;font-size:13px}.perde-playback-choice-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.perde-playback-choice-actions button{display:flex;min-height:58px;align-items:center;justify-content:center;gap:10px;padding:12px;border:1px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.06);color:#f5f5f5;font-size:13px;font-weight:750;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}.perde-playback-choice-actions button:hover:not(:disabled){transform:translateY(-2px);border-color:#e5b94b;background:rgba(229,185,75,.13)}.perde-playback-choice-actions button:last-child{border-color:rgba(229,185,75,.55);background:#e5b94b;color:#171717}.perde-playback-choice-actions button:disabled{opacity:.38;cursor:not-allowed}@media(max-width:560px){.perde-playback-choice{padding:12px}.perde-playback-choice-actions{grid-template-columns:1fr}.perde-playback-choice-actions button{min-height:52px}}';
+    document.head.appendChild(style);
+  }
+
   function installOnlineSubtitleStyles() {
     if (document.getElementById('perde-online-subtitle-style')) return;
     const style = document.createElement('style');
@@ -448,6 +506,7 @@
   });
   $('player-subtitle-file')?.addEventListener('change', addSubtitleFiles);
   installOnlineSubtitleStyles();
+  installPlaybackChoiceStyles();
   subtitlePanel();
   $('player-settings-toggle')?.addEventListener('click', () => { $('player-settings-panel').hidden = !$('player-settings-panel').hidden; });
   $('player-settings-close')?.addEventListener('click', () => { $('player-settings-panel').hidden = true; });
@@ -456,7 +515,7 @@
   $('player-skip-intro')?.addEventListener('click', () => { const end = markerData().introEnd; if (end != null) video.currentTime = end; });
   $('player-skip-credits')?.addEventListener('click', () => { if (Number.isFinite(video.duration)) video.currentTime = video.duration; });
 
-  video.addEventListener('loadedmetadata', () => { resumeProgress(); refreshTrackSelects(); updateSkipButtons(); });
+  video.addEventListener('loadedmetadata', () => { showPlaybackChoice(); refreshTrackSelects(); updateSkipButtons(); });
   video.addEventListener('timeupdate', () => {
     saveProgress();
     updateSkipButtons();
