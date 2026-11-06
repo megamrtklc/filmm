@@ -1495,8 +1495,8 @@ async function loadSavedPlayerSource(id){
 function openPlayerForMedia(id){
  const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
  if(!item)return;
- if(item.type==='tv'){alert('Dizi bölümleri için bölüm bazlı oynatıcı henüz etkin değil.');return;}
- activePlayerMediaId=String(item.id);
+ if(item.type==='tv'&&!window.perdeEpisodeContext){return;}
+ activePlayerMediaId=String(window.perdeEpisodeContext?.playerId||item.id);
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
  document.getElementById('player-media-title').textContent=window.perdeEpisodeContext ? item.title+' · S'+window.perdeEpisodeContext.season+' B'+window.perdeEpisodeContext.episode+' — '+(window.perdeEpisodeContext.episodeTitle||'Bölüm') : item.title+' · '+(item.year||'');
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
