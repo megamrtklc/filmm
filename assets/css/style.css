@@ -4912,3 +4912,33 @@ body.trailer-popup-open{overflow:hidden}
 .detail-synopsis-dialog>p{margin:20px 0 0;color:#d1d5db;font-size:14px;line-height:1.9;white-space:pre-wrap}
 body.detail-synopsis-open{overflow:hidden}
 @media(max-width:560px){.detail-synopsis-popup{padding:12px}.detail-synopsis-dialog{padding:20px 18px 24px;border-radius:14px;max-height:86vh}.detail-synopsis-dialog>p{font-size:13px;line-height:1.8}}
+
+/* Perde — episode-specific external video sources */
+.series-source-manager{margin:0 0 18px;padding:16px;border:1px solid #ffffff18;border-radius:10px;background:#0b0d12}
+.series-source-manager[hidden]{display:none}
+.series-source-manager-heading{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.series-source-manager-heading>span{color:#c5a66a;font-size:9px;font-weight:850;letter-spacing:.16em}
+.series-source-manager-heading>strong{font-size:15px;font-weight:800;color:#f5f5f6}
+.series-source-manager-heading>small,.series-source-help{color:#9298a5;font-size:10px;line-height:1.6}
+.series-source-form{display:grid;gap:10px}
+.series-source-form label{display:grid;gap:6px;color:#cbd0da;font-size:11px;font-weight:700}
+.series-source-form input,.series-source-form select{width:100%;min-width:0;padding:10px 11px;border:1px solid #ffffff20;border-radius:7px;background:#171a22;color:#fff;font:inherit;outline:none}
+.series-source-form input:focus,.series-source-form select:focus{border-color:#c5a66a}
+.series-source-add{padding:11px;border-radius:7px;background:#e20d19;color:#fff;font-size:11px;font-weight:800}
+.series-source-add i{margin-right:5px}
+.series-source-status{margin:12px 0;color:#aeb4c0;font-size:10px;line-height:1.6}
+.series-source-status.is-error{color:#ff858b}
+.series-source-list{display:grid;gap:7px}
+.series-source-row{display:flex;align-items:center;gap:9px;padding:9px;border:1px solid #ffffff16;border-radius:8px;background:#151821}
+.series-source-row.is-active{border-color:#c5a66a88;background:#1d1a16}
+.series-source-play,.series-source-delete{width:31px;height:31px;flex:0 0 31px;display:grid;place-items:center;border-radius:6px;background:#ffffff0b;color:#d7d9df}
+.series-source-play{color:#e9c77f}
+.series-source-delete{color:#ff9298}
+.series-source-row-copy{display:grid;gap:3px;flex:1;min-width:0;cursor:pointer}
+.series-source-row-copy strong{overflow:hidden;color:#f4f4f5;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.series-source-row-copy small{color:#9298a5;font-size:9px}
+.series-source-help{margin:13px 0 0}
+.series-source-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+#player-stage:has(.series-source-frame){background:#000}
+#player-stage:has(.series-source-frame) .ny7-player-controls{display:none!important}
+@media(max-width:560px){.series-source-manager{padding:13px}.series-source-form{gap:9px}}
