@@ -950,16 +950,18 @@ function updateCastCarouselControls(){
 function renderCastPage(){
  const list=document.getElementById('detail-cast-list');
  const controls=document.getElementById('detail-cast-controls');
+ const count=document.getElementById('detail-cast-count');
  if(!list||!controls)return;
  const visible=currentCastNames.slice(0,10);
- list.innerHTML=visible.map(member=>{
+ if(count)count.textContent=currentCastNames.length?currentCastNames.length+' oyuncu':'';
+ list.innerHTML=visible.map((member,index)=>{
   const name=typeof member==='string'?member:member.name;
-  const character=typeof member==='string'?'':member.character||member.role||'';
+  const character=typeof member==='string?'':member.character||member.role||'';
   const photo=typeof member==='string'?'':member.image||'';
   const safe=escapeCastHtml(name);
   const role=escapeCastHtml(character);
-  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=320&bold=true';
-  return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></button>';
+  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=480&bold=true';
+  return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'" aria-label="'+safe+(role?', '+role:'')+'"><span class="detail-cast-photo"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-index">'+String(index+1).padStart(2,'0')+'</span></span><span class="detail-cast-person-copy"><b>'+safe+'</b>'+(role?'<small>'+role+'</small>':'')+'</span></button>';
  }).join('')||'<p class="detail-cast-empty">Oyuncu bilgisi bulunmuyor.</p>';
  list.scrollLeft=0;
  controls.classList.toggle('hidden',currentCastNames.length<=5);
@@ -1178,16 +1180,23 @@ function applyPosterAtmosphere(item){
 function renderDetailFacts(item){
  const grid=document.getElementById('detail-facts-grid');
  if(!grid)return;
- const rows=[
-  ['Yapım yılı',item.year],
-  ['Yapım türü',item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film')],
-  ['Süre',item.duration],
-  ['Yönetmen',item.director],
-  ['Ülke',item.country],
-  ['Tür',item.category||item.genre],
-  ['TMDB kimliği',item.tmdbId]
- ].filter(([,value])=>value!==undefined&&value!==null&&String(value).trim()!=='');
- grid.innerHTML=rows.map(([label,value])=>'<div class="detail-fact"><span>'+escapeCountryHtml(label)+'</span><b>'+escapeCountryHtml(value)+'</b></div>').join('')||'<p class="detail-data-note">Künye bilgisi henüz eklenmemiş.</p>';
+ const clean=value=>String(value??'').trim();
+ const split=value=>countryTokens(value).filter(Boolean);
+ const kind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(clean(item.type).toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
+ const genres=[...new Set(split(item.category||item.genre).flatMap(value=>value.split('/')).map(value=>value.trim()).filter(Boolean))];
+ const countries=split(item.country);
+ const directors=split(item.director);
+ const facts=[
+  {label:'Yapım yılı',value:item.year,icon:'fa-calendar'},
+  {label:'Yapım türü',value:kind,icon:'fa-clapperboard'},
+  {label:item.type==='tv'?'Bölüm süresi':'Süre',value:item.duration,icon:'fa-clock'},
+  {label:'Yönetmen',value:directors.join(', '),icon:'fa-bullhorn'},
+  {label:'Orijinal ad',value:item.originalTitle,icon:'fa-language'}
+ ].filter(row=>clean(row.value));
+ const factMarkup=facts.map(row=>'<div class="detail-fact"><span class="detail-fact-icon"><i class="fa-solid '+row.icon+'"></i></span><span class="detail-fact-copy"><small>'+escapeCountryHtml(row.label)+'</small><b>'+escapeCountryHtml(row.value)+'</b></span></div>').join('');
+ const countryMarkup=countries.length?'<div class="detail-fact-wide"><span class="detail-fact-wide-label">Ülke / Bölge</span><div class="detail-fact-chips">'+countries.map(country=>{const info=countryDisplay(country);return '<span class="detail-fact-chip">'+countryFlagImage(info.iso,'detail-fact-flag')+escapeCountryHtml(info.name)+'</span>';}).join('')+'</div></div>':'';
+ const genreMarkup=genres.length?'<div class="detail-fact-wide"><span class="detail-fact-wide-label">Türler</span><div class="detail-fact-chips">'+genres.map(genre=>'<span class="detail-fact-chip">'+escapeCountryHtml(genre)+'</span>').join('')+'</div></div>':'';
+ grid.innerHTML=(factMarkup||'<p class="detail-data-note">Künye bilgisi henüz eklenmemiş.</p>')+countryMarkup+genreMarkup;
 }
 function renderDetailSeries(item){
  const panel=document.getElementById('detail-series-panel'),stats=document.getElementById('detail-series-stats');
