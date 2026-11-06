@@ -219,7 +219,12 @@
     renderList();
     const sources = getSources();
     if (sources.length) {
-      status(sources.length + ' kayıtlı kaynak bulundu. Oynatmak için birini seç.', false);
+      // Bölüm açıldığında ilk kayıtlı kaynağı otomatik başlat.
+      renderList();
+      playSource(sources[0]);
+      if (sources.length > 1) {
+        status('İlk kayıtlı kaynak otomatik başlatıldı. Diğer kaynaklara sağdaki listeden geçebilirsin.', false);
+      }
     }
   }
   function closeForEpisode() {
