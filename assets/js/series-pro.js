@@ -25,7 +25,10 @@
     const all = Object.values(readDiary());
     const totalWatched = all.reduce((sum,row)=>sum+(Array.isArray(row.watched)?row.watched.length:0),0);
     const completed = all.filter(row=>row.status==='completed').length;
-    root.innerHTML += '<div class="series-global-stats"><span><strong>'+totalWatched+'</strong><small>İzlenen bölüm</small></span><span><strong>'+completed+'</strong><small>Tamamlanan dizi</small></span></div>';
+    let playerStats = {}; try { playerStats = JSON.parse(localStorage.getItem('perde_player_stats_v3') || '{}') || {}; } catch (_) {}
+    const seconds = Object.entries(playerStats).filter(([id])=>id.startsWith('series:')).reduce((sum,[,row])=>sum+(Number(row.seconds)||0),0);
+    const watchTime = seconds >= 3600 ? Math.floor(seconds/3600)+' sa '+Math.floor((seconds%3600)/60)+' dk' : Math.floor(seconds/60)+' dk';
+    root.innerHTML += '<div class="series-global-stats"><span><strong>'+totalWatched+'</strong><small>İzlenen bölüm</small></span><span><strong>'+completed+'</strong><small>Tamamlanan dizi</small></span><span><strong>'+watchTime+'</strong><small>Toplam izleme süresi</small></span></div>';
   }
   function ensureGuide() {
     let guide = $('series-watch-system');
