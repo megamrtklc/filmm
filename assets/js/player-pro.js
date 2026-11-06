@@ -259,7 +259,7 @@
 
   function mediaSearchDetails() {
     const raw = String($('player-media-title')?.textContent || '').trim();
-    const match = raw.match(/^(.*?)(?:\\s*[·|–-]\\s*(\\d{4}))?$/);
+    const match = raw.match(/^(.*?)\s*[·|–-]\s*(\d{4})$/);
     return { title: (match?.[1] || raw).trim(), year: match?.[2] || '' };
   }
 
@@ -293,10 +293,10 @@
   }
 
   function srtToVtt(source) {
-    let text = String(source || '').replace(/^\\uFEFF/, '').replace(/\\r\\n?/g, '\\n').trim();
-    if (/^WEBVTT(?:\\s|$)/i.test(text)) return text;
-    text = text.replace(/(\\d{2}:\\d{2}:\\d{2}),(\\d{3})/g, '$1.$2');
-    return 'WEBVTT\\n\\n' + text;
+    let text = String(source || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').trim();
+    if (/^WEBVTT(?:\s|$)/i.test(text)) return text;
+    text = text.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+    return 'WEBVTT\n\n' + text;
   }
 
   async function searchOnlineSubtitles() {
@@ -304,7 +304,6 @@
     if (!panel) return;
     const details = mediaSearchDetails();
     if (!details.title) { subtitleStatus('Önce bir film açmalısın.', true); return; }
-    const requestId = ++onlineSubtitleRequest;
     clearOnlineSubtitles();
     // clearOnlineSubtitles invalidates the previous request; use the new request id.
     const activeRequest = onlineSubtitleRequest;
@@ -346,7 +345,7 @@
         throw new Error(payload.error || 'Altyazı indirilemedi (' + response.status + ').');
       }
       const source = await response.text();
-      if (!source || /<html[\\s>]/i.test(source.slice(0, 300))) throw new Error('İndirilen altyazı dosyası geçerli görünmüyor.');
+      if (!source || /<html[\s>]/i.test(source.slice(0, 300))) throw new Error('İndirilen altyazı dosyası geçerli görünmüyor.');
       const blob = new Blob([srtToVtt(source)], { type: 'text/vtt;charset=utf-8' });
       const objectUrl = URL.createObjectURL(blob);
       onlineSubtitleUrls.push(objectUrl);
