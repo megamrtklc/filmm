@@ -1,5 +1,5 @@
-const CACHE_NAME='ny7-shell-v3';
-const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/ny7-icon.svg'];
+const CACHE_NAME='ny7-shell-v4';
+const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/ny7-icon.svg','./data/catalog.json'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
@@ -32,7 +32,7 @@ self.addEventListener('fetch',event=>{
       }
       return response;
     }).catch(async()=>{
-      const cached=await caches.match(request);
+      const cached=await caches.match(request,{ignoreSearch:isCatalog});
       if(cached)return cached;
       if(request.mode==='navigate')return caches.match('./index.html');
       return new Response('İçerik şu anda yüklenemiyor. Lütfen bağlantınızı kontrol edip yeniden deneyin.',{
