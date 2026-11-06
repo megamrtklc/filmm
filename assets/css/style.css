@@ -4323,3 +4323,70 @@ body.trailer-popup-open{overflow:hidden}
 }
 @media(max-width:380px){#detail-page-view .detail-cast-title-group p{display:none!important}#detail-page-view .detail-cast-person{flex-basis:112px!important}}
 @media(prefers-reduced-motion:reduce){#detail-page-view .detail-cast-person,#detail-page-view .detail-cast-person img{transition:none!important}#detail-page-view .detail-cast-grid{scroll-behavior:auto!important}}
+
+
+/* IMDb tarzı kompakt oyuncu listesi */
+.detail-cast-card .detail-cast-grid{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:0 24px!important;
+}
+.detail-cast-card .detail-cast-person{
+ display:flex!important;
+ flex-direction:row!important;
+ align-items:center!important;
+ gap:14px!important;
+ min-width:0!important;
+ min-height:92px!important;
+ padding:10px 0!important;
+ border:0!important;
+ border-bottom:1px solid rgba(255,255,255,.09)!important;
+ border-radius:0!important;
+ background:transparent!important;
+ text-align:left!important;
+ cursor:default!important;
+}
+.detail-cast-card .detail-cast-person img{
+ flex:0 0 58px!important;
+ width:58px!important;
+ height:72px!important;
+ border-radius:7px!important;
+ object-fit:cover!important;
+ object-position:center 25%!important;
+ background:#20232b!important;
+}
+.detail-cast-card .detail-cast-person-copy{
+ display:flex!important;
+ flex-direction:column!important;
+ justify-content:center!important;
+ gap:5px!important;
+ min-width:0!important;
+}
+.detail-cast-card .detail-cast-person b{
+ display:block!important;
+ padding:0!important;
+ color:#f3f4f6!important;
+ font-size:13px!important;
+ line-height:1.35!important;
+ font-weight:700!important;
+ overflow-wrap:anywhere;
+}
+.detail-cast-card .detail-cast-person small{
+ display:block!important;
+ color:#9ca3af!important;
+ font-size:11px!important;
+ line-height:1.4!important;
+}
+.detail-cast-card .detail-cast-empty{
+ grid-column:1/-1;
+ color:#9ca3af;
+ font-size:13px;
+ padding:14px 0;
+}
+@media(max-width:700px){
+ .detail-cast-card .detail-cast-grid{grid-template-columns:1fr!important;gap:0!important}
+ .detail-cast-card .detail-cast-person{min-height:82px!important;gap:12px!important;padding:8px 0!important}
+ .detail-cast-card .detail-cast-person img{flex-basis:52px!important;width:52px!important;height:66px!important}
+ .detail-cast-card .detail-cast-person b{font-size:12px!important}
+ .detail-cast-card .detail-cast-person small{font-size:10px!important}
+}
