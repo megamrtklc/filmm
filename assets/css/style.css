@@ -4645,3 +4645,20 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view .detail-series-value:nth-child(even) strong{
   color:#fff!important;
 }
+
+
+/* Final override: keep the director-to-series gap and episode count fully white */
+#detail-page-view .detail-series-group.detail-series-total{
+  margin-left:16px!important;
+}
+#detail-page-view .detail-series-total > .detail-series-value:nth-child(2),
+#detail-page-view .detail-series-total > .detail-series-value:nth-child(2) strong{
+  color:#fff!important;
+  opacity:1!important;
+  -webkit-text-fill-color:#fff!important;
+}
+@media(max-width:700px){
+  #detail-page-view .detail-series-group.detail-series-total{
+    margin-left:10px!important;
+  }
+}
