@@ -4866,7 +4866,7 @@ body.trailer-popup-open{overflow:hidden}
 
 
 /* Perde Pro Player isolated controls */
-.ny7-player-skip{position:absolute;z-index:8;right:22px;bottom:92px;border:1px solid rgba(255,255,255,.24);border-radius:8px;background:rgba(12,15,21,.88);color:#fff;padding:11px 15px;font:600 13px inherit;cursor:pointer;backdrop-filter:blur(12px)}
+.ny7-player-skip{position:absolute;z-index:8;right:22px;bottom:92px;border:1px solid rgba(255,255,255,.24);border-radius:8px;background:rgba(12,15,21,.88);color:#fff;padding:11px 15px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;backdrop-filter:blur(12px)}
 .ny7-player-skip:hover{background:rgba(255,255,255,.16)}
 .ny7-player-skip[hidden],.ny7-player-settings[hidden],.ny7-player-resume-note[hidden]{display:none!important}
 .player-skip-credits{bottom:145px}
