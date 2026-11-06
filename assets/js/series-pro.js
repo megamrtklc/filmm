@@ -21,7 +21,11 @@
     const entry = getEntry(item), watched = entry.watched.length;
     const total = Number(item.episodes) || episodeRows.length || 0;
     const percent = total ? Math.min(100, Math.round(watched / total * 100)) : 0;
-    root.innerHTML = '<div class="series-progress-top"><span>İZLEME İLERLEMESİ</span><strong>'+watched+(total?' / '+total:'')+' bölüm</strong></div><div class="series-progress-track"><i style="width:'+percent+'%"></i></div><div class="series-progress-bottom"><span>'+percent+'% tamamlandı</span><span>'+esc(({watching:'İzliyorum',planned:'İzleme listemde',completed:'Tamamladım',paused:'Ara verdim',dropped:'Yarıda bıraktım'}[entry.status]||'İzliyorum'))+'</span></div>';\n    const all = Object.values(readDiary());\n    const totalWatched = all.reduce((sum,row)=>sum+(Array.isArray(row.watched)?row.watched.length:0),0);\n    const completed = all.filter(row=>row.status==='completed').length;\n    root.innerHTML += '<div class="series-global-stats"><span><strong>'+totalWatched+'</strong><small>İzlenen bölüm</small></span><span><strong>'+completed+'</strong><small>Tamamlanan dizi</small></span></div>';
+    root.innerHTML = '<div class="series-progress-top"><span>İZLEME İLERLEMESİ</span><strong>'+watched+(total?' / '+total:'')+' bölüm</strong></div><div class="series-progress-track"><i style="width:'+percent+'%"></i></div><div class="series-progress-bottom"><span>'+percent+'% tamamlandı</span><span>'+esc(({watching:'İzliyorum',planned:'İzleme listemde',completed:'Tamamladım',paused:'Ara verdim',dropped:'Yarıda bıraktım'}[entry.status]||'İzliyorum'))+'</span></div>';
+    const all = Object.values(readDiary());
+    const totalWatched = all.reduce((sum,row)=>sum+(Array.isArray(row.watched)?row.watched.length:0),0);
+    const completed = all.filter(row=>row.status==='completed').length;
+    root.innerHTML += '<div class="series-global-stats"><span><strong>'+totalWatched+'</strong><small>İzlenen bölüm</small></span><span><strong>'+completed+'</strong><small>Tamamlanan dizi</small></span></div>';
   }
   function ensureGuide() {
     let guide = $('series-watch-system');
