@@ -1624,7 +1624,7 @@ function attachPlayerSubtitle(){
   if(!isVtt&&!isSrt){setPlayerError('Altyazı dosyası .vtt veya .srt biçiminde olmalı.');return;}
   const sourceUrl=URL.createObjectURL(file);
   if(isSrt){
-   const reader=new FileReader();reader.onload=()=>{const converted='WEBVTT\\n\\n'+String(reader.result||'').replace(/^\\uFEFF/,'').replace(/(\\d{2}:\\d{2}:\\d{2}),(\d{3})/g,'$1.$2').replace(/\\r?\\n/g,'\\n');const blob=new Blob([converted],{type:'text/vtt'});const url=URL.createObjectURL(blob);urls.push(url);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\\.srt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=url;video.appendChild(track);refreshSubtitleTrackOptions();};reader.readAsText(file);URL.revokeObjectURL(sourceUrl);return;
+   const reader=new FileReader();reader.onload=()=>{const converted='WEBVTT\n\n'+String(reader.result||'').replace(/^\uFEFF/,'').replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g,'$1.$2').replace(/\r?\n/g,'\n');const blob=new Blob([converted],{type:'text/vtt'});const url=URL.createObjectURL(blob);urls.push(url);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\\.srt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=url;video.appendChild(track);refreshSubtitleTrackOptions();};reader.readAsText(file);URL.revokeObjectURL(sourceUrl);return;
   }
   urls.push(sourceUrl);const track=document.createElement('track');track.dataset.userSubtitle='true';track.kind='subtitles';track.label=file.name.replace(/\\.vtt$/i,'')||('Altyazı '+(index+1));track.srclang='tr';track.src=sourceUrl;video.appendChild(track);
  });
