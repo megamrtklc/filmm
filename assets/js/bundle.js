@@ -980,6 +980,7 @@ function showDashboard(update=true){
  document.getElementById('detail-related').classList.add('hidden');
  if(update&&location.hash!=='#/anasayfa')history.pushState(null,'','#/anasayfa');
  updateHeaderActiveState();
+ window.dispatchEvent(new Event('perde:homepage-refresh'));
  window.scrollTo({top:0,behavior:!update&&history.state?.ny7ScrollY!=null?'auto':'smooth'});
 }
 
@@ -1680,6 +1681,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 initializeMoodDiscovery();
                 renderMediaGrid();
                 renderLiveTv();
+                window.dispatchEvent(new Event('perde:catalog-ready'));
                 renderHeaderSearchResults(headerSearchInput?.value||'');
                 loadOriginalTitles();
                 if (location.hash) routeFromHash();
