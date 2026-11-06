@@ -1175,6 +1175,15 @@ function applyPosterAtmosphere(item){
  };
  poster.src=sampleUrl;
 }
+function renderDetailSeries(item){
+ const panel=document.getElementById('detail-series-panel'),stats=document.getElementById('detail-series-stats');
+ if(!panel||!stats)return;
+ const isSeries=item.type==='tv';
+ panel.hidden=!isSeries;
+ if(!isSeries)return;
+ const values=[['Sezon',item.seasons?String(item.seasons):'Bilgi yok'],['Bölüm',item.episodes?String(item.episodes):'Bilgi yok'],['Yayın başlangıcı',item.year||'Bilgi yok']];
+ stats.innerHTML=values.map(([label,value])=>'<div class="detail-series-stat"><strong>'+escapeCountryHtml(value)+'</strong><span>'+escapeCountryHtml(label)+'</span></div>').join('');
+}
 function loadDetailDiary(item){
  const rating=document.getElementById('detail-diary-rating'),note=document.getElementById('detail-diary-note'),status=document.getElementById('detail-diary-status'),save=document.getElementById('detail-diary-save');
  if(!rating||!note||!save)return;
@@ -1489,47 +1498,61 @@ function launchPlayer(title) {
             if (catalogInitialized) return;
             catalogInitialized = true;
             showCatalogSkeletons();
+            const parseCatalogResponse = async (response, source) => {
+                if (!response.ok) throw new Error(source + ' HTTP ' + response.status);
+                const payload = await response.json();
+                let candidate = payload;
+                if (!Array.isArray(payload) && typeof payload?.content === 'string') {
+                    const binary = atob(payload.content.replace(/\\s/g, ''));
+                    const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
+                    candidate = JSON.parse(new TextDecoder().decode(bytes));
+                }
+                if (!Array.isArray(candidate) || candidate.length === 0) throw new Error(source + ': katalog boş veya geçersiz.');
+                return candidate;
+            };
+            const fetchCatalog = async (url, source) => {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 12000);
+                try {
+                    const response = await fetch(url, {cache:'no-store',mode:'cors',credentials:'omit',signal:controller.signal});
+                    return await parseCatalogResponse(response, source);
+                } finally { clearTimeout(timeout); }
+            };
             try {
-                const catalogUrls = [
-                    new URL('data/catalog.json?v=20261105-recovery-v1', document.baseURI).href,
-                    'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261105-recovery-v1'
-                ];
+                const localUrl = new URL('./data/catalog.json?v=20261106-catalog-recovery-v4', document.baseURI).href;
+                const rootUrl = new URL('/data/catalog.json?v=20261106-catalog-recovery-v4', location.origin).href;
+                const rawUrl = 'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261106-catalog-recovery-v4';
+                const apiUrl = 'https://api.github.com/repos/megamrtklc/filmm/contents/data/catalog.json?ref=main';
+                const sources = [[localUrl,'Yayınlanan katalog'],[rootUrl,'Kök katalog yolu'],[rawUrl,'GitHub ham katalog'],[apiUrl,'GitHub API kataloğu']];
                 let loadedCatalog = null;
-                let lastCatalogError = null;
-                for (const catalogUrl of catalogUrls) {
+                const errors = [];
+                for (const [url,label] of sources) {
                     try {
-                        const response = await fetch(catalogUrl, { cache: 'no-store' });
-                        if (!response.ok) throw new Error('HTTP ' + response.status);
-                        const candidate = await response.json();
-                        if (!Array.isArray(candidate) || candidate.length === 0) throw new Error('Katalog boş veya geçersiz.');
-                        loadedCatalog = candidate;
+                        loadedCatalog = await fetchCatalog(url,label);
+                        console.info('Katalog yüklendi:',label,loadedCatalog.length+' kayıt');
                         break;
                     } catch (requestError) {
-                        lastCatalogError = requestError;
-                        console.warn('Katalog kaynağı denenemedi:', catalogUrl, requestError);
+                        errors.push(label+': '+(requestError?.message||requestError));
+                        console.warn('Katalog kaynağı denenemedi:',label,requestError);
                     }
                 }
-                if (!loadedCatalog) throw new Error('Katalog kaynaklarının hiçbiri yanıt vermedi: ' + (lastCatalogError?.message || 'bilinmeyen hata'));
-                if (!Array.isArray(loadedCatalog) || loadedCatalog.length === 0) throw new Error('Katalog dosyası boş veya geçersiz.');
+                if (!loadedCatalog) throw new Error(errors.join(' | ')||'Hiçbir katalog kaynağı yanıt vermedi.');
                 mediaDatabase = loadedCatalog;
-                heroItems = [...mediaDatabase].sort((a,b) => Number(b.year)-Number(a.year)).slice(0,10);
+                heroItems = [...mediaDatabase].sort((a,b)=>Number(b.year)-Number(a.year)).slice(0,10);
                 setHeroMedia(mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
                 initializeMoodDiscovery();
                 renderMediaGrid();
                 renderLiveTv();
-                renderHeaderSearchResults(headerSearchInput?.value || '');
+                renderHeaderSearchResults(headerSearchInput?.value||'');
                 loadOriginalTitles();
-                if(location.hash) routeFromHash();
+                if (location.hash) routeFromHash();
             } catch (error) {
                 catalogInitialized = false;
-                console.error('Katalog yükleme hatası:', error);
-                const message = '<div class="col-span-full ny7-error-state"><i class="fa-solid fa-triangle-exclamation"></i><b>İçerikler şu anda yüklenemedi</b><p>Bağlantını kontrol edip yeniden deneyebilirsin.</p><button type="button" onclick="initializeCatalog()"><i class="fa-solid fa-rotate-right"></i> Yeniden dene</button></div>';
-                ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id => {
-                    const target = document.getElementById(id);
-                    if (target) target.innerHTML = message;
-                });
+                console.error('Katalog yükleme hatası:',error);
+                const message = '<div class="col-span-full ny7-error-state"><i class="fa-solid fa-triangle-exclamation"></i><b>İçerikler şu anda yüklenemedi</b><p>Katalog kaynaklarına erişilemedi. Bağlantını kontrol edip yeniden deneyebilirsin.</p><button type="button" onclick="initializeCatalog()"><i class="fa-solid fa-rotate-right"></i> Yeniden dene</button></div>';
+                ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id=>{const target=document.getElementById(id);if(target)target.innerHTML=message;});
             }
         }
         // Script sayfanin en altinda yuklendigi icin katalogu beklemeden baslat.
