@@ -66,7 +66,7 @@
     refreshStats();
   }
   function saveProgress() {
-    if (!mediaId || !Number.isFinite(video.duration) || video.duration <= 0) return;
+    if (choicePending || !mediaId || !Number.isFinite(video.duration) || video.duration <= 0) return;
     const all = read(KEYS.progress), key = String(mediaId);
     if (video.ended || video.duration - video.currentTime < 25) delete all[key];
     else all[key] = { time: video.currentTime, duration: video.duration, savedAt: Date.now() };
