@@ -1476,7 +1476,6 @@ function releasePlayerUrls(){
 function attachPlayerSource(url,label){
  const video=document.getElementById('player-video'),empty=document.getElementById('player-empty-state');
  if(!video||!url)return;
- releasePlayerUrls();
  video.pause();video.innerHTML='';video.src=url;video.load();
  if(empty)empty.hidden=true;
  setPlayerError('');
@@ -1517,6 +1516,7 @@ async function saveAndPlayLocalVideo(){
  try{
   await saveNY7LocalVideo(activePlayerMediaId,file);
   writePlayerSource(activePlayerMediaId,{type:'local',name:file.name});
+  releasePlayerUrls();
   activePlayerObjectUrl=URL.createObjectURL(file);
   attachPlayerSource(activePlayerObjectUrl,file.name);
  }catch(error){setPlayerError(error.message||'Dosya kaydedilemedi. Tarayıcı depolama alanını kontrol et.');}
@@ -1527,6 +1527,7 @@ function saveAndPlayStream(){
  let url;try{url=new URL(raw);}catch(_){setPlayerError('Geçerli bir http veya https video bağlantısı gir.');return;}
  if(!['http:','https:'].includes(url.protocol)){setPlayerError('Yalnızca http veya https bağlantıları kullanılabilir.');return;}
  if(!writePlayerSource(activePlayerMediaId,{type:'url',url:url.href})){setPlayerError('Bağlantı bu tarayıcıya kaydedilemedi.');return;}
+ releasePlayerUrls();
  attachPlayerSource(url.href,'Harici yayın');
 }
 function attachPlayerSubtitle(){
