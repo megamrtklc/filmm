@@ -7,6 +7,51 @@
   let activeItem = null, activeSeason = 1, episodeRows = [], activeEpisode = null;
   const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const norm = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').replace(/[^a-z0-9ığüşöç]+/g,' ').trim();
+  const TRANSLATION_CACHE = 'perde_series_tr_translations_v1';
+  const readTranslations = () => { try { return JSON.parse(localStorage.getItem(TRANSLATION_CACHE) || '{}') || {}; } catch (_) { return {}; } };
+  async function translateToTurkish(value) {
+    const source = String(value || '').trim();
+    if (!source) return '';
+    const cache = readTranslations();
+    if (Object.prototype.hasOwnProperty.call(cache, source)) return cache[source];
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=tr&dt=t&q=' + encodeURIComponent(source);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Çeviri servisi yanıt vermedi.');
+    const data = await response.json();
+    const translated = Array.isArray(data?.[0]) ? data[0].map(part => part?.[0] || '').join('').trim() : '';
+    if (!translated) throw new Error('Çeviri alınamadı.');
+    cache[source] = translated;
+    try { localStorage.setItem(TRANSLATION_CACHE, JSON.stringify(cache)); } catch (_) {}
+    return translated;
+  }
+  function episodeTitle(ep) {
+    const name = String(ep.name || '').trim();
+    const generic = name.match(/^(?:episode|ep\.?)[\s#-]*(\d+)$/i);
+    return generic ? generic[1] + '. Bölüm' : (name || 'Bölüm ' + ep.number);
+  }
+  async function translateEpisodeCards(episodes) {
+    const jobs = [];
+    episodes.forEach(ep => {
+      const titleNode = document.querySelector('[data-episode-title="' + CSS.escape(String(ep.id)) + '"]');
+      const summaryNode = document.querySelector('[data-episode-summary="' + CSS.escape(String(ep.id)) + '"]');
+      if (titleNode && ep.name && !/^(?:episode|ep\.?)[\s#-]*\d+$/i.test(ep.name.trim())) jobs.push({node:titleNode,text:ep.name});
+      if (summaryNode && ep.summary) jobs.push({node:summaryNode,text:ep.summary.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim()});
+    });
+    let cursor = 0;
+    async function worker() {
+      while (cursor < jobs.length) {
+        const job = jobs[cursor++];
+        if (!job.node.isConnected) continue;
+        try {
+          const translated = await translateToTurkish(job.text);
+          if (job.node.isConnected) job.node.textContent = translated;
+        } catch (_) {
+          if (job.node.isConnected) job.node.textContent = job.text;
+        }
+      }
+    }
+    await Promise.all(Array.from({length:Math.min(4,jobs.length)},worker));
+  }
   const readDiary = () => { try { return JSON.parse(localStorage.getItem(STORAGE) || '{}') || {}; } catch (_) { return {}; } };
   const saveDiary = value => { try { localStorage.setItem(STORAGE, JSON.stringify(value)); } catch (e) { console.warn('Dizi günlüğü kaydedilemedi', e); } };
   const keyFor = item => String(item?.id ?? '');
@@ -58,7 +103,7 @@
     host.innerHTML = episodes.length ? episodes.map(ep => {
       const done = getEntry(activeItem).watched.includes(String(ep.id));
       const image = ep.image?.medium || ep.image?.original || '';
-      return '<article class="series-episode-row"><div class="series-episode-image">'+(image?'<img src="'+esc(image)+'" alt="" loading="lazy">':'<span><i class="fa-solid fa-clapperboard"></i></span>')+'</div><div class="series-episode-copy"><div class="series-episode-meta"><span>S'+String(ep.season).padStart(2,'0')+' · B'+String(ep.number||0).padStart(2,'0')+'</span><span>'+(ep.runtime?ep.runtime+' dk':'')+(ep.airdate?' · '+esc(ep.airdate):'')+'</span></div><h3>'+esc(ep.name||'Bölüm '+ep.number)+'</h3><p>'+esc(ep.summary?ep.summary.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim():'Bu bölüm için açıklama bulunmuyor.')+'</p><div class="series-episode-actions"><button type="button" data-play-episode="'+esc(ep.id)+'"><i class="fa-solid fa-play"></i> Bölümü izle</button><button type="button" class="series-watched-toggle '+(done?'is-watched':'')+'" data-watched-episode="'+esc(ep.id)+'"><i class="fa-solid '+(done?'fa-check':'fa-circle-check')+'"></i> '+(done?'İzlendi':'İzlendi olarak işaretle')+'</button></div></div></article>';
+      return '<article class="series-episode-row"><div class="series-episode-image">'+(image?'<img src="'+esc(image)+'" alt="" loading="lazy">':'<span><i class="fa-solid fa-clapperboard"></i></span>')+'</div><div class="series-episode-copy"><div class="series-episode-meta"><span>S'+String(ep.season).padStart(2,'0')+' · B'+String(ep.number||0).padStart(2,'0')+'</span><span>'+(ep.runtime?ep.runtime+' dk':'')+(ep.airdate?' · '+esc(ep.airdate):'')+'</span></div><h3 data-episode-title="'+esc(ep.id)+'">'+esc(episodeTitle(ep))+'</h3><p data-episode-summary="'+esc(ep.id)+'">'+esc(ep.summary?'Türkçeye çevriliyor…':'Bu bölüm için açıklama bulunmuyor.')+'</p><div class="series-episode-actions"><button type="button" data-play-episode="'+esc(ep.id)+'"><i class="fa-solid fa-play"></i> Bölümü izle</button><button type="button" class="series-watched-toggle '+(done?'is-watched':'')+'" data-watched-episode="'+esc(ep.id)+'"><i class="fa-solid '+(done?'fa-check':'fa-circle-check')+'"></i> '+(done?'İzlendi':'İzlendi olarak işaretle')+'</button></div></div></article>';
     }).join('') : '<p class="series-empty">Bu sezon için bölüm bilgisi bulunamadı.</p>';
     host.querySelectorAll('[data-play-episode]').forEach(button => button.addEventListener('click', () => {
       const ep = episodeRows.find(row => String(row.id) === button.dataset.playEpisode);
@@ -69,6 +114,7 @@
       if (ep) markWatched(activeItem,ep,!getEntry(activeItem).watched.includes(String(ep.id)));
     }));
     renderDiarySummary(activeItem);
+    translateEpisodeCards(episodes);
   }
   function openEpisode(ep) {
     if (!activeItem || typeof window.openPlayerForMedia !== 'function') return;
