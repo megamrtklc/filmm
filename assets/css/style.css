@@ -4448,3 +4448,32 @@ body.trailer-popup-open{overflow:hidden}
  #detail-page-view .detail-score-actions{margin-left:auto}
  #detail-page-view .detail-score-actions .detail-icon-btn{width:36px;height:36px}
 }
+
+
+/* Dizi sezon rehberi: ayrı kart yerine sade metin başlığı */
+#detail-page-view .detail-series-panel{
+ max-width:1240px!important;
+ margin:26px auto 0!important;
+ padding:22px 0 0!important;
+ background:transparent!important;
+ border:0!important;
+ border-top:1px solid rgba(255,255,255,.12)!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+#detail-page-view .detail-series-heading{margin:0 0 16px!important}
+#detail-page-view .detail-series-heading>span{
+ display:block!important;margin:0 0 5px!important;
+ color:#aeb3bd!important;font-size:9px!important;
+ font-weight:800!important;letter-spacing:.18em!important;
+}
+#detail-page-view .detail-series-heading h2{
+ margin:0!important;color:#f5f5f5!important;
+ font-size:19px!important;font-weight:750!important;
+ letter-spacing:-.02em!important;
+}
+#detail-page-view .detail-series-panel .detail-series-stats{margin-top:0!important}
+@media(max-width:700px){
+ #detail-page-view .detail-series-panel{margin-top:18px!important;padding-top:17px!important}
+ #detail-page-view .detail-series-heading h2{font-size:17px!important}
+}
