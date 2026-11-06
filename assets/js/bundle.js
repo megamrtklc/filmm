@@ -929,54 +929,6 @@ function showDashboard(update=true){
  window.scrollTo({top:0,behavior:!update&&history.state?.ny7ScrollY!=null?'auto':'smooth'});
 }
 
-let currentCastNames=[];
-let currentCastItemId='';
-function escapeCastHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function renderCastPage(){
- const list=document.getElementById('detail-cast-list');
- if(!list)return;
- const visible=currentCastNames.slice(0,10);
- list.innerHTML=visible.map(member=>{
-  const name=typeof member==='string'?member:member.name;
-  const character=typeof member==='string'?'':member.character||member.role||'';
-  const photo=typeof member==='string'?'':member.image||'';
-  const safe=escapeCastHtml(name);
-  const role=escapeCastHtml(character);
-  const src=photo?escapeCastHtml(photo):'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=252936&color=ffffff&size=160&bold=true';
-  return '<button type="button" class="detail-cast-person" data-actor-name="'+safe+'"><img src="'+src+'" alt="'+safe+'" loading="lazy"><span class="detail-cast-person-copy"><b>'+safe+'</b><small>'+(role||'Karakter bilgisi bulunmuyor')+'</small></span></button>';
- }).join('')||'<p class="detail-cast-empty">Oyuncu bilgisi bulunmuyor.</p>';
-}
-// Oyuncu kimliği isimden tahmin edilmez: yapımın TMDB kimliğiyle Wikidata'daki
-// doğrudan oyuncu kadrosu (P161) alınır. Böylece aynı isimli kişiler karışmaz.
-async function loadVerifiedCast(item){
- const requestId=String(item.id);
- currentCastItemId=requestId;
- const fallback=(item.cast||[]).slice(0,10).map(member=>typeof member==='string'?({name:member,image:'',character:''}):({name:member.name||'',image:member.image||'',character:member.character||member.role||''}));
- if(!item.tmdbId){currentCastNames=fallback;renderCastPage();return;}
- const property=item.type==='tv'?'P4983':'P4947';
- const query='SELECT ?actor ?actorLabel ?image ?order ?characterLabel WHERE { ?work wdt:'+property+' "'+String(item.tmdbId).replace(/[^0-9]/g,'')+'". ?work p:P161 ?statement. ?statement ps:P161 ?actor. OPTIONAL { ?statement pq:P1545 ?order. } OPTIONAL { ?statement pq:P453 ?character. } OPTIONAL { ?actor wdt:P18 ?image. } SERVICE wikibase:label { bd:serviceParam wikibase:language "tr,en". } } ORDER BY (IF(BOUND(?order), xsd:integer(?order), 999)) LIMIT 30';
- try{
-  const response=await fetch('https://query.wikidata.org/sparql?query='+encodeURIComponent(query)+'&format=json',{headers:{'Accept':'application/sparql-results+json'}});
-  if(!response.ok)throw new Error('Doğrulanmış oyuncu listesi alınamadı');
-  const data=await response.json();
-  const rows=data.results?.bindings||[];
-  const verified=[];
-  const seenActors=new Set();
-  for(const row of rows){
-   const person={name:row.actorLabel?.value||'',qid:(row.actor?.value||'').split('/').pop(),image:row.image?.value||'',character:row.characterLabel?.value||''};
-   if(person.name&&person.qid&&!seenActors.has(person.qid)){seenActors.add(person.qid);verified.push(person);}
-  }
-  if(currentCastItemId!==requestId)return;
-  currentCastNames=(verified.length?verified:fallback).slice(0,10);
-  activeCastPage=0;
-  renderCastPage();
- }catch(error){
-  if(currentCastItemId!==requestId)return;
-  currentCastNames=fallback.slice(0,10);
-  activeCastPage=0;
-  renderCastPage();
- }
-}
 function cleanActorBiography(text){
  let value=String(text||'').replace(/\r/g,'').replace(/\u00a0/g,' ');
  // Biyografi dışındaki ansiklopedik dizin/bağlantı bölümlerini tamamen çıkar.
@@ -1156,20 +1108,6 @@ function renderDetailSeries(item){
  const values=[['Sezon',item.seasons?String(item.seasons):'Bilgi yok'],['Bölüm',item.episodes?String(item.episodes):'Bilgi yok'],['Yayın başlangıcı',item.year||'Bilgi yok']];
  stats.innerHTML=values.map(([label,value])=>'<div class="detail-series-stat"><strong>'+escapeCountryHtml(value)+'</strong><span>'+escapeCountryHtml(label)+'</span></div>').join('');
 }
-function loadDetailDiary(item){
- const rating=document.getElementById('detail-diary-rating'),note=document.getElementById('detail-diary-note'),status=document.getElementById('detail-diary-status'),save=document.getElementById('detail-diary-save');
- if(!rating||!note||!save)return;
- let saved={};
- try{saved=JSON.parse(localStorage.getItem('ny7_detail_diary_'+String(item.id))||'{}')||{};}catch(_){}
- rating.value=saved.rating||'';
- note.value=saved.note||'';
- status.textContent=saved.updatedAt?'Son kayıt: '+saved.updatedAt:'Notların yalnızca bu tarayıcıda saklanır.';
- save.onclick=()=>{
-  const value={rating:rating.value,note:note.value.trim(),updatedAt:new Date().toLocaleDateString('tr-TR')};
-  try{localStorage.setItem('ny7_detail_diary_'+String(item.id),JSON.stringify(value));status.textContent='Kaydedildi · '+value.updatedAt;}
-  catch(_){status.textContent='Kayıt yapılamadı. Tarayıcı depolama alanını kontrol et.';}
- };
-}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -1201,12 +1139,12 @@ function openDetailPage(id,update=true){
  ];
  document.getElementById('detail-score-row').innerHTML=scoreItems.map(score=>'<span class="detail-score-pill score-'+score.key+(score.value?'':' is-unavailable')+'"><span class="score-brand score-brand-'+score.key+'" aria-label="'+score.logo+'">'+(score.key==='imdb'?'<b>IMDb</b>':score.key==='tmdb'?'<i class="score-tmdb-symbol">T</i><b>TMDB</b>':score.key==='rt'?'<i class="score-rt-symbol" aria-hidden="true">🍅</i><b>RT</b>':'<i class="score-popcorn-symbol" aria-hidden="true">🍿</i><b>POPCORNMETER</b>')+'</span><strong>'+(score.value?escapeCountryHtml(score.value)+(score.suffix&&!String(score.value).includes('%')?score.suffix:''):'Veri yok')+'</strong></span>').join('');
  updateDetailButtons(item.id);
- currentCastNames=(item.cast||[]).slice(0,15).map(name=>({name,image:''}));currentCastItemId=String(item.id);activeCastPage=0;renderCastPage();loadVerifiedCast(item);
+ 
  document.getElementById('detail-play-btn').onclick=()=>launchPlayer(item.title);
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
- renderDetailSeries(item);loadDetailDiary(item);
+ renderDetailSeries(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
