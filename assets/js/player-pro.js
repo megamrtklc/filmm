@@ -29,7 +29,7 @@
     if (!select) return;
     select.replaceChildren();
     const first = document.createElement('option');
-    first.value = '';
+    first.value = id === 'player-subtitle-track' ? '-1' : '';
     first.textContent = placeholder;
     select.appendChild(first);
     items.forEach(item => {
@@ -223,7 +223,7 @@
   function addSubtitleFiles() {
     const files = Array.from($('player-subtitle-file')?.files || []);
     if (!files.length) return;
-    Array.from(video.querySelectorAll('track[data-perde-user]')).forEach(track => track.remove());
+    Array.from(video.querySelectorAll('track')).forEach(track => track.remove());
     files.forEach((file, index) => {
       const isVtt = /\.vtt$/i.test(file.name) || file.type === 'text/vtt';
       const isSrt = /\.srt$/i.test(file.name);
@@ -273,7 +273,7 @@
   });
   $('player-subtitle-track')?.addEventListener('change', event => {
     const selected = Number(event.target.value);
-    Array.from(video.textTracks || []).forEach((track, index) => { track.mode = selected === index ? 'showing' : 'disabled'; });
+    Array.from(video.textTracks || []).forEach((track, index) => { track.mode = selected >= 0 && selected === index ? 'showing' : 'disabled'; });
   });
   $('player-subtitle-file')?.addEventListener('change', addSubtitleFiles);
   $('player-settings-toggle')?.addEventListener('click', () => { $('player-settings-panel').hidden = !$('player-settings-panel').hidden; });
