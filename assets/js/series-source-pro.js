@@ -7,7 +7,8 @@
   if (!video || !stage || window.__perdeSeriesSourcesInstalled) return;
   window.__perdeSeriesSourcesInstalled = true;
 
-  let episodeKey = '';
+  let mediaKey = '';
+  let mediaType = '';
   let frame = null;
   let activeSourceId = '';
 
@@ -19,10 +20,10 @@
     try { localStorage.setItem(STORE, JSON.stringify(data)); return true; }
     catch (_) { status('Kaynaklar bu tarayıcıya kaydedilemedi. Depolama alanını kontrol et.', true); return false; }
   }
-  function getSources() { return readAll()[episodeKey] || []; }
+  function getSources() { return readAll()[mediaKey] || []; }
   function setSources(items) {
     const all = readAll();
-    all[episodeKey] = items;
+    all[mediaKey] = items;
     return writeAll(all);
   }
   function status(message, error) {
@@ -38,7 +39,7 @@
     panel.id = 'series-source-manager';
     panel.className = 'series-source-manager';
     panel.hidden = true;
-    panel.innerHTML = '<div class="series-source-manager-heading"><span>BÖLÜM KAYNAKLARI</span><strong>Video kaynaklarını yönet</strong><small>Eklediğin bağlantılar yalnızca seçtiğin bölüm için kaydedilir.</small></div><form class="series-source-form"><label>Kaynak adı<input name="label" type="text" maxlength="60" placeholder="Örn. YouTube – 1080p"></label><label>Video bağlantısı<input name="url" type="url" required placeholder="https://..." autocomplete="url"></label><label>Kaynak türü<select name="kind"><option value="auto">Otomatik algıla</option><option value="direct">Doğrudan video (MP4 / HLS / DASH)</option><option value="embed">Gömülü oynatıcı / diğer site</option></select></label><button type="submit" class="series-source-add"><i class="fa-solid fa-plus"></i> Kaynağı ekle ve oynat</button></form><p class="series-source-status" role="status">Bu bölüm için henüz kaynak eklenmedi.</p><div class="series-source-list"></div><p class="series-source-help">YouTube, Vimeo ve Dailymotion bağlantıları gömülü oynatıcıda açılır. Diğer sitelerde sitenin sağladığı gömme bağlantısını kullan. MP4, M3U8 ve MPD bağlantıları Perde oynatıcısında açılır. Kaynağın paylaşım ve izleme iznine sahip olduğundan emin ol.</p>';
+    panel.innerHTML = '<div class="series-source-manager-heading"><span class="series-source-kicker">VİDEO KAYNAKLARI</span><strong>Video kaynaklarını yönet</strong><small class="series-source-description">Eklediğin bağlantılar seçtiğin içerik için kaydedilir.</small></div><form class="series-source-form"><label>Kaynak adı<input name="label" type="text" maxlength="60" placeholder="Örn. YouTube – 1080p"></label><label>Video bağlantısı<input name="url" type="url" required placeholder="https://..." autocomplete="url"></label><label>Kaynak türü<select name="kind"><option value="auto">Otomatik algıla</option><option value="direct">Doğrudan video (MP4 / HLS / DASH)</option><option value="embed">Gömülü oynatıcı / diğer site</option></select></label><button type="submit" class="series-source-add"><i class="fa-solid fa-plus"></i> Kaynağı ekle ve oynat</button></form><p class="series-source-status" role="status">Bu bölüm için henüz kaynak eklenmedi.</p><div class="series-source-list"></div><p class="series-source-help">YouTube, Vimeo ve Dailymotion bağlantıları gömülü oynatıcıda açılır. Diğer sitelerde sitenin sağladığı gömme bağlantısını kullan. MP4, M3U8 ve MPD bağlantıları Perde oynatıcısında açılır. Kaynağın paylaşım ve izleme iznine sahip olduğundan emin ol.</p>';
     const grid = host.querySelector('.ny7-player-source-grid');
     if (grid) grid.insertAdjacentElement('beforebegin', panel);
     else host.appendChild(panel);
@@ -55,7 +56,7 @@
     if (frame) frame.remove();
     frame = document.createElement('iframe');
     frame.className = 'series-source-frame';
-    frame.title = 'Dizi bölümü video oynatıcısı';
+    frame.title = 'Perde video oynatıcısı';
     frame.src = 'about:blank';
     frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
     frame.allowFullscreen = true;
@@ -107,24 +108,26 @@
   function playSource(source) {
     if (!source) return;
     activeSourceId = source.id;
-    let nav = $('series-episode-navigation');
-    if (!nav) {
-      nav = document.createElement('div');
-      nav.id = 'series-episode-navigation';
-      nav.className = 'series-episode-navigation';
-      nav.innerHTML = '<button type="button" data-series-direction="-1" aria-label="Önceki bölüm"><i class="fa-solid fa-chevron-left"></i><span>Önceki bölüm</span></button><button type="button" data-series-direction="1" aria-label="Sonraki bölüm"><span>Sonraki bölüm</span><i class="fa-solid fa-chevron-right"></i></button>';
-      stage.appendChild(nav);
-      nav.querySelectorAll('[data-series-direction]').forEach(button => button.addEventListener('click', () => {
-        const direction = Number(button.dataset.seriesDirection);
-        if (typeof window.perdeNavigateEpisode === 'function') window.perdeNavigateEpisode(direction);
-      }));
+    if (mediaType === 'episode') {
+      let nav = $('series-episode-navigation');
+      if (!nav) {
+        nav = document.createElement('div');
+        nav.id = 'series-episode-navigation';
+        nav.className = 'series-episode-navigation';
+        nav.innerHTML = '<button type="button" data-series-direction="-1" aria-label="Önceki bölüm"><i class="fa-solid fa-chevron-left"></i><span>Önceki bölüm</span></button><button type="button" data-series-direction="1" aria-label="Sonraki bölüm"><span>Sonraki bölüm</span><i class="fa-solid fa-chevron-right"></i></button>';
+        stage.appendChild(nav);
+        nav.querySelectorAll('[data-series-direction]').forEach(button => button.addEventListener('click', () => {
+          const direction = Number(button.dataset.seriesDirection);
+          if (typeof window.perdeNavigateEpisode === 'function') window.perdeNavigateEpisode(direction);
+        }));
+      }
+      nav.hidden = false;
     }
-    nav.hidden = false;
     const panel = ensurePanel();
     const grid = document.querySelector('.ny7-player-source-grid');
-    if (grid) grid.hidden = true;
+    if (grid) grid.hidden = mediaType === 'episode';
     const subtitle = document.querySelector('.ny7-player-subtitle');
-    if (subtitle) subtitle.hidden = true;
+    if (subtitle) subtitle.hidden = mediaType === 'episode';
     if (source.mode === 'embed') {
       clearCurrent();
       const embed = source.embedUrl || toEmbedUrl(source.url, 'embed');
@@ -206,10 +209,20 @@
     renderList();
     playSource(parsed);
   }
-  function openForEpisode(context) {
-    episodeKey = String(context.playerId || '');
-    activeSourceId = '';
+  function configurePanel(type) {
     const panel = ensurePanel();
+    if (!panel) return null;
+    const kicker = panel.querySelector('.series-source-kicker');
+    const description = panel.querySelector('.series-source-description');
+    if (kicker) kicker.textContent = type === 'movie' ? 'FİLM KAYNAKLARI' : 'BÖLÜM KAYNAKLARI';
+    if (description) description.textContent = type === 'movie' ? 'Eklediğin video bağlantıları bu film için kaydedilir.' : 'Eklediğin video bağlantıları yalnızca seçtiğin bölüm için kaydedilir.';
+    return panel;
+  }
+  function openForEpisode(context) {
+    mediaType = 'episode';
+    mediaKey = String(context.playerId || '');
+    activeSourceId = '';
+    const panel = configurePanel('episode');
     const grid = document.querySelector('.ny7-player-source-grid');
     const subtitle = document.querySelector('.ny7-player-subtitle');
     if (panel) panel.hidden = false;
@@ -219,15 +232,29 @@
     renderList();
     const sources = getSources();
     if (sources.length) {
-      // Bölüm açıldığında ilk kayıtlı kaynağı otomatik başlat.
-      renderList();
       playSource(sources[0]);
-      if (sources.length > 1) {
-        status('İlk kayıtlı kaynak otomatik başlatıldı. Diğer kaynaklara sağdaki listeden geçebilirsin.', false);
-      }
+      if (sources.length > 1) status('İlk kayıtlı kaynak otomatik başlatıldı. Diğer kaynaklara sağdaki listeden geçebilirsin.', false);
     }
   }
-  function closeForEpisode() {
+  function openForFilm(id) {
+    mediaType = 'movie';
+    mediaKey = 'movie:' + String(id);
+    activeSourceId = '';
+    const panel = configurePanel('movie');
+    if (panel) panel.hidden = false;
+    // Film oynatıcısının yerel dosya, doğrudan yayın ve altyazı araçlarını koru.
+    const grid = document.querySelector('.ny7-player-source-grid');
+    const subtitle = document.querySelector('.ny7-player-subtitle');
+    if (grid) grid.hidden = false;
+    if (subtitle) subtitle.hidden = false;
+    renderList();
+    const sources = getSources();
+    if (sources.length) {
+      playSource(sources[0]);
+      if (sources.length > 1) status('İlk kayıtlı kaynak otomatik başlatıldı. Diğer kaynaklara sağdaki listeden geçebilirsin.', false);
+    }
+  }
+  function closeForMedia() {
     if (frame) { frame.src = 'about:blank'; frame.remove(); frame = null; }
     video.hidden = false;
     const nav = $('series-episode-navigation');
@@ -238,7 +265,8 @@
     if (grid) grid.hidden = false;
     const subtitle = document.querySelector('.ny7-player-subtitle');
     if (subtitle) subtitle.hidden = false;
-    episodeKey = '';
+    mediaKey = '';
+    mediaType = '';
     activeSourceId = '';
   }
 
@@ -248,7 +276,11 @@
       const result = originalOpen.apply(this, arguments);
       const context = window.perdeEpisodeContext;
       if (context && context.playerId) openForEpisode(context);
-      else closeForEpisode();
+      else {
+        // openPlayerForMedia rejects TV items without an episode context, so this path is a film.
+        if (arguments[0] !== undefined && arguments[0] !== null) openForFilm(arguments[0]);
+        else closeForMedia();
+      }
       return result;
     };
   }
@@ -256,7 +288,7 @@
   if (typeof originalClose === 'function') {
     window.closePlayer = function () {
       const result = originalClose.apply(this, arguments);
-      closeForEpisode();
+      closeForMedia();
       window.perdeEpisodeContext = null;
       return result;
     };
