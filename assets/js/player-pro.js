@@ -295,8 +295,14 @@
 
   function srtToVtt(source) {
     let text = String(source || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').trim();
-    if (/^WEBVTT(?:\s|$)/i.test(text)) return text;
-    text = text.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+    if (/^WEBVTT(?:\s|$)/i.test(text)) {
+      text = text.replace(/^WEBVTT[^\n]*\n(?:[ \t]*\n)?/i, '');
+    } else {
+      text = text.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+    }
+    // Keep captions above the custom playback controls instead of at the bottom edge.
+    text = text.replace(/^(\d{2}:\d{2}:\d{2}\.\d{3}\s+-->\s+\d{2}:\d{2}:\d{2}\.\d{3})(.*)$/gm,
+      (line, timing, settings) => timing + ( /\\bline:/.test(settings) ? settings : settings + ' line:80% position:50% align:middle'));
     return 'WEBVTT\n\n' + text;
   }
 
