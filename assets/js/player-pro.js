@@ -151,6 +151,7 @@
 
   if (typeof originalAttach === 'function') {
     window.attachPlayerSource = function (url, label) {
+      clearOnlineSubtitles();
       resumedForSource = false;
       const source = String(url || '');
       if (/\.m3u8(?:$|[?#])|\.mpd(?:$|[?#])/i.test(source) && attachAdaptive(source)) return;
