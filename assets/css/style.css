@@ -4344,7 +4344,7 @@ body.trailer-popup-open{overflow:hidden}
  border-radius:0!important;
  background:transparent!important;
  text-align:left!important;
- cursor:default!important;
+ cursor:pointer!important;
 }
 .detail-cast-card .detail-cast-person img{
  flex:0 0 58px!important;
