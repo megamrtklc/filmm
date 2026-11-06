@@ -4732,3 +4732,49 @@ body.trailer-popup-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   .trailer-popup-poster-frame:before,.trailer-popup-player:before{transition:none}
 }
+
+
+/* Perde film oynatıcı */
+#detail-page-view .detail-poster-watch{
+ width:100%;min-height:44px;margin-top:9px;padding:11px 14px;display:flex;align-items:center;justify-content:center;gap:10px;
+ border:1px solid rgba(255,15,27,.55);border-radius:8px;background:linear-gradient(135deg,#ff1722,#c90813);
+ color:#fff;font-size:12px;font-weight:850;letter-spacing:.01em;box-shadow:0 8px 24px rgba(255,15,27,.18);transition:transform .18s ease,filter .18s ease;
+}
+#detail-page-view .detail-poster-watch:hover{transform:translateY(-2px);filter:brightness(1.08)}
+#detail-page-view .detail-poster-watch i{font-size:13px}
+#detail-page-view .detail-poster-watch[hidden]{display:none!important}
+.ny7-player-modal{position:fixed;inset:0;z-index:1000;overflow-y:auto;background:#08090d;color:#f5f6f8;padding:24px clamp(16px,4vw,64px) 40px}
+.ny7-player-modal:not(.hidden){display:block}
+.ny7-player-header{max-width:1500px;margin:0 auto 24px;display:flex;align-items:center;gap:16px}
+.ny7-player-back,.ny7-player-close{width:42px;height:42px;border:1px solid #ffffff20;border-radius:50%;display:grid;place-items:center;background:#ffffff0a;color:#fff;font-size:17px}
+.ny7-player-close{margin-left:auto}
+.ny7-player-heading span,.ny7-player-source-heading span{font-size:9px;letter-spacing:.2em;font-weight:800;color:#c5a66a}
+.ny7-player-heading h2{font-size:18px;font-weight:750;margin:3px 0 0}
+.ny7-player-layout{max-width:1500px;margin:auto;display:grid;grid-template-columns:minmax(0,1.8fr) minmax(290px,.8fr);gap:24px;align-items:start}
+.ny7-player-stage{position:relative;min-height:260px;aspect-ratio:16/9;background:#000;border:1px solid #ffffff16;border-radius:12px;overflow:hidden;display:grid;place-items:center}
+.ny7-player-stage video{width:100%;height:100%;max-height:calc(100vh - 190px);object-fit:contain;background:#000}
+.ny7-player-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center;background:radial-gradient(ellipse at center,#1c1d23,#050506 70%);pointer-events:none}
+.ny7-player-empty[hidden]{display:none}
+.ny7-player-empty>i{font-size:42px;color:#c5a66a}
+.ny7-player-empty strong{font-size:16px}
+.ny7-player-empty span{max-width:440px;color:#9ca3af;font-size:12px;line-height:1.7}
+.ny7-player-error{margin:12px 0 0;color:#ff858b;font-size:12px}
+.ny7-player-source-panel{padding:22px;border:1px solid #ffffff16;border-radius:12px;background:#11131a}
+.ny7-player-source-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.ny7-player-source-heading h3{font-size:17px;font-weight:750;margin-top:4px}
+.ny7-player-source-heading>i{color:#c5a66a;font-size:20px}
+.ny7-player-source-grid{display:grid;gap:14px}
+.ny7-source-option{padding:15px;border:1px solid #ffffff17;border-radius:9px;background:#0b0d12}
+.ny7-source-option label,.ny7-player-subtitle label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:750;margin-bottom:12px}
+.ny7-source-option label i,.ny7-player-subtitle label i{color:#c5a66a}
+.ny7-source-option input[type=file],.ny7-source-option input[type=url]{width:100%;min-width:0;margin-bottom:10px;color:#cbd0da;font-size:11px}
+.ny7-source-option input[type=url]{padding:11px;border:1px solid #ffffff20;border-radius:7px;background:#171a22;color:#fff;outline:none}
+.ny7-source-option input[type=url]:focus{border-color:#c5a66a}
+.ny7-source-button{width:100%;padding:10px;border-radius:7px;background:#e20d19;color:#fff;font-size:11px;font-weight:800}
+.ny7-source-option small{display:block;margin-top:9px;color:#858b98;font-size:10px;line-height:1.6}
+.ny7-player-subtitle{margin-top:16px;padding-top:16px;border-top:1px solid #ffffff14}
+.ny7-player-subtitle label{margin:0 0 10px}
+.ny7-player-subtitle input{font-size:11px;color:#cbd0da}
+.ny7-player-note{margin-top:16px;color:#858b98;font-size:10px;line-height:1.7}
+@media(max-width:900px){.ny7-player-layout{grid-template-columns:1fr}.ny7-player-source-panel{padding:17px}.ny7-player-stage{min-height:210px}}
+@media(max-width:560px){.ny7-player-modal{padding:16px 12px 28px}.ny7-player-header{margin-bottom:16px}.ny7-player-heading h2{font-size:15px}.ny7-player-stage{min-height:190px}.ny7-player-source-grid{gap:10px}}
