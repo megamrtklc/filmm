@@ -107,6 +107,19 @@
   function playSource(source) {
     if (!source) return;
     activeSourceId = source.id;
+    let nav = $('series-episode-navigation');
+    if (!nav) {
+      nav = document.createElement('div');
+      nav.id = 'series-episode-navigation';
+      nav.className = 'series-episode-navigation';
+      nav.innerHTML = '<button type="button" data-series-direction="-1" aria-label="Önceki bölüm"><i class="fa-solid fa-chevron-left"></i><span>Önceki bölüm</span></button><button type="button" data-series-direction="1" aria-label="Sonraki bölüm"><span>Sonraki bölüm</span><i class="fa-solid fa-chevron-right"></i></button>';
+      stage.appendChild(nav);
+      nav.querySelectorAll('[data-series-direction]').forEach(button => button.addEventListener('click', () => {
+        const direction = Number(button.dataset.seriesDirection);
+        if (typeof window.perdeNavigateEpisode === 'function') window.perdeNavigateEpisode(direction);
+      }));
+    }
+    nav.hidden = false;
     const panel = ensurePanel();
     const grid = document.querySelector('.ny7-player-source-grid');
     if (grid) grid.hidden = true;
@@ -212,6 +225,8 @@
   function closeForEpisode() {
     if (frame) { frame.src = 'about:blank'; frame.remove(); frame = null; }
     video.hidden = false;
+    const nav = $('series-episode-navigation');
+    if (nav) nav.hidden = true;
     const panel = $('series-source-manager');
     if (panel) panel.hidden = true;
     const grid = document.querySelector('.ny7-player-source-grid');
