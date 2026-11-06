@@ -351,6 +351,23 @@
                         <span>İzlemek için bilgisayarından bir video seç veya yayın bağlantısı ekle.</span>
                     </div>
                     <button type="button" id="player-big-play" class="ny7-player-big-play" aria-label="Oynat"><i class="fa-solid fa-play"></i></button>
+                    <button type="button" id="player-skip-intro" class="ny7-player-skip" hidden>Girişi atla <i class="fa-solid fa-forward-step"></i></button>
+                    <button type="button" id="player-skip-credits" class="ny7-player-skip player-skip-credits" hidden>Jeneriği atla <i class="fa-solid fa-forward-step"></i></button>
+                    <p id="player-resume-note" class="ny7-player-resume-note" hidden></p>
+                    <section id="player-settings-panel" class="ny7-player-settings" hidden aria-label="Gelişmiş oynatıcı ayarları">
+                        <div class="ny7-settings-heading"><strong>Gelişmiş ayarlar</strong><button type="button" id="player-settings-close" aria-label="Ayarları kapat"><i class="fa-solid fa-xmark"></i></button></div>
+                        <div class="ny7-settings-grid">
+                            <label>Altyazı boyutu<select id="player-subtitle-size"><option value="16px">Küçük</option><option value="22px" selected>Orta</option><option value="28px">Büyük</option><option value="34px">Çok büyük</option></select></label>
+                            <label>Altyazı rengi<select id="player-subtitle-color"><option value="#ffffff">Beyaz</option><option value="#ffdf70">Sarı</option><option value="#80d8ff">Açık mavi</option></select></label>
+                            <label>Altyazı arka planı<select id="player-subtitle-bg"><option value="0.65">Koyu</option><option value="0.35">Yarı saydam</option><option value="0">Kapalı</option></select></label>
+                        </div>
+                        <div class="ny7-marker-settings">
+                            <strong>Atlama zamanları <small>Film başına, bu cihazda saklanır</small></strong>
+                            <div><label>Giriş başlangıcı (sn)<input id="player-intro-start" type="number" min="0" step="1" placeholder="0"></label><label>Giriş bitişi (sn)<input id="player-intro-end" type="number" min="0" step="1" placeholder="95"></label></div>
+                            <div><label>Jenerik başlangıcı (sn)<input id="player-credits-start" type="number" min="0" step="1" placeholder="Örn. 6300"></label></div>
+                            <button type="button" id="player-save-markers" class="ny7-source-button">Atlama zamanlarını kaydet</button>
+                        </div>
+                    </section>
                     <div class="ny7-player-loading" id="player-loading"><span></span></div>
                     <p id="player-error" class="ny7-player-error" role="status" hidden></p>
                     <div class="ny7-player-controls" id="player-controls">
@@ -367,13 +384,17 @@
                             <div class="ny7-player-control-right">
                                 <label class="ny7-player-speed-label" for="player-speed"><i class="fa-solid fa-gauge-high"></i></label>
                                 <select id="player-speed" aria-label="Oynatma hızı"><option value="0.5">0.5x</option><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option><option value="1.75">1.75x</option><option value="2">2x</option></select>
+                                <select id="player-quality" class="ny7-player-select" aria-label="Görüntü kalitesi"><option value="">Kalite</option></select>
+                                <select id="player-audio-track" class="ny7-player-select" aria-label="Ses dili"><option value="">Ses</option></select>
+                                <select id="player-subtitle-track" class="ny7-player-select" aria-label="Altyazı"><option value="">Altyazı kapalı</option></select>
+                                <button type="button" id="player-settings-toggle" class="ny7-control-button" aria-label="Gelişmiş ayarlar" title="Ayarlar"><i class="fa-solid fa-sliders"></i></button>
                                 <button type="button" id="player-pip" class="ny7-control-button" aria-label="Resim içinde resim"><i class="fa-regular fa-clone"></i></button>
                                 <button type="button" id="player-fullscreen" class="ny7-control-button" aria-label="Tam ekran"><i class="fa-solid fa-expand"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="ny7-player-underbar"><div><span class="ny7-player-underbar-dot"></span><span>ŞİMDİ İZLİYORSUN</span><strong id="player-underbar-title">Perde Sinema</strong></div><span class="ny7-player-shortcuts">Kısayollar: Space oynat · ← / → 10 sn · F tam ekran</span></div>
+                <div class="ny7-player-underbar"><div><span class="ny7-player-underbar-dot"></span><span>ŞİMDİ İZLİYORSUN</span><strong id="player-underbar-title">Perde Sinema</strong></div><div class="ny7-player-statline"><span><i class="fa-regular fa-clock"></i> Bu filmde <b id="player-stat-minutes">0 dk</b></span><span><i class="fa-solid fa-check-circle"></i> <b id="player-stat-completed">0</b> tamamlandı</span></div><span class="ny7-player-shortcuts">Space oynat · ← / → 10 sn · F tam ekran · M sessiz</span></div>
             </section>
             <aside class="ny7-player-source-panel">
                 <div class="ny7-player-source-heading"><div><span>OYNATMA MERKEZİ</span><h3>Video kaynağı</h3></div><i class="fa-solid fa-sliders"></i></div>
@@ -391,7 +412,7 @@
                         <small>Yalnızca kullanma ve izleme iznine sahip olduğun kaynakları ekle.</small>
                     </div>
                 </div>
-                <div class="ny7-player-subtitle"><label for="player-subtitle-file"><i class="fa-regular fa-closed-captioning"></i> Altyazı yükle <span>.VTT</span></label><input id="player-subtitle-file" type="file" accept=".vtt,text/vtt"></div>
+                <div class="ny7-player-subtitle"><label for="player-subtitle-file"><i class="fa-regular fa-closed-captioning"></i> Altyazı yükle <span>.VTT</span></label><input id="player-subtitle-file" type="file" accept=".vtt,text/vtt,.srt,application/x-subrip" multiple></div>
                 <p class="ny7-player-note"><i class="fa-solid fa-circle-info"></i> Video biçimi tarayıcı tarafından desteklenmelidir. Kayıtlı kaynaklar bu cihazda kullanılabilir.</p>
             </aside>
         </main>
@@ -405,5 +426,8 @@
     
     
     <script src="assets/js/bundle.js?v=20261107-cinema-v1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
+    <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
+    <script src="assets/js/player-pro.js?v=20261107-pro-v1"></script>
 </body>
 </html>
