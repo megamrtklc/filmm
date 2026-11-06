@@ -229,6 +229,7 @@
                 <div class="detail-poster-column">
                     <div class="detail-poster-frame"><img id="detail-poster" src="" alt="Film veya dizi afişi"></div>
                     <button id="detail-trailer-btn" class="detail-poster-trailer" type="button"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i><span>Fragmanı izle</span></button>
+                    <button id="detail-watch-play-btn" class="detail-poster-watch" type="button"><i class="fa-solid fa-play" aria-hidden="true"></i><span>Filmi izle</span></button>
                 </div>
                 <div class="detail-copy">
                     <div class="detail-rating-row flex items-center gap-2 flex-wrap">
@@ -332,47 +333,46 @@
         </div>
     </div>
 
-    <!-- OYNATICI MODAL -->
-    <div id="player-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between p-6">
-        <div class="flex items-center justify-between text-white z-10">
-            <div class="flex items-center gap-3">
-                <button onclick="closePlayer()" class="p-2 rounded-full hover:bg-white/10 text-white">
-                    <i class="fa-solid fa-arrow-left text-xl"></i>
-                </button>
-                <div>
-                    <h3 id="player-media-title" class="font-bold text-sm">Oynatılan İçerik</h3>
-                    <span class="text-[10px] text-brand-yellow font-mono">NY 7 TV Ultra HD Yayın</span>
+    <!-- PERDE VIDEO PLAYER -->
+    <div id="player-modal" class="ny7-player-modal hidden" aria-hidden="true">
+        <header class="ny7-player-header">
+            <button type="button" onclick="closePlayer()" class="ny7-player-back" aria-label="Geri dön"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="ny7-player-heading"><span>PERDE · İZLE</span><h2 id="player-media-title">Film oynatıcı</h2></div>
+            <button type="button" onclick="closePlayer()" class="ny7-player-close" aria-label="Oynatıcıyı kapat"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+        <main class="ny7-player-layout">
+            <section class="ny7-player-stage">
+                <video id="player-video" controls playsinline preload="metadata"></video>
+                <div id="player-empty-state" class="ny7-player-empty">
+                    <i class="fa-solid fa-film"></i>
+                    <strong>İzlemeye başlamak için bir kaynak seç</strong>
+                    <span>Bilgisayarından video dosyası açabilir veya izinli bir yayın bağlantısı ekleyebilirsin.</span>
                 </div>
-            </div>
-            <button onclick="closePlayer()" class="p-2 rounded-full hover:bg-white/10 text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-        </div>
-
-        <div class="absolute inset-0 flex items-center justify-center bg-zinc-950">
-            <img id="player-poster" src="" class="absolute inset-0 w-full h-full object-cover opacity-25 blur-sm" alt="Player Cover">
-            <div class="z-10 text-center space-y-4">
-                <div class="w-20 h-20 rounded-full bg-brand-red/30 border-2 border-brand-red flex items-center justify-center mx-auto cursor-pointer hover:scale-110 transition-transform" onclick="togglePlayState()">
-                    <i id="player-play-icon" class="fa-solid fa-pause text-brand-red text-3xl"></i>
+                <p id="player-error" class="ny7-player-error" role="status" hidden></p>
+            </section>
+            <section class="ny7-player-source-panel">
+                <div class="ny7-player-source-heading"><div><span>VİDEO KAYNAĞI</span><h3>Nasıl izlemek istersin?</h3></div><i class="fa-solid fa-sliders"></i></div>
+                <div class="ny7-player-source-grid">
+                    <div class="ny7-source-option">
+                        <label for="player-local-file"><i class="fa-solid fa-folder-open"></i> Bilgisayarımdan video seç</label>
+                        <input id="player-local-file" type="file" accept="video/*,.mp4,.webm,.ogv,.m4v,.mov,.m3u8">
+                        <button id="player-save-local" type="button" class="ny7-source-button">Dosyayı kaydet ve oynat</button>
+                        <small>Dosya bu tarayıcıda saklanır; site sunucusuna yüklenmez.</small>
+                    </div>
+                    <div class="ny7-source-option">
+                        <label for="player-stream-url"><i class="fa-solid fa-link"></i> Harici yayın bağlantısı</label>
+                        <input id="player-stream-url" type="url" placeholder="https://.../video.mp4" autocomplete="url">
+                        <button id="player-save-stream" type="button" class="ny7-source-button">Bağlantıyı kaydet ve oynat</button>
+                        <small>Yalnızca kullanma ve izleme iznine sahip olduğun kaynakları ekle.</small>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 font-mono">Çevrimiçi medya oynatılıyor...</p>
-            </div>
-        </div>
-
-        <div class="relative z-10 space-y-3 bg-gradient-to-t from-black via-black/80 to-transparent pt-8 p-4 rounded-xl">
-            <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden cursor-pointer">
-                <div class="bg-brand-red h-full w-2/5"></div>
-            </div>
-            <div class="flex items-center justify-between text-white text-xs">
-                <div class="flex items-center gap-4">
-                    <button onclick="togglePlayState()" class="hover:text-brand-yellow">
-                        <i id="player-bar-icon" class="fa-solid fa-pause"></i>
-                    </button>
-                    <span class="font-mono text-slate-300">00:45:12 / 02:18:00</span>
+                <div class="ny7-player-subtitle">
+                    <label for="player-subtitle-file"><i class="fa-regular fa-closed-captioning"></i> Altyazı ekle <span>(.vtt)</span></label>
+                    <input id="player-subtitle-file" type="file" accept=".vtt,text/vtt">
                 </div>
-                <button class="hover:text-brand-yellow"><i class="fa-solid fa-expand"></i></button>
-            </div>
-        </div>
+                <p class="ny7-player-note">Video biçiminin tarayıcı tarafından desteklenmesi gerekir. Yerel dosyalar ve kayıtlı bağlantılar bu cihazın tarayıcısında kullanılabilir.</p>
+            </section>
+        </main>
     </div>
 
     <!-- Modüler JavaScript dosyaları -->
@@ -382,6 +382,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261106-ambilight-fix-v1"></script>
+    <script src="assets/js/bundle.js?v=20261106-player-v1"></script>
 </body>
 </html>
