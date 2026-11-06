@@ -4942,3 +4942,11 @@ body.detail-synopsis-open{overflow:hidden}
 #player-stage:has(.series-source-frame){background:#000}
 #player-stage:has(.series-source-frame) .ny7-player-controls{display:none!important}
 @media(max-width:560px){.series-source-manager{padding:13px}.series-source-form{gap:9px}}
+
+/* Episode navigation stays above third-party iframe players */
+.series-episode-navigation{position:absolute;z-index:30;inset:0;display:flex;align-items:center;justify-content:space-between;pointer-events:none;padding:0 14px}
+.series-episode-navigation[hidden]{display:none}
+.series-episode-navigation button{display:flex;align-items:center;gap:8px;pointer-events:auto;border:1px solid #ffffff35;border-radius:999px;padding:11px 14px;background:#090b10d9;color:#fff;font-size:11px;font-weight:750;box-shadow:0 4px 18px #0008;backdrop-filter:blur(8px);cursor:pointer;transition:background .2s,transform .2s}
+.series-episode-navigation button:hover{background:#c51b2b;transform:scale(1.04)}
+.series-episode-navigation button:focus-visible{outline:2px solid #e5b94b;outline-offset:3px}
+@media(max-width:600px){.series-episode-navigation{padding:0 7px}.series-episode-navigation button{width:38px;height:38px;justify-content:center;padding:0}.series-episode-navigation button span{display:none}}
