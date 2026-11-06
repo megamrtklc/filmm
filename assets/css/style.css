@@ -4635,3 +4635,13 @@ body.trailer-popup-open{overflow:hidden}
   #detail-page-view .detail-series-group{gap:6px 10px!important}
   #detail-page-view .detail-series-average{padding-left:10px!important}
 }
+
+
+/* Series metadata: clearer separation after director and consistent episode text color */
+#detail-page-view .detail-series-total{
+  margin-left:8px!important;
+}
+#detail-page-view .detail-series-value:nth-child(even),
+#detail-page-view .detail-series-value:nth-child(even) strong{
+  color:#fff!important;
+}
