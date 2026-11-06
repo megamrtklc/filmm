@@ -333,45 +333,67 @@
         </div>
     </div>
 
-    <!-- PERDE VIDEO PLAYER -->
+    <!-- PERDE CINEMA PLAYER -->
     <div id="player-modal" class="ny7-player-modal hidden" aria-hidden="true">
         <header class="ny7-player-header">
             <button type="button" onclick="closePlayer()" class="ny7-player-back" aria-label="Geri dön"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="ny7-player-heading"><span>PERDE · İZLE</span><h2 id="player-media-title">Film oynatıcı</h2></div>
-            <button type="button" onclick="closePlayer()" class="ny7-player-close" aria-label="Oynatıcıyı kapat"><i class="fa-solid fa-xmark"></i></button>
+            <div class="ny7-player-heading"><span><i class="fa-solid fa-circle-play"></i> PERDE ORIGINAL PLAYER</span><h2 id="player-media-title">Film oynatıcı</h2></div>
+            <div class="ny7-player-header-actions"><span class="ny7-player-live-label"><i></i> SİNEMA MODU</span><button type="button" onclick="closePlayer()" class="ny7-player-close" aria-label="Oynatıcıyı kapat"><i class="fa-solid fa-xmark"></i></button></div>
         </header>
         <main class="ny7-player-layout">
-            <section class="ny7-player-stage">
-                <video id="player-video" controls playsinline preload="metadata"></video>
-                <div id="player-empty-state" class="ny7-player-empty">
-                    <i class="fa-solid fa-film"></i>
-                    <strong>İzlemeye başlamak için bir kaynak seç</strong>
-                    <span>Bilgisayarından video dosyası açabilir veya izinli bir yayın bağlantısı ekleyebilirsin.</span>
+            <section class="ny7-player-main-column">
+                <div class="ny7-player-stage" id="player-stage">
+                    <video id="player-video" playsinline preload="metadata"></video>
+                    <div id="player-empty-state" class="ny7-player-empty">
+                        <div class="ny7-player-empty-mark"><i class="fa-solid fa-clapperboard"></i></div>
+                        <span class="ny7-player-eyebrow">PERDE SİNEMA DENEYİMİ</span>
+                        <strong>Film keyfin başlasın.</strong>
+                        <span>İzlemek için bilgisayarından bir video seç veya yayın bağlantısı ekle.</span>
+                    </div>
+                    <button type="button" id="player-big-play" class="ny7-player-big-play" aria-label="Oynat"><i class="fa-solid fa-play"></i></button>
+                    <div class="ny7-player-loading" id="player-loading"><span></span></div>
+                    <p id="player-error" class="ny7-player-error" role="status" hidden></p>
+                    <div class="ny7-player-controls" id="player-controls">
+                        <input id="player-seek" class="ny7-player-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Videoda konum">
+                        <div class="ny7-player-control-row">
+                            <div class="ny7-player-control-left">
+                                <button type="button" id="player-play-toggle" class="ny7-control-button primary" aria-label="Oynat"><i class="fa-solid fa-play"></i></button>
+                                <button type="button" id="player-rewind" class="ny7-control-button" aria-label="10 saniye geri"><i class="fa-solid fa-rotate-left"></i><small>10</small></button>
+                                <button type="button" id="player-forward" class="ny7-control-button" aria-label="10 saniye ileri"><i class="fa-solid fa-rotate-right"></i><small>10</small></button>
+                                <button type="button" id="player-volume-toggle" class="ny7-control-button" aria-label="Sesi kapat"><i class="fa-solid fa-volume-high"></i></button>
+                                <input id="player-volume" class="ny7-player-volume" type="range" min="0" max="1" value="1" step="0.05" aria-label="Ses seviyesi">
+                                <span class="ny7-player-time"><b id="player-current-time">00:00</b><i>/</i><span id="player-duration">00:00</span></span>
+                            </div>
+                            <div class="ny7-player-control-right">
+                                <label class="ny7-player-speed-label" for="player-speed"><i class="fa-solid fa-gauge-high"></i></label>
+                                <select id="player-speed" aria-label="Oynatma hızı"><option value="0.5">0.5x</option><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option><option value="1.75">1.75x</option><option value="2">2x</option></select>
+                                <button type="button" id="player-pip" class="ny7-control-button" aria-label="Resim içinde resim"><i class="fa-regular fa-clone"></i></button>
+                                <button type="button" id="player-fullscreen" class="ny7-control-button" aria-label="Tam ekran"><i class="fa-solid fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p id="player-error" class="ny7-player-error" role="status" hidden></p>
+                <div class="ny7-player-underbar"><div><span class="ny7-player-underbar-dot"></span><span>ŞİMDİ İZLİYORSUN</span><strong id="player-underbar-title">Perde Sinema</strong></div><span class="ny7-player-shortcuts">Kısayollar: Space oynat · ← / → 10 sn · F tam ekran</span></div>
             </section>
-            <section class="ny7-player-source-panel">
-                <div class="ny7-player-source-heading"><div><span>VİDEO KAYNAĞI</span><h3>Nasıl izlemek istersin?</h3></div><i class="fa-solid fa-sliders"></i></div>
+            <aside class="ny7-player-source-panel">
+                <div class="ny7-player-source-heading"><div><span>OYNATMA MERKEZİ</span><h3>Video kaynağı</h3></div><i class="fa-solid fa-sliders"></i></div>
                 <div class="ny7-player-source-grid">
                     <div class="ny7-source-option">
-                        <label for="player-local-file"><i class="fa-solid fa-folder-open"></i> Bilgisayarımdan video seç</label>
+                        <label for="player-local-file"><i class="fa-solid fa-folder-open"></i> Cihazından video seç</label>
                         <input id="player-local-file" type="file" accept="video/*,.mp4,.webm,.ogv,.m4v,.mov,.m3u8">
-                        <button id="player-save-local" type="button" class="ny7-source-button">Dosyayı kaydet ve oynat</button>
+                        <button id="player-save-local" type="button" class="ny7-source-button"><i class="fa-solid fa-play"></i> Dosyayı aç ve oynat</button>
                         <small>Dosya bu tarayıcıda saklanır; site sunucusuna yüklenmez.</small>
                     </div>
                     <div class="ny7-source-option">
-                        <label for="player-stream-url"><i class="fa-solid fa-link"></i> Harici yayın bağlantısı</label>
+                        <label for="player-stream-url"><i class="fa-solid fa-link"></i> Yayın bağlantısı</label>
                         <input id="player-stream-url" type="url" placeholder="https://.../video.mp4" autocomplete="url">
-                        <button id="player-save-stream" type="button" class="ny7-source-button">Bağlantıyı kaydet ve oynat</button>
+                        <button id="player-save-stream" type="button" class="ny7-source-button"><i class="fa-solid fa-arrow-up-right-from-square"></i> Bağlantıyı aç</button>
                         <small>Yalnızca kullanma ve izleme iznine sahip olduğun kaynakları ekle.</small>
                     </div>
                 </div>
-                <div class="ny7-player-subtitle">
-                    <label for="player-subtitle-file"><i class="fa-regular fa-closed-captioning"></i> Altyazı ekle <span>(.vtt)</span></label>
-                    <input id="player-subtitle-file" type="file" accept=".vtt,text/vtt">
-                </div>
-                <p class="ny7-player-note">Video biçiminin tarayıcı tarafından desteklenmesi gerekir. Yerel dosyalar ve kayıtlı bağlantılar bu cihazın tarayıcısında kullanılabilir.</p>
-            </section>
+                <div class="ny7-player-subtitle"><label for="player-subtitle-file"><i class="fa-regular fa-closed-captioning"></i> Altyazı yükle <span>.VTT</span></label><input id="player-subtitle-file" type="file" accept=".vtt,text/vtt"></div>
+                <p class="ny7-player-note"><i class="fa-solid fa-circle-info"></i> Video biçimi tarayıcı tarafından desteklenmelidir. Kayıtlı kaynaklar bu cihazda kullanılabilir.</p>
+            </aside>
         </main>
     </div>
 
@@ -382,6 +404,6 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261106-player-v2"></script>
+    <script src="assets/js/bundle.js?v=20261107-cinema-v1"></script>
 </body>
 </html>
