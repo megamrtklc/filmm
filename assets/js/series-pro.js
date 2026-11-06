@@ -116,6 +116,15 @@
     renderDiarySummary(activeItem);
     translateEpisodeCards(episodes);
   }
+  window.perdeNavigateEpisode = function(direction) {
+    if (!activeEpisode || !activeItem) return false;
+    const list = episodeRows.slice().sort((a,b)=>a.season-b.season||a.number-b.number);
+    const index = list.findIndex(row=>String(row.id)===String(activeEpisode.id));
+    const target = list[index + (direction < 0 ? -1 : 1)];
+    if (!target) return false;
+    openEpisode(target);
+    return true;
+  };
   function openEpisode(ep) {
     if (!activeItem || typeof window.openPlayerForMedia !== 'function') return;
     activeEpisode = ep;
