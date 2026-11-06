@@ -1210,6 +1210,7 @@ function openDetailPage(id,update=true){
  updateDetailButtons(item.id);
  
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
+ const watchPlayButton=document.getElementById('detail-watch-play-btn');if(watchPlayButton){watchPlayButton.hidden=item.type==='tv';watchPlayButton.onclick=()=>openPlayerForMedia(item.id);}
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  renderDetailSeries(item);
@@ -1430,24 +1431,124 @@ function launchPlayer(title) {
             document.getElementById('player-modal').classList.add('flex');
         }
 
-        function closePlayer() {
-            document.getElementById('player-modal').classList.add('hidden');
-            document.getElementById('player-modal').classList.remove('flex');
-        }
+        const NY7_PLAYER_STORAGE_KEY='ny7_player_sources_v1';
+let activePlayerMediaId=null;
+let activePlayerObjectUrl=null;
+let activeSubtitleObjectUrl=null;
+function readPlayerSources(){
+ try{const value=JSON.parse(localStorage.getItem(NY7_PLAYER_STORAGE_KEY)||'{}');return value&&typeof value==='object'?value:{};}catch(_){return {};}
+}
+function writePlayerSource(id,source){
+ const all=readPlayerSources();all[String(id)]=source;
+ try{localStorage.setItem(NY7_PLAYER_STORAGE_KEY,JSON.stringify(all));return true;}catch(error){console.warn('Video kaynağı kaydedilemedi:',error);return false;}
+}
+function openNY7VideoDB(){
+ return new Promise((resolve,reject)=>{
+  if(!('indexedDB' in window)){reject(new Error('Bu tarayıcı yerel video depolamayı desteklemiyor.'));return;}
+  const request=indexedDB.open('PerdeVideoLibrary',1);
+  request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains('videos'))db.createObjectStore('videos');};
+  request.onsuccess=()=>resolve(request.result);
+  request.onerror=()=>reject(request.error||new Error('Video deposu açılamadı.'));
+ });
+}
+async function saveNY7LocalVideo(id,file){
+ const db=await openNY7VideoDB();
+ return new Promise((resolve,reject)=>{
+  const tx=db.transaction('videos','readwrite');tx.objectStore('videos').put(file,String(id));
+  tx.oncomplete=()=>{db.close();resolve(true);};tx.onerror=()=>{db.close();reject(tx.error||new Error('Video kaydedilemedi.'));};
+ });
+}
+async function getNY7LocalVideo(id){
+ const db=await openNY7VideoDB();
+ return new Promise((resolve,reject)=>{
+  const tx=db.transaction('videos','readonly'),request=tx.objectStore('videos').get(String(id));
+  request.onsuccess=()=>{const file=request.result||null;db.close();resolve(file);};
+  request.onerror=()=>{db.close();reject(request.error||new Error('Kayıtlı video okunamadı.'));};
+ });
+}
+function setPlayerError(message){
+ const error=document.getElementById('player-error');if(error){error.textContent=message||'';error.hidden=!message;}
+}
+function releasePlayerUrls(){
+ if(activePlayerObjectUrl){URL.revokeObjectURL(activePlayerObjectUrl);activePlayerObjectUrl=null;}
+ if(activeSubtitleObjectUrl){URL.revokeObjectURL(activeSubtitleObjectUrl);activeSubtitleObjectUrl=null;}
+}
+function attachPlayerSource(url,label){
+ const video=document.getElementById('player-video'),empty=document.getElementById('player-empty-state');
+ if(!video||!url)return;
+ releasePlayerUrls();
+ video.pause();video.innerHTML='';video.src=url;video.load();
+ if(empty)empty.hidden=true;
+ setPlayerError('');
+ const subtitleInput=document.getElementById('player-subtitle-file');if(subtitleInput)subtitleInput.value='';
+ video.play().catch(()=>{});
+}
+async function loadSavedPlayerSource(id){
+ const source=readPlayerSources()[String(id)];
+ const urlInput=document.getElementById('player-stream-url');
+ if(urlInput)urlInput.value=source?.type==='url'?source.url:'';
+ if(source?.type==='local'){
+  try{const file=await getNY7LocalVideo(id);if(file){activePlayerObjectUrl=URL.createObjectURL(file);attachPlayerSource(activePlayerObjectUrl,file.name);return;}}
+  catch(error){setPlayerError(error.message||'Kayıtlı video açılamadı.');}
+ }
+ if(source?.type==='url'&&source.url)attachPlayerSource(source.url,'Harici yayın');
+}
+function openPlayerForMedia(id){
+ const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
+ if(!item)return;
+ if(item.type==='tv'){alert('Dizi bölümleri için bölüm bazlı oynatıcı henüz etkin değil.');return;}
+ activePlayerMediaId=String(item.id);
+ const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
+ document.getElementById('player-media-title').textContent=item.title+' · '+(item.year||'');
+ modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
+ document.documentElement.classList.add('ny7-modal-lock');
+ if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.poster=item.image||'';video.load();}
+ document.getElementById('player-empty-state').hidden=false;
+ document.getElementById('player-local-file').value='';
+ document.getElementById('player-subtitle-file').value='';
+ setPlayerError('');
+ loadSavedPlayerSource(activePlayerMediaId);
+}
+async function saveAndPlayLocalVideo(){
+ if(!activePlayerMediaId)return;
+ const input=document.getElementById('player-local-file'),file=input?.files?.[0];
+ if(!file){setPlayerError('Önce bilgisayarından bir video dosyası seç.');return;}
+ if(file.type&&!file.type.startsWith('video/')){setPlayerError('Lütfen geçerli bir video dosyası seç.');return;}
+ try{
+  await saveNY7LocalVideo(activePlayerMediaId,file);
+  writePlayerSource(activePlayerMediaId,{type:'local',name:file.name});
+  activePlayerObjectUrl=URL.createObjectURL(file);
+  attachPlayerSource(activePlayerObjectUrl,file.name);
+ }catch(error){setPlayerError(error.message||'Dosya kaydedilemedi. Tarayıcı depolama alanını kontrol et.');}
+}
+function saveAndPlayStream(){
+ if(!activePlayerMediaId)return;
+ const input=document.getElementById('player-stream-url'),raw=String(input?.value||'').trim();
+ let url;try{url=new URL(raw);}catch(_){setPlayerError('Geçerli bir http veya https video bağlantısı gir.');return;}
+ if(!['http:','https:'].includes(url.protocol)){setPlayerError('Yalnızca http veya https bağlantıları kullanılabilir.');return;}
+ if(!writePlayerSource(activePlayerMediaId,{type:'url',url:url.href})){setPlayerError('Bağlantı bu tarayıcıya kaydedilemedi.');return;}
+ attachPlayerSource(url.href,'Harici yayın');
+}
+function attachPlayerSubtitle(){
+ const input=document.getElementById('player-subtitle-file'),file=input?.files?.[0],video=document.getElementById('player-video');
+ if(!file||!video)return;
+ if(activeSubtitleObjectUrl)URL.revokeObjectURL(activeSubtitleObjectUrl);
+ activeSubtitleObjectUrl=URL.createObjectURL(file);
+ const track=document.createElement('track');track.kind='subtitles';track.label='Altyazı';track.srclang='tr';track.src=activeSubtitleObjectUrl;track.default=true;
+ video.appendChild(track);
+}
+function closePlayer(){
+ const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
+ if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.load();}
+ releasePlayerUrls();activePlayerMediaId=null;
+ if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}
+ document.documentElement.classList.remove('ny7-modal-lock');
+}
+document.getElementById('player-save-local')?.addEventListener('click',saveAndPlayLocalVideo);
+document.getElementById('player-save-stream')?.addEventListener('click',saveAndPlayStream);
+document.getElementById('player-subtitle-file')?.addEventListener('change',attachPlayerSubtitle);
+document.getElementById('player-video')?.addEventListener('error',()=>setPlayerError('Bu video kaynağı açılamadı. Bağlantıyı, dosya biçimini veya erişim iznini kontrol et.'));
 
-        let isPlaying = true;
-        function togglePlayState() {
-            isPlaying = !isPlaying;
-            const centerIcon = document.getElementById('player-play-icon');
-            const barIcon = document.getElementById('player-bar-icon');
-            if (isPlaying) {
-                centerIcon.className = 'fa-solid fa-pause text-brand-red text-3xl';
-                barIcon.className = 'fa-solid fa-pause';
-            } else {
-                centerIcon.className = 'fa-solid fa-play text-brand-red text-3xl ml-1';
-                barIcon.className = 'fa-solid fa-play';
-            }
-        }
 
 
 
