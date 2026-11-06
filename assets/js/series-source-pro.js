@@ -125,9 +125,9 @@
     }
     const panel = ensurePanel();
     const grid = document.querySelector('.ny7-player-source-grid');
-    if (grid) grid.hidden = true;
+    if (grid) grid.hidden = mediaType === 'episode';
     const subtitle = document.querySelector('.ny7-player-subtitle');
-    if (subtitle) subtitle.hidden = true;
+    if (subtitle) subtitle.hidden = mediaType === 'episode';
     if (source.mode === 'embed') {
       clearCurrent();
       const embed = source.embedUrl || toEmbedUrl(source.url, 'embed');
@@ -277,8 +277,8 @@
       const context = window.perdeEpisodeContext;
       if (context && context.playerId) openForEpisode(context);
       else {
-        const item = Array.isArray(window.mediaDatabase) ? window.mediaDatabase.find(entry => String(entry.id) === String(arguments[0])) : null;
-        if (item && item.type !== 'tv') openForFilm(item.id);
+        // openPlayerForMedia rejects TV items without an episode context, so this path is a film.
+        if (arguments[0] !== undefined && arguments[0] !== null) openForFilm(arguments[0]);
         else closeForMedia();
       }
       return result;
