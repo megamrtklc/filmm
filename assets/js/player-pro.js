@@ -162,6 +162,7 @@
   }
   if (typeof originalOpen === 'function') {
     window.openPlayerForMedia = function (id) {
+      clearOnlineSubtitles();
       mediaId = String(id);
       resumedForSource = false;
       const result = originalOpen.apply(this, arguments);
@@ -173,6 +174,7 @@
   if (typeof originalClose === 'function') {
     window.closePlayer = function () {
       saveProgress();
+      clearOnlineSubtitles();
       destroyAdaptive();
       lastTick = 0;
       const result = originalClose.apply(this, arguments);
@@ -220,6 +222,169 @@
     }
     style.textContent = '#player-video::cue{font-size:' + size + ';color:' + color + ';background:rgba(0,0,0,' + bg + ');}';
   }
+
+  // OpenSubtitles online subtitle search (isolated from catalog/player core).
+  const SUBTITLE_WORKER = 'https://perde-subtitles.oyunmrtklc.workers.dev';
+  let onlineSubtitleUrls = [];
+  let onlineSubtitleRequest = 0;
+
+  function clearOnlineSubtitles() {
+    onlineSubtitleRequest++;
+    video.querySelectorAll('track[data-perde-online="true"]').forEach(track => track.remove());
+    onlineSubtitleUrls.forEach(url => URL.revokeObjectURL(url));
+    onlineSubtitleUrls = [];
+    refreshTrackSelects();
+  }
+
+  function subtitlePanel() {
+    let panel = document.querySelector('.perde-online-subtitles');
+    if (panel) return panel;
+    const anchor = document.querySelector('.ny7-player-subtitle');
+    if (!anchor) return null;
+    panel = document.createElement('section');
+    panel.className = 'perde-online-subtitles';
+    panel.innerHTML = '<div class="perde-online-subtitles-head"><div><strong>Çevrim içi altyazı</strong><small>OpenSubtitles üzerinden ara</small></div><button type="button" class="perde-subtitle-search">Altyazı ara</button></div><p class="perde-subtitle-status" role="status">Film açıldığında Türkçe altyazı arayabilirsin.</p><div class="perde-subtitle-results"></div>';
+    anchor.insertAdjacentElement('afterend', panel);
+    panel.querySelector('.perde-subtitle-search').addEventListener('click', searchOnlineSubtitles);
+    return panel;
+  }
+
+  function subtitleStatus(message, isError) {
+    const panel = subtitlePanel();
+    if (!panel) return;
+    const status = panel.querySelector('.perde-subtitle-status');
+    status.textContent = message;
+    status.classList.toggle('is-error', !!isError);
+  }
+
+  function mediaSearchDetails() {
+    const raw = String($('player-media-title')?.textContent || '').trim();
+    const match = raw.match(/^(.*?)(?:\\s*[·|–-]\\s*(\\d{4}))?$/);
+    return { title: (match?.[1] || raw).trim(), year: match?.[2] || '' };
+  }
+
+  function renderOnlineSubtitleResults(items, requestId) {
+    if (requestId !== onlineSubtitleRequest) return;
+    const panel = subtitlePanel();
+    if (!panel) return;
+    const results = panel.querySelector('.perde-subtitle-results');
+    results.replaceChildren();
+    const entries = [];
+    (Array.isArray(items) ? items : []).forEach(item => {
+      const attrs = item?.attributes || {};
+      (Array.isArray(attrs.files) ? attrs.files : []).forEach(file => {
+        if (file?.file_id) entries.push({ fileId: file.file_id, language: attrs.language || '', release: attrs.release || attrs.feature_details?.title || 'Altyazı', downloads: Number(attrs.download_count) || 0, rating: attrs.ratings });
+      });
+    });
+    if (!entries.length) {
+      subtitleStatus('Bu yapım için altyazı bulunamadı. Başka bir kaynak veya başlık deneyebilirsin.', false);
+      return;
+    }
+    subtitleStatus(entries.length + ' altyazı bulundu. Türkçe sonuçlar üstte listelenir.', false);
+    entries.slice(0, 12).forEach(entry => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'perde-subtitle-result';
+      const language = entry.language === 'tr' ? 'Türkçe' : entry.language.toUpperCase();
+      button.textContent = language + ' · ' + entry.release + (entry.downloads ? ' · ' + entry.downloads.toLocaleString('tr-TR') + ' indirme' : '');
+      button.addEventListener('click', () => downloadOnlineSubtitle(entry, button));
+      results.appendChild(button);
+    });
+  }
+
+  function srtToVtt(source) {
+    let text = String(source || '').replace(/^\\uFEFF/, '').replace(/\\r\\n?/g, '\\n').trim();
+    if (/^WEBVTT(?:\\s|$)/i.test(text)) return text;
+    text = text.replace(/(\\d{2}:\\d{2}:\\d{2}),(\\d{3})/g, '$1.$2');
+    return 'WEBVTT\\n\\n' + text;
+  }
+
+  async function searchOnlineSubtitles() {
+    const panel = subtitlePanel();
+    if (!panel) return;
+    const details = mediaSearchDetails();
+    if (!details.title) { subtitleStatus('Önce bir film açmalısın.', true); return; }
+    const requestId = ++onlineSubtitleRequest;
+    clearOnlineSubtitles();
+    // clearOnlineSubtitles invalidates the previous request; use the new request id.
+    const activeRequest = onlineSubtitleRequest;
+    panel.querySelector('.perde-subtitle-results').replaceChildren();
+    const searchButton = panel.querySelector('.perde-subtitle-search');
+    searchButton.disabled = true;
+    searchButton.textContent = 'Aranıyor…';
+    subtitleStatus('Türkçe altyazılar aranıyor…', false);
+    try {
+      const params = new URLSearchParams({ query: details.title, type: 'movie', languages: 'tr,en' });
+      if (details.year) params.set('year', details.year);
+      const response = await fetch(SUBTITLE_WORKER + '/subtitles?' + params.toString(), { headers: { Accept: 'application/json' } });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'Altyazı araması başarısız oldu (' + response.status + ').');
+      renderOnlineSubtitleResults(payload.data, activeRequest);
+    } catch (error) {
+      if (activeRequest === onlineSubtitleRequest) subtitleStatus(error.message || 'Altyazı aranırken bir hata oluştu.', true);
+    } finally {
+      searchButton.disabled = false;
+      searchButton.textContent = 'Yeniden ara';
+    }
+  }
+
+  async function downloadOnlineSubtitle(entry, button) {
+    const panel = subtitlePanel();
+    if (!panel) return;
+    const label = button.textContent;
+    button.disabled = true;
+    button.textContent = 'İndiriliyor…';
+    subtitleStatus('Altyazı indiriliyor ve oynatıcıya ekleniyor…', false);
+    try {
+      const response = await fetch(SUBTITLE_WORKER + '/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'text/plain' },
+        body: JSON.stringify({ file_id: entry.fileId })
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || 'Altyazı indirilemedi (' + response.status + ').');
+      }
+      const source = await response.text();
+      if (!source || /<html[\\s>]/i.test(source.slice(0, 300))) throw new Error('İndirilen altyazı dosyası geçerli görünmüyor.');
+      const blob = new Blob([srtToVtt(source)], { type: 'text/vtt;charset=utf-8' });
+      const objectUrl = URL.createObjectURL(blob);
+      onlineSubtitleUrls.push(objectUrl);
+      const track = document.createElement('track');
+      track.dataset.perdeOnline = 'true';
+      track.kind = 'subtitles';
+      track.label = entry.language === 'tr' ? 'Türkçe (OpenSubtitles)' : entry.language.toUpperCase() + ' (OpenSubtitles)';
+      track.srclang = entry.language || 'tr';
+      track.src = objectUrl;
+      track.default = true;
+      track.addEventListener('load', () => {
+        const tracks = Array.from(video.textTracks || []);
+        tracks.forEach((item, index) => { item.mode = item === track.track ? 'showing' : 'disabled'; });
+        refreshTrackSelects();
+        const select = $('player-subtitle-track');
+        if (select) {
+          const index = tracks.indexOf(track.track);
+          if (index >= 0) { select.value = String(index); track.track.mode = 'showing'; }
+        }
+      }, { once: true });
+      video.appendChild(track);
+      refreshTrackSelects();
+      subtitleStatus('Altyazı yüklendi. Altyazı seçeneğinden açıp kapatabilirsin.', false);
+    } catch (error) {
+      subtitleStatus(error.message || 'Altyazı yüklenemedi.', true);
+      button.disabled = false;
+      button.textContent = label;
+    }
+  }
+
+  function installOnlineSubtitleStyles() {
+    if (document.getElementById('perde-online-subtitle-style')) return;
+    const style = document.createElement('style');
+    style.id = 'perde-online-subtitle-style';
+    style.textContent = '.perde-online-subtitles{margin-top:12px;padding:13px 14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(255,255,255,.035)}.perde-online-subtitles-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.perde-online-subtitles-head>div{display:grid;gap:3px}.perde-online-subtitles-head strong{font-size:13px;color:#f4f4f5}.perde-online-subtitles-head small,.perde-subtitle-status{font-size:11px;color:#9ca3af}.perde-subtitle-search{border:0;border-radius:8px;padding:8px 12px;background:#e5b94b;color:#171717;font-size:12px;font-weight:700;cursor:pointer}.perde-subtitle-search:disabled,.perde-subtitle-result:disabled{opacity:.55;cursor:wait}.perde-subtitle-status{margin:10px 0 0;line-height:1.5}.perde-subtitle-status.is-error{color:#fca5a5}.perde-subtitle-results{display:grid;gap:6px;margin-top:9px}.perde-subtitle-result{text-align:left;border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:9px 10px;background:rgba(255,255,255,.045);color:#e5e7eb;font-size:11px;line-height:1.4;cursor:pointer}.perde-subtitle-result:hover{background:rgba(229,185,75,.12);border-color:rgba(229,185,75,.4)}';
+    document.head.appendChild(style);
+  }
+
   function addSubtitleFiles() {
     const files = Array.from($('player-subtitle-file')?.files || []);
     if (!files.length) return;
@@ -276,6 +441,8 @@
     Array.from(video.textTracks || []).forEach((track, index) => { track.mode = selected >= 0 && selected === index ? 'showing' : 'disabled'; });
   });
   $('player-subtitle-file')?.addEventListener('change', addSubtitleFiles);
+  installOnlineSubtitleStyles();
+  subtitlePanel();
   $('player-settings-toggle')?.addEventListener('click', () => { $('player-settings-panel').hidden = !$('player-settings-panel').hidden; });
   $('player-settings-close')?.addEventListener('click', () => { $('player-settings-panel').hidden = true; });
   ['player-subtitle-size', 'player-subtitle-color', 'player-subtitle-bg'].forEach(id => $(id)?.addEventListener('change', applySubtitleStyle));
