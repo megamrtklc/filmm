@@ -505,6 +505,6 @@
 /* Brand marks on the Data Sources page */
 .integration-logo.rt img{display:block;width:31px;height:31px;object-fit:contain}
 .integration-logo.popcorn svg{display:block;width:36px;height:36px}
-.tmdb-mark.github-mark img{display:block;width:27px;height:27px;filter:invert(1);object-fit:contain}
+.tmdb-mark.github-mark{color:#fff}.tmdb-mark.github-mark svg{display:block;width:29px;height:29px;fill:currentColor}
 .tmdb-mark.tmdb-logo{background:#fff;padding:3px}
 .tmdb-mark.tmdb-logo img{display:block;width:100%;height:100%;object-fit:contain}
