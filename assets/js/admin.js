@@ -14,7 +14,7 @@
   let editorSubtitles = [];
   let editorTmdbCast = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
-  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',settings:'Genel Ayarlar'};
+  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',history:'Değişiklik Geçmişi',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
     node.innerHTML = '<i class="fa-solid fa-circle-info"></i>' + escapeHtml(message);
@@ -1440,7 +1440,50 @@
     downloadJson('perde-arsiv-yedegi-'+new Date().toISOString().slice(0,10)+'.json',data);
     toast('Katalog, koleksiyonlar ve ana sayfa ayarları yedeklendi.');
   });
-  $('#import-archive').addEventListener('click',() => $('#archive-backup-file').click());
+  async function loadChangeHistory() {
+    const host=$('#history-list'),status=$('#history-status'),total=$('#history-total'),button=$('#history-refresh');
+    if(!host||!status||!total)return;
+    if(!getGithubToken()){status.textContent='GITHUB BAĞLANTISI GEREKLİ';host.innerHTML='<div class="health-empty"><i class="fa-solid fa-key"></i><b>GitHub bağlantısı gerekli</b><span>Veri Kaynakları bölümünden GitHub erişim anahtarını kaydet, ardından yeniden dene.</span></div>';total.textContent='—';return;}
+    if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor';}
+    status.textContent='KAYITLAR ALINIYOR';
+    host.innerHTML='<div class="loading-line">GitHub değişiklik geçmişi yükleniyor…</div>';
+    try{
+      const token=getGithubToken();
+      const paths=['data/catalog.json','data/collections.json','data/homepage-config.json'];
+      const results=await Promise.all(paths.map(async path=>{
+        const response=await fetch('https://api.github.com/repos/'+githubRepo+'/commits?path='+encodeURIComponent(path)+'&per_page=15',{
+          headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28'}
+        });
+        const data=await response.json().catch(()=>[]);
+        if(!response.ok)throw new Error('GitHub HTTP '+response.status+': '+(data.message||'Geçmiş okunamadı.'));
+        if(!Array.isArray(data))throw new Error('GitHub geçmiş yanıtı geçersiz.');
+        return {path,data};
+      }));
+      const records=new Map();
+      const labels={'data/catalog.json':'Katalog','data/collections.json':'Koleksiyonlar','data/homepage-config.json':'Ana sayfa / Slider'};
+      results.forEach(({path,data})=>data.forEach(commit=>{
+        if(!commit||!commit.sha)return;
+        const row=records.get(commit.sha)||{sha:commit.sha,message:commit.commit?.message||'İsimsiz kayıt',author:commit.commit?.author?.name||commit.author?.login||'Bilinmeyen kullanıcı',date:commit.commit?.author?.date||commit.commit?.committer?.date||'',url:commit.html_url,files:[]};
+        row.files.push(labels[path]||path);records.set(commit.sha,row);
+      }));
+      const sorted=[...records.values()].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,30);
+      total.textContent=String(sorted.length);
+      if(!sorted.length){host.innerHTML='<div class="health-empty"><i class="fa-solid fa-inbox"></i><b>Henüz kayıt bulunamadı</b><span>Takip edilen dosyalarda GitHub commit geçmişi görünmüyor.</span></div>';status.textContent='KAYIT BULUNAMADI';return;}
+      host.innerHTML=sorted.map(row=>{
+        const date=row.date?new Date(row.date):null;
+        const dateLabel=date&&!Number.isNaN(date.getTime())?new Intl.DateTimeFormat('tr-TR',{dateStyle:'medium',timeStyle:'short'}).format(date):'Tarih bilinmiyor';
+        return '<article class="history-row"><span class="history-icon"><i class="fa-solid fa-code-commit"></i></span><div class="history-copy"><b>'+escapeHtml(row.message.split('\\n')[0])+'</b><small>'+escapeHtml(row.author)+' · '+escapeHtml(dateLabel)+'</small><div class="history-tags">'+[...new Set(row.files)].map(label=>'<span>'+escapeHtml(label)+'</span>').join('')+'</div></div><a class="history-link" href="'+escapeHtml(row.url||'#')+'" target="_blank" rel="noopener noreferrer" aria-label="GitHub kaydını aç"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></article>';
+      }).join('');
+      status.textContent='GÜNCEL · '+sorted.length+' KAYIT';
+    }catch(error){
+      total.textContent='—';status.textContent='YÜKLEME BAŞARISIZ';
+      host.innerHTML='<div class="health-empty"><i class="fa-solid fa-triangle-exclamation"></i><b>Geçmiş yüklenemedi</b><span>'+escapeHtml(error.message)+'</span></div>';
+    }finally{
+      if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-rotate"></i> Yenile';}
+    }
+  }
+  $('#history-refresh').addEventListener('click',loadChangeHistory);
+    $('#import-archive').addEventListener('click',() => $('#archive-backup-file').click());
   $('#archive-backup-file').addEventListener('change',async event => {
     const file=event.target.files&&event.target.files[0];
     if(!file)return;
@@ -1562,5 +1605,7 @@
       event.target.value='';
     }
   });
+  if(location.hash==='#history')loadChangeHistory();
+  $('.nav-item[data-page="history"]').forEach(item=>item.addEventListener('click',loadChangeHistory));
   init();
 })();
