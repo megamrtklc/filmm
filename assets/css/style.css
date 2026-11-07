@@ -6173,3 +6173,18 @@ body.detail-synopsis-open{overflow:hidden}
     max-width:calc(100% - 30px)!important;
   }
 }
+
+
+/* IMDb puan rozeti: sarı zemin ve siyah tipografi */
+#dashboard-view .home-feature-row #hero-section .hero-rating-badge.imdb{
+  background:#f5c518!important;
+  border:1px solid #f5c518!important;
+  color:#111!important;
+  box-shadow:0 2px 10px rgba(245,197,24,.18)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-rating-badge.imdb b,
+#dashboard-view .home-feature-row #hero-section .hero-rating-badge.imdb strong{
+  color:#111!important;
+}
