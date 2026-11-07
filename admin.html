@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-personal-analytics">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-backup-restore">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -263,7 +263,7 @@
         <section class="page-view" id="page-backups">
           <div class="page-heading"><div><span class="eyebrow">VERİ GÜVENLİĞİ</span><h1>Yedekleme ve Geri Yükleme</h1><p>Katalog ve kişisel verilerin için güvenli yedekleme merkezi.</p></div></div>
           <div class="backup-callout"><i class="fa-solid fa-shield-halved"></i><div><h2>Önce güvenlik, sonra değişiklik.</h2><p>Gerçek kayıt işlemleri açılmadan önce otomatik yedekleme ve geri yükleme akışı kurulacak.</p></div></div>
-          <div class="backup-grid"><article class="surface-card"><i class="fa-solid fa-file-code"></i><h3>Katalog yedeği</h3><p>Film ve dizi kayıtlarının JSON dışa aktarımı.</p><button class="outline-button" id="export-catalog"><i class="fa-solid fa-download"></i> Kataloğu indir</button></article><article class="surface-card"><i class="fa-solid fa-box-archive"></i><h3>Kişisel veriler</h3><p>Bu tarayıcıda tutulan favori ve izleme listesi.</p><button class="outline-button" id="export-personal"><i class="fa-solid fa-download"></i> Kişisel verileri indir</button></article></div>
+          <div class="backup-grid"><article class="surface-card"><i class="fa-solid fa-file-code"></i><h3>Katalog yedeği</h3><p>Film ve dizi kayıtlarının JSON dışa aktarımı. Katalog bu aşamada salt okunurdur.</p><button class="outline-button" id="export-catalog"><i class="fa-solid fa-download"></i> Kataloğu indir</button></article><article class="surface-card"><i class="fa-solid fa-box-archive"></i><h3>Kişisel veriler</h3><p>İzleme günlüğü, favoriler ve izleme listesi tek bir yedek dosyasında saklanır.</p><button class="outline-button" id="export-personal"><i class="fa-solid fa-download"></i> Yedek oluştur</button></article><article class="surface-card backup-restore-card"><i class="fa-solid fa-clock-rotate-left"></i><h3>Kişisel verileri geri yükle</h3><p>Daha önce Perde’den indirdiğin kişisel JSON yedeğini seç. Mevcut kişisel kayıtların yedekteki kayıtlarla değiştirilecek.</p><input type="file" id="personal-backup-file" accept=".json,application/json" hidden><button class="outline-button" id="import-personal"><i class="fa-solid fa-upload"></i> Yedek dosyası seç</button><small class="backup-restore-hint" id="backup-restore-hint">Yalnızca kişisel kayıtlar geri yüklenir; katalog değiştirilmez.</small></article></div>
           <p class="info-note"><i class="fa-solid fa-lock"></i> Bu taslak yalnızca mevcut tarayıcıda erişilebilen verileri dışa aktarabilir. Sunucu yedeği veya geri yükleme henüz etkin değildir.</p>
         </section>
 
@@ -276,6 +276,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-personal-analytics"></script>
+  <script src="assets/js/admin.js?v=20261107-backup-restore"></script>
 </body>
 </html>
