@@ -145,17 +145,17 @@
     const item = mediaDatabase.find(entry => String(entry.id) === String(mediaId));
     if (!item || !Array.isArray(item.subtitles)) return;
     const episode = window.perdeEpisodeContext || null;
-    item.subtitles
-      .filter(track => track && track.url && (!track.season || (episode && Number(track.season) === Number(episode.season) && Number(track.episode) === Number(episode.episode))))
-      .forEach(track => {
-        const node = document.createElement('track');
-        node.kind = 'subtitles';
-        node.label = track.languageLabel || track.language || 'Altyazı';
-        node.srclang = track.language === 'other' ? 'und' : (track.language || 'tr');
-        node.src = track.url;
-        if (track.default) node.default = true;
-        video.appendChild(node);
-      });
+    const matchingTracks = item.subtitles.filter(track => track && track.url && (!track.season || (episode && Number(track.season) === Number(episode.season) && Number(track.episode) === Number(episode.episode))));
+    const hasEpisodeDefault = !!episode && matchingTracks.some(track => track.season && track.default);
+    matchingTracks.forEach(track => {
+      const node = document.createElement('track');
+      node.kind = 'subtitles';
+      node.label = track.languageLabel || track.language || 'Altyazı';
+      node.srclang = track.language === 'other' ? 'und' : (track.language || 'tr');
+      node.src = track.url;
+      node.default = !!track.default && !(hasEpisodeDefault && !track.season);
+      video.appendChild(node);
+    });
   }
   function attachAdaptive(url) {
     destroyAdaptive();
