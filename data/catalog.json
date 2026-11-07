@@ -7,7 +7,7 @@
     "genre": "Aksiyon",
     "rating": "6.1",
     "ratingCount": "IMDb 6.1",
-    "year": "2026",
+    "year": 2026,
     "duration": "96 dk",
     "themeColor": "#101014",
     "image": "https://image.tmdb.org/t/p/w500/mUcJtoyGnYbYNmeIuZASUJfyj3x.jpg",
@@ -26,7 +26,8 @@
     "country": "Spain",
     "tmdbId": 1507696,
     "seasons": null,
-    "episodes": null
+    "episodes": null,
+    "platform": "Netflix"
   },
   {
     "id": "archive-2",
