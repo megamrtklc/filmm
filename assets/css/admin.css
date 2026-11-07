@@ -712,3 +712,17 @@
 .watchlink-url{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#aebbd0;font-size:10px;text-decoration:underline;text-underline-offset:2px}
 @media(max-width:850px){.health-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.watchlink-toolbar{grid-template-columns:minmax(0,1fr) 1fr}.watchlink-toolbar .admin-search{grid-column:1/-1}}
 @media(max-width:560px){.health-summary-grid{gap:8px}.health-summary-card{padding:13px}.health-summary-card>strong{font-size:23px}.health-workspace,.watchlink-workspace{padding:13px}.health-issue-row,.watchlink-row{gap:8px;padding:8px}.health-issue-poster,.watchlink-poster{flex-basis:36px;width:36px;height:52px}.health-issue-copy>b,.watchlink-copy>b{font-size:11px}.health-issue-row .row-action,.watchlink-row .row-action{padding:7px 8px;font-size:10px}.watchlink-toolbar{grid-template-columns:1fr}.watchlink-toolbar .admin-search{grid-column:auto}.watchlink-toolbar select{min-height:40px}}
+
+
+/* Safe multi-select actions in the catalog table */
+.catalog-bulk-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 16px;border-bottom:1px solid var(--line);background:rgba(216,173,85,.055)}
+.catalog-bulk-toolbar>div{display:grid;gap:3px;min-width:160px;flex:1}
+.catalog-bulk-toolbar>div b{color:var(--text);font-size:12px}
+.catalog-bulk-toolbar>div small{color:var(--muted);font-size:10px}
+.catalog-bulk-toolbar select{min-width:170px;max-width:240px;min-height:38px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--text);font:500 11px "DM Sans",sans-serif}
+.catalog-bulk-toolbar button{min-height:38px;padding:8px 11px;font-size:11px}
+.catalog-bulk-toolbar button:disabled{opacity:.45;cursor:not-allowed}
+.catalog-select-all{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.catalog-select-all input,.catalog-row-check{width:15px;height:15px;flex:0 0 auto;accent-color:var(--gold);cursor:pointer}
+.catalog-name .catalog-row-check{margin-right:3px}
+@media(max-width:650px){.catalog-bulk-toolbar{align-items:stretch}.catalog-bulk-toolbar>div{flex-basis:100%}.catalog-bulk-toolbar select{max-width:none;flex:1}.catalog-bulk-toolbar button{flex:1}}
