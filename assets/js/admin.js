@@ -746,8 +746,7 @@
     renderHeroPreview();
   }
   function initHeroManager() {
-    const select=$('#hero-content-select');
-    [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    setupCatalogPicker('hero-catalog-picker','hero-content-select','hero-catalog-results','hero-catalog-selected',()=>heroSlides.map(slide=>slide.id));
     heroSlides=heroSeed();
     heroActiveIndex=0;
     renderHeroSlides();
@@ -758,6 +757,7 @@
     if(!id)return toast('Önce katalogdan bir yapım seç.');
     if(heroSlides.some(slide=>slide.id===id))return toast('Bu yapım zaten slider listesinde.');
     heroSlides.push({id,active:true,headline:'',description:''});
+    resetCatalogPicker('hero-catalog-picker');
     heroActiveIndex=heroSlides.length-1;
     renderHeroSlides();
     toast('Yapım yerel ön izleme listesine eklendi.');
@@ -828,12 +828,54 @@
     ];
   }
   function selectedCollection() { return collections.find(item=>item.id===activeCollectionId)||null; }
+  const catalogPickerState = {};
+  function setupCatalogPicker(rootId,selectId,resultsId,selectedId,getExcluded) {
+    const root=$('#'+rootId), select=$('#'+selectId);
+    if(!root||!select)return;
+    select.innerHTML='<option value="">Yapım seç…</option>';
+    [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    catalogPickerState[rootId]={rootId,selectId,resultsId,selectedId,getExcluded,filter:'all'};
+    const search=root.querySelector('input[type="search"]');
+    search.addEventListener('input',()=>renderCatalogPicker(rootId));
+    root.addEventListener('click',event=>{
+      const filter=event.target.closest('[data-picker-filter]');
+      if(filter){catalogPickerState[rootId].filter=filter.dataset.pickerFilter;root.querySelectorAll('[data-picker-filter]').forEach(button=>button.classList.toggle('active',button===filter));renderCatalogPicker(rootId);return;}
+      const choose=event.target.closest('[data-picker-item]');
+      if(choose){const state=catalogPickerState[rootId];const item=catalog.find(entry=>String(entry.id)===choose.dataset.pickerItem);if(!item)return;
+        if((state.getExcluded?.()||[]).map(String).includes(String(item.id)))return;
+        select.value=String(item.id);$('#'+selectedId).innerHTML='<i class="fa-solid fa-check-circle"></i> Seçildi: <b>'+escapeHtml(item.title)+'</b> <span>· '+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</span>';
+        root.querySelectorAll('[data-picker-item]').forEach(button=>button.classList.toggle('chosen',button===choose));
+      }
+    });
+    renderCatalogPicker(rootId);
+  }
+  function renderCatalogPicker(rootId) {
+    const state=catalogPickerState[rootId];if(!state)return;
+    const root=$('#'+rootId),query=(root.querySelector('input[type="search"]').value||'').trim().toLocaleLowerCase('tr-TR');
+    const excluded=new Set((state.getExcluded?.()||[]).map(String));
+    const results=catalog.filter(item=>(state.filter==='all'||(state.filter==='tv'?item.type==='tv':item.type!=='tv'))&&(!query||[item.title,item.originalTitle,item.original_title,item.director,item.year].some(value=>String(value||'').toLocaleLowerCase('tr-TR').includes(query)))).slice(0,80);
+    const target=$('#'+state.resultsId);
+    if(!results.length){target.innerHTML='<div class="catalog-picker-empty"><i class="fa-solid fa-magnifying-glass"></i><span>Aramana uygun yapım bulunamadı.</span></div>';return;}
+    if(!query&&state.filter==='all'){target.innerHTML='<div class="catalog-picker-hint"><i class="fa-solid fa-keyboard"></i> Arşivde arama yapmak için yapım adını yaz.</div>';return;}
+    target.innerHTML=results.map(item=>{
+      const id=String(item.id),image=poster(item),already=excluded.has(id),selected=$('#'+state.selectId).value===id;
+      return '<button type="button" class="catalog-picker-result'+(already?' already-added':'')+(selected?' chosen':'')+'" data-picker-item="'+escapeHtml(id)+'" '+(already?'disabled':'')+'>'+(image?'<img src="'+escapeHtml(image)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<span class="catalog-picker-poster-placeholder"><i class="fa-solid fa-film"></i></span>')+'<span class="catalog-picker-result-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</small></span><span class="catalog-picker-result-state">'+(already?'<i class="fa-solid fa-check"></i> Eklendi':selected?'<i class="fa-solid fa-check"></i> Seçildi':'Seç')+'</span></button>';
+    }).join('');
+  }
+  function resetCatalogPicker(rootId) {
+    const state=catalogPickerState[rootId];if(!state)return;
+    $('#'+state.selectId).value='';
+    const root=$('#'+rootId);root.querySelector('input[type="search"]').value='';
+    $('#'+state.selectedId).textContent='Henüz yapım seçilmedi.';
+    renderCatalogPicker(rootId);
+  }
   function renderCollections() {
     $('#collection-total').textContent=collections.length.toLocaleString('tr-TR');
     $('#collection-item-total').textContent=collections.reduce((sum,item)=>sum+item.items.length,0).toLocaleString('tr-TR');
     $('#collection-active-total').textContent=collections.filter(item=>item.active).length.toLocaleString('tr-TR');
     $('#collection-list').innerHTML=collections.map(item=>'<button type="button" class="collection-list-item'+(item.id===activeCollectionId?' selected':'')+'" data-collection-select="'+escapeHtml(item.id)+'"><span class="collection-list-icon"><i class="fa-solid fa-layer-group"></i></span><span class="collection-list-copy"><b>'+escapeHtml(item.title)+'</b><small>'+item.items.length+' yapım · '+(item.active?'Görünür':'Gizli')+'</small></span><i class="fa-solid fa-chevron-right"></i></button>').join('')||'<div class="collection-editor-empty">Henüz koleksiyon yok.</div>';
     renderCollectionEditor();
+    renderCatalogPicker('collection-catalog-picker');
   }
   function renderCollectionEditor() {
     const item=selectedCollection();
@@ -862,9 +904,7 @@
     }).join('')+'</div>';
   }
   async function initCollections() {
-    const select=$('#collection-item-select');
-    select.innerHTML='<option value="">Film veya dizi seç…</option>';
-    [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    setupCatalogPicker('collection-catalog-picker','collection-item-select','collection-catalog-results','collection-catalog-selected',()=>selectedCollection()?.items||[]);
     try {
       const saved=await githubCollectionsRequest('GET');
       if(!saved.content) throw new Error('Koleksiyon dosyası boş.');
@@ -904,6 +944,7 @@
     if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     if(item.items.includes(id))return toast('Bu yapım koleksiyonda zaten var.');
     item.items.push(id);
+    resetCatalogPicker('collection-catalog-picker');
     renderCollections();
     try { await persistCollections(); } catch(error) { toast('Yapım eklendi ancak kaydedilemedi: '+error.message); }
   }
