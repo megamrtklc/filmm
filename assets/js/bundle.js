@@ -1304,16 +1304,16 @@ function renderDetailPersonalInfo(item){
   'blutv':['blutv','#36a8e0'],'tod':['tod','#ffffff'],'tabii':['tabii','#ffffff'],'gain':['gain','#ffffff'],
   'blu tv':['blutv','#36a8e0'],'apple tv':['appletv','#ffffff'],'disney plus':['disneyplus','#ffffff']
  };
- const platformMarkup=platforms.length?'<div class="detail-personal-platform"><span class="detail-personal-label"><i class="fa-solid fa-tv" aria-hidden="true"></i> YAYIN PLATFORMLARI</span><div class="detail-platform-brands">'+platforms.map(platform=>{
+ const platformMarkup=platforms.length?'<div class="detail-personal-row detail-personal-platform"><span class="detail-personal-label">Yayın platformları</span><div class="detail-platform-brands">'+platforms.map(platform=>{
   const brand=platformBrands[platform.toLocaleLowerCase('tr-TR')]||null;
   return '<span class="detail-platform-brand">'+(brand?'<img src="https://cdn.simpleicons.org/'+brand[0]+'/'+brand[1].replace('#','')+'" alt="'+escapeCountryHtml(platform)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')+'<strong'+(brand?' hidden':'')+'>'+escapeCountryHtml(platform)+'</strong></span>';
  }).join('')+'</div></div>':'';
+ const watchMarkup=validUrl?'<a class="detail-personal-watch" href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısını aç</a>':'';
+ const noteMarkup=note?'<div class="detail-personal-row detail-personal-note"><span class="detail-personal-label">Kişisel notun</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
  const hasInfo=!!(note||platforms.length||validUrl);
  panel.hidden=!hasInfo;
  if(!hasInfo){panel.innerHTML='';return;}
- const watchMarkup=validUrl?'<a class="detail-personal-watch" href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısını aç <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>':'';
- const noteMarkup=note?'<div class="detail-personal-note"><span class="detail-personal-label"><i class="fa-regular fa-note-sticky" aria-hidden="true"></i> KİŞİSEL NOTUN</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
- panel.innerHTML='<div class="detail-personal-heading"><span>PERDE’YE ÖZEL</span><h2>Senin notların</h2></div><div class="detail-personal-content">'+platformMarkup+watchMarkup+noteMarkup+'</div>';
+ panel.innerHTML='<div class="detail-personal-card"><div class="detail-personal-heading"><h2>Senin notların</h2></div><div class="detail-personal-content">'+platformMarkup+noteMarkup+watchMarkup+'</div></div>';
 }
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
