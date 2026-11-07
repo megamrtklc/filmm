@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T09:36:11.898Z",
+  "updatedAt": "2026-11-07T21:54:49.785Z",
   "heroSlides": [
+    {
+      "id": "perde-mw6xs3qb",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "perde-mw6xrtd2",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "perde-mw6xr2mm",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
     {
       "id": "archive-66",
       "active": true,
@@ -21,31 +39,13 @@
       "description": ""
     },
     {
-      "id": "archive-103",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-124",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-99",
+      "id": "archive-51",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
       "id": "archive-125",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-51",
       "active": true,
       "headline": "",
       "description": ""
@@ -64,12 +64,6 @@
     },
     {
       "id": "archive-59",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-97",
       "active": true,
       "headline": "",
       "description": ""
