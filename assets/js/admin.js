@@ -14,7 +14,7 @@
   let editorSubtitles = [];
   let editorTmdbCast = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
-  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',settings:'Genel Ayarlar'};
+  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme ve Geçmiş',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
     node.innerHTML = '<i class="fa-solid fa-circle-info"></i>' + escapeHtml(message);
@@ -243,7 +243,7 @@
       } else { payload.id='perde-'+Date.now().toString(36); latest.push(payload); }
       await githubCatalogRequest('PUT',{message:(editing?'Update':'Add')+' Perde catalog item: '+payload.title,content:encodeGithubContent(JSON.stringify(latest,null,2)+'\n'),sha:current.sha,branch:'main'});
       catalog=latest; editorEditingId=null; $('#editor-record-id').value='';
-      renderOverview(); initCatalogFilters(); renderCatalog(); initHeroManager(); initCollections(); initDiary();
+      renderOverview(); initCatalogFilters(); renderCatalog(); renderCatalogHealth(); renderWatchLinks(); initHeroManager(); initCollections(); initDiary();
       $('#editor-preview-status').textContent=payload.title+' GitHub kataloğuna kalıcı olarak kaydedildi.';
       toast('Yapım kaydedildi. Katalogda '+catalog.length+' kayıt var.');
     } catch(error) { $('#editor-preview-status').textContent='Kayıt başarısız: '+error.message+' Mevcut katalog değiştirilmedi.'; toast('Katalog kaydedilemedi: '+error.message); }
@@ -511,7 +511,7 @@
       progress.textContent='GitHub kataloğuna kaydediliyor…';
       await githubCatalogRequest('PUT',{message:'Sync Perde catalog metadata from TMDB ('+succeeded+' items)',content:encodeGithubContent(JSON.stringify(latest,null,2)+'\n'),sha:current.sha,branch:'main'});
       catalog=latest;
-      renderOverview();initCatalogFilters();renderCatalog();initHeroManager();initCollections();initDiary();
+      renderOverview();initCatalogFilters();renderCatalog();renderCatalogHealth();renderWatchLinks();initHeroManager();initCollections();initDiary();
       const summary=succeeded+' kayıt güncellendi · '+failed+' hata · '+skipped+' TMDB kimliği olmayan kayıt atlandı.';
       status.textContent=summary;
       progress.textContent=stopError?'Kısmi eşitleme tamamlandı. '+stopError:summary;
@@ -557,6 +557,73 @@
     $('#genre-insights').innerHTML = topGenres.length ? topGenres.map(([genre,count]) => '<div class="genre-row"><span>'+escapeHtml(genre)+'</span><div class="genre-track"><i style="width:'+(count/maxGenreCount*100)+'%"></i></div><b>'+count+'</b></div>').join('') : '<div class="loading-line">Tür bilgisi bulunamadı.</div>';
     $('#catalog-status').textContent = catalog.length+' kayıt başarıyla okundu';
   }
+  const healthLabels={poster:'Afiş',description:'Konu',year:'Yıl',genre:'Tür',rating:'Puan',tmdb:'TMDB',director:'Yönetmen',cast:'Oyuncu'};
+  let healthFilter='all';
+  function catalogIssues(item){
+    const issues=[];
+    if(!(item.image||item.poster||item.tmdbPoster))issues.push('poster');
+    if(!(item.desc||item.overview||item.tmdbOverview))issues.push('description');
+    if(!(item.year||item.tmdbReleaseDate))issues.push('year');
+    if(!(item.genre||item.category||item.tmdbGenres))issues.push('genre');
+    if(!(item.rating||item.tmdbRating))issues.push('rating');
+    if(!item.tmdbId)issues.push('tmdb');
+    if(!(item.director||item.tmdbDirector))issues.push('director');
+    if(!((Array.isArray(item.cast)&&item.cast.length)||(Array.isArray(item.tmdbCast)&&item.tmdbCast.length)))issues.push('cast');
+    return issues;
+  }
+  function duplicateCatalogIds(){
+    const groups=new Map();
+    catalog.forEach(item=>{
+      const tmdb=item.tmdbId?String(item.type||'')+':tmdb:'+String(item.tmdbId):'';
+      const title=String(item.title||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+      const titleYear=title&&item.year?String(item.type||'')+':title:'+title+':'+item.year:'';
+      [tmdb,titleYear].filter(Boolean).forEach(key=>{if(!groups.has(key))groups.set(key,[]);groups.get(key).push(String(item.id));});
+    });
+    const ids=new Set();groups.forEach(rows=>{if(rows.length>1)rows.forEach(id=>ids.add(id));});return ids;
+  }
+  function renderCatalogHealth(){
+    const duplicates=duplicateCatalogIds();
+    const incomplete=catalog.filter(item=>catalogIssues(item).length);
+    const noWatch=catalog.filter(item=>!item.watchUrl);
+    $('#health-total').textContent=catalog.length.toLocaleString('tr-TR');
+    $('#health-incomplete').textContent=incomplete.length.toLocaleString('tr-TR');
+    $('#health-duplicates').textContent=duplicates.size.toLocaleString('tr-TR');
+    $('#health-no-watch').textContent=noWatch.length.toLocaleString('tr-TR');
+    const rows=[];
+    catalog.forEach(item=>{
+      const issues=catalogIssues(item);
+      if(healthFilter==='duplicate'){
+        if(duplicates.has(String(item.id)))rows.push({item,labels:['Olası tekrar']});
+      }else{
+        const selected=healthFilter==='all'?issues:issues.filter(key=>key===healthFilter);
+        if(selected.length)rows.push({item,labels:selected.map(key=>healthLabels[key])});
+      }
+    });
+    $('#health-result-count').textContent=rows.length.toLocaleString('tr-TR')+' kayıt';
+    $('#health-issue-list').innerHTML=rows.length?rows.map(({item,labels})=>'<article class="health-issue-row"><div class="health-issue-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-clapperboard"></i>')+'</div><div class="health-issue-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'Yıl yok')+' · '+escapeHtml(item.id)+'</small><div class="health-tags">'+labels.map(label=>'<span>'+escapeHtml(label)+'</span>').join('')+'</div></div><button type="button" class="row-action" data-health-edit="'+escapeHtml(item.id)+'">Düzenle</button></article>').join(''):'<div class="health-empty"><i class="fa-solid fa-circle-check"></i><b>Bu filtrede sorun görünmüyor</b><span>Seçili kontrol başlığı için katalog kayıtları tamam.</span></div>';
+  }
+  function isYoutubeSource(url){return /(^|\\.)((www|m)\\.)?(youtube\\.com|youtu\\.be)(\\/|$)/i.test(String(url||'').replace(/^https?:\\/\\//i,''));}
+  function renderWatchLinks(){
+    const search=($('#watchlink-search').value||'').trim().toLocaleLowerCase('tr-TR');
+    const filter=$('#watchlink-filter').value,type=$('#watchlink-type').value;
+    const linked=catalog.filter(item=>item.watchUrl);
+    const youtube=linked.filter(item=>isYoutubeSource(item.watchUrl));
+    const direct=linked.filter(item=>!isYoutubeSource(item.watchUrl));
+    $('#watchlink-total').textContent=catalog.length.toLocaleString('tr-TR');
+    $('#watchlink-has').textContent=linked.length.toLocaleString('tr-TR');
+    $('#watchlink-youtube').textContent=youtube.length.toLocaleString('tr-TR');
+    $('#watchlink-direct').textContent=direct.length.toLocaleString('tr-TR');
+    const rows=catalog.filter(item=>{
+      const has=!!item.watchUrl,yt=has&&isYoutubeSource(item.watchUrl);
+      return (type==='all'||item.type===type)&&(filter==='all'||(filter==='has'&&has)||(filter==='missing'&&!has)||(filter==='youtube'&&yt)||(filter==='direct'&&has&&!yt))&&String(item.title||'').toLocaleLowerCase('tr-TR').includes(search);
+    });
+    $('#watchlink-list').innerHTML=rows.length?rows.map(item=>{
+      const url=String(item.watchUrl||'');const valid=/^https?:\\/\\//i.test(url);const yt=valid&&isYoutubeSource(url);
+      const kind=!url?'Bağlantı eklenmemiş':yt?'YouTube bağlantısı':'Doğrudan / harici video';
+      return '<article class="watchlink-row"><div class="watchlink-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-film"></i>')+'</div><div class="watchlink-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</small><span class="'+(url?'watchlink-present':'watchlink-missing')+'"><i class="fa-solid '+(yt?'fa-brands fa-youtube':url?'fa-link':'fa-circle-minus')+'"></i> '+kind+'</span>'+(valid?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" class="watchlink-url">'+escapeHtml(url)+'</a>':'')+'</div><button type="button" class="row-action" data-watch-edit="'+escapeHtml(item.id)+'">'+(url?'Düzenle':'Bağlantı ekle')+'</button></article>';
+    }).join(''):'<div class="health-empty"><i class="fa-solid fa-circle-info"></i><b>Sonuç bulunamadı</b><span>Arama veya filtre ölçütlerini değiştirebilirsin.</span></div>';
+  }
+
   let catalogView = 'grid';
   let catalogPage = 1;
   const catalogPageSize = 15;
@@ -1213,6 +1280,8 @@
       renderOverview();
       initCatalogFilters();
       renderCatalog();
+      renderCatalogHealth();
+      renderWatchLinks();
       initHeroManager();
       initCollections();
       initDiary();
@@ -1230,7 +1299,23 @@
     const hash = location.hash.replace('#','');
     if (pageNames[hash]) navigate(hash);
   }
-  $$('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
+  $('#health-filters').addEventListener('click',event=>{
+    const button=event.target.closest('[data-health-filter]');if(!button)return;
+    healthFilter=button.dataset.healthFilter;
+    $('#health-filters').querySelectorAll('[data-health-filter]').forEach(item=>item.classList.toggle('active',item===button));
+    renderCatalogHealth();
+  });
+  $('#health-refresh').addEventListener('click',()=>{renderCatalogHealth();toast('Katalog yeniden tarandı.');});
+  $('#health-issue-list').addEventListener('click',event=>{
+    const button=event.target.closest('[data-health-edit]');if(!button)return;
+    const item=catalog.find(row=>String(row.id)===button.dataset.healthEdit);if(item)openEditor(item);
+  });
+  ['#watchlink-search','#watchlink-filter','#watchlink-type'].forEach(selector=>$(selector).addEventListener(selector==='#watchlink-search'?'input':'change',renderWatchLinks));
+  $('#watchlink-list').addEventListener('click',event=>{
+    const button=event.target.closest('[data-watch-edit]');if(!button)return;
+    const item=catalog.find(row=>String(row.id)===button.dataset.watchEdit);if(item)openEditor(item);
+  });
+  $('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
   $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
   ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',() => {catalogPage=1;renderCatalog();}));
@@ -1307,9 +1392,9 @@
   $$('[data-demo]').forEach(button => button.addEventListener('click',() => toast(button.dataset.demo+' alanı veritabanı aşamasında etkinleştirilecek.')));
   $('#export-catalog').addEventListener('click',() => {
     if (!catalog.length) return toast('Dışa aktarılacak katalog verisi bulunamadı.');
-    const data = {app:'Perde',backupType:'archive-data',version:1,catalog,collections,exportedAt:new Date().toISOString()};
+    const data = {app:'Perde',backupType:'archive-data',version:2,catalog,collections,homepageConfig:{version:2,settings:heroSettings,heroSlides},exportedAt:new Date().toISOString()};
     downloadJson('perde-arsiv-yedegi-'+new Date().toISOString().slice(0,10)+'.json',data);
-    toast('Katalog ve koleksiyonların yedeği indirildi.');
+    toast('Katalog, koleksiyonlar ve ana sayfa ayarları yedeklendi.');
   });
   $('#export-personal').addEventListener('click',() => {
     const keys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist','perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1','ny7_player_sources_v1'];
