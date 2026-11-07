@@ -5021,7 +5021,7 @@ body.detail-synopsis-open{overflow:hidden}
 /* Homepage: original mood discovery card restored beside the cinematic hero */
 #dashboard-view .home-feature-row{
  display:grid!important;
- grid-template-columns:minmax(0,1.85fr) minmax(300px,.8fr);
+ grid-template-columns:minmax(0,2fr) minmax(280px,.75fr);
  align-items:stretch;
  gap:18px;
  padding:26px clamp(22px,3.4vw,52px) 0;
@@ -5034,12 +5034,12 @@ body.detail-synopsis-open{overflow:hidden}
  min-height:440px!important;
  border:0;
  border-radius:0;
- padding:82px clamp(22px,3vw,46px) 145px;
+ padding:68px clamp(22px,3vw,46px) 145px;
  overflow:hidden;
 }
 #dashboard-view .home-feature-row #hero-section .hero-copy{
  max-width:min(650px,78%);
- margin:clamp(28px,5vh,58px) 0 0;
+ margin:clamp(14px,2.5vh,30px) 0 0;
 }
 #dashboard-view .home-feature-row #hero-section .hero-thumbnails{
  left:clamp(22px,4vw,62px);
@@ -5115,7 +5115,7 @@ body.detail-synopsis-open{overflow:hidden}
 }
 @media(max-width:1050px){
  #dashboard-view .home-feature-row{
-  grid-template-columns:minmax(0,1.55fr) minmax(285px,1fr);
+  grid-template-columns:minmax(0,1.75fr) minmax(270px,.85fr);
   gap:13px;
   padding-inline:18px;
  }
