@@ -128,7 +128,7 @@
   function tmdbCredential() {
     const value = getTmdbToken().trim();
     if (!value) throw new Error('Önce TMDB API anahtarını kaydetmelisin.');
-    if (/^[a-f0-9]{32}$/i.test(value)) return { type:'v3', value };
+    if (/^[a-z0-9]{32}$/i.test(value)) return { type:'v3', value };
     if (value.split('.').length === 3 && value.startsWith('eyJ')) return { type:'bearer', value };
     throw new Error('Anahtar biçimi tanınmadı. TMDB API Key (v3) veya API Read Access Token kullan.');
   }
@@ -280,7 +280,7 @@
     try {
       localStorage.setItem(tmdbTokenStorageKey,token);
       $('#editor-tmdb-token').value = '';
-      setTmdbTokenStatus(/^[a-f0-9]{32}$/i.test(token) ? 'TMDB API Key (v3) bu tarayıcıya kaydedildi.' : 'Read Access Token bu tarayıcıya kaydedildi.',true);
+      setTmdbTokenStatus(/^[a-z0-9]{32}$/i.test(token) ? 'TMDB API Key (v3) bu tarayıcıya kaydedildi.' : 'Read Access Token bu tarayıcıya kaydedildi.',true);
       toast('TMDB bağlantı anahtarı kaydedildi.');
     } catch (_) {
       setTmdbTokenStatus('Tarayıcı depolamasına kaydedilemedi.');
