@@ -1053,20 +1053,6 @@ function cleanActorBiography(text){
  value=value.split('\n').filter(line=>!/^\s*(?:IMDb|Filmografi|Filmography|Sinema|Televizyon|Müzik videoları)\b/i.test(line.trim())).join('\n');
  return value.replace(/\s+/g,' ').trim();
 }
-async function fetchActorSummary(name,fullBiography=true){
- const title=String(name||'').trim().replace(/_/g,' ');
- const requestPage=async(language)=>{
-  const base='https://'+language+'.wikipedia.org/w/api.php?';
-  const makeParams=(extra={})=>new URLSearchParams({action:'query',titles:title,redirects:'1',prop:'extracts|pageimages|info|pageprops',explaintext:'1',exchars:fullBiography?'20000':'2600',piprop:'thumbnail',pithumbsize:'1200',inprop:'url',format:'json',origin:'*',...extra});
-  let page=null,lastError=null;
-  try{const params=makeParams();if(!fullBiography)params.set('exintro','1');const response=await fetch(base+params.toString(),{headers:{'Accept':'application/json'}});if(!response.ok)throw new Error('Wikipedia HTTP '+response.status);const data=await response.json();page=Object.values(data.query?.pages||{}).find(item=>item.extract);}
-  catch(error){lastError=error;}
-  if(!page){try{const params=makeParams({generator:'search',gsrsearch:title,gsrlimit:'8'});if(!fullBiography)params.set('exintro','1');const response=await fetch(base+params.toString(),{headers:{'Accept':'application/json'}});if(!response.ok)throw new Error('Wikipedia search HTTP '+response.status);const data=await response.json();const pages=Object.values(data.query?.pages||{});const wanted=title.toLocaleLowerCase('tr-TR');page=pages.find(item=>String(item.title||'').toLocaleLowerCase('tr-TR')===wanted)||pages.find(item=>item.extract);}catch(error){lastError=error;}}
-  if(!page?.extract)throw lastError||new Error(language+' Wikipedia biography not found');
-  return {extract:fullBiography?cleanActorBiography(page.extract):page.extract,thumbnail:page.thumbnail?{source:page.thumbnail.source}:undefined,content_urls:{desktop:{page:page.fullurl||('https://'+language+'.wikipedia.org/wiki/'+encodeURIComponent(page.title.replace(/ /g,'_')))}},wikibase_item:page.pageprops?.wikibase_item,title:page.title};
- };
- try{return await requestPage('tr');}catch(error){return await requestPage('en');}
-}
 function getRelatedMedia(item,limit=10){
  const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
  const tokens=value=>[...new Set(countryTokens(value).map(normalize).filter(Boolean))];
@@ -1484,15 +1470,6 @@ document.addEventListener('keydown',function(event){
  if(event.key==='ArrowLeft')stepActorPhoto(-1);
  if(event.key==='ArrowRight')stepActorPhoto(1);
 });
-async function fetchWikidataLabel(id){
- if(!id)return '';
- try{
-  const response=await fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&ids='+encodeURIComponent(id)+'&props=labels&languages=tr|en&format=json&origin=*');
-  const data=await response.json();
-  const entity=data.entities?.[id];
-  return entity?.labels?.tr?.value||entity?.labels?.en?.value||'';
- }catch(e){return ''}
-}
 let actorProfileRequestSequence=0;
 function normalizeActorName(value){
  return String(value||'').normalize('NFD').replace(/\p{M}/gu,'').toLocaleLowerCase('tr-TR').replace(/ı/g,'i').trim().replace(/\s+/g,' ');
