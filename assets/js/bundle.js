@@ -118,6 +118,8 @@ function fitHeroTitleToWidth() {
             if (heroImageSwapTimer) window.clearTimeout(heroImageSwapTimer);
             section.classList.add('is-changing');
             heroImageSwapTimer = window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
+            const typeBadge = document.getElementById('hero-type-badge');
+            if (typeBadge) typeBadge.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i><span>DİZİ</span>' : '<i class="fa-solid fa-film" aria-hidden="true"></i><span>FİLM</span>';
             document.getElementById('hero-title').innerText = item.title;
             let heroOriginal = document.getElementById('hero-original-title');
             if (!heroOriginal) { heroOriginal = document.createElement('small'); heroOriginal.id = 'hero-original-title'; heroOriginal.className = 'media-original-title hero-original-title'; document.getElementById('hero-title').after(heroOriginal); }
@@ -1674,8 +1676,13 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 }
                 if (!loadedCatalog) throw new Error(errors.join(' | ')||'Hiçbir katalog kaynağı yanıt vermedi.');
                 mediaDatabase = loadedCatalog;
-                heroItems = [...mediaDatabase].sort((a,b)=>Number(b.year)-Number(a.year)).slice(0,10);
-                setHeroMedia(mediaDatabase[0].id);
+                const heroCandidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
+                for (let i = heroCandidates.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [heroCandidates[i], heroCandidates[j]] = [heroCandidates[j], heroCandidates[i]];
+                }
+                heroItems = heroCandidates.slice(0, 10);
+                setHeroMedia(heroItems[0]?.id ?? mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
                 initializeMoodDiscovery();
