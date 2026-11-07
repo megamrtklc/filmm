@@ -1328,6 +1328,43 @@ function renderDetailPersonalInfo(item){
  panel.innerHTML='<div class="detail-personal-card"><div class="detail-personal-heading"><h2>Senin notların</h2></div><div class="detail-personal-content">'+platformMarkup+noteMarkup+watchMarkup+'</div></div>';
 }
 
+const detailCastCacheKey='perde_tmdb_cast_cache_v1';
+let detailCastRequestSequence=0;
+function readDetailCastCache(key){
+ try{const cache=JSON.parse(localStorage.getItem(detailCastCacheKey)||'{}');return Array.isArray(cache[key])?cache[key]:null;}catch(_){return null;}
+}
+function writeDetailCastCache(key,cast){
+ try{const cache=JSON.parse(localStorage.getItem(detailCastCacheKey)||'{}');cache[key]=cast;localStorage.setItem(detailCastCacheKey,JSON.stringify(cache));}catch(_){}
+}
+async function loadTmdbDetailCast(item){
+ const id=String(item.tmdbId||'').trim();
+ if(!/^\\d+$/.test(id))return;
+ const mediaType=item.type==='tv'?'tv':'movie';
+ const cacheKey=mediaType+':'+id;
+ const cached=readDetailCastCache(cacheKey);
+ if(cached&&cached.length){item.tmdbCast=cached;renderDetailCredits(item);}
+ const hasCompleteCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.some(person=>person&&typeof person==='object'&&person.character&&person.profile);
+ if(hasCompleteCast&&!cached)return;
+ let token='';
+ try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
+ if(!token)return;
+ let auth={},query='';
+ if(/^[a-z0-9]{32}$/i.test(token))query='?api_key='+encodeURIComponent(token)+'&language=tr-TR&append_to_response=credits';
+ else if(token.split('.').length===3&&token.startsWith('eyJ')){auth={Authorization:'Bearer '+token};query='?language=tr-TR&append_to_response=credits';}
+ else return;
+ const requestId=++detailCastRequestSequence;
+ try{
+  const response=await fetch('https://api.themoviedb.org/3/'+mediaType+'/'+encodeURIComponent(id)+query,{headers:{...auth,Accept:'application/json'}});
+  if(!response.ok)throw new Error('TMDB HTTP '+response.status);
+  const details=await response.json();
+  const cast=(details.credits?.cast||[]).filter(person=>person&&person.name).slice(0,10).map(person=>({id:person.id||null,name:person.name,character:person.character||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w185'+person.profile_path:'',order:Number.isFinite(Number(person.order))?Number(person.order):999}));
+  if(!cast.length)return;
+  writeDetailCastCache(cacheKey,cast);
+  item.tmdbCast=cast;
+  if(requestId===detailCastRequestSequence&&String(location.hash).includes(encodeURIComponent(String(item.id))))renderDetailCredits(item);
+ }catch(error){console.warn('Oyuncu bilgileri TMDB üzerinden alınamadı:',error);}
+}
+
 function renderDetailCredits(item){
  const panel=document.getElementById('detail-credits');
  if(!panel)return;
@@ -1386,6 +1423,7 @@ function openDetailPage(id,update=true){
  renderDetailSeries(item);
  renderDetailPersonalInfo(item);
  renderDetailCredits(item);
+ loadTmdbDetailCast(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
