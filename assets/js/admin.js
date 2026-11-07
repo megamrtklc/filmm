@@ -12,6 +12,7 @@
   let tmdbSearchResults = [];
   let tmdbRequestSequence = 0;
   let editorSubtitles = [];
+  let editorTmdbCast = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
   const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',settings:'Genel Ayarlar'};
   function toast(message) {
@@ -70,7 +71,7 @@
     $('#editor-tmdb-query').value = '';
     $('#editor-tmdb-results').innerHTML = '';
     $('#editor-tmdb-search-status').textContent = 'Aramaya başlamak için bir yapım adı yaz.';
-    editorSubtitles = []; renderEditorSubtitles();
+    editorSubtitles = []; editorTmdbCast = []; renderEditorSubtitles();
     $('#editor-subtitle-file').value = ''; $('#editor-subtitle-season').value = ''; $('#editor-subtitle-episode').value = ''; $('#editor-subtitle-default').checked = true;
     $('#editor-subtitle-status').textContent = 'Henüz altyazı eklenmedi.';
     setEditorType('movie');
@@ -91,6 +92,7 @@
     value.type = editorType;
     value.subtitles = editorSubtitles.map(item=>({...item}));
     value.cast = editorValue('editor-cast').split(',').map(name=>name.trim()).filter(Boolean);
+    if(editorTmdbCast.length) value.tmdbCast = editorTmdbCast.map(person=>({...person}));
     value.themeColor = '#101014';
     value.id = editorEditingId || ('draft-'+Date.now());
     if (editorType === 'movie') { value.seasons = null; value.episodes = null; }
@@ -119,6 +121,7 @@
       setEditorType(item.type);
       Object.entries(editorFields).forEach(([key,id]) => { if(key==='platform'){setSelectedPlatforms(item.platform);return;} document.getElementById(id).value = item[key] ?? ''; });
       $('#editor-cast').value = Array.isArray(item.cast) ? item.cast.join(', ') : '';
+      editorTmdbCast = Array.isArray(item.tmdbCast) ? item.tmdbCast.map(person=>typeof person==='string'?{name:person,character:'',profile:''}:{...person}) : [];
       editorSubtitles = Array.isArray(item.subtitles) ? item.subtitles.map(entry=>({...entry})) : [];
       renderEditorSubtitles();
       $('#editor-record-id').value = editorEditingId;
@@ -355,7 +358,9 @@
       const director = type === 'tv'
         ? (details.created_by || []).map(item=>item.name).join(', ')
         : (crew.find(item=>item.job==='Director')?.name || '');
-      const cast = (details.credits?.cast || []).slice(0,12).map(item=>item.name).filter(Boolean);
+      const castCredits = (details.credits?.cast || []).slice(0,12).filter(item=>item?.name);
+      const cast = castCredits.map(item=>item.name);
+      editorTmdbCast = castCredits.map(item=>({id:item.id||null,name:item.name,character:item.character||'',profile:item.profile_path?tmdbImage(item.profile_path,'w185'):'',order:item.order??0}));
       const countries = type === 'tv'
         ? (details.origin_country || []).join(', ')
         : (details.production_countries || []).map(item=>item.name).join(', ');
@@ -441,7 +446,9 @@
           const genres=(details.genres||[]).map(row=>row.name).filter(Boolean);
           const crew=details.credits?.crew||[];
           const director=type==='tv'?(details.created_by||[]).map(row=>row.name).filter(Boolean).join(', '):(crew.find(row=>row.job==='Director')?.name||'');
-          const cast=(details.credits?.cast||[]).slice(0,12).map(row=>row.name).filter(Boolean);
+          const castCredits=(details.credits?.cast||[]).slice(0,12).filter(row=>row?.name);
+          const cast=castCredits.map(row=>row.name);
+          const castDetails=castCredits.map(row=>({id:row.id||null,name:row.name,character:row.character||'',profile:row.profile_path?tmdbImage(row.profile_path,'w185'):'',order:row.order??0}));
           const trailer=(details.videos?.results||[]).find(row=>row.site==='YouTube'&&row.type==='Trailer')||(details.videos?.results||[]).find(row=>row.site==='YouTube');
           const countries=type==='tv'?(details.origin_country||[]).join(', '):(details.production_countries||[]).map(row=>row.name).filter(Boolean).join(', ');
           const runtime=type==='tv'?((details.episode_run_time||[])[0]?(details.episode_run_time[0]+' dk / bölüm'):''):(details.runtime?(details.runtime+' dk'):'');
@@ -456,7 +463,7 @@
           item.tmdbRuntime=runtime;
           item.tmdbCountries=countries;
           item.tmdbDirector=director;
-          item.tmdbCast=cast;
+          item.tmdbCast=castDetails;
           item.tmdbOverview=details.overview||'';
           item.tmdbPoster=posterUrl;
           item.tmdbBackdrop=backdropUrl;
