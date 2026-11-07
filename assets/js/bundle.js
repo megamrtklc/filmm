@@ -1471,6 +1471,7 @@ document.addEventListener('keydown',function(event){
  if(event.key==='ArrowRight')stepActorPhoto(1);
 });
 let actorProfileRequestSequence=0;
+function escapeCastHtml(value){return escapeCountryHtml(value);}
 function normalizeActorName(value){
  return String(value||'').normalize('NFD').replace(/\p{M}/gu,'').toLocaleLowerCase('tr-TR').replace(/ı/g,'i').trim().replace(/\s+/g,' ');
 }
