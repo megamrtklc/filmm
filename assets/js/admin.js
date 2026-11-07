@@ -9,6 +9,9 @@
   let editorType = 'movie';
   let editorDrafts = [];
   let editorEditingId = null;
+  let tmdbSearchResults = [];
+  let tmdbRequestSequence = 0;
+  const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
   const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',subtitles:'Altyazı Merkezi',backups:'Yedekleme',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
@@ -37,7 +40,8 @@
     title:'editor-title',originalTitle:'editor-original-title',year:'editor-year',category:'editor-category',
     genre:'editor-genre',rating:'editor-rating',duration:'editor-duration',country:'editor-country',
     director:'editor-director',tmdbId:'editor-tmdb',seasons:'editor-seasons',episodes:'editor-episodes',
-    desc:'editor-desc',image:'editor-image',backdrop:'editor-backdrop',trailerUrl:'editor-trailer'
+    desc:'editor-desc',image:'editor-image',backdrop:'editor-backdrop',trailerUrl:'editor-trailer',imdbId:'editor-imdb',
+    watchUrl:'editor-watch-url',platform:'editor-platform',personalNote:'editor-personal-note'
   };
   function editorValue(id) { return document.getElementById(id).value.trim(); }
   function setEditorType(type) {
@@ -109,6 +113,143 @@
     $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-check"></i> Taslak oturum listesine eklendi; katalog değişmedi.';
     renderEditorDrafts();
     toast('Taslak ön izleme listesine eklendi.');
+  }
+  function getTmdbToken() {
+    try { return localStorage.getItem(tmdbTokenStorageKey) || ''; } catch (_) { return ''; }
+  }
+  function setTmdbTokenStatus(message, good=false) {
+    const node = $('#editor-token-status');
+    node.textContent = message;
+    node.classList.toggle('is-ready',good);
+  }
+  async function tmdbRequest(path) {
+    const token = getTmdbToken();
+    if (!token) throw new Error('Önce TMDB Read Access Token kaydetmelisin.');
+    const response = await fetch('https://api.themoviedb.org/3'+path, {
+      headers: { Authorization: 'Bearer '+token, Accept: 'application/json' }
+    });
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) throw new Error('TMDB anahtarı geçersiz veya yetkisiz. Token ayarını kontrol et.');
+      if (response.status === 429) throw new Error('TMDB istek sınırına ulaşıldı. Biraz sonra tekrar dene.');
+      throw new Error('TMDB isteği başarısız oldu ('+response.status+').');
+    }
+    return response.json();
+  }
+  function tmdbImage(path, size='w500') {
+    return path ? 'https://image.tmdb.org/t/p/'+size+path : '';
+  }
+  function renderTmdbResults(results) {
+    const host = $('#editor-tmdb-results');
+    tmdbSearchResults = results;
+    host.innerHTML = results.length ? results.map((item,index) => {
+      const name = item.title || item.name || 'İsimsiz yapım';
+      const year = String(item.release_date || item.first_air_date || '').slice(0,4);
+      const image = tmdbImage(item.poster_path,'w185');
+      return '<button type="button" class="tmdb-result-item" data-tmdb-result="'+index+'">'+
+        (image ? '<img src="'+escapeHtml(image)+'" alt="" loading="lazy">' : '<span class="tmdb-result-placeholder"><i class="fa-solid fa-clapperboard"></i></span>')+
+        '<span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+(item.media_type==='tv'||editorType==='tv'?'Dizi':'Film')+' · '+escapeHtml(year||'Yıl bilinmiyor')+'</small><em>'+escapeHtml(item.overview||'Konu bilgisi bulunmuyor.')+'</em></span><i class="fa-solid fa-chevron-right"></i></button>';
+    }).join('') : '<div class="tmdb-result-empty">Bu aramayla eşleşen yapım bulunamadı.</div>';
+  }
+  async function searchTmdb() {
+    const query = $('#editor-tmdb-query').value.trim();
+    if (!query) return toast('Aramak için yapım adını veya IMDb ID yaz.');
+    const sequence = ++tmdbRequestSequence;
+    const status = $('#editor-tmdb-search-status');
+    status.textContent = 'TMDB kataloğunda aranıyor…';
+    $('#editor-tmdb-results').innerHTML = '';
+    try {
+      let results = [];
+      if (/^tt\\d{5,}$/i.test(query)) {
+        const found = await tmdbRequest('/find/'+encodeURIComponent(query)+'?external_source=imdb_id&language=tr-TR');
+        results = [
+          ...(found.movie_results || []).map(item=>({...item,media_type:'movie'})),
+          ...(found.tv_results || []).map(item=>({...item,media_type:'tv'}))
+        ];
+      } else {
+        const endpoint = editorType === 'tv' ? '/search/tv' : '/search/movie';
+        const found = await tmdbRequest(endpoint+'?query='+encodeURIComponent(query)+'&language=tr-TR&include_adult=false');
+        results = (found.results || []).map(item=>({...item,media_type:editorType}));
+      }
+      if (sequence !== tmdbRequestSequence) return;
+      status.textContent = results.length+' eşleşme bulundu. Doğru yapımı seç.';
+      renderTmdbResults(results);
+    } catch (error) {
+      if (sequence !== tmdbRequestSequence) return;
+      status.textContent = error.message;
+      renderTmdbResults([]);
+    }
+  }
+  async function selectTmdbResult(index) {
+    const result = tmdbSearchResults[index];
+    if (!result) return;
+    const type = result.media_type === 'tv' ? 'tv' : 'movie';
+    const status = $('#editor-tmdb-search-status');
+    status.textContent = 'Yapımın tüm bilgileri TMDB’den alınıyor…';
+    try {
+      const details = await tmdbRequest('/'+(type==='tv'?'tv':'movie')+'/'+encodeURIComponent(result.id)+'?language=tr-TR&append_to_response=credits,videos,external_ids');
+      const releaseDate = details.release_date || details.first_air_date || '';
+      const genres = (details.genres || []).map(item=>item.name).filter(Boolean);
+      const crew = details.credits?.crew || [];
+      const director = type === 'tv'
+        ? (details.created_by || []).map(item=>item.name).join(', ')
+        : (crew.find(item=>item.job==='Director')?.name || '');
+      const cast = (details.credits?.cast || []).slice(0,12).map(item=>item.name).filter(Boolean);
+      const countries = type === 'tv'
+        ? (details.origin_country || []).join(', ')
+        : (details.production_countries || []).map(item=>item.name).join(', ');
+      const trailer = (details.videos?.results || []).find(item=>item.site==='YouTube' && item.type==='Trailer') ||
+        (details.videos?.results || []).find(item=>item.site==='YouTube');
+      const duration = type === 'tv'
+        ? ((details.episode_run_time || [])[0] ? (details.episode_run_time[0]+' dk / bölüm') : 'Bilinmiyor')
+        : (details.runtime ? (details.runtime+' dk') : 'Bilinmiyor');
+      const values = {
+        title:details.title || details.name || '',
+        originalTitle:details.original_title || details.original_name || '',
+        year:releaseDate.slice(0,4),
+        category:genres.join(' / '),
+        genre:genres[0] || '',
+        rating:Number.isFinite(Number(details.vote_average)) ? Number(details.vote_average).toFixed(1) : '',
+        duration,
+        country:countries,
+        director,
+        tmdbId:details.id || '',
+        imdbId:details.external_ids?.imdb_id || details.imdb_id || '',
+        seasons:type==='tv' ? (details.number_of_seasons ?? '') : '',
+        episodes:type==='tv' ? (details.number_of_episodes ?? '') : '',
+        desc:details.overview || '',
+        image:tmdbImage(details.poster_path,'w500'),
+        backdrop:tmdbImage(details.backdrop_path,'w1280'),
+        trailerUrl:trailer?.key ? 'https://www.youtube.com/watch?v='+trailer.key : ''
+      };
+      setEditorType(type);
+      Object.entries(editorFields).forEach(([key,id]) => {
+        if (['watchUrl','platform','personalNote'].includes(key)) return;
+        const node = document.getElementById(id);
+        if (node) node.value = values[key] ?? '';
+      });
+      $('#editor-cast').value = cast.join(', ');
+      $('#editor-record-id').value = '';
+      editorEditingId = null;
+      $('#editor-page-title').textContent = type==='tv' ? 'Dizi Ekle' : 'Film Ekle';
+      $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-check"></i> TMDB bilgileri otomatik yüklendi.';
+      status.textContent = 'Seçildi: '+(values.title || 'Yapım')+' · TMDB ID '+details.id;
+      renderEditorPreview();
+      $('#content-editor-form').scrollIntoView({behavior:'smooth',block:'start'});
+    } catch (error) {
+      status.textContent = error.message;
+    }
+  }
+  function saveTmdbToken() {
+    const token = $('#editor-tmdb-token').value.trim();
+    if (!token) return toast('TMDB Read Access Token alanını doldur.');
+    try {
+      localStorage.setItem(tmdbTokenStorageKey,token);
+      $('#editor-tmdb-token').value = '';
+      setTmdbTokenStatus('Token bu tarayıcıya kaydedildi.',true);
+      toast('TMDB bağlantı anahtarı kaydedildi.');
+    } catch (_) {
+      setTmdbTokenStatus('Tarayıcı depolamasına kaydedilemedi.');
+    }
   }
   function poster(item) {
     const url = item.poster || item.image || item.backdrop || '';
@@ -704,11 +845,19 @@
     $$('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
     renderHeroPreview();
   }));
+  $('#editor-save-token').addEventListener('click',saveTmdbToken);
+  $('#editor-tmdb-search').addEventListener('click',searchTmdb);
+  $('#editor-tmdb-query').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();searchTmdb();}});
+  $('#editor-tmdb-results').addEventListener('click',event=>{
+    const button=event.target.closest('[data-tmdb-result]');
+    if(button)selectTmdbResult(Number(button.dataset.tmdbResult));
+  });
+  if(getTmdbToken())setTmdbTokenStatus('TMDB anahtarı bu tarayıcıda kayıtlı.',true);
   $('#add-content-button').addEventListener('click',() => openEditor());
   $('#content-editor-form').addEventListener('submit',saveEditorDraft);
   $('#editor-reset').addEventListener('click',resetEditor);
   $('[data-editor-type]').forEach(button=>button.addEventListener('click',()=>setEditorType(button.dataset.editorType)));
-  Object.values(editorFields).concat(['editor-cast']).forEach(id=>document.getElementById(id).addEventListener('input',renderEditorPreview));
+  Object.values(editorFields).concat(['editor-cast']).forEach(id=>{const node=document.getElementById(id);if(node)node.addEventListener('input',renderEditorPreview);});
   $('#editor-draft-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-editor-draft]');
     if(!button)return;
