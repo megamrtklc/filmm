@@ -1331,26 +1331,12 @@ function renderDetailPersonalInfo(item){
 function renderDetailCredits(item){
  const panel=document.getElementById('detail-credits');
  if(!panel)return;
- const list=[];
- const add=(label,value)=>{const text=String(value??'').trim();if(text)list.push({label,value:text});};
- const originalTitle=String(item.tmdbOriginalTitle||item.originalTitle||'').trim();
- const release=String(item.tmdbReleaseDate||item.releaseDate||'').trim();
- let releaseLabel=release;
- if(/^\d{4}-\d{2}-\d{2}$/.test(release)){const date=new Date(release+'T12:00:00');if(!Number.isNaN(date.getTime()))releaseLabel=new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'long',year:'numeric'}).format(date);}
- add('Orijinal adı',originalTitle);
- add('Yayın tarihi',releaseLabel);
- add('Tür',item.tmdbGenres||item.category||item.genre);
- add('Ülke',countryTokens(item.tmdbCountries||item.country).map(country=>countryDisplay(country).name).join(', '));
- add('Yönetmen',countryTokens(item.tmdbDirector||item.director).join(', '));
- add(item.type==='tv'?'Bölüm süresi':'Süre',item.tmdbRuntime||item.duration);
- if(item.type==='tv'){add('Sezon sayısı',item.seasons);add('Bölüm sayısı',item.episodes);}
  const rawCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.length?item.tmdbCast:item.cast;
  const cast=Array.isArray(rawCast)?rawCast.map(person=>typeof person==='string'?{name:person,character:'',profile:''}:({name:person?.name||'',character:person?.character||'',profile:person?.profile||''})).filter(person=>person.name):String(rawCast||'').split(/[,;|]/).map(x=>x.trim()).filter(Boolean).map(name=>({name,character:'',profile:''}));
- const markup=list.map(entry=>'<div class="detail-credit-item"><span>'+escapeCountryHtml(entry.label)+'</span><strong>'+escapeCountryHtml(entry.value)+'</strong></div>').join('');
- const castMarkup=cast.length?'<div class="detail-credit-cast"><span>Oyuncular</span><div class="detail-cast-grid">'+cast.slice(0,12).map(person=>'<button type="button" class="detail-cast-person" data-actor-name="'+escapeCountryHtml(person.name)+'" aria-label="'+escapeCountryHtml(person.name)+' oyuncu profilini aç">'+(person.profile?'<img src="'+escapeCountryHtml(person.profile)+'" alt="'+escapeCountryHtml(person.name)+'" loading="lazy" onerror="this.hidden=true">':'<span class="detail-cast-avatar">'+escapeCountryHtml(person.name.split(/\s+/).map(part=>part[0]||'').slice(0,2).join('').toLocaleUpperCase('tr-TR'))+'</span>')+'<span class="detail-cast-person-copy"><strong>'+escapeCountryHtml(person.name)+'</strong>'+(person.character?'<small>'+escapeCountryHtml(person.character)+'</small>':'')+'</span></button>').join('')+'</div></div>':'';
- panel.hidden=!list.length&&!castMarkup;
- panel.innerHTML=panel.hidden?'':'<div class="detail-credits-card"><div class="detail-credits-heading"><span>YAPIM BİLGİLERİ</span><h2>Film künyesi</h2></div><div class="detail-credits-grid">'+markup+castMarkup+'</div></div>';
+ panel.hidden=!cast.length;
+ panel.innerHTML=panel.hidden?'':'<div class="detail-credits-card"><div class="detail-credits-heading"><h2>Oyuncular</h2></div><div class="detail-cast-grid">'+cast.slice(0,12).map(person=>'<button type="button" class="detail-cast-person" data-actor-name="'+escapeCountryHtml(person.name)+'" aria-label="'+escapeCountryHtml(person.name)+' oyuncu profilini aç">'+(person.profile?'<img src="'+escapeCountryHtml(person.profile)+'" alt="'+escapeCountryHtml(person.name)+'" loading="lazy" onerror="this.hidden=true">':'<span class="detail-cast-avatar">'+escapeCountryHtml(person.name.split(/\s+/).map(part=>part[0]||'').slice(0,2).join('').toLocaleUpperCase('tr-TR'))+'</span>')+'<span class="detail-cast-person-copy"><strong>'+escapeCountryHtml(person.name)+'</strong>'+(person.character?'<small>'+escapeCountryHtml(person.character)+'</small>':'')+'</span></button>').join('')+'</div></div>';
 }
+
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
