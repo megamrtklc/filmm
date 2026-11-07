@@ -1327,6 +1327,30 @@ function renderDetailPersonalInfo(item){
  if(!hasInfo){panel.innerHTML='';return;}
  panel.innerHTML='<div class="detail-personal-card"><div class="detail-personal-heading"><h2>Senin notların</h2></div><div class="detail-personal-content">'+platformMarkup+noteMarkup+watchMarkup+'</div></div>';
 }
+
+function renderDetailCredits(item){
+ const panel=document.getElementById('detail-credits');
+ if(!panel)return;
+ const list=[];
+ const add=(label,value)=>{const text=String(value??'').trim();if(text)list.push({label,value:text});};
+ const originalTitle=String(item.tmdbOriginalTitle||item.originalTitle||'').trim();
+ const release=String(item.tmdbReleaseDate||item.releaseDate||'').trim();
+ let releaseLabel=release;
+ if(/^\d{4}-\d{2}-\d{2}$/.test(release)){const date=new Date(release+'T12:00:00');if(!Number.isNaN(date.getTime()))releaseLabel=new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'long',year:'numeric'}).format(date);}
+ add('Orijinal adı',originalTitle);
+ add('Yayın tarihi',releaseLabel);
+ add('Tür',item.tmdbGenres||item.category||item.genre);
+ add('Ülke',countryTokens(item.tmdbCountries||item.country).map(country=>countryDisplay(country).name).join(', '));
+ add('Yönetmen',countryTokens(item.tmdbDirector||item.director).join(', '));
+ add(item.type==='tv'?'Bölüm süresi':'Süre',item.tmdbRuntime||item.duration);
+ if(item.type==='tv'){add('Sezon sayısı',item.seasons);add('Bölüm sayısı',item.episodes);}
+ const rawCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.length?item.tmdbCast:item.cast;
+ const cast=Array.isArray(rawCast)?rawCast.map(person=>typeof person==='string'?person:(person&&person.name)||'').filter(Boolean):String(rawCast||'').split(/[,;|]/).map(x=>x.trim()).filter(Boolean);
+ const markup=list.map(entry=>'<div class="detail-credit-item"><span>'+escapeCountryHtml(entry.label)+'</span><strong>'+escapeCountryHtml(entry.value)+'</strong></div>').join('');
+ const castMarkup=cast.length?'<div class="detail-credit-cast"><span>Oyuncular</span><strong>'+cast.slice(0,12).map(escapeCountryHtml).join(' · ')+'</strong></div>':'';
+ panel.hidden=!list.length&&!castMarkup;
+ panel.innerHTML=panel.hidden?'':'<div class="detail-credits-card"><div class="detail-credits-heading"><span>YAPIM BİLGİLERİ</span><h2>Film künyesi</h2></div><div class="detail-credits-grid">'+markup+castMarkup+'</div></div>';
+}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -1368,6 +1392,7 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  renderDetailSeries(item);
  renderDetailPersonalInfo(item);
+ renderDetailCredits(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
