@@ -16787,5 +16787,130 @@
     "id": "perde-mw6xr2mm",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "PK",
+    "originalTitle": "पीके",
+    "year": 2014,
+    "category": "Komedi / Dram / Bilim-Kurgu",
+    "genre": "Komedi",
+    "rating": "7.7",
+    "duration": "153 dk",
+    "country": "India",
+    "director": "Rajkumar Hirani",
+    "tmdbId": 297222,
+    "desc": "P.K. bi şehirdeki yabancının düşünceler komedisidir. P.K.(Aamir Khan) Daha önce kimsenin sormadığı sorular sorar. Bunlar masum, çocuk gibi sorulardır ama cevapları enteresandır.P.K.'in masum gözlerini gören insanlar kendi monoton hayatlarını gözden geçirirler.P.K.'in sadık arkadaşları ve dostları olur. Kırık kalpleri düzeltir öfkeleri dindirir. P.K.'in çocuksu merakı kendisi ve milyonlarca insan için manevi bir yolculuğa dönüşür.Film karmaşık felsefelerin iddialı ve benzersiz yönlerini orijinal bi şekilde ortaya koyuyor. Ayrıca basit, kahkaha dolu, insani bir aşk masalı da süregidiyor. Sonuç olarak ayrı dünyalardan gelen yabancılar arasında dostluk destanı işlenmiş diyebiliriz.",
+    "image": "https://image.tmdb.org/t/p/w500/i9V1uuUzJFPjdXOg6knfHci8Mha.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/gxfvtq5eYiClS2X7hxAAPBNrbWA.jpg",
+    "imdbId": "tt2338151",
+    "watchUrl": "",
+    "platform": [],
+    "personalNote": "",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Amir Han",
+      "Anushka Sharma",
+      "Saurabh Shukla",
+      "Boman Irani",
+      "Sushant Singh Rajput",
+      "Sencay Dat",
+      "Parikshat Sahni",
+      "Reema Debnath",
+      "Rukhsar Rehman",
+      "Sachin Parikh",
+      "Brijendra Kala",
+      "Sai Gundewar"
+    ],
+    "tmdbCast": [
+      {
+        "id": 52763,
+        "name": "Amir Han",
+        "character": "PK",
+        "profile": "https://image.tmdb.org/t/p/w185/6uiZSwi2kvd1jZ7X7Xz9W9VGuV4.jpg",
+        "order": 0
+      },
+      {
+        "id": 81928,
+        "name": "Anushka Sharma",
+        "character": "Jagat 'Jaggu' Janani Sahni",
+        "profile": "https://image.tmdb.org/t/p/w185/fPhX9mefBzco5ntQUZNJZG56Gbi.jpg",
+        "order": 1
+      },
+      {
+        "id": 76789,
+        "name": "Saurabh Shukla",
+        "character": "Tapasvi Maharaj",
+        "profile": "https://image.tmdb.org/t/p/w185/uFGVBmRIHLAQkYYSI2lSXOxMi4f.jpg",
+        "order": 2
+      },
+      {
+        "id": 35779,
+        "name": "Boman Irani",
+        "character": "Cherry Bajwa",
+        "profile": "https://image.tmdb.org/t/p/w185/5J7GiiNar9bg9rGYeA2L30JXE2W.jpg",
+        "order": 3
+      },
+      {
+        "id": 1192902,
+        "name": "Sushant Singh Rajput",
+        "character": "Sarfraz Yousuf",
+        "profile": "https://image.tmdb.org/t/p/w185/j5cjz4SlZYlhrIFZkmCREvG3wSm.jpg",
+        "order": 4
+      },
+      {
+        "id": 85881,
+        "name": "Sencay Dat",
+        "character": "Bhairao Singh",
+        "profile": "https://image.tmdb.org/t/p/w185/70viNBvKHpX1kMZcfIwULqWnfdM.jpg",
+        "order": 5
+      },
+      {
+        "id": 123317,
+        "name": "Parikshat Sahni",
+        "character": "Jayprakash Sahni",
+        "profile": "https://image.tmdb.org/t/p/w185/wQs7zYQNahLrntjqd7aIrajnbpM.jpg",
+        "order": 6
+      },
+      {
+        "id": 1425216,
+        "name": "Reema Debnath",
+        "character": "Phuljhadiya",
+        "profile": "https://image.tmdb.org/t/p/w185/6okSyr5zIfyLH6EPbXr2cALUSs8.jpg",
+        "order": 7
+      },
+      {
+        "id": 86890,
+        "name": "Rukhsar Rehman",
+        "character": "Pakistan Embassy Receptionist",
+        "profile": "https://image.tmdb.org/t/p/w185/4iRIgfCtBB2WZ5mhumrTiOA3dGK.jpg",
+        "order": 8
+      },
+      {
+        "id": 1255526,
+        "name": "Sachin Parikh",
+        "character": "Tapasviji's Manager",
+        "profile": "https://image.tmdb.org/t/p/w185/hH8adrclOIMLtqRPF2RcLKOImwR.jpg",
+        "order": 9
+      },
+      {
+        "id": 230440,
+        "name": "Brijendra Kala",
+        "character": "Vendor at the Temple",
+        "profile": "https://image.tmdb.org/t/p/w185/wogG1hX0EHzAhnfnGpN3tY3Ch6n.jpg",
+        "order": 10
+      },
+      {
+        "id": 2016241,
+        "name": "Sai Gundewar",
+        "character": "Ticket Seller",
+        "profile": "https://image.tmdb.org/t/p/w185/3La5dDx3Pnyct0OgjYLQ6KB4ONP.jpg",
+        "order": 11
+      }
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw6xrtd2",
+    "seasons": null,
+    "episodes": null
   }
 ]
