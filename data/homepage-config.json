@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T07:19:43.107Z",
+  "updatedAt": "2026-11-07T07:21:40.357Z",
   "heroSlides": [
     {
       "id": "archive-66",
@@ -34,6 +34,42 @@
     },
     {
       "id": "archive-125",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-51",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-84",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-106",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-59",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-97",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-82",
       "active": true,
       "headline": "",
       "description": ""
