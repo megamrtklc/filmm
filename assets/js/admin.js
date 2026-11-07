@@ -1474,9 +1474,9 @@
       const collectionsCurrent=await githubCollectionsRequest('GET');
       const heroCurrent=await githubHeroConfigRequest('GET');
       if(!catalogCurrent.sha||!collectionsCurrent.sha||!heroCurrent.sha)throw new Error('GitHub dosyalarının sürüm bilgisi alınamadı; hiçbir dosya değiştirilmedi.');
-      await githubCatalogRequest('PUT',{message:'Restore Perde catalog from archive backup',content:encodeGithubContent(JSON.stringify(parsed.catalog,null,2)+'\\n'),sha:catalogCurrent.sha,branch:'main'});
-      await githubCollectionsRequest('PUT',{message:'Restore Perde collections from archive backup',content:encodeGithubContent(JSON.stringify(safeCollections,null,2)+'\\n'),sha:collectionsCurrent.sha,branch:'main'});
-      await githubHeroConfigRequest('PUT',{message:'Restore Perde homepage settings from archive backup',content:encodeGithubContent(JSON.stringify(safeConfig,null,2)+'\\n'),sha:heroCurrent.sha,branch:'main'});
+      await githubCatalogRequest('PUT',{message:'Restore Perde catalog from archive backup',content:encodeGithubContent(JSON.stringify(parsed.catalog,null,2)+'\n'),sha:catalogCurrent.sha,branch:'main'});
+      await githubCollectionsRequest('PUT',{message:'Restore Perde collections from archive backup',content:encodeGithubContent(JSON.stringify(safeCollections,null,2)+'\n'),sha:collectionsCurrent.sha,branch:'main'});
+      await githubHeroConfigRequest('PUT',{message:'Restore Perde homepage settings from archive backup',content:encodeGithubContent(JSON.stringify(safeConfig,null,2)+'\n'),sha:heroCurrent.sha,branch:'main'});
       catalog=parsed.catalog;
       collections=safeCollections;
       heroSettings=safeConfig.settings;
