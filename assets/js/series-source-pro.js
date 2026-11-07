@@ -97,7 +97,7 @@
       return 'https://player.vimeo.com/video/' + id + '?autoplay=1';
     }
     if (host === 'ok.ru' || host.endsWith('.ok.ru') || host === 'odnoklassniki.ru' || host.endsWith('.odnoklassniki.ru')) {
-      const match = url.pathname.match(/\\/(?:video|videoembed)\\/(\\d+)/i);
+      const match = url.pathname.match(/\/(?:video|videoembed)\/(\d+)/i);
       id = match && match[1];
       if (!id) throw new Error('OK.ru video bağlantısı tanınamadı. Video sayfası bağlantısını kullan (ok.ru/video/...).');
       return 'https://ok.ru/videoembed/' + encodeURIComponent(id);
