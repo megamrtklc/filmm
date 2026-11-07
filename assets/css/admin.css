@@ -310,3 +310,62 @@
 .diary-toolbar p,.diary-entry-title span,.diary-status-pill,.diary-entry-fields label,.diary-insight-total span,.diary-insight-row,.diary-insight-note{font-size:10px}
 .diary-tabs button{font-size:11px}
 .diary-tabs button b{font-size:10px}
+
+
+/* Okunabilirlik v2 — ikincil metinlerde daha belirgin punto artışı */
+.admin-sidebar .sidebar-caption{font-size:11px}
+.admin-sidebar .admin-brand small{font-size:11px}
+.admin-sidebar .sidebar-status small,.admin-sidebar .back-to-site{font-size:12px}
+.admin-sidebar .nav-item{font-size:13px}
+.admin-main .breadcrumbs,.admin-main .heading-date{font-size:13px}
+.admin-main .preview-pill{font-size:12px}
+.admin-main .eyebrow{font-size:11px}
+.admin-main .page-heading p,
+.admin-main .section-title-row p,
+.admin-main .card-heading p{font-size:13px;line-height:1.65}
+.admin-main .welcome-copy p{font-size:13px;line-height:1.7}
+.admin-main .admin-content small{font-size:12px}
+.admin-main .admin-content label{font-size:12px}
+.admin-main .stat-label{font-size:13px}
+.admin-main .stat-card>small{font-size:12px}
+.admin-main .info-note{font-size:13px;line-height:1.75}
+.admin-main .result-count{font-size:12px}
+.admin-main .catalog-summary-strip small,
+.admin-main .collection-summary-strip small,
+.admin-main .watch-summary-grid small{font-size:12px}
+.admin-main .catalog-card-copy>span,
+.admin-main .catalog-card-foot small{font-size:12px;line-height:1.5}
+.admin-main .catalog-quality-warning,
+.admin-main .catalog-quality-good{font-size:12px}
+.admin-main .catalog-empty span{font-size:13px;line-height:1.6}
+.admin-main .collection-list-copy small,
+.admin-main .collection-create-form>small,
+.admin-main .collection-item-copy small,
+.admin-main .collection-preview-note{font-size:12px;line-height:1.55}
+.admin-main .hero-live-kicker,
+.admin-main .hero-live-meta,
+.admin-main .hero-live-copy p,
+.admin-main .hero-live-cta,
+.admin-main .hero-live-index{font-size:12px}
+.admin-main .hero-slide-select small,
+.admin-main .hero-slide-state,
+.admin-main .hero-manager-tip,
+.admin-main .hero-manager-status small{font-size:12px}
+.admin-main .hero-field-label{font-size:12px}
+.admin-main .diary-toolbar p,
+.admin-main .diary-entry-title span,
+.admin-main .diary-status-pill,
+.admin-main .diary-entry-fields label,
+.admin-main .diary-insight-total span,
+.admin-main .diary-insight-row,
+.admin-main .diary-insight-note{font-size:12px;line-height:1.55}
+.admin-main .diary-tabs button{font-size:12px}
+.admin-main .diary-tabs button b{font-size:11px}
+.admin-main .pagination-summary{font-size:12px}
+.admin-main .pagination-step,
+.admin-main .pagination-page{font-size:12px}
+.admin-main .admin-content .surface-card p,
+.admin-main .admin-content .surface-card .muted{font-size:13px;line-height:1.6}
+.admin-main .admin-content input,
+.admin-main .admin-content select,
+.admin-main .admin-content textarea{font-size:13px}
