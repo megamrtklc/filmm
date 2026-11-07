@@ -49,7 +49,22 @@
     $('#movie-bar').style.width = (catalog.length ? movies.length/catalog.length*100 : 0)+'%';
     $('#tv-bar').style.width = (catalog.length ? series.length/catalog.length*100 : 0)+'%';
     const recent = [...catalog].sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,5);
-    $('#recent-list').innerHTML = recent.length ? recent.map(item => '<div class="recent-row"><img class="recent-poster" src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()"><div class="recent-meta"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.year||'Yıl bilgisi yok')+' · '+(item.type==='tv'?'Dizi':'Film')+'</small></div><span class="rating-tag">'+(item.rating ? '★ '+escapeHtml(item.rating) : 'Puan yok')+'</span></div>').join('') : '<div class="loading-line">Katalogda kayıt bulunamadı.</div>';
+    $('#recent-list').innerHTML = recent.length ? recent.map(item => '<article class="recent-poster-card">'+(poster(item)?'<img class="recent-poster-image" src="'+poster(item)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="recent-poster-placeholder"><i class="fa-solid fa-film"></i></div>')+'<div class="recent-poster-overlay"><span>'+(item.type==='tv'?'DİZİ':'FİLM')+' · '+escapeHtml(item.year||'—')+'</span><b>'+escapeHtml(item.title)+'</b><small>'+(item.rating?'★ '+escapeHtml(item.rating):'Puan bilgisi yok')+'</small></div></article>').join('') : '<div class="loading-line">Katalogda kayıt bulunamadı.</div>';
+    const stackItems = [...catalog].filter(item => poster(item)).sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,4);
+    $('#welcome-poster-stack').innerHTML = stackItems.length ? stackItems.map(item => '<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">').join('') : '<span class="poster-stack-fallback"><i class="fa-solid fa-clapperboard"></i></span>';
+    const movieShare = catalog.length ? movies.length / catalog.length * 100 : 0;
+    $('#overview-donut').style.background = 'conic-gradient(var(--gold) 0% '+movieShare+'%, #68788e '+movieShare+'% 100%)';
+    $('#donut-total').textContent = catalog.length.toLocaleString('tr-TR');
+    $('#overview-movie-count').textContent = movies.length.toLocaleString('tr-TR');
+    $('#overview-series-count').textContent = series.length.toLocaleString('tr-TR');
+    const genreCounts = catalog.reduce((counts,item) => {
+      const genre = String(item.genre || (item.category || '').split('/')[0] || 'Diğer').trim();
+      if (genre) counts[genre] = (counts[genre] || 0) + 1;
+      return counts;
+    }, {});
+    const topGenres = Object.entries(genreCounts).sort((a,b) => b[1]-a[1]).slice(0,5);
+    const maxGenreCount = topGenres.length ? topGenres[0][1] : 1;
+    $('#genre-insights').innerHTML = topGenres.length ? topGenres.map(([genre,count]) => '<div class="genre-row"><span>'+escapeHtml(genre)+'</span><div class="genre-track"><i style="width:'+(count/maxGenreCount*100)+'%"></i></div><b>'+count+'</b></div>').join('') : '<div class="loading-line">Tür bilgisi bulunamadı.</div>';
     $('#catalog-status').textContent = catalog.length+' kayıt başarıyla okundu';
   }
   function renderCatalog() {

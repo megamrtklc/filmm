@@ -58,7 +58,7 @@
           </div>
           <div class="welcome-banner">
             <div class="welcome-copy"><span class="eyebrow gold">PERDE YÖNETİM MERKEZİ</span><h2>Her şey kontrol altında.</h2><p>Arşivini düzenle, izleme geçmişini takip et ve ana sayfa deneyimini şekillendir.</p><button class="gold-button" data-goto="catalog"><i class="fa-solid fa-arrow-right"></i> Arşivi yönet</button></div>
-            <div class="welcome-art" aria-hidden="true"><div class="art-ring"></div><i class="fa-solid fa-clapperboard"></i><span>YOUR CINEMA<br>YOUR COLLECTION</span></div>
+            <div class="welcome-art" aria-hidden="true"><div class="art-ring"></div><div class="welcome-poster-stack" id="welcome-poster-stack"><span class="poster-stack-fallback"><i class="fa-solid fa-clapperboard"></i></span></div><span class="welcome-art-label">YOUR CINEMA<br>YOUR COLLECTION</span></div>
           </div>
           <div class="section-title-row"><div><h2>Arşiv özeti</h2><p>Katalog dosyasından okunan mevcut kayıtlar</p></div><span class="live-label"><i class="fa-solid fa-circle"></i> CANLI KATALOG</span></div>
           <div class="stats-grid">
@@ -69,7 +69,7 @@
           </div>
           <div class="overview-grid">
             <section class="surface-card">
-              <div class="card-heading"><div><h2>Son eklenen yapımlar</h2><p>Katalogdaki en yeni kayıtlar</p></div><button class="text-button" data-goto="catalog">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div>
+              <div class="card-heading"><div><h2>Arşivden seçkiler</h2><p>Yıl bilgisine göre öne çıkan yapımlar</p></div><button class="text-button" data-goto="catalog">Tüm kataloğu gör <i class="fa-solid fa-arrow-right"></i></button></div>
               <div class="recent-list" id="recent-list"><div class="loading-line">Katalog yükleniyor…</div></div>
             </section>
             <section class="surface-card quick-card">
@@ -78,6 +78,22 @@
               <button class="quick-action" data-goto="hero"><span><i class="fa-regular fa-images"></i></span><b>Manşeti düzenle</b><i class="fa-solid fa-chevron-right"></i></button>
               <button class="quick-action" data-goto="collections"><span><i class="fa-solid fa-layer-group"></i></span><b>Koleksiyonları yönet</b><i class="fa-solid fa-chevron-right"></i></button>
               <button class="quick-action" data-goto="backups"><span><i class="fa-solid fa-download"></i></span><b>Verileri dışa aktar</b><i class="fa-solid fa-chevron-right"></i></button>
+            </section>
+          </div>
+          <div class="insights-grid">
+            <section class="surface-card archive-balance-card">
+              <div class="card-heading"><div><h2>Arşiv dengesi</h2><p>Film ve dizi dağılımı</p></div><span class="insight-kicker">KATALOG ANALİZİ</span></div>
+              <div class="balance-content">
+                <div class="overview-donut" id="overview-donut"><div class="donut-center"><strong id="donut-total">—</strong><span>YAPIM</span></div></div>
+                <div class="balance-legend">
+                  <div><span class="legend-dot movie-dot"></span><span>Filmler</span><b id="overview-movie-count">—</b></div>
+                  <div><span class="legend-dot tv-dot"></span><span>Diziler</span><b id="overview-series-count">—</b></div>
+                </div>
+              </div>
+            </section>
+            <section class="surface-card genre-card">
+              <div class="card-heading"><div><h2>Türlere göre arşiv</h2><p>Katalogdaki öne çıkan kategoriler</p></div></div>
+              <div class="genre-insights" id="genre-insights"><div class="loading-line">Katalog analiz ediliyor…</div></div>
             </section>
           </div>
           <section class="surface-card system-card">
