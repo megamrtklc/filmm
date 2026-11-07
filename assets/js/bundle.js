@@ -1572,7 +1572,7 @@ async function fetchTmdbActorProfile(name,onPersonResolved){
    if(!looksLikeTurkishBiography(biography))biography='Bu oyuncunun biyografisi şu anda Türkçe olarak alınamıyor.';
   }
  }
- return {id:person.id,name:person.name,biography,birthday:person.birthday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||'',headers};
+ return {id:person.id,name:person.name,biography,birthday:person.birthday||'',deathday:person.deathday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||'',headers};
 }
 function renderActorFilmography(person,name,localWorks){
  const grid=document.getElementById('actor-filmography-grid');
@@ -1606,6 +1606,7 @@ function openActorPage(name,update=true){
  document.getElementById('dashboard-view').classList.add('hidden');document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');document.getElementById('actor-page-view').classList.remove('hidden');document.getElementById('theme-body').style.backgroundColor='#07080c';
  document.getElementById('actor-banner-name').textContent=actorName;document.getElementById('actor-biography-title').textContent=actorName;document.getElementById('actor-biography-text').textContent='TMDB oyuncu bilgileri yükleniyor…';
  ['actor-birth-date','actor-birth-place','actor-country','actor-education'].forEach(id=>document.getElementById(id).textContent='Bilgi bulunamadı');
+ const deathInfoNode=document.getElementById('actor-death-info');if(deathInfoNode){deathInfoNode.hidden=true;deathInfoNode.textContent='';}
  const avatar='https://ui-avatars.com/api/?name='+encodeURIComponent(actorName)+'&background=252936&color=ffffff&size=512&bold=true';
  document.getElementById('actor-profile-image').src=avatar;document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">TMDB oyuncu görselleri yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
  actorGalleryPhotos=[];actorGalleryVisibleCount=5;activeActorPhotoName=actorName;renderActorGallery();
@@ -1623,6 +1624,15 @@ function openActorPage(name,update=true){
   bioToggle.innerHTML='Devamını oku <i class="fa-solid fa-chevron-down"></i>';
   bioToggle.onclick=()=>{const expanded=biographyNode.classList.toggle('is-expanded');bioToggle.innerHTML=expanded?'Daha az göster <i class="fa-solid fa-chevron-up"></i>':'Devamını oku <i class="fa-solid fa-chevron-down"></i>';};
   document.getElementById('actor-birth-date').textContent=person.birthday?new Date(person.birthday+'T00:00:00').toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'Bilgi bulunamadı';
+  if(deathInfoNode&&person.deathday&&person.birthday){
+   const birthDate=new Date(person.birthday+'T00:00:00Z'),deathDate=new Date(person.deathday+'T00:00:00Z');
+   if(!Number.isNaN(birthDate.getTime())&&!Number.isNaN(deathDate.getTime())&&deathDate>=birthDate){
+    let age=deathDate.getUTCFullYear()-birthDate.getUTCFullYear();
+    if(deathDate.getUTCMonth()<birthDate.getUTCMonth()||(deathDate.getUTCMonth()===birthDate.getUTCMonth()&&deathDate.getUTCDate()<birthDate.getUTCDate()))age--;
+    deathInfoNode.textContent='Vefat: '+deathDate.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'UTC'})+' ('+age+' yaşında)';
+    deathInfoNode.hidden=false;
+   }
+  }
   document.getElementById('actor-birth-place').textContent=person.placeOfBirth||'Bilgi bulunamadı';
   const birthplaceCountry=String(person.placeOfBirth||'').split(',').map(part=>part.trim()).filter(Boolean).pop()||'';
   const nationality=countryDisplay(birthplaceCountry);
