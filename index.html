@@ -105,38 +105,35 @@
                 <div class="absolute inset-0 hero-vignette"></div>
             </div>
 
-            <div class="hero-copy relative z-10 max-w-2xl space-y-4 my-12">
-                <div class="hero-kicker">Öne Çıkan Yapım</div>
-                <div id="hero-ratings" class="hero-ratings" aria-label="Puanlar"></div>
-
-                <h1 id="hero-title" class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white drop-shadow-md leading-none">
-                    THE BATMAN
-                </h1>
-
-                <div id="hero-meta" class="text-xs font-semibold text-slate-400 space-x-2">
-                    <span>2022</span> • <span>Drama / Suç</span> • <span>Yönetmen: Matt Reeves</span>
+            <div class="hero-layout">
+                <div class="hero-topbar">
+                    <div class="hero-kicker">Öne Çıkan Yapım</div>
+                    <div class="hero-actions">
+                        <button id="hero-watch-btn" onclick="openDetailPage(heroCurrentId)" type="button">
+                            <i class="fa-solid fa-play" aria-hidden="true"></i><span>Şimdi İzle</span>
+                        </button>
+                        <button id="hero-trailer-btn" onclick="openTrailerPopup(heroCurrentId)" type="button">
+                            <i class="fa-solid fa-film" aria-hidden="true"></i><span>Fragmanı İzle</span>
+                        </button>
+                    </div>
                 </div>
-
-                <p id="hero-desc" class="text-slate-300 text-xs sm:text-sm line-clamp-3 leading-relaxed max-w-xl font-light pt-1">
-                    Gotham Şehri'nin karanlık sularında adaleti arayan Batman, şehrin elitlerini hedef alan sadist bir katilin izini sürerken geçmişiyle ilgili sırlarla yüzleşir.
-                </p>
-
-                <div class="flex items-center gap-3 pt-4 flex-wrap">
-                    
-                    <button id="hero-watch-btn" onclick="openDetailPage(heroCurrentId)" class="px-7 py-3 rounded-full bg-brand-red hover:bg-brand-redHover text-white font-extrabold text-xs flex items-center gap-2.5 shadow-xl shadow-red-600/30 transition-transform transform hover:scale-105 active:scale-95">
-                        <i class="fa-solid fa-play text-xs"></i>
-                        <span>Şimdi İzle</span>
-                    </button>
-
-                    <button onclick="openTrailerPopup(heroCurrentId)" class="px-7 py-3 rounded-full bg-black/40 hover:bg-white/10 text-white font-bold text-xs border border-white/30 backdrop-blur-md transition-all">
-                        <i class="fa-brands fa-youtube mr-2"></i><span>Fragmanı İzle</span>
-                    </button>
+                <div class="hero-copy">
+                    <div id="hero-ratings" class="hero-ratings" aria-label="Puanlar"></div>
+                    <h1 id="hero-title" class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white drop-shadow-md leading-none">THE BATMAN</h1>
+                    <div id="hero-meta" class="text-xs font-semibold text-slate-400 space-x-2">
+                        <span>2022</span> • <span>Drama / Suç</span> • <span>Yönetmen: Matt Reeves</span>
+                    </div>
+                    <p id="hero-desc" class="text-slate-300 text-xs sm:text-sm line-clamp-3 leading-relaxed max-w-xl font-light pt-1">
+                        Gotham Şehri'nin karanlık sularında adaleti arayan Batman, şehrin elitlerini hedef alan sadist bir katilin izini sürerken geçmişiyle ilgili sırlarla yüzleşir.
+                    </p>
                 </div>
-            </div>
-            <div id="hero-thumbnails-rail" class="hero-thumbnails no-scrollbar" aria-label="Son eklenen içerikler"></div>
-            <div class="hero-arrows" role="group" aria-label="Manşet gezinme">
-                <button class="hero-arrow" type="button" data-hero-direction="-1" aria-label="Önceki yapım" title="Önceki yapım"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-                <button class="hero-arrow" type="button" data-hero-direction="1" aria-label="Sonraki yapım" title="Sonraki yapım"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                <div class="hero-poster-zone">
+                    <div id="hero-thumbnails-rail" class="hero-thumbnails no-scrollbar" aria-label="Son eklenen içerikler"></div>
+                    <div class="hero-arrows" role="group" aria-label="Manşet gezinme">
+                        <button class="hero-arrow" type="button" data-hero-direction="-1" aria-label="Önceki yapım" title="Önceki yapım"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                        <button class="hero-arrow" type="button" data-hero-direction="1" aria-label="Sonraki yapım" title="Sonraki yapım"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                </div>
             </div>
         </section>
         <!-- MODUNA GÖRE KEŞFET: manşetin sağında -->
