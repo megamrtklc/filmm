@@ -98,13 +98,7 @@ function fitHeroTitleToWidth() {
             const title = document.getElementById('hero-title');
             if (!title) return;
             title.style.removeProperty('font-size');
-            title.style.whiteSpace = 'nowrap';
-            const baseSize = parseFloat(window.getComputedStyle(title).fontSize) || 36;
-            let size = baseSize;
-            while (title.scrollWidth > title.clientWidth && size > 16) {
-                size -= 1;
-                title.style.fontSize = size + 'px';
-            }
+            title.style.whiteSpace = 'normal';
         }
         window.addEventListener('resize', fitHeroTitleToWidth);
 
