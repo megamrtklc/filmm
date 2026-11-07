@@ -106,16 +106,62 @@
     navigate('editor');
     renderEditorPreview();
   }
-  function saveEditorDraft(event) {
-    event.preventDefault();
-    const payload = editorPayload();
-    if (!payload.title) return toast('Lütfen yapım adını gir.');
-    const index = editorDrafts.findIndex(item=>String(item.id)===String(payload.id));
-    if (index >= 0) editorDrafts[index] = payload;
-    else editorDrafts.unshift(payload);
-    $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-check"></i> Taslak oturum listesine eklendi; katalog değişmedi.';
-    renderEditorDrafts();
-    toast('Taslak ön izleme listesine eklendi.');
+  const githubTokenStorageKey = 'perde_github_contents_token_v1';
+  const githubRepo = 'megamrtklc/filmm';
+  function getGithubToken() { try { return localStorage.getItem(githubTokenStorageKey) || ''; } catch (_) { return ''; } }
+  function setGithubTokenStatus(message, good=false) { const node=$('#editor-github-status'); node.textContent=message; node.classList.toggle('is-ready',good); }
+  function saveGithubToken() {
+    const token=$('#editor-github-token').value.trim();
+    if (!token) return toast('GitHub erişim anahtarını gir.');
+    if (!/^(github_pat_|ghp_)[A-Za-z0-9_]+$/.test(token)) return setGithubTokenStatus('GitHub token biçimi tanınmadı. Fine-grained token kullan.');
+    try { localStorage.setItem(githubTokenStorageKey,token); $('#editor-github-token').value=''; setGithubTokenStatus('GitHub kayıt bağlantısı bu tarayıcıya kaydedildi.',true); toast('GitHub kayıt bağlantısı hazır.'); }
+    catch (_) { setGithubTokenStatus('Anahtar tarayıcıya kaydedilemedi.'); }
+  }
+  function decodeGithubContent(value) {
+    const binary=atob(String(value||'').replace(/\s/g,''));
+    const bytes=Uint8Array.from(binary,char=>char.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+  function encodeGithubContent(value) {
+    const bytes=new TextEncoder().encode(value); let binary='';
+    for(let i=0;i<bytes.length;i+=8192) binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+    return btoa(binary);
+  }
+  async function githubCatalogRequest(method, body) {
+    const token=getGithubToken(); if(!token) throw new Error('Önce GitHub kayıt anahtarını kaydet.');
+    const response=await fetch('https://api.github.com/repos/'+githubRepo+'/contents/data/catalog.json',{
+      method, headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28',...(body?{'Content-Type':'application/json'}:{})},
+      ...(body?{body:JSON.stringify(body)}:{})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error('GitHub HTTP '+response.status+': '+(data.message||'İstek başarısız.'));
+    return data;
+  }
+  async function saveEditorDraft(event) {
+    event.preventDefault(); const payload=editorPayload();
+    if(!payload.title) return toast('Lütfen önce TMDB’den bir yapım seç.');
+    if(!getGithubToken()) { setGithubTokenStatus('Kayıt için GitHub bağlantısı gerekli.'); return toast('Önce GitHub kayıt anahtarını ekle.'); }
+    const submit=$('#content-editor-form').querySelector('[type="submit"]');
+    submit.disabled=true; submit.textContent='GitHub’a kaydediliyor…';
+    try {
+      const current=await githubCatalogRequest('GET');
+      if(!current.sha||!current.content) throw new Error('GitHub katalog dosyası okunamadı.');
+      const latest=JSON.parse(decodeGithubContent(current.content));
+      if(!Array.isArray(latest)) throw new Error('Katalog biçimi geçersiz.');
+      const editing=!!editorEditingId;
+      if(!editing && payload.tmdbId && latest.some(item=>item.type===payload.type && String(item.tmdbId)===String(payload.tmdbId))) throw new Error('Bu TMDB yapımı katalogda zaten var.');
+      if(editing) {
+        const index=latest.findIndex(item=>String(item.id)===String(editorEditingId));
+        if(index<0) throw new Error('Düzenlenecek kayıt bulunamadı; katalog korunarak işlem durduruldu.');
+        payload.id=latest[index].id; latest[index]={...latest[index],...payload};
+      } else { payload.id='perde-'+Date.now().toString(36); latest.push(payload); }
+      await githubCatalogRequest('PUT',{message:(editing?'Update':'Add')+' Perde catalog item: '+payload.title,content:encodeGithubContent(JSON.stringify(latest,null,2)+'\n'),sha:current.sha,branch:'main'});
+      catalog=latest; editorEditingId=null; $('#editor-record-id').value='';
+      renderOverview(); initCatalogFilters(); renderCatalog(); initHeroManager(); initCollections(); initDiary();
+      $('#editor-preview-status').textContent=payload.title+' GitHub kataloğuna kalıcı olarak kaydedildi.';
+      toast('Yapım kaydedildi. Katalogda '+catalog.length+' kayıt var.');
+    } catch(error) { $('#editor-preview-status').textContent='Kayıt başarısız: '+error.message+' Mevcut katalog değiştirilmedi.'; toast('Katalog kaydedilemedi: '+error.message); }
+    finally { submit.disabled=false; submit.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Kataloğa kaydet'; }
   }
   function getTmdbToken() {
     try { return localStorage.getItem(tmdbTokenStorageKey) || ''; } catch (_) { return ''; }
@@ -881,6 +927,8 @@
     renderHeroPreview();
   }));
   $('#editor-save-token').addEventListener('click',saveTmdbToken);
+  $('#editor-save-github-token').addEventListener('click',saveGithubToken);
+  if(getGithubToken())setGithubTokenStatus('GitHub kayıt anahtarı bu tarayıcıda kayıtlı.',true);
   $('#editor-tmdb-search').addEventListener('click',searchTmdb);
   $('#editor-tmdb-query').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();searchTmdb();}});
   $('#editor-tmdb-results').addEventListener('click',event=>{
