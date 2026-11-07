@@ -64,7 +64,7 @@
   }
   let catalogView = 'grid';
   let catalogPage = 1;
-  const catalogPageSize = 15;
+  const catalogPageSize = 10;
   function catalogGenres() {
     return [...new Set(catalog.flatMap(item => String(item.category || item.genre || '').split('/').map(value => value.trim()).filter(Boolean)))].sort((a,b) => a.localeCompare(b,'tr'));
   }
