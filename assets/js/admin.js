@@ -62,6 +62,7 @@
     $$('.editor-series-field').forEach(field => field.hidden = editorType !== 'tv');
     $('#editor-duration-field').querySelector('input').placeholder = editorType === 'tv' ? '45 dk / bölüm' : '120 dk';
     $('#editor-page-title').textContent = editorEditingId ? 'Yapımı Düzenle' : (editorType === 'tv' ? 'Dizi Ekle' : 'Film Ekle');
+    if (tmdbSearchResults.length) renderTmdbResults(tmdbSearchResults);
     renderEditorPreview();
   }
   function resetEditor() {
@@ -298,14 +299,17 @@
   function renderTmdbResults(results) {
     const host = $('#editor-tmdb-results');
     tmdbSearchResults = results;
-    host.innerHTML = results.length ? results.map((item,index) => {
+    const filtered = results.map((item,index)=>({item,index})).filter(entry=>entry.item.media_type===editorType);
+    host.innerHTML = filtered.length ? filtered.map(({item,index}) => {
       const name = item.title || item.name || 'İsimsiz yapım';
       const year = String(item.release_date || item.first_air_date || '').slice(0,4);
       const image = tmdbImage(item.poster_path,'w185');
-      return '<button type="button" class="tmdb-result-item" data-tmdb-result="'+index+'">'+
+      const duplicate = !!(item.id && catalog.some(record=>record.type===editorType && String(record.tmdbId)===String(item.id)));
+      return '<button type="button" class="tmdb-result-item'+(duplicate?' is-duplicate':'')+'" data-tmdb-result="'+index+'" '+(duplicate?'disabled aria-disabled="true"':'')+'>'+
         (image ? '<img src="'+escapeHtml(image)+'" alt="" loading="lazy">' : '<span class="tmdb-result-placeholder"><i class="fa-solid fa-clapperboard"></i></span>')+
-        '<span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+(item.media_type==='tv'?'Dizi':'Film')+' · '+escapeHtml(year||'Yıl bilinmiyor')+'</small><em>'+escapeHtml(item.overview||'Konu bilgisi bulunmuyor.')+'</em></span><i class="fa-solid fa-chevron-right"></i></button>';
-    }).join('') : '<div class="tmdb-result-empty">Bu aramayla eşleşen yapım bulunamadı.</div>';
+        '<span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+(item.media_type==='tv'?'Dizi':'Film')+' · '+escapeHtml(year||'Yıl bilinmiyor')+'</small><em>'+escapeHtml(item.overview||'Konu bilgisi bulunmuyor.')+'</em></span>'+
+        (duplicate?'<span class="tmdb-result-state"><i class="fa-solid fa-check"></i> Katalogda mevcut</span>':'<i class="fa-solid fa-chevron-right"></i>')+'</button>';
+    }).join('') : '<div class="tmdb-result-empty">Bu aramada '+(editorType==='tv'?'dizi':'film')+' bulunamadı. Diğer türü seçerek tekrar kontrol edebilirsin.</div>';
   }
   async function searchTmdb() {
     const query = $('#editor-tmdb-query').value.trim();
@@ -348,6 +352,11 @@
     const result = tmdbSearchResults[index];
     if (!result) return;
     const type = result.media_type === 'tv' ? 'tv' : 'movie';
+    const duplicate = catalog.find(record=>record.type===type && String(record.tmdbId)===String(result.id));
+    if (duplicate) {
+      $('#editor-tmdb-search-status').textContent = 'Bu yapım katalogda zaten kayıtlı: '+(duplicate.title||'İsimsiz yapım')+'. Düzenlemek için Film ve Diziler bölümünü kullan.';
+      return toast('Bu yapım zaten Perde kataloğunda.');
+    }
     const status = $('#editor-tmdb-search-status');
     status.textContent = 'Yapımın tüm bilgileri TMDB’den alınıyor…';
     try {
