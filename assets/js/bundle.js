@@ -2134,9 +2134,13 @@ if (typeof ResizeObserver !== 'undefined') {
  };
  if(typeof MutationObserver!=='undefined'){
   const observer=new MutationObserver(records=>{
-   const changed=new Set(records.map(record=>record.target));
-   changed.forEach(animate);
+   // Yalnızca gizli görünüm açıldığında animasyon uygula.
+   // Animasyonun kendi class değişiklikleri yeniden animasyon başlatmamalı.
+   const entering=new Set(records
+    .filter(record=>(record.oldValue||'').split(/\s+/).includes('hidden')&&!record.target.classList.contains('hidden'))
+    .map(record=>record.target));
+   entering.forEach(animate);
   });
-  targets.forEach(element=>observer.observe(element,{attributes:true,attributeFilter:['class']}));
+  targets.forEach(element=>observer.observe(element,{attributes:true,attributeOldValue:true,attributeFilter:['class']}));
  }
 })();
