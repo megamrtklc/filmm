@@ -137,6 +137,30 @@
     if(!response.ok) throw new Error('GitHub HTTP '+response.status+': '+(data.message||'İstek başarısız.'));
     return data;
   }
+  async function githubCollectionsRequest(method, body) {
+    const token=getGithubToken(); if(!token) throw new Error('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
+    const response=await fetch('https://api.github.com/repos/'+githubRepo+'/contents/data/collections.json',{
+      method,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28',...(body?{'Content-Type':'application/json'}:{})},
+      ...(body?{body:JSON.stringify(body)}:{})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error('GitHub HTTP '+response.status+': '+(data.message||'Koleksiyon isteği başarısız.'));
+    return data;
+  }
+  let collectionsSaving=false;
+  async function persistCollections() {
+    if(collectionsSaving) throw new Error('Önceki koleksiyon kaydı tamamlanıyor; birkaç saniye sonra tekrar dene.');
+    collectionsSaving=true;
+    try {
+      const current=await githubCollectionsRequest('GET');
+      if(!current.sha||!current.content) throw new Error('Koleksiyon dosyası okunamadı; mevcut kayıt korunuyor.');
+      const latest=JSON.parse(decodeGithubContent(current.content));
+      if(!Array.isArray(latest)) throw new Error('Koleksiyon dosyasının biçimi geçersiz.');
+      const normalized=collections.map(item=>({...item,items:item.items.map(String)}));
+      await githubCollectionsRequest('PUT',{message:'Update Perde homepage collections',content:encodeGithubContent(JSON.stringify(normalized,null,2)+'\\n'),sha:current.sha,branch:'main'});
+      toast('Koleksiyonlar GitHub’a kalıcı olarak kaydedildi.');
+    } finally { collectionsSaving=false; }
+  }
   async function saveEditorDraft(event) {
     event.preventDefault(); const payload=editorPayload();
     if(!payload.title) return toast('Lütfen önce TMDB’den bir yapım seç.');
@@ -699,19 +723,30 @@
       return '<div class="collection-preview-card">'+(image?'<img src="'+image+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="collection-item-placeholder"><i class="fa-solid fa-film"></i></span>')+'<b>'+escapeHtml(entry.title)+'</b></div>';
     }).join('')+'</div>';
   }
-  function initCollections() {
-    collections=collectionSeed();
-    activeCollectionId=collections[0]?.id||'';
+  async function initCollections() {
     const select=$('#collection-item-select');
+    select.innerHTML='<option value="">Film veya dizi seç…</option>';
     [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    try {
+      const saved=await githubCollectionsRequest('GET');
+      if(!saved.content) throw new Error('Koleksiyon dosyası boş.');
+      const parsed=JSON.parse(decodeGithubContent(saved.content));
+      if(!Array.isArray(parsed)) throw new Error('Koleksiyon dosyasının biçimi geçersiz.');
+      collections=parsed.filter(item=>item&&item.id&&item.title&&Array.isArray(item.items)).map(item=>({...item,items:item.items.map(String),active:item.active!==false}));
+    } catch(error) {
+      collections=[];
+      if(getGithubToken()) toast('Koleksiyonlar yüklenemedi: '+error.message);
+    }
+    activeCollectionId=collections[0]?.id||'';
     renderCollections();
   }
-  function handleCollectionClick(event) {
+  async function handleCollectionClick(event) {
     const button=event.target.closest('button');
     if(!button)return;
     if(button.hasAttribute('data-collection-select')){activeCollectionId=button.dataset.collectionSelect;renderCollections();return;}
     const item=selectedCollection();
     if(!item)return;
+    if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     if(button.hasAttribute('data-collection-up')||button.hasAttribute('data-collection-down')){
       const index=Number(button.dataset.collectionUp??button.dataset.collectionDown);
       const target=index+(button.hasAttribute('data-collection-up')?-1:1);
@@ -721,36 +756,40 @@
       item.items.splice(Number(button.dataset.collectionRemove),1);
     }
     renderCollections();
+    try { await persistCollections(); } catch(error) { toast('Değişiklik kaydedilemedi: '+error.message); }
   }
-  function addCollectionItem() {
+  async function addCollectionItem() {
     const item=selectedCollection();
     const id=$('#collection-item-select').value;
     if(!item)return toast('Önce bir koleksiyon seç.');
     if(!id)return toast('Önce katalogdan bir yapım seç.');
+    if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     if(item.items.includes(id))return toast('Bu yapım koleksiyonda zaten var.');
     item.items.push(id);
     renderCollections();
-    toast('Yapım koleksiyon taslağına eklendi.');
+    try { await persistCollections(); } catch(error) { toast('Yapım eklendi ancak kaydedilemedi: '+error.message); }
   }
-  function createCollection(event) {
+  async function createCollection(event) {
     event.preventDefault();
     const input=$('#collection-new-title');
     const title=input.value.trim();
     if(!title)return;
+    if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     if(collections.some(item=>item.title.toLocaleLowerCase('tr-TR')===title.toLocaleLowerCase('tr-TR')))return toast('Bu isimde bir koleksiyon zaten var.');
     const id='custom-'+Date.now().toString(36);
-    collections.push({id,title,description:'Yeni oluşturulan özel koleksiyon.',active:true,items:[]});
+    collections.push({id,title,description:'',active:true,items:[]});
     activeCollectionId=id;
     input.value='';
     renderCollections();
-    toast('Yeni koleksiyon taslağı oluşturuldu.');
+    try { await persistCollections(); } catch(error) { toast('Raf oluşturuldu ancak kaydedilemedi: '+error.message); }
   }
-  function toggleCollectionVisibility() {
+  async function toggleCollectionVisibility() {
     const item=selectedCollection();
     if(!item)return;
+    if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     item.active=!item.active;
     renderCollections();
-    toast(item.active?'Koleksiyon ön izlemede görünür.':'Koleksiyon ön izlemede gizlendi.');
+    try { await persistCollections(); } catch(error) { toast('Yayın durumu kaydedilemedi: '+error.message); }
   }
   const DIARY_STORAGE_KEY = 'perde_watch_diary_v1';
   let diaryEntries = [];
