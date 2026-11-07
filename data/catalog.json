@@ -16912,5 +16912,131 @@
     "id": "perde-mw6xrtd2",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Pi'nin Yaşamı",
+    "originalTitle": "Life of Pi",
+    "year": 2012,
+    "category": "Macera / Dram",
+    "genre": "Macera",
+    "rating": "7.4",
+    "duration": "127 dk",
+    "country": "United States of America",
+    "director": "李安",
+    "tmdbId": 87827,
+    "desc": "Hindistan'dan Kanada'ya giden bir yük gemisi, içindeki hemen hemen tüm canlılarla birlikte trajik şekilde batar. Bir can kurtaran filikası, uçsuz bucaksız vahşi Pasifik Okyanusu'nun ortasında yapayalnız kalır. Sandalın hayatta kalmayı başarabilen mürettebatı ise bir sırtlan, kırık bacaklı bir zebra, bir orangutan, Richard Parker adında üç yüz kiloluk bir Bengal kaplanı ve Pi adlı 16 yaşında Hintli bir çocuktan oluşmaktadır. Pi'nin hayvanat bahçesi işleten ve hayvanlarıyla göç yoluna koyulan ailesi, batan gemide yaşamını kaybetmiştir. Pi, kurtuluş yok gibi görünen bu okyanusta, zayıf bir sandalda yanındaki hayvanlarla birlikte hayatta kalma savaşı verir ve keskin zekası ve zooloji bilgisiyle besin zincirine kurban gitmez. Ama şimdi Bengal Kaplanı ile teknede baş başa kalmıştır. Dev kaplana yem olmamak için hayvanla anlaşmanın ve yakınlaşmanın yollarını bulur. Sıra dışı yolculuk sona ermeden büyülü bir adaya varacaktır.",
+    "image": "https://image.tmdb.org/t/p/w500/1HBUzQXeb2D8DUs0EYV6XJzIzqi.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/21YsCNMub5455NQCn3jh9SmRFyG.jpg",
+    "trailerUrl": "https://www.youtube.com/watch?v=cPGvpDXPvuE",
+    "imdbId": "tt0454876",
+    "watchUrl": "",
+    "platform": [],
+    "personalNote": "",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Suraj Sharma",
+      "Irrfan Khan",
+      "Ayush Tandon",
+      "Gautam Belur",
+      "Adil Hüseyin",
+      "तबु",
+      "Ayaan Khan",
+      "Mohd Abbas Khaleeli",
+      "Vibish Sivakumar",
+      "Rafe Spall",
+      "Gérard Depardieu",
+      "James Saito"
+    ],
+    "tmdbCast": [
+      {
+        "id": 933160,
+        "name": "Suraj Sharma",
+        "character": "Pi Patel",
+        "profile": "https://image.tmdb.org/t/p/w185/zM1GN7rnzdhoIK3FBXaBCOx7igy.jpg",
+        "order": 0
+      },
+      {
+        "id": 76793,
+        "name": "Irrfan Khan",
+        "character": "Adult Pi Patel",
+        "profile": "https://image.tmdb.org/t/p/w185/qkA9PpWJRw3rNjVkWfNZdwLvRZx.jpg",
+        "order": 1
+      },
+      {
+        "id": 935504,
+        "name": "Ayush Tandon",
+        "character": "Pi Patel (11-12 Years)",
+        "profile": "https://image.tmdb.org/t/p/w185/iVq1xDK3dYPSAulHdDW2JiIlco1.jpg",
+        "order": 2
+      },
+      {
+        "id": 1133846,
+        "name": "Gautam Belur",
+        "character": "Pi Patel (5 Years)",
+        "profile": "",
+        "order": 3
+      },
+      {
+        "id": 227849,
+        "name": "Adil Hüseyin",
+        "character": "Santosh Patel",
+        "profile": "https://image.tmdb.org/t/p/w185/eCWVa1pH7mmz0i9Q0l4VEKs7g6m.jpg",
+        "order": 4
+      },
+      {
+        "id": 55062,
+        "name": "तबु",
+        "character": "Gita Patel",
+        "profile": "https://image.tmdb.org/t/p/w185/cvt5nvCHr1ICf5u8A2mlzLQ8LsV.jpg",
+        "order": 5
+      },
+      {
+        "id": 1377778,
+        "name": "Ayaan Khan",
+        "character": "Ravi Patel (7 Years)",
+        "profile": "",
+        "order": 6
+      },
+      {
+        "id": 1133848,
+        "name": "Mohd Abbas Khaleeli",
+        "character": "Ravi Patel (13-14 Years)",
+        "profile": "",
+        "order": 7
+      },
+      {
+        "id": 1133849,
+        "name": "Vibish Sivakumar",
+        "character": "Ravi Patel (18-19 Years)",
+        "profile": "",
+        "order": 8
+      },
+      {
+        "id": 28847,
+        "name": "Rafe Spall",
+        "character": "Writer",
+        "profile": "https://image.tmdb.org/t/p/w185/zcqUqAvO7RQnitcCNNfTVPaiQtS.jpg",
+        "order": 9
+      },
+      {
+        "id": 16927,
+        "name": "Gérard Depardieu",
+        "character": "Cook",
+        "profile": "https://image.tmdb.org/t/p/w185/pOpHfkYRhFJiKAiIycdguQPYfem.jpg",
+        "order": 10
+      },
+      {
+        "id": 77155,
+        "name": "James Saito",
+        "character": "Older Insurance Investigator",
+        "profile": "https://image.tmdb.org/t/p/w185/2XiFPyvmJWUtaWHAJOhrMa6JJhQ.jpg",
+        "order": 11
+      }
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw6xs3qb",
+    "seasons": null,
+    "episodes": null
   }
 ]
