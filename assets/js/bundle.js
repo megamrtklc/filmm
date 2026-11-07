@@ -1307,9 +1307,9 @@ function renderDetailPersonalInfo(item){
  };
  const platformMarkup=platforms.length?'<div class="detail-personal-platform"><span class="detail-personal-label">Yayın platformları</span><div class="detail-platform-brands">'+platforms.map(platform=>{
   const brand=platformBrands[platform.toLocaleLowerCase('tr-TR')];
-  if(!brand)return '<span class="detail-platform-brand detail-platform-brand-text">'+escapeCountryHtml(platform)+'</span>';
+  if(!brand)return '<span class="detail-platform-brand detail-platform-brand-text"><span class="detail-platform-logo-fallback">'+escapeCountryHtml(platform.slice(0,1).toLocaleUpperCase('tr-TR'))+'</span><span class="detail-platform-name">'+escapeCountryHtml(platform)+'</span></span>';
   const label=brand[0],kind=brand[1];
-  return '<span class="detail-platform-brand detail-platform-brand-'+kind+'" role="img" aria-label="'+escapeCountryHtml(platform)+'"><svg viewBox="0 0 150 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><text x="2" y="25" class="detail-platform-wordmark detail-platform-wordmark-'+kind+'">'+label+'</text></svg></span>';
+  return '<span class="detail-platform-brand detail-platform-brand-'+kind+'"><span class="detail-platform-logo" aria-hidden="true"><svg viewBox="0 0 150 34" xmlns="http://www.w3.org/2000/svg" focusable="false"><text x="2" y="25" class="detail-platform-wordmark detail-platform-wordmark-'+kind+'">'+label+'</text></svg></span><span class="detail-platform-name">'+escapeCountryHtml(platform)+'</span></span>';
  }).join('')+'</div></div>':'';
  const watchMarkup=validUrl?'<a class="detail-personal-watch" href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısını aç</a>':'';
  const noteMarkup=note?'<div class="detail-personal-note"><span class="detail-personal-label">Kişisel notun</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
