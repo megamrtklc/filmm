@@ -132,8 +132,13 @@
   }
   function refreshTrackSelects() {
     const tracks = Array.from(video.textTracks || []);
-    setOptions('player-subtitle-track', tracks.map((t, i) => ({ value: i, label: t.label || t.language || ('Altyazı ' + (i + 1)) })), 'Altyazı kapalı');
-    tracks.forEach(t => { t.mode = 'disabled'; });
+    const trackNodes = Array.from(video.querySelectorAll('track[kind="subtitles"], track[kind="captions"]'));
+    let selected = tracks.findIndex(track => track.mode === 'showing');
+    if (selected < 0) selected = trackNodes.findIndex(node => node.default);
+    setOptions('player-subtitle-track', tracks.map((track, index) => ({ value: index, label: track.label || track.language || ('Altyazı ' + (index + 1)) })), 'Altyazı kapalı');
+    tracks.forEach((track, index) => { track.mode = index === selected ? 'showing' : 'disabled'; });
+    const select = $('player-subtitle-track');
+    if (select) select.value = selected >= 0 ? String(selected) : '-1';
   }
   function attachAdaptive(url) {
     destroyAdaptive();
