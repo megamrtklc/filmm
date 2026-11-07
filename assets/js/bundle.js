@@ -968,6 +968,8 @@ function renderFilteredCatalog() {
             const related=document.getElementById('detail-related');
             if(related)related.classList.add('hidden');
             const homeFeature=document.querySelector('.home-feature-row');
+            const dashboard=document.getElementById('dashboard-view');
+            if(dashboard)dashboard.dataset.homeActive='false';
             if(homeFeature){homeFeature.hidden=true;homeFeature.classList.add('hidden');}
             const context=document.getElementById('page-context-card');
             if(context)context.hidden=false;
@@ -1126,7 +1128,9 @@ function showDashboard(update=true){
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
- const homeFeature=document.querySelector('.home-feature-row');if(homeFeature){homeFeature.hidden=false;homeFeature.classList.remove('hidden');}
+ const homeFeature=document.querySelector('.home-feature-row');
+ const dashboard=document.getElementById('dashboard-view');if(dashboard)dashboard.dataset.homeActive='true';
+ if(homeFeature){homeFeature.hidden=false;homeFeature.classList.remove('hidden');}
  const context=document.getElementById('page-context-card');if(context)context.hidden=true;
  document.getElementById('hero-section').classList.remove('hidden');
  document.getElementById('home-collections').classList.remove('hidden');
