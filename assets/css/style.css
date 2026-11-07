@@ -497,6 +497,7 @@
 .actor-facts div:last-child{border:0}
 .actor-facts span{font-size:10px;color:#9299a7}
 .actor-facts b{font-size:12px;color:#e9ebef}
+.actor-facts small{font-size:11px;line-height:1.4;color:#d2a85a;margin-top:2px}
 .actor-biography{padding:22px 24px;border:1px solid #ffffff12;border-radius:14px;background:linear-gradient(145deg,#171a22,#0e1016);min-height:240px}
 .actor-section-kicker{font-size:9px;letter-spacing:.22em;font-weight:900;color:#d6ad5b}
 .actor-biography h2{font-size:25px;font-weight:850;margin:9px 0 15px}
