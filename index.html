@@ -263,18 +263,21 @@
     <div id="actor-page-view" class="actor-page hidden min-h-screen flex-1">
         <section class="actor-hero">
             <div class="actor-hero-top"><button class="detail-back" onclick="showDashboard()"><i class="fa-solid fa-arrow-left"></i> Geri dön</button><span>OYUNCU PROFİLİ</span></div>
-            <div id="actor-featured-photos" class="actor-banner" aria-label="Oyuncu yatay afişi">
-                <div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div>
-                <div class="actor-banner-shade"></div>
-                <div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name"></h1></div>
-            </div>
         </section>
         <main class="actor-profile-layout">
-            <section class="actor-biography">
-                <div class="actor-section-kicker"><i class="fa-solid fa-user"></i> HAYATI VE KARİYERİ</div>
-                <h2 id="actor-biography-title"></h2>
-                <p id="actor-biography-text">Oyuncu hakkında bilgiler yükleniyor…</p>
-                <a id="actor-wikipedia-link" href="#" target="_blank" rel="noopener">TMDB üzerinde görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <section class="actor-biography actor-intro-card">
+                <div class="actor-intro">
+                    <img id="actor-profile-image" class="actor-profile-photo" src="" alt="Oyuncu portresi">
+                    <div class="actor-intro-copy">
+                        <span class="actor-section-kicker"><i class="fa-solid fa-user"></i> HAYATI VE KARİYERİ</span>
+                        <h2 id="actor-biography-title"></h2>
+                        <p id="actor-biography-text">Oyuncu hakkında bilgiler yükleniyor…</p>
+                        <button id="actor-bio-toggle" class="actor-bio-toggle" type="button" hidden>Devamını oku <i class="fa-solid fa-chevron-down"></i></button>
+                        <a id="actor-wikipedia-link" href="#" target="_blank" rel="noopener">TMDB üzerinde görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                </div>
+                <span id="actor-banner-name" hidden></span>
+                <div id="actor-featured-photos" hidden></div>
             </section>
         </main>
         <aside class="actor-facts-panel actor-profile-facts-horizontal">
@@ -282,13 +285,12 @@
             <div class="actor-facts">
                 <div><span><i class="fa-regular fa-calendar"></i> Doğum tarihi</span><b id="actor-birth-date">Bilgi aranıyor…</b></div>
                 <div><span><i class="fa-solid fa-location-dot"></i> Doğum yeri</span><b id="actor-birth-place">Bilgi aranıyor…</b></div>
-                <div><span><i class="fa-solid fa-clapperboard"></i> Bilinen alan</span><b id="actor-country">Bilgi aranıyor…</b></div>
-                <div><span><i class="fa-solid fa-film"></i> Filmografi</span><b id="actor-education">Bilgi aranıyor…</b></div>
+                <div><span><i class="fa-solid fa-flag"></i> Uyruğu</span><b id="actor-country">Bilgi aranıyor…</b></div>
+                <div><span><i class="fa-solid fa-film"></i> Perde filmografisi</span><b id="actor-education">Bilgi aranıyor…</b></div>
             </div>
-            <img id="actor-profile-image" class="actor-profile-image-hidden" src="" alt="">
         </aside>
         <section class="actor-filmography">
-            <div class="actor-section-heading"><div><span>EKRANDAKİ YOLCULUĞU</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div><i class="fa-solid fa-film"></i></div>
+            <div class="actor-section-heading"><div><span>PERDE KATALOĞUNDAN</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div><i class="fa-solid fa-film"></i></div>
             <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
         </section>
         <section class="actor-gallery-section">
@@ -407,7 +409,7 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261107-actor-tmdb-profile-v4"></script>
+    <script src="assets/js/bundle.js?v=20261107-actor-catalog-profile-v5"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
