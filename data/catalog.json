@@ -773,7 +773,7 @@
     "genre": "Aksiyon & Macera",
     "rating": "9.4",
     "ratingCount": "IMDb 9.4",
-    "year": "2026",
+    "year": 2026,
     "duration": "70 dk / bölüm",
     "themeColor": "#101014",
     "image": "https://image.tmdb.org/t/p/w500/44iAuz8HkEDCOxjBmF4oogaXjnI.jpg",
@@ -790,7 +790,9 @@
     "country": "South Korea",
     "tmdbId": 276161,
     "seasons": 1,
-    "episodes": 10
+    "episodes": 10,
+    "platform": "Netflix",
+    "personalNote": "Okuldaki zorbalığa karşı..."
   },
   {
     "id": "archive-27",
