@@ -49,7 +49,7 @@
     $('#movie-bar').style.width = (catalog.length ? movies.length/catalog.length*100 : 0)+'%';
     $('#tv-bar').style.width = (catalog.length ? series.length/catalog.length*100 : 0)+'%';
     const recent = [...catalog].sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,5);
-    $('#recent-list').innerHTML = recent.length ? recent.map(item => '<div class="recent-row"><img class="recent-poster" src="'+poster(item)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><div class="recent-meta"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.year||'Yıl bilgisi yok')+' · '+(item.type==='tv'?'Dizi':'Film')+'</small></div><span class="rating-tag">'+(item.rating ? '★ '+escapeHtml(item.rating) : 'Puan yok')+'</span></div>').join('') : '<div class="loading-line">Katalogda kayıt bulunamadı.</div>';
+    $('#recent-list').innerHTML = recent.length ? recent.map(item => '<div class="recent-row"><img class="recent-poster" src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()"><div class="recent-meta"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.year||'Yıl bilgisi yok')+' · '+(item.type==='tv'?'Dizi':'Film')+'</small></div><span class="rating-tag">'+(item.rating ? '★ '+escapeHtml(item.rating) : 'Puan yok')+'</span></div>').join('') : '<div class="loading-line">Katalogda kayıt bulunamadı.</div>';
     $('#catalog-status').textContent = catalog.length+' kayıt başarıyla okundu';
   }
   function renderCatalog() {
@@ -61,7 +61,7 @@
       return matchesType && haystack.includes(query);
     });
     $('#catalog-count').textContent = rows.length+' / '+catalog.length+' kayıt';
-    $('#catalog-table-body').innerHTML = rows.slice(0,150).map(item => '<tr><td><div class="catalog-name">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>').join('') || '<tr><td colspan="6" class="empty-cell">Aramanla eşleşen yapım bulunamadı.</td></tr>';
+    $('#catalog-table-body').innerHTML = rows.slice(0,150).map(item => '<tr><td><div class="catalog-name">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>').join('') || '<tr><td colspan="6" class="empty-cell">Aramanla eşleşen yapım bulunamadı.</td></tr>';
     if (rows.length > 150) $('#catalog-count').textContent += ' · İlk 150 kayıt gösteriliyor';
   }
   function downloadJson(filename, data) {
