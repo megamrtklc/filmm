@@ -6750,3 +6750,24 @@ body.detail-synopsis-open{overflow:hidden}
  .page-context-trail{flex-basis:33px;width:33px;height:33px;font-size:13px}
  .actor-context-card{width:calc(100% - 26px);margin:13px auto 0}
 }
+
+/* Kategoriye göre değişen karşılama kartı atmosferleri */
+.page-context-card[data-theme="animation"]{--context-a:255,177,74;--context-b:104,55,116}
+.page-context-card[data-theme="action"]{--context-a:255,91,75;--context-b:103,35,40}
+.page-context-card[data-theme="comedy"]{--context-a:255,218,91;--context-b:103,77,28}
+.page-context-card[data-theme="drama"]{--context-a:210,139,255;--context-b:74,43,93}
+.page-context-card[data-theme="horror"]{--context-a:151,110,220;--context-b:39,31,68}
+.page-context-card[data-theme="thriller"]{--context-a:92,178,255;--context-b:30,49,84}
+.page-context-card[data-theme="scifi"]{--context-a:80,226,255;--context-b:23,73,91}
+.page-context-card[data-theme="fantasy"]{--context-a:185,143,255;--context-b:57,44,102}
+.page-context-card[data-theme="romance"]{--context-a:255,131,174;--context-b:99,39,65}
+.page-context-card[data-theme="adventure"]{--context-a:119,213,151;--context-b:35,83,66}
+.page-context-card[data-theme="crime"]{--context-a:190,196,211;--context-b:46,52,68}
+.page-context-card[data-theme="mystery"]{--context-a:118,154,255;--context-b:37,48,91}
+.page-context-card[data-theme="documentary"]{--context-a:101,213,196;--context-b:29,78,75}
+.page-context-card[data-theme="history"]{--context-a:224,183,111;--context-b:91,62,34}
+.page-context-card[data-theme="war"]{--context-a:188,153,111;--context-b:77,55,37}
+.page-context-card[data-theme="music"]{--context-a:255,123,195;--context-b:92,39,85}
+.page-context-card[data-theme="family"]{--context-a:255,190,120;--context-b:103,65,41}
+.page-context-card[data-theme="sport"]{--context-a:113,226,143;--context-b:30,85,53}
+.page-context-card[data-theme="western"]{--context-a:226,164,104;--context-b:102,57,31}
