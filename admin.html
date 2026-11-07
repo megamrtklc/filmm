@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-diary-date-chart-fix">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-content-editor">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -22,6 +22,7 @@
       <nav class="admin-nav" aria-label="Yönetim menüsü">
         <button class="nav-item active" data-page="overview"><i class="fa-solid fa-grid-2"></i><span>Genel Bakış</span></button>
         <button class="nav-item" data-page="catalog"><i class="fa-solid fa-film"></i><span>Film ve Diziler</span></button>
+        <button class="nav-item" data-page="editor"><i class="fa-solid fa-pen-to-square"></i><span>Film / Dizi Ekle-Düzenle</span></button>
         <button class="nav-item" data-page="collections"><i class="fa-solid fa-layer-group"></i><span>Koleksiyonlar</span></button>
         <button class="nav-item" data-page="hero"><i class="fa-regular fa-images"></i><span>Manşet ve Slider</span></button>
         <div class="sidebar-caption">KİŞİSEL SİNEMA</div>
@@ -126,6 +127,63 @@
           <div class="surface-card table-card catalog-table-view" id="catalog-table-view" hidden><div class="table-scroll"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB ID</th><th>VERİ DURUMU</th><th></th></tr></thead><tbody id="catalog-table-body"><tr><td colspan="7" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div></div>
           <nav class="catalog-pagination" id="catalog-pagination" aria-label="Katalog sayfaları" hidden></nav>
           <p class="info-note"><i class="fa-solid fa-lock"></i> Katalog şu anda salt okunur. Ekleme, düzenleme ve silme işlemleri gerçek veritabanı ve güvenli kayıt katmanı kurulduktan sonra açılacak. Mevcut JSON verilerine dokunulmaz.</p>
+        </section>
+
+        <section class="page-view" id="page-editor">
+          <div class="page-heading">
+            <div><span class="eyebrow">İÇERİK STÜDYOSU</span><h1 id="editor-page-title">Film / Dizi Ekle</h1><p>Yapım bilgilerini düzenle, görselleri kontrol et ve taslak ön izlemeni oluştur.</p></div>
+            <span class="status-chip warning"><i class="fa-solid fa-flask"></i> Geçici taslak</span>
+          </div>
+          <div class="editor-mode-switch">
+            <button type="button" class="active" data-editor-type="movie"><i class="fa-solid fa-film"></i> Film</button>
+            <button type="button" data-editor-type="tv"><i class="fa-solid fa-tv"></i> Dizi</button>
+          </div>
+          <div class="content-editor-layout">
+            <form class="surface-card content-editor-form" id="content-editor-form">
+              <input type="hidden" id="editor-record-id">
+              <div class="card-heading"><div><h2>Yapım bilgileri</h2><p>Temel bilgileri eksiksiz ve tutarlı şekilde gir.</p></div><span class="insight-kicker">01 / İÇERİK</span></div>
+              <div class="editor-fields-grid">
+                <label class="editor-field editor-field-wide">Yapım adı *<input id="editor-title" maxlength="180" required placeholder="Örn. The Shawshank Redemption"></label>
+                <label class="editor-field">Orijinal adı<input id="editor-original-title" maxlength="180" placeholder="Orijinal yapım adı"></label>
+                <label class="editor-field">Yayın yılı<input id="editor-year" type="number" min="1888" max="2100" placeholder="2026"></label>
+                <label class="editor-field">Tür / kategoriler<input id="editor-category" maxlength="120" placeholder="Dram / Suç"></label>
+                <label class="editor-field">Ana tür<input id="editor-genre" maxlength="60" placeholder="Dram"></label>
+                <label class="editor-field">IMDb puanı<input id="editor-rating" type="number" min="0" max="10" step="0.1" placeholder="8.5"></label>
+                <label class="editor-field" id="editor-duration-field">Süre<input id="editor-duration" maxlength="40" placeholder="142 dk"></label>
+                <label class="editor-field">Ülke<input id="editor-country" maxlength="120" placeholder="United States"></label>
+                <label class="editor-field">Yönetmen<input id="editor-director" maxlength="180" placeholder="Yönetmen adı"></label>
+                <label class="editor-field">TMDB ID<input id="editor-tmdb" inputmode="numeric" placeholder="12345"></label>
+                <label class="editor-field editor-series-field" hidden>Sezon sayısı<input id="editor-seasons" type="number" min="0" max="300" placeholder="3"></label>
+                <label class="editor-field editor-series-field" hidden>Bölüm sayısı<input id="editor-episodes" type="number" min="0" max="10000" placeholder="24"></label>
+                <label class="editor-field editor-field-wide">Oyuncular <small>İsimleri virgülle ayır.</small><input id="editor-cast" placeholder="Oyuncu 1, Oyuncu 2"></label>
+                <label class="editor-field editor-field-wide">Konu / açıklama<textarea id="editor-desc" rows="5" maxlength="5000" placeholder="Yapımın konusunu yaz…"></textarea></label>
+              </div>
+              <div class="editor-divider"></div>
+              <div class="card-heading"><div><h2>Görsel ve medya</h2><p>Afiş, arka plan ve fragman bağlantılarını ekle.</p></div><span class="insight-kicker">02 / MEDYA</span></div>
+              <div class="editor-fields-grid">
+                <label class="editor-field editor-field-wide">Afiş görseli URL<input id="editor-image" type="url" placeholder="https://…"></label>
+                <label class="editor-field editor-field-wide">Arka plan görseli URL<input id="editor-backdrop" type="url" placeholder="https://…"></label>
+                <label class="editor-field editor-field-wide">Fragman bağlantısı<input id="editor-trailer" type="url" placeholder="https://www.youtube.com/watch?v=…"></label>
+              </div>
+              <div class="editor-form-actions">
+                <button class="outline-button" type="button" id="editor-reset"><i class="fa-solid fa-rotate-left"></i> Formu temizle</button>
+                <button class="gold-button" type="submit"><i class="fa-solid fa-eye"></i> Taslağı ön izle</button>
+              </div>
+            </form>
+            <aside class="content-editor-aside">
+              <section class="surface-card editor-preview-card">
+                <div class="card-heading"><div><h2>Canlı ön izleme</h2><p>Girdiğin bilgiler burada görünür.</p></div><span class="status-chip">Ön izleme</span></div>
+                <div class="editor-poster-preview" id="editor-poster-preview"><div><i class="fa-solid fa-clapperboard"></i><span>AFİŞ ÖN İZLEMESİ</span></div></div>
+                <div class="editor-preview-copy"><span id="editor-preview-type">FİLM · YIL</span><h3 id="editor-preview-title">Yapım adı</h3><p id="editor-preview-meta">Tür · Süre · Puan</p><p id="editor-preview-desc">Konu metni burada görünecek.</p></div>
+                <p class="editor-preview-status" id="editor-preview-status"><i class="fa-solid fa-circle-info"></i> Henüz taslak oluşturulmadı.</p>
+              </section>
+              <section class="surface-card editor-drafts-card">
+                <div class="card-heading"><div><h2>Oturum taslakları</h2><p>Bu sayfada oluşturduğun geçici kayıtlar.</p></div><b id="editor-draft-count">0</b></div>
+                <div id="editor-draft-list" class="editor-draft-list"><div class="editor-draft-empty">Henüz taslak yok.</div></div>
+              </section>
+            </aside>
+          </div>
+          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Bu ekran şu anda yalnızca oturum içi taslak oluşturur. Taslaklar JSON kataloğa, tarayıcı depolamasına veya sunucuya kaydedilmez. Mevcut yapımların üzerinde yapılan düzenlemeler de özgün katalog kaydını değiştirmez.</p>
         </section>
 
         <section class="page-view" id="page-collections">
@@ -288,6 +346,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-diary-date-chart-fix"></script>
+  <script src="assets/js/admin.js?v=20261107-content-editor"></script>
 </body>
 </html>
