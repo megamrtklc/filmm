@@ -11,6 +11,7 @@
   let editorEditingId = null;
   let tmdbSearchResults = [];
   let tmdbRequestSequence = 0;
+  let editorSubtitles = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
   const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',subtitles:'Altyazı Merkezi',backups:'Yedekleme',settings:'Genel Ayarlar'};
   function toast(message) {
@@ -69,6 +70,9 @@
     $('#editor-tmdb-query').value = '';
     $('#editor-tmdb-results').innerHTML = '';
     $('#editor-tmdb-search-status').textContent = 'Aramaya başlamak için bir yapım adı yaz.';
+    editorSubtitles = []; renderEditorSubtitles();
+    $('#editor-subtitle-file').value = ''; $('#editor-subtitle-season').value = ''; $('#editor-subtitle-episode').value = ''; $('#editor-subtitle-default').checked = true;
+    $('#editor-subtitle-status').textContent = 'Henüz altyazı eklenmedi.';
     setEditorType('movie');
     $('#editor-page-title').textContent = 'Film / Dizi Ekle';
     $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-circle-info"></i> Henüz taslak oluşturulmadı.';
@@ -85,6 +89,7 @@
       else if (raw) value[key] = ['year','tmdbId','seasons','episodes'].includes(key) ? Number(raw) : raw;
     });
     value.type = editorType;
+    value.subtitles = editorSubtitles.map(item=>({...item}));
     value.cast = editorValue('editor-cast').split(',').map(name=>name.trim()).filter(Boolean);
     value.themeColor = '#101014';
     value.id = editorEditingId || ('draft-'+Date.now());
@@ -114,6 +119,8 @@
       setEditorType(item.type);
       Object.entries(editorFields).forEach(([key,id]) => { if(key==='platform'){setSelectedPlatforms(item.platform);return;} document.getElementById(id).value = item[key] ?? ''; });
       $('#editor-cast').value = Array.isArray(item.cast) ? item.cast.join(', ') : '';
+      editorSubtitles = Array.isArray(item.subtitles) ? item.subtitles.map(entry=>({...entry})) : [];
+      renderEditorSubtitles();
       $('#editor-record-id').value = editorEditingId;
       $('#editor-page-title').textContent = 'Yapımı Düzenle';
     }
@@ -150,6 +157,42 @@
     const data=await response.json().catch(()=>({}));
     if(!response.ok) throw new Error('GitHub HTTP '+response.status+': '+(data.message||'İstek başarısız.'));
     return data;
+  }
+  const subtitleLanguages={tr:'Türkçe',en:'İngilizce',de:'Almanca',fr:'Fransızca',es:'İspanyolca',it:'İtalyanca',ar:'Arapça',ja:'Japonca',ko:'Korece',other:'Diğer'};
+  function renderEditorSubtitles(){
+    const host=$('#editor-subtitle-list');if(!host)return;
+    host.innerHTML=editorSubtitles.length?editorSubtitles.map((item,index)=>'<div class="editor-subtitle-item"><span class="subtitle-language-tag">'+escapeHtml(item.languageLabel||subtitleLanguages[item.language]||item.language||'Altyazı')+'</span><span class="editor-subtitle-name">'+escapeHtml(item.fileName||'Altyazı dosyası')+'</span><small>'+(item.season&&item.episode?'S'+item.season+' · B'+item.episode:'Tüm yapım')+(item.default?' · Varsayılan':'')+'</small><button type="button" data-remove-subtitle="'+index+'" aria-label="Altyazıyı listeden kaldır"><i class="fa-solid fa-trash"></i></button></div>').join(''):'<div class="editor-subtitle-empty">Bu yapım için henüz altyazı kaydı yok.</div>';
+  }
+  function convertSrtToVtt(source){
+    let value=String(source||'').replace(/^\\uFEFF/,'').replace(/\\r/g,'').trim();
+    value=value.replace(/(\\d{2}:\\d{2}:\\d{2}),(\\d{3})/g,'$1.$2');
+    return 'WEBVTT\\n\\n'+value+'\\n';
+  }
+  async function githubUploadSubtitle(path,content){
+    const token=getGithubToken();if(!token)throw new Error('Önce GitHub bağlantısını kur.');
+    const response=await fetch('https://api.github.com/repos/'+githubRepo+'/contents/'+path,{method:'PUT',headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'},body:JSON.stringify({message:'Add Perde subtitle: '+path.split('/').pop(),content:encodeGithubContent(content),branch:'main'})});
+    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error('Altyazı yüklenemedi (HTTP '+response.status+'): '+(result.message||'GitHub isteği başarısız.'));
+    return result.content?.download_url||('https://raw.githubusercontent.com/'+githubRepo+'/main/'+path);
+  }
+  async function addEditorSubtitle(){
+    const file=$('#editor-subtitle-file').files?.[0];if(!file)return toast('Önce bir .srt veya .vtt dosyası seç.');
+    if(file.size>1024*1024)return toast('Altyazı dosyası 1 MB sınırını aşmamalı.');
+    if(!getGithubToken())return toast('Altyazı yüklemek için GitHub bağlantısı gerekli.');
+    const language=$('#editor-subtitle-language').value,season=Number($('#editor-subtitle-season').value)||null,episode=Number($('#editor-subtitle-episode').value)||null;
+    if((season&&!episode)||(!season&&episode))return toast('Sezon ve bölüm numarasını birlikte gir.');
+    if(editorType==='movie'&&(season||episode))return toast('Sezon ve bölüm bilgisi yalnızca diziler için kullanılabilir.');
+    const button=$('#editor-subtitle-add'),status=$('#editor-subtitle-status');button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor…';status.textContent='Altyazı GitHub deposuna yükleniyor…';
+    try{
+      const raw=await file.text(),srt=/\\.srt$/i.test(file.name),vtt=srt?convertSrtToVtt(raw):(/^WEBVTT/m.test(raw.trim())?raw:'WEBVTT\\n\\n'+raw);
+      const key=editorEditingId||('tmdb-'+(editorValue('editor-tmdb')||Date.now()));
+      const safe=file.name.replace(/\\.[^.]+$/,'').normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'subtitle';
+      const episodeTag=season&&episode?'-s'+season+'e'+episode:'',path='assets/subtitles/'+key+'/'+language+episodeTag+'-'+safe+'-'+Date.now()+'.vtt';
+      const url=await githubUploadSubtitle(path,vtt);
+      if($('#editor-subtitle-default').checked)editorSubtitles=editorSubtitles.map(item=>({...item,default:false}));
+      editorSubtitles.push({language,languageLabel:subtitleLanguages[language]||language,fileName:file.name,url,default:$('#editor-subtitle-default').checked,season,episode});
+      renderEditorSubtitles();$('#editor-subtitle-file').value='';status.textContent='Altyazı yüklendi. Yapım kaydını kaydettiğinde kataloğa bağlanacak.';toast('Altyazı GitHub’a yüklendi; şimdi yapımı kaydet.');
+    }catch(error){status.textContent='Yükleme başarısız: '+error.message;toast(error.message);}
+    finally{button.disabled=false;button.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Altyazıyı yükle ve ekle';}
   }
   async function githubCollectionsRequest(method, body) {
     const token=getGithubToken(); if(!token) throw new Error('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
@@ -1100,6 +1143,8 @@
   if(getTmdbToken())setTmdbTokenStatus('TMDB anahtarı bu tarayıcıda kayıtlı.',true);
   $('#add-content-button').addEventListener('click',() => openEditor());
   $('#content-editor-form').addEventListener('submit',saveEditorDraft);
+  $('#editor-subtitle-add').addEventListener('click',addEditorSubtitle);
+  $('#editor-subtitle-list').addEventListener('click',event=>{const button=event.target.closest('[data-remove-subtitle]');if(!button)return;editorSubtitles.splice(Number(button.dataset.removeSubtitle),1);renderEditorSubtitles();$('#editor-subtitle-status').textContent='Altyazı katalog kaydından çıkarıldı. Depodaki dosya güvenlik için silinmedi.';});
   $('#editor-platform-picker').addEventListener('change',updatePlatformPickerLabel);
   $('#editor-reset').addEventListener('click',resetEditor);
   $$('[data-editor-type]').forEach(button=>button.addEventListener('click',()=>setEditorType(button.dataset.editorType)));
