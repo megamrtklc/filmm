@@ -176,6 +176,11 @@
                 <div id="custom-collection-rails" class="space-y-10" aria-label="Özel koleksiyon rafları"></div>
             </section>
 
+            <section id="page-context-card" class="page-context-card" aria-label="Geçerli sayfa bilgisi" hidden>
+                <span class="page-context-icon" aria-hidden="true"><i id="page-context-icon" class="fa-solid fa-compass"></i></span>
+                <span class="page-context-copy"><strong id="page-context-title">KEŞFET</strong><small id="page-context-description">Perde arşivini keşfet.</small></span>
+                <span class="page-context-trail" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+            </section>
             <section id="catalog-page" class="catalog-page space-y-6 hidden" aria-label="Film ve dizi kataloğu">
             <!-- TÜR FİLTRELERİ -->
             <div class="catalog-genre-scroller flex items-center gap-2 overflow-x-auto pb-3 no-scrollbar snap-x snap-mandatory" role="group" aria-label="Tür filtresi">
@@ -262,6 +267,11 @@
 
 
     <div id="actor-page-view" class="actor-page hidden min-h-screen flex-1">
+        <section id="actor-context-card" class="page-context-card actor-context-card" aria-label="Oyuncu profili sayfası">
+            <span class="page-context-icon"><i class="fa-solid fa-user-astronaut" aria-hidden="true"></i></span>
+            <span class="page-context-copy"><strong>OYUNCU PROFİLİ</strong><small id="actor-context-description">Oyuncunun yaşamı, kariyeri ve Perde kataloğundaki yapımları.</small></span>
+            <span class="page-context-trail" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></span>
+        </section>
         <section class="actor-hero">
             <div class="actor-hero-top"><button class="detail-back" onclick="showDashboard()"><i class="fa-solid fa-arrow-left"></i> Geri dön</button><span>OYUNCU PROFİLİ</span></div>
         </section>
