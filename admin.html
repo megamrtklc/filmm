@@ -351,6 +351,12 @@
             <div class="tmdb-token-controls"><input id="editor-tmdb-token" type="password" autocomplete="off" placeholder="TMDB API Key (v3) veya Read Access Token"><button class="outline-button" type="button" id="editor-save-token">Anahtarı kaydet</button><span id="editor-token-status" role="status">Bağlantı kurulmadı</span></div>
             <small>Anahtarını TMDB hesap ayarlarında API bölümünden alabilirsin. v3 anahtarı veya Read Access Token kullanabilirsin. Bu bilgiyi kimseyle paylaşma.</small>
           </section>
+          <section class="surface-card tmdb-setup-card tmdb-sync-card">
+            <div class="tmdb-setup-copy"><span class="tmdb-mark"><i class="fa-solid fa-arrows-rotate"></i></span><div><b>Katalog TMDB verilerini yenile</b><p>TMDB ID'si bulunan film ve dizilerin puan, afiş, arka plan, tür, süre, ülke, yönetmen, oyuncu ve fragman bilgilerini günceller. Elle girilmiş alanlar korunur.</p></div></div>
+            <div class="tmdb-token-controls"><button class="gold-button" type="button" id="tmdb-sync-catalog"><i class="fa-solid fa-cloud-arrow-down"></i> Tüm kataloğu TMDB ile eşitle</button><span id="tmdb-sync-status" role="status">Henüz eşitleme yapılmadı.</span></div>
+            <div id="tmdb-sync-progress" class="editor-preview-status" aria-live="polite"></div>
+            <small>TMDB anahtarı ziyaretçilere açılmaz. Eşitleme yönetim tarayıcısında yapılır ve sonuçlar GitHub kataloğuna yazılır; herkese açık site güncel verileri anahtarsız kullanır.</small>
+          </section>
 
         </section>
 
