@@ -166,7 +166,7 @@
   function convertSrtToVtt(source){
     let value=String(source||'').replace(/^\uFEFF/,'').replace(/\r/g,'').trim();
     value=value.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g,'$1.$2');
-    return 'WEBVTT\n\n'+value+'\\n';
+    return 'WEBVTT\n\n'+value+'\n';
   }
   async function githubUploadSubtitle(path,content){
     const token=getGithubToken();if(!token)throw new Error('Önce GitHub bağlantısını kur.');
@@ -183,7 +183,7 @@
     if(editorType==='movie'&&(season||episode))return toast('Sezon ve bölüm bilgisi yalnızca diziler için kullanılabilir.');
     const button=$('#editor-subtitle-add'),status=$('#editor-subtitle-status');button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor…';status.textContent='Altyazı GitHub deposuna yükleniyor…';
     try{
-      const raw=await file.text(),srt=/\.srt$/i.test(file.name),vtt=srt?convertSrtToVtt(raw):(/^WEBVTT/m.test(raw.trim())?raw:'WEBVTT\\n\\n'+raw);
+      const raw=await file.text(),srt=/\.srt$/i.test(file.name),vtt=srt?convertSrtToVtt(raw):(/^WEBVTT/m.test(raw.trim())?raw:'WEBVTT\n\n'+raw);
       const key=editorEditingId||('tmdb-'+(editorValue('editor-tmdb')||Date.now()));
       const safe=file.name.replace(/\.[^.]+$/,'').normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'subtitle';
       const episodeTag=season&&episode?'-s'+season+'e'+episode:'',path='assets/subtitles/'+key+'/'+language+episodeTag+'-'+safe+'-'+Date.now()+'.vtt';
