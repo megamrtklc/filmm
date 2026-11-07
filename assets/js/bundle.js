@@ -1868,9 +1868,54 @@ function releasePlayerUrls(){
  if(activePlayerObjectUrl){URL.revokeObjectURL(activePlayerObjectUrl);activePlayerObjectUrl=null;}
  if(activeSubtitleObjectUrl){URL.revokeObjectURL(activeSubtitleObjectUrl);activeSubtitleObjectUrl=null;}
 }
+function clearYouTubePlayer(){
+ const stage=document.getElementById('player-stage');
+ stage?.querySelector('#player-youtube-frame')?.remove();
+ stage?.classList.remove('is-youtube-playing');
+}
+function getYouTubeVideoId(value){
+ try{
+  const parsed=new URL(String(value||'').trim());
+  const host=parsed.hostname.toLowerCase().replace(/^www\\./,'');
+  if(!['youtube.com','m.youtube.com','music.youtube.com','youtu.be','youtube-nocookie.com'].includes(host))return '';
+  let id='';
+  if(host==='youtu.be')id=parsed.pathname.split('/').filter(Boolean)[0]||'';
+  else if(parsed.pathname==='/watch')id=parsed.searchParams.get('v')||'';
+  else{
+   const parts=parsed.pathname.split('/').filter(Boolean);
+   if(['embed','shorts','live','v'].includes(parts[0]))id=parts[1]||'';
+  }
+  return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
+ }catch(_){return '';}
+}
+function attachYouTubePlayer(url){
+ const stage=document.getElementById('player-stage'),video=document.getElementById('player-video');
+ if(!stage||!video)return false;
+ const videoId=getYouTubeVideoId(url);
+ if(!videoId)return false;
+ clearYouTubePlayer();
+ video.pause();video.removeAttribute('src');video.replaceChildren();video.load();
+ const iframe=document.createElement('iframe');
+ iframe.id='player-youtube-frame';
+ iframe.className='ny7-youtube-frame';
+ iframe.title=(document.getElementById('player-media-title')?.textContent||'Film')+' — YouTube oynatıcı';
+ iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(videoId)+'?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+ iframe.allow='autoplay; encrypted-media; picture-in-picture; web-share';
+ iframe.allowFullscreen=true;
+ iframe.referrerPolicy='strict-origin-when-cross-origin';
+ stage.insertBefore(iframe,video);
+ stage.classList.add('is-youtube-playing');
+ const empty=document.getElementById('player-empty-state');if(empty)empty.hidden=true;
+ ['player-big-play','player-controls','player-settings-panel','player-skip-intro','player-skip-credits'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=true;});
+ const loading=document.getElementById('player-loading');if(loading)loading.hidden=true;
+ setPlayerError('');
+ return true;
+}
 function attachPlayerSource(url,label){
  const video=document.getElementById('player-video'),empty=document.getElementById('player-empty-state');
  if(!video||!url)return;
+ clearYouTubePlayer();
+ ['player-big-play','player-controls'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=false;});
  video.pause();video.removeAttribute('src');video.replaceChildren();
  const currentItem=mediaDatabase.find(entry=>String(entry.id)===String(activePlayerMediaId));
  if(currentItem&&Array.isArray(currentItem.subtitles)){
@@ -1897,15 +1942,19 @@ async function loadSavedPlayerSource(id, catalogWatchUrl=''){
  const source=readPlayerSources()[String(id)];
  const watchUrl=String(catalogWatchUrl||'').trim();
  if(watchUrl){
+  if(getYouTubeVideoId(watchUrl)){attachYouTubePlayer(watchUrl);return;}
   if(isDirectPlayablePlayerUrl(watchUrl)){attachPlayerSource(watchUrl,'Yapım izleme bağlantısı');return;}
-  setPlayerError('Eklediğin bağlantı doğrudan video akışı değil. Perde oynatıcısında oynatmak için .mp4, .webm, .m3u8 veya .mpd gibi doğrudan video bağlantısı kullanmalısın. Netflix, Prime Video gibi platform sayfaları DRM ve erişim korumaları nedeniyle bu oynatıcıya aktarılamaz.');
+  setPlayerError('Bu bağlantı desteklenmiyor. YouTube bağlantısı veya doğrudan .mp4, .webm, .m3u8 ya da .mpd video bağlantısı kullan.');
   return;
  }
  if(source?.type==='local'){
   try{const file=await getNY7LocalVideo(id);if(file){activePlayerObjectUrl=URL.createObjectURL(file);attachPlayerSource(activePlayerObjectUrl,file.name);return;}}
   catch(error){setPlayerError(error.message||'Kayıtlı video açılamadı.');}
  }
- if(source?.type==='url'&&source.url)attachPlayerSource(source.url,'Harici yayın');
+ if((source?.type==='youtube'||source?.type==='url')&&source.url){
+  if(getYouTubeVideoId(source.url)){attachYouTubePlayer(source.url);return;}
+  attachPlayerSource(source.url,'Harici yayın');
+ }
 }
 function openPlayerForMedia(id){
  const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
@@ -1916,7 +1965,9 @@ function openPlayerForMedia(id){
  document.getElementById('player-media-title').textContent=window.perdeEpisodeContext ? item.title+' · S'+window.perdeEpisodeContext.season+' B'+window.perdeEpisodeContext.episode+' — '+(window.perdeEpisodeContext.episodeTitle||'Bölüm') : item.title+' · '+(item.year||'');
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
  document.documentElement.classList.add('ny7-modal-lock');
- if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.poster=item.image||'';video.load();}
+ clearYouTubePlayer();
+ if(video){video.style.display='';video.pause();video.removeAttribute('src');video.innerHTML='';video.poster=item.image||'';video.load();}
+ ['player-big-play','player-controls'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=false;});
  document.getElementById('player-empty-state').hidden=false;
  setPlayerError('');
  loadSavedPlayerSource(activePlayerMediaId,window.perdeEpisodeContext?'':item.watchUrl);
@@ -1926,13 +1977,17 @@ function saveAndPlayStream(){
  const input=document.getElementById('player-stream-url'),raw=String(input?.value||'').trim();
  let url;try{url=new URL(raw);}catch(_){setPlayerError('Geçerli bir http veya https video bağlantısı gir.');return;}
  if(!['http:','https:'].includes(url.protocol)){setPlayerError('Yalnızca http veya https bağlantıları kullanılabilir.');return;}
- if(!writePlayerSource(activePlayerMediaId,{type:'url',url:url.href})){setPlayerError('Bağlantı bu tarayıcıya kaydedilemedi.');return;}
+ const youtube=!!getYouTubeVideoId(url.href);
+ if(!youtube&&!isDirectPlayablePlayerUrl(url.href)){setPlayerError('YouTube bağlantısı veya doğrudan .mp4, .webm, .m3u8 ya da .mpd video bağlantısı kullan.');return;}
+ if(!writePlayerSource(activePlayerMediaId,{type:youtube?'youtube':'url',url:url.href})){setPlayerError('Bağlantı bu tarayıcıya kaydedilemedi.');return;}
  releasePlayerUrls();
- attachPlayerSource(url.href,'Harici yayın');
+ if(youtube)attachYouTubePlayer(url.href);else attachPlayerSource(url.href,'Harici yayın');
 }
 function closePlayer(){
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
- if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.load();}
+ clearYouTubePlayer();
+ if(video){video.style.display='';video.pause();video.removeAttribute('src');video.innerHTML='';video.load();}
+ ['player-big-play','player-controls'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=false;});
  releasePlayerUrls();activePlayerMediaId=null;
  if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}
  document.documentElement.classList.remove('ny7-modal-lock');
