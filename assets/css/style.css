@@ -127,6 +127,12 @@
 .collection-eyebrow { color:#e11d48; font-size:9px; font-weight:900; letter-spacing:.2em; margin-bottom:.25rem; }
 .collection-heading h2 { color:#fff; font-size:clamp(1.15rem,2vw,1.55rem); font-weight:850; letter-spacing:-.035em; }
 .collection-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(132px, 16%); gap:1rem; overflow-x:auto; padding:.25rem .1rem .9rem; scroll-snap-type:x mandatory; scrollbar-width:thin; scrollbar-color:rgba(225,29,72,.65) rgba(255,255,255,.05); }
+/* Kullanıcının özel rafları: masaüstünde ilk görünümde tam 8 afiş. */
+.saved-collection-rail{grid-auto-columns:calc((100% - 7rem)/8);overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.saved-collection-rail::-webkit-scrollbar{display:none}
+.saved-collection-section .rail-controls button{width:36px;height:36px}
+@media(max-width:900px){.saved-collection-rail{grid-auto-columns:calc((100% - 3rem)/4)}}
+@media(max-width:640px){.saved-collection-rail{grid-auto-columns:38%;gap:.75rem}.saved-collection-section .rail-controls button{width:32px;height:32px}}
 .collection-card { min-width:0; cursor:pointer; scroll-snap-align:start; transition:transform .25s ease; }
 .collection-card:hover,.collection-card:focus-visible { transform:translateY(-5px); outline:none; }
 .collection-poster-wrap { position:relative; aspect-ratio:2/3; overflow:hidden; border-radius:13px; background:#15151b; border:1px solid rgba(255,255,255,.09); box-shadow:0 10px 28px rgba(0,0,0,.22); }
