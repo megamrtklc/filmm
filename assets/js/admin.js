@@ -6,7 +6,10 @@
   const adminScriptUrl = document.currentScript?.src || new URL('assets/js/admin.js', window.location.href).href;
   let catalog = [];
   let toastTimer;
-  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',subtitles:'Altyazı Merkezi',backups:'Yedekleme',settings:'Genel Ayarlar'};
+  let editorType = 'movie';
+  let editorDrafts = [];
+  let editorEditingId = null;
+  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',subtitles:'Altyazı Merkezi',backups:'Yedekleme',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
     node.innerHTML = '<i class="fa-solid fa-circle-info"></i>' + escapeHtml(message);
@@ -29,6 +32,83 @@
     $('#admin-sidebar').classList.remove('open');
     window.scrollTo({top:0,behavior:'smooth'});
     history.replaceState(null, '', '#'+page);
+  }
+  const editorFields = {
+    title:'editor-title',originalTitle:'editor-original-title',year:'editor-year',category:'editor-category',
+    genre:'editor-genre',rating:'editor-rating',duration:'editor-duration',country:'editor-country',
+    director:'editor-director',tmdbId:'editor-tmdb',seasons:'editor-seasons',episodes:'editor-episodes',
+    desc:'editor-desc',image:'editor-image',backdrop:'editor-backdrop',trailerUrl:'editor-trailer'
+  };
+  function editorValue(id) { return document.getElementById(id).value.trim(); }
+  function setEditorType(type) {
+    editorType = type === 'tv' ? 'tv' : 'movie';
+    $('[data-editor-type]').forEach(button => button.classList.toggle('active',button.dataset.editorType===editorType));
+    $('.editor-series-field').forEach(field => field.hidden = editorType !== 'tv');
+    $('#editor-duration-field').querySelector('input').placeholder = editorType === 'tv' ? '45 dk / bölüm' : '120 dk';
+    $('#editor-page-title').textContent = editorEditingId ? 'Yapımı Düzenle' : (editorType === 'tv' ? 'Dizi Ekle' : 'Film Ekle');
+    renderEditorPreview();
+  }
+  function resetEditor() {
+    $('#content-editor-form').reset();
+    $('#editor-record-id').value = '';
+    editorEditingId = null;
+    setEditorType('movie');
+    $('#editor-page-title').textContent = 'Film / Dizi Ekle';
+    $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-circle-info"></i> Henüz taslak oluşturulmadı.';
+    renderEditorPreview();
+  }
+  function editorPayload() {
+    const value = {};
+    Object.entries(editorFields).forEach(([key,id]) => {
+      const raw = editorValue(id);
+      if (raw) value[key] = ['year','tmdbId','seasons','episodes'].includes(key) ? Number(raw) : raw;
+    });
+    value.type = editorType;
+    value.cast = editorValue('editor-cast').split(',').map(name=>name.trim()).filter(Boolean);
+    value.themeColor = '#101014';
+    value.id = editorEditingId || ('draft-'+Date.now());
+    if (editorType === 'movie') { value.seasons = null; value.episodes = null; }
+    return value;
+  }
+  function renderEditorPreview() {
+    const title = editorValue('editor-title') || 'Yapım adı';
+    const image = editorValue('editor-image');
+    const year = editorValue('editor-year') || 'YIL';
+    const type = editorType === 'tv' ? 'DİZİ' : 'FİLM';
+    $('#editor-preview-title').textContent = title;
+    $('#editor-preview-type').textContent = type+' · '+year;
+    $('#editor-preview-meta').textContent = [editorValue('editor-category')||editorValue('editor-genre')||'Tür belirtilmedi',editorValue('editor-duration')||'Süre belirtilmedi',editorValue('editor-rating')?'★ '+editorValue('editor-rating'):'Puan yok'].join(' · ');
+    $('#editor-preview-desc').textContent = editorValue('editor-desc') || 'Konu metni burada görünecek.';
+    const art = $('#editor-poster-preview');
+    art.innerHTML = image ? '<img src="'+escapeHtml(image)+'" alt="'+escapeHtml(title)+' afiş ön izlemesi" onerror="this.parentElement.innerHTML=\'<div><i class=&quot;fa-solid fa-image&quot;></i><span>GÖRSEL YÜKLENEMEDİ</span></div>\'">' : '<div><i class="fa-solid fa-clapperboard"></i><span>AFİŞ ÖN İZLEMESİ</span></div>';
+  }
+  function renderEditorDrafts() {
+    $('#editor-draft-count').textContent = editorDrafts.length;
+    $('#editor-draft-list').innerHTML = editorDrafts.length ? editorDrafts.map((draft,index)=>'<button type="button" class="editor-draft-item" data-editor-draft="'+index+'"><span class="editor-draft-icon"><i class="fa-solid '+(draft.type==='tv'?'fa-tv':'fa-film')+'"></i></span><span><b>'+escapeHtml(draft.title||'İsimsiz yapım')+'</b><small>'+(draft.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(draft.year||'Yıl yok')+'</small></span><i class="fa-solid fa-chevron-right"></i></button>').join('') : '<div class="editor-draft-empty">Henüz taslak yok.</div>';
+  }
+  function openEditor(item=null) {
+    resetEditor();
+    if (item) {
+      editorEditingId = String(item.id);
+      setEditorType(item.type);
+      Object.entries(editorFields).forEach(([key,id]) => { document.getElementById(id).value = item[key] ?? ''; });
+      $('#editor-cast').value = Array.isArray(item.cast) ? item.cast.join(', ') : '';
+      $('#editor-record-id').value = editorEditingId;
+      $('#editor-page-title').textContent = 'Yapımı Düzenle';
+    }
+    navigate('editor');
+    renderEditorPreview();
+  }
+  function saveEditorDraft(event) {
+    event.preventDefault();
+    const payload = editorPayload();
+    if (!payload.title) return toast('Lütfen yapım adını gir.');
+    const index = editorDrafts.findIndex(item=>String(item.id)===String(payload.id));
+    if (index >= 0) editorDrafts[index] = payload;
+    else editorDrafts.unshift(payload);
+    $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-check"></i> Taslak oturum listesine eklendi; katalog değişmedi.';
+    renderEditorDrafts();
+    toast('Taslak ön izleme listesine eklendi.');
   }
   function poster(item) {
     const url = item.poster || item.image || item.backdrop || '';
@@ -597,13 +677,13 @@
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
     const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
-    if (item) toast(item.title+' · '+(item.type==='tv'?'Dizi':'Film')+' · '+(item.year||'Yıl bilgisi yok')+' — salt okunur ön izleme');
+    if (item) openEditor(item);
   });
   $('#catalog-table-body').addEventListener('click',event => {
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
     const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
-    if (item) toast(item.title+' · '+(item.type==='tv'?'Dizi':'Film')+' · '+(item.year||'Yıl bilgisi yok')+' — salt okunur ön izleme');
+    if (item) openEditor(item);
   });
   $('#hero-add-button').addEventListener('click',addHeroSlide);
   $('#collection-list').addEventListener('click',handleCollectionClick);
@@ -624,7 +704,17 @@
     $$('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
     renderHeroPreview();
   }));
-  $('#add-content-button').addEventListener('click',() => toast('Yeni kayıt formu, güvenli kayıt altyapısı kurulduğunda etkinleştirilecek.'));
+  $('#add-content-button').addEventListener('click',() => openEditor());
+  $('#content-editor-form').addEventListener('submit',saveEditorDraft);
+  $('#editor-reset').addEventListener('click',resetEditor);
+  $('[data-editor-type]').forEach(button=>button.addEventListener('click',()=>setEditorType(button.dataset.editorType)));
+  Object.values(editorFields).concat(['editor-cast']).forEach(id=>document.getElementById(id).addEventListener('input',renderEditorPreview));
+  $('#editor-draft-list').addEventListener('click',event=>{
+    const button=event.target.closest('[data-editor-draft]');
+    if(!button)return;
+    const draft=editorDrafts[Number(button.dataset.editorDraft)];
+    if(draft)openEditor(draft);
+  });
   $$('[data-demo]').forEach(button => button.addEventListener('click',() => toast(button.dataset.demo+' alanı veritabanı aşamasında etkinleştirilecek.')));
   $('#export-catalog').addEventListener('click',() => {
     if (!catalog.length) return toast('Dışa aktarılacak katalog verisi bulunamadı.');
