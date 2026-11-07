@@ -120,7 +120,7 @@
             <select id="catalog-genre" aria-label="Tür filtresi"><option value="all">Tüm türler</option></select>
             <select id="catalog-year" aria-label="Yıl filtresi"><option value="all">Tüm yıllar</option></select>
             <select id="catalog-rating" aria-label="Puan filtresi"><option value="all">Tüm puanlar</option><option value="rated">Puanı olanlar</option><option value="unrated">Puanı olmayanlar</option><option value="high">8 ve üzeri</option><option value="mid">6–7.9</option><option value="low">6 altı</option></select>
-            <select id="catalog-sort" aria-label="Sıralama"><option value="year-desc">Yıl: yeni → eski</option><option value="year-asc">Yıl: eski → yeni</option><option value="title-asc">Ad: A → Z</option><option value="rating-desc">Puan: yüksek → düşük</option></select>
+            <select id="catalog-sort" aria-label="Sıralama"><option value="added-desc" selected>Eklenme: yeni → eski</option><option value="year-desc">Yıl: yeni → eski</option><option value="year-asc">Yıl: eski → yeni</option><option value="title-asc">Ad: A → Z</option><option value="rating-desc">Puan: yüksek → düşük</option></select>
             <div class="catalog-toolbar-bottom"><span class="result-count" id="catalog-count">Katalog yükleniyor</span><div class="view-switch" role="group" aria-label="Görünüm"><button class="view-switch-button active" type="button" data-catalog-view="grid" aria-pressed="true"><i class="fa-solid fa-grip"></i> Afişler</button><button class="view-switch-button" type="button" data-catalog-view="table" aria-pressed="false"><i class="fa-solid fa-list"></i> Liste</button></div></div>
           </div>
           <div class="catalog-poster-grid" id="catalog-poster-grid" aria-live="polite"><div class="loading-line">Katalog yükleniyor…</div></div>
@@ -373,6 +373,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-tmdb-editor"></script>
+  <script src="assets/js/admin.js?v=20261107-latest-catalog-v1"></script>
 </body>
 </html>
