@@ -44,10 +44,10 @@
     watchUrl:'editor-watch-url',platform:'editor-platform',personalNote:'editor-personal-note'
   };
   function editorValue(id) { return document.getElementById(id).value.trim(); }
-  function getSelectedPlatforms() { return $('#editor-platform-picker input[name="editor-platform"]:checked').map(input=>input.value); }
+  function getSelectedPlatforms() { return Array.from(document.querySelectorAll('#editor-platform-picker input[name="editor-platform"]:checked')).map(input=>input.value); }
   function setSelectedPlatforms(value) {
     const selected=Array.isArray(value)?value:String(value||'').split(/[,;|]/).map(item=>item.trim()).filter(Boolean);
-    $('#editor-platform-picker input[name="editor-platform"]').forEach(input=>{input.checked=selected.some(item=>item.toLocaleLowerCase('tr-TR')===input.value.toLocaleLowerCase('tr-TR'));});
+    Array.from(document.querySelectorAll('#editor-platform-picker input[name="editor-platform"]')).forEach(input=>{input.checked=selected.some(item=>item.toLocaleLowerCase('tr-TR')===input.value.toLocaleLowerCase('tr-TR'));});
     updatePlatformPickerLabel();
   }
   function updatePlatformPickerLabel() {
