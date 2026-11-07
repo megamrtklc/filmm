@@ -5703,3 +5703,46 @@ body.detail-synopsis-open{overflow:hidden}
   -webkit-backdrop-filter:none!important;
   padding:0 0 8px!important;
 }
+
+
+/* Hero copy: keep ratings and title free of any card-like gradient panel */
+#dashboard-view .home-feature-row #hero-section .hero-copy,
+#dashboard-view .home-feature-row #hero-section .hero-copy::before,
+#dashboard-view .home-feature-row #hero-section .hero-copy::after{
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-kicker-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+#dashboard-view .home-feature-row #hero-section .hero-type-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:999px;
+  background:rgba(10,13,19,.48);
+  color:#fff;
+  font-size:9px;
+  line-height:1;
+  font-weight:850;
+  letter-spacing:.12em;
+  white-space:nowrap;
+  box-shadow:0 3px 12px rgba(0,0,0,.16);
+}
+#dashboard-view .home-feature-row #hero-section .hero-type-badge i{
+  color:#f4c64f;
+  font-size:10px;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-kicker-wrap{gap:8px}
+  #dashboard-view .home-feature-row #hero-section .hero-type-badge{padding:5px 8px;font-size:8px}
+}
