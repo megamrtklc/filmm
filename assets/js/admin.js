@@ -144,7 +144,7 @@
   }
   function setCatalogView(view) {
     catalogView = view === 'table' ? 'table' : 'grid';
-    $$('[data-catalog-view]').forEach(button => {
+    $$$('[data-catalog-view]').forEach(button => {
       const active = button.dataset.catalogView === catalogView;
       button.classList.toggle('active',active);
       button.setAttribute('aria-pressed',String(active));
@@ -297,7 +297,7 @@
   });
   $('#hero-add-button').addEventListener('click',addHeroSlide);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
-  $('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
+  $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
     heroPreviewMode=button.dataset.heroPreview;
     $('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
     renderHeroPreview();
