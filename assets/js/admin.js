@@ -750,6 +750,7 @@
     heroSlides=heroSeed();
     heroActiveIndex=0;
     renderHeroSlides();
+    loadHeroConfig();
   }
   function addHeroSlide() {
     const id=$('#hero-content-select').value;
