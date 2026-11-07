@@ -423,3 +423,9 @@
 .catalog-analytics-grid{margin-bottom:26px}
 .personal-section-heading{padding-top:22px;border-top:1px solid var(--line)}
 @media(max-width:760px){.catalog-analytics-grid{grid-template-columns:1fr}}
+
+/* Keep the eight archive-year bars inside their analytics card. */
+#archive-year-chart{min-width:0;width:100%;overflow:hidden}
+#archive-year-chart .year-chart-bars{grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(3px,1vw,7px);width:100%;min-width:0}
+#archive-year-chart .year-chart-column{min-width:0}
+#archive-year-chart .year-chart-column>span{font-size:clamp(8px,1vw,10px);white-space:normal;text-align:center;overflow-wrap:anywhere}
