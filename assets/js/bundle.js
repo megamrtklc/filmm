@@ -1052,11 +1052,24 @@ function renderHeaderSearchResults(value) {
  }).join('');
  const peopleMarkup=people.map(person=>{
   const name=escapeCountryHtml(person.name);
-  const image=person.profile?'<img src="'+escapeCountryHtml(person.profile)+'" alt="" loading="lazy">':'<span class="header-search-person-placeholder"><i class="fa-regular fa-user"></i></span>';
+  const image=person.profile?'<img src="'+escapeCountryHtml(person.profile)+'" alt="" loading="lazy">':'<span class="header-search-person-placeholder" data-person-photo="'+escapeCountryHtml(person.type+':'+normalizeActorName(person.name))+'"><i class="fa-regular '+(person.type==='director'?'fa-clapperboard':'fa-user')+'"></i></span>';
   const label=person.type==='director'?'Yönetmen':'Oyuncu';
   return '<button type="button" class="header-search-result header-search-person" role="option" data-search-person-name="'+name+'" data-search-person-type="'+person.type+'">'+image+
    '<span class="header-search-result-copy"><strong>'+name+'</strong><small>'+label+'</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>';
  }).join('');
+ const directorPhotoRequest=headerSearchRequest;
+ people.filter(person=>person.type==='director'&&!person.profile).forEach(async person=>{
+  try{
+   const info=await fetchDirectorProfileData(person.name);
+   if(!info.image||directorPhotoRequest!==headerSearchRequest||headerSearchCategory?.value!=='director')return;
+   const key=person.type+':'+normalizeActorName(person.name);
+   const placeholder=[...headerSearchResults.querySelectorAll('[data-person-photo]')].find(node=>node.dataset.personPhoto===key);
+   if(!placeholder)return;
+   const photo=document.createElement('img');photo.src=info.image;photo.alt='';photo.loading='lazy';
+   photo.onerror=()=>photo.remove();
+   placeholder.replaceWith(photo);
+  }catch(error){console.debug('Yönetmen arama fotoğrafı alınamadı:',person.name,error);}
+  });
  const hasResults=mediaMarkup||peopleMarkup;
  const resultLabel=searchCategory==='actor'?'Oyuncular':searchCategory==='director'?'Yönetmenler':'Film ve diziler';
  const emptyHint=searchCategory==='actor'?'Perde kataloğunda eşleşen oyuncu bulunamadı.':searchCategory==='director'?'Perde kataloğunda eşleşen yönetmen bulunamadı.':'Perde kataloğunda eşleşen film veya dizi bulunamadı.';
