@@ -1,5 +1,5 @@
-const CACHE_NAME='ny7-shell-v17';
-const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/ny7-icon.svg','./data/catalog.json','./data/homepage-config.json'];
+const CACHE_NAME='perde-shell-v18';
+const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/perde-icon.svg','./data/catalog.json','./data/homepage-config.json'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
@@ -8,7 +8,7 @@ self.addEventListener('install',event=>{
 self.addEventListener('activate',event=>{
   event.waitUntil(
     caches.keys()
-      .then(keys=>Promise.all(keys.filter(key=>key.startsWith('ny7-')&&key!==CACHE_NAME).map(key=>caches.delete(key))))
+      .then(keys=>Promise.all(keys.filter(key=>(key.startsWith('ny7-')||key.startsWith('perde-'))&&key!==CACHE_NAME).map(key=>caches.delete(key))))
       .then(()=>self.clients.claim())
   );
 });
