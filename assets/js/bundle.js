@@ -1298,18 +1298,27 @@ function renderDetailPersonalInfo(item){
   if(!watchUrl)return '';
   try{const parsed=new URL(watchUrl);return ['http:','https:'].includes(parsed.protocol)?parsed.href:'';}catch(_){return '';}
  })();
- const platformBrands={
-  'netflix':['NETFLIX','netflix'],'prime video':['prime video','prime'],'primevideo':['prime video','prime'],
-  'disney+':['Disney+','disney'],'disney plus':['Disney+','disney'],
-  'max':['max','max'],'apple tv+':['Apple TV+','apple'],'apple tv':['Apple TV+','apple'],
-  'mubi':['MUBI','mubi'],'blutv':['BluTV','blutv'],'blu tv':['BluTV','blutv'],
-  'tod':['TOD','tod'],'tabii':['tabii','tabii'],'gain':['GAİN','gain']
+ const platformIcons={
+  'netflix':['netflix','<path d="M7 4h5l8 24h-5L7 4zm13 0h5v24h-5V4zM7 4h5v24H7z"/>'],
+  'prime video':['prime','<path d="M8 10h12a5 5 0 0 1 0 10h-4"/><path d="m17 16 4 4-4 4"/><path d="M5 25c6 3 14 3 21-1"/>'],
+  'primevideo':['prime','<path d="M8 10h12a5 5 0 0 1 0 10h-4"/><path d="m17 16 4 4-4 4"/><path d="M5 25c6 3 14 3 21-1"/>'],
+  'disney+':['disney','<path d="M4 17c5-10 19-13 25-6"/><path d="M17 5c2 3 3 6 3 10"/><path d="m24 4 1.2 2.5L28 7l-2 2 .5 2.8L24 10.5 21.5 12l.5-2.8-2-2 2.8-.5L24 4z"/>'],
+  'disney plus':['disney','<path d="M4 17c5-10 19-13 25-6"/><path d="M17 5c2 3 3 6 3 10"/><path d="m24 4 1.2 2.5L28 7l-2 2 .5 2.8L24 10.5 21.5 12l.5-2.8-2-2 2.8-.5L24 4z"/>'],
+  'max':['max','<path d="M4 25V8l8 10 8-10v17"/><path d="M20 8h3a5 5 0 0 1 0 10h-3"/>'],
+  'apple tv+':['apple','<path d="M20.5 16.5c0-3 2.4-4.5 2.5-4.6-1.4-2-3.6-2.3-4.4-2.3-1.9-.2-3.7 1.1-4.7 1.1s-2.5-1.1-4.1-1.1c-2.1 0-4 1.2-5.1 3-2.2 3.8-.6 9.4 1.5 12.5 1 1.5 2.2 3.1 3.8 3 1.5-.1 2.1-1 4-1s2.5 1 4.1 1 2.7-1.5 3.7-3.1c1.2-1.8 1.7-3.5 1.7-3.6-.1 0-3-.9-3-4.9z"/><path d="M17.5 6.8c.8-1 1.3-2.4 1.2-3.8-1.2.1-2.7.8-3.6 1.8-.8.9-1.4 2.3-1.2 3.6 1.4.1 2.8-.6 3.6-1.6z"/>'],
+  'apple tv':['apple','<path d="M20.5 16.5c0-3 2.4-4.5 2.5-4.6-1.4-2-3.6-2.3-4.4-2.3-1.9-.2-3.7 1.1-4.7 1.1s-2.5-1.1-4.1-1.1c-2.1 0-4 1.2-5.1 3-2.2 3.8-.6 9.4 1.5 12.5 1 1.5 2.2 3.1 3.8 3 1.5-.1 2.1-1 4-1s2.5 1 4.1 1 2.7-1.5 3.7-3.1c1.2-1.8 1.7-3.5 1.7-3.6-.1 0-3-.9-3-4.9z"/><path d="M17.5 6.8c.8-1 1.3-2.4 1.2-3.8-1.2.1-2.7.8-3.6 1.8-.8.9-1.4 2.3-1.2 3.6 1.4.1 2.8-.6 3.6-1.6z"/>'],
+  'mubi':['mubi','<circle cx="16" cy="16" r="13"/><path d="M8 21V11l5 6 3-4 3 4 5-6v10" stroke="#111" stroke-width="2.2" fill="none"/>'],
+  'blutv':['blutv','<rect x="4" y="4" width="24" height="24" rx="7"/><path d="M12 9v14m0-14h6a3 3 0 0 1 0 6h-6m0 0h7a4 4 0 0 1 0 8h-7" stroke="#fff" stroke-width="2" fill="none"/>'],
+  'blu tv':['blutv','<rect x="4" y="4" width="24" height="24" rx="7"/><path d="M12 9v14m0-14h6a3 3 0 0 1 0 6h-6m0 0h7a4 4 0 0 1 0 8h-7" stroke="#fff" stroke-width="2" fill="none"/>'],
+  'tod':['tod','<circle cx="16" cy="16" r="13"/><path d="m13 10 9 6-9 6z" fill="#fff" stroke="none"/>'],
+  'tabii':['tabii','<path d="M7 8h18M16 5v18a4 4 0 0 0 4 4h3"/><circle cx="8" cy="24" r="3"/>'],
+  'gain':['gain','<rect x="3" y="3" width="26" height="26" rx="8"/><path d="M23 11a9 9 0 1 0 1 8h-8" stroke="#f04452" stroke-width="3" fill="none"/>']
  };
  const platformMarkup=platforms.length?'<div class="detail-personal-platform"><span class="detail-personal-label">Yayın platformları</span><div class="detail-platform-brands">'+platforms.map(platform=>{
-  const brand=platformBrands[platform.toLocaleLowerCase('tr-TR')];
-  if(!brand)return '<span class="detail-platform-brand detail-platform-brand-text"><span class="detail-platform-logo-fallback">'+escapeCountryHtml(platform.slice(0,1).toLocaleUpperCase('tr-TR'))+'</span><span class="detail-platform-name">'+escapeCountryHtml(platform)+'</span></span>';
-  const label=brand[0],kind=brand[1];
-  return '<span class="detail-platform-brand detail-platform-brand-'+kind+'"><span class="detail-platform-logo" aria-hidden="true"><svg viewBox="0 0 150 34" xmlns="http://www.w3.org/2000/svg" focusable="false"><text x="2" y="25" class="detail-platform-wordmark detail-platform-wordmark-'+kind+'">'+label+'</text></svg></span><span class="detail-platform-name">'+escapeCountryHtml(platform)+'</span></span>';
+  const brand=platformIcons[platform.toLocaleLowerCase('tr-TR')];
+  const icon=brand?'<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" focusable="false">'+brand[1]+'</svg>':'<span class="detail-platform-logo-fallback">'+escapeCountryHtml(platform.slice(0,1).toLocaleUpperCase('tr-TR'))+'</span>';
+  const kind=brand?brand[0]:'other';
+  return '<span class="detail-platform-brand detail-platform-brand-'+kind+'"><span class="detail-platform-logo" aria-hidden="true">'+icon+'</span><span class="detail-platform-name">'+escapeCountryHtml(platform)+'</span></span>';
  }).join('')+'</div></div>':'';
  const watchMarkup=validUrl?'<a class="detail-personal-watch" href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısını aç</a>':'';
  const noteMarkup=note?'<div class="detail-personal-note"><span class="detail-personal-label">Kişisel notun</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
