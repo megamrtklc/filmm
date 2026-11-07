@@ -70,6 +70,7 @@
     $('#editor-record-id').value = '';
     editorEditingId = null;
     $('#editor-tmdb-query').value = '';
+    tmdbSearchResults = [];
     $('#editor-tmdb-results').innerHTML = '';
     $('#editor-tmdb-search-status').textContent = 'Aramaya başlamak için bir yapım adı yaz.';
     editorSubtitles = []; editorTmdbCast = []; renderEditorSubtitles();
