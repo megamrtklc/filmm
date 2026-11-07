@@ -1287,6 +1287,25 @@ function updateDetailSynopsis(item){
 document.addEventListener('keydown',event=>{
  if(event.key==='Escape')closeDetailSynopsisPopup();
 });
+function renderDetailPersonalInfo(item){
+ const panel=document.getElementById('detail-personal-info');
+ if(!panel)return;
+ const note=String(item.personalNote||'').trim();
+ const platform=String(item.platform||'').trim();
+ const watchUrl=String(item.watchUrl||'').trim();
+ const validUrl=(()=>{
+  if(!watchUrl)return '';
+  try{const parsed=new URL(watchUrl);return ['http:','https:'].includes(parsed.protocol)?parsed.href:'';}catch(_){return '';}
+ })();
+ const hasInfo=!!(note||platform||validUrl);
+ panel.hidden=!hasInfo;
+ if(!hasInfo){panel.innerHTML='';return;}
+ const rows=[];
+ if(platform)rows.push('<div class="detail-personal-row"><span class="detail-personal-label"><i class="fa-solid fa-tv" aria-hidden="true"></i> Platform</span><strong>'+escapeCountryHtml(platform)+'</strong></div>');
+ if(validUrl)rows.push('<div class="detail-personal-row"><span class="detail-personal-label"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısı</span><a href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer">Yapımı aç <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></div>');
+ if(note)rows.push('<div class="detail-personal-note"><span class="detail-personal-label"><i class="fa-regular fa-note-sticky" aria-hidden="true"></i> Kişisel notun</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>');
+ panel.innerHTML='<div class="detail-personal-heading"><span>PERDE’YE ÖZEL</span><h2>Senin notların</h2></div><div class="detail-personal-content">'+rows.join('')+'</div>';
+}
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -1327,6 +1346,7 @@ function openDetailPage(id,update=true){
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  renderDetailSeries(item);
+ renderDetailPersonalInfo(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
@@ -1713,9 +1733,9 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 } finally { clearTimeout(timeout); }
             };
             try {
-                const localUrl = new URL('./data/catalog.json?v=20261107-tmdb-display-v2', document.baseURI).href;
-                const rootUrl = new URL('/data/catalog.json?v=20261107-tmdb-display-v2', location.origin).href;
-                const rawUrl = 'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261107-tmdb-display-v2';
+                const localUrl = new URL('./data/catalog.json?v=20261107-personal-info-v1', document.baseURI).href;
+                const rootUrl = new URL('/data/catalog.json?v=20261107-personal-info-v1', location.origin).href;
+                const rawUrl = 'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261107-personal-info-v1';
                 const apiUrl = 'https://api.github.com/repos/megamrtklc/filmm/contents/data/catalog.json?ref=main';
                 const sources = [[localUrl,'Yayınlanan katalog'],[rootUrl,'Kök katalog yolu'],[rawUrl,'GitHub ham katalog'],[apiUrl,'GitHub API kataloğu']];
                 let loadedCatalog = null;

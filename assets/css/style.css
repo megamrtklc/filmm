@@ -6351,3 +6351,21 @@ body.detail-synopsis-open{overflow:hidden}
 #dashboard-view .home-feature-row #daily-pick-section .mood-discovery-description{
   text-shadow:0 1px 5px rgba(0,0,0,.82),0 3px 12px rgba(0,0,0,.62);
 }
+
+
+/* Perde'ye özel kişisel bilgiler: yalnızca dolu alanlarda görünür. */
+.detail-personal-info{max-width:1280px;margin:28px auto 0;padding:0 clamp(20px,5vw,72px)}
+.detail-personal-info[hidden]{display:none!important}
+.detail-personal-heading{margin-bottom:13px}
+.detail-personal-heading>span{display:block;color:#d7a94c;font-size:9px;font-weight:900;letter-spacing:.2em;margin-bottom:5px}
+.detail-personal-heading h2{font-size:20px;font-weight:850;letter-spacing:-.02em}
+.detail-personal-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.detail-personal-row,.detail-personal-note{min-width:0;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.025));padding:15px 17px}
+.detail-personal-label{display:flex;align-items:center;gap:8px;color:#a8a8b2;font-size:11px;font-weight:700;margin-bottom:8px}
+.detail-personal-label i{color:#d7a94c}
+.detail-personal-row strong{display:block;color:#f5f5f5;font-size:14px;font-weight:750}
+.detail-personal-row a{display:inline-flex;align-items:center;gap:8px;color:#f2c66d;font-size:13px;font-weight:750;text-decoration:none}
+.detail-personal-row a:hover{text-decoration:underline}
+.detail-personal-note{grid-column:1/-1}
+.detail-personal-note p{color:#e1e1e6;font-size:13px;line-height:1.75;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:700px){.detail-personal-info{padding-inline:18px;margin-top:18px}.detail-personal-content{grid-template-columns:1fr}.detail-personal-note{grid-column:auto}}

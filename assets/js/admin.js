@@ -68,7 +68,10 @@
     const value = {};
     Object.entries(editorFields).forEach(([key,id]) => {
       const raw = editorValue(id);
-      if (raw) value[key] = ['year','tmdbId','seasons','episodes'].includes(key) ? Number(raw) : raw;
+      // Perde'ye özel alanları boş bırakıldıklarında da açıkça kaydet:
+      // düzenleme sırasında eski notun/bağlantının yanlışlıkla geri gelmesini önler.
+      if (['watchUrl','platform','personalNote'].includes(key)) value[key] = raw;
+      else if (raw) value[key] = ['year','tmdbId','seasons','episodes'].includes(key) ? Number(raw) : raw;
     });
     value.type = editorType;
     value.cast = editorValue('editor-cast').split(',').map(name=>name.trim()).filter(Boolean);
@@ -974,14 +977,27 @@
   async function init() {
     $('#today-label').textContent = new Intl.DateTimeFormat('tr-TR',{dateStyle:'full'}).format(new Date());
     try {
+      let data = null;
+      const loadErrors = [];
+      // GitHub'a kaydedilen son katalog, Pages dağıtımını beklemeden yönetim paneline yüklenir.
+      if (getGithubToken()) {
+        try {
+          const saved = await githubCatalogRequest('GET');
+          if (!saved.content) throw new Error('GitHub katalog içeriği boş.');
+          const latest = JSON.parse(decodeGithubContent(saved.content));
+          if (!Array.isArray(latest)) throw new Error('GitHub katalog biçimi geçersiz.');
+          data = latest;
+        } catch (loadError) {
+          loadErrors.push('GitHub kayıtlı katalog ('+loadError.message+')');
+        }
+      }
       const catalogUrls = [...new Set([
         new URL('../../data/catalog.json', adminScriptUrl).href,
         new URL('data/catalog.json', window.location.href).href,
         new URL('/data/catalog.json', window.location.origin).href
       ])];
-      let data = null;
-      const loadErrors = [];
       for (const url of catalogUrls) {
+        if (data) break;
         try {
           const response = await fetch(url,{cache:'no-store'});
           if (!response.ok) throw new Error('HTTP '+response.status);
