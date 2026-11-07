@@ -3689,5 +3689,41 @@
     "tmdbId": 27205,
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Adalet 2",
+    "originalTitle": "The Equalizer 2",
+    "year": 2018,
+    "category": "Aksiyon / Gerilim / Suç",
+    "genre": "Aksiyon",
+    "rating": "6.8",
+    "duration": "121 dk",
+    "country": "United States of America",
+    "director": "Antoine Fuqua",
+    "tmdbId": 345887,
+    "desc": "Emekli CIA ajanı Robert McCall, kendi bildiği şekilde adaletsizliklere son vermeye, başkalarına haksızlık yapanları cezalandırmaya devam etmektedir. Günün birinde en yakın arkadaşı Susan Plummer öldürülür. McCall, arkadaşının intikamını almak için sonuna kadar gitmeye hazırdır.",
+    "image": "https://image.tmdb.org/t/p/w500/xNcm0kmMOmE5lxRiDaA6bmx4unH.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/z7noaCJ4KtmhwHw7QcNtnMMo4Qy.jpg",
+    "trailerUrl": "https://www.youtube.com/watch?v=tIHyWhi61mA",
+    "imdbId": "tt3766354",
+    "type": "movie",
+    "cast": [
+      "Denzel Washington",
+      "Pedro Pascal",
+      "Ashton Sanders",
+      "Orson Bean",
+      "Bill Pullman",
+      "Melissa Leo",
+      "Jonathan Scarfe",
+      "Sakina Jaffrey",
+      "Kazy Tauginas",
+      "Garrett Golden",
+      "Adam Karst",
+      "Alican Barlas"
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw5w3oth",
+    "seasons": null,
+    "episodes": null
   }
 ]
