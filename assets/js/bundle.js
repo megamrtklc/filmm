@@ -1675,19 +1675,6 @@ function openPlayerForMedia(id){
  setPlayerError('');
  loadSavedPlayerSource(activePlayerMediaId,window.perdeEpisodeContext?'':item.watchUrl);
 }
-async function saveAndPlayLocalVideo(){
- if(!activePlayerMediaId)return;
- const input=document.getElementById('player-local-file'),file=input?.files?.[0];
- if(!file){setPlayerError('Önce bilgisayarından bir video dosyası seç.');return;}
- if(file.type&&!file.type.startsWith('video/')){setPlayerError('Lütfen geçerli bir video dosyası seç.');return;}
- try{
-  await saveNY7LocalVideo(activePlayerMediaId,file);
-  writePlayerSource(activePlayerMediaId,{type:'local',name:file.name});
-  releasePlayerUrls();
-  activePlayerObjectUrl=URL.createObjectURL(file);
-  attachPlayerSource(activePlayerObjectUrl,file.name);
- }catch(error){setPlayerError(error.message||'Dosya kaydedilemedi. Tarayıcı depolama alanını kontrol et.');}
-}
 function saveAndPlayStream(){
  if(!activePlayerMediaId)return;
  const input=document.getElementById('player-stream-url'),raw=String(input?.value||'').trim();
@@ -1696,14 +1683,6 @@ function saveAndPlayStream(){
  if(!writePlayerSource(activePlayerMediaId,{type:'url',url:url.href})){setPlayerError('Bağlantı bu tarayıcıya kaydedilemedi.');return;}
  releasePlayerUrls();
  attachPlayerSource(url.href,'Harici yayın');
-}
-function attachPlayerSubtitle(){
- const input=document.getElementById('player-subtitle-file'),file=input?.files?.[0],video=document.getElementById('player-video');
- if(!file||!video)return;
- if(activeSubtitleObjectUrl)URL.revokeObjectURL(activeSubtitleObjectUrl);
- activeSubtitleObjectUrl=URL.createObjectURL(file);
- const track=document.createElement('track');track.kind='subtitles';track.label='Altyazı';track.srclang='tr';track.src=activeSubtitleObjectUrl;track.default=true;
- video.appendChild(track);
 }
 function closePlayer(){
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
