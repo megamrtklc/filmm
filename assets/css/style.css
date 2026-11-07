@@ -6873,3 +6873,13 @@ body.detail-synopsis-open{overflow:hidden}
 .page-context-card[data-theme="family"]{--context-image:url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&q=90")}
 .page-context-card[data-theme="sport"]{--context-image:url("https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1800&q=90")}
 .page-context-card[data-theme="western"]{--context-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=90")}
+
+/* Manşet slider: numarasız, tıklanabilir konum göstergeleri */
+.hero-slide-indicators{position:absolute;z-index:23;right:clamp(20px,5vw,72px);bottom:153px;display:flex;align-items:center;gap:13px;padding:9px 12px;min-width:130px;max-width:min(230px,42vw);border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(5,7,11,.68);backdrop-filter:blur(12px);box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.hero-slide-progress{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
+.hero-slide-tick{height:5px;min-width:4px;flex:1;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.25);cursor:pointer;transition:background .22s ease,transform .22s ease}
+.hero-slide-tick:hover{background:rgba(255,255,255,.65);transform:scaleY(1.5)}
+.hero-slide-tick.is-active{background:#f5c84b;box-shadow:0 0 9px rgba(245,200,75,.35)}
+.hero-slide-tick:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:700px){.hero-slide-indicators{right:18px;bottom:137px;min-width:115px;max-width:42vw;padding:8px 10px;gap:9px;border-radius:10px}.hero-slide-tick{height:4px;min-width:3px}}
+@media(prefers-reduced-motion:reduce){.hero-slide-tick{transition:none!important}}
