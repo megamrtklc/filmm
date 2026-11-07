@@ -1634,7 +1634,7 @@ function attachPlayerSource(url,label){
  const currentItem=mediaDatabase.find(entry=>String(entry.id)===String(activePlayerMediaId));
  if(currentItem&&Array.isArray(currentItem.subtitles)){
   const episode=window.perdeEpisodeContext||null;
-  currentItem.subtitles.filter(track=>track&&track.url&&(!track.season||!episode||(Number(track.season)===Number(episode.season)&&Number(track.episode)===Number(episode.episode)))).forEach(track=>{const node=document.createElement('track');node.kind='subtitles';node.label=track.languageLabel||track.language||'Altyazı';node.srclang=track.language||'tr';node.src=track.url;if(track.default)node.default=true;video.appendChild(node);});
+  currentItem.subtitles.filter(track=>track&&track.url&&(!track.season||(episode&&Number(track.season)===Number(episode.season)&&Number(track.episode)===Number(episode.episode)))).forEach(track=>{const node=document.createElement('track');node.kind='subtitles';node.label=track.languageLabel||track.language||'Altyazı';node.srclang=track.language||'tr';node.src=track.url;if(track.default)node.default=true;video.appendChild(node);});
  }
  if(empty)empty.hidden=true;
  setPlayerError('');
