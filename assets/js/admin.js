@@ -43,13 +43,6 @@
     $('#stat-series').textContent = series.length.toLocaleString('tr-TR');
     $('#stat-favorites').textContent = favorites.length.toLocaleString('tr-TR');
     $('#stat-watchlist').textContent = watchlist.length.toLocaleString('tr-TR');
-    $('#analytics-total').textContent = catalog.length.toLocaleString('tr-TR');
-    $('#analytics-movie-share').textContent = catalog.length ? Math.round(movies.length/catalog.length*100)+'%' : '—';
-    $('#analytics-tv-share').textContent = catalog.length ? Math.round(series.length/catalog.length*100)+'%' : '—';
-    $('#legend-movies').textContent = movies.length;
-    $('#legend-series').textContent = series.length;
-    $('#movie-bar').style.width = (catalog.length ? movies.length/catalog.length*100 : 0)+'%';
-    $('#tv-bar').style.width = (catalog.length ? series.length/catalog.length*100 : 0)+'%';
     const recent = [...catalog].sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,5);
     $('#recent-list').innerHTML = recent.length ? recent.map(item => '<article class="recent-poster-card">'+(poster(item)?'<img class="recent-poster-image" src="'+poster(item)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="recent-poster-placeholder"><i class="fa-solid fa-film"></i></div>')+'<div class="recent-poster-overlay"><span>'+(item.type==='tv'?'DİZİ':'FİLM')+' · '+escapeHtml(item.year||'—')+'</span><b>'+escapeHtml(item.title)+'</b><small>'+(item.rating?'★ '+escapeHtml(item.rating):'Puan bilgisi yok')+'</small></div></article>').join('') : '<div class="loading-line">Katalogda kayıt bulunamadı.</div>';
     const stackItems = [...catalog].filter(item => poster(item)).sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,4);
