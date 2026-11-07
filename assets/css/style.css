@@ -6353,19 +6353,22 @@ body.detail-synopsis-open{overflow:hidden}
 }
 
 
-/* Perde'ye özel kişisel bilgiler: yalnızca dolu alanlarda görünür. */
-.detail-personal-info{max-width:1280px;margin:28px auto 0;padding:0 clamp(20px,5vw,72px)}
+/* Perde'ye özel: kompakt platform ve kişisel not kartları. */
+.detail-personal-info{max-width:1280px;margin:26px auto 0;padding:0 clamp(20px,5vw,72px)}
 .detail-personal-info[hidden]{display:none!important}
-.detail-personal-heading{margin-bottom:13px}
-.detail-personal-heading>span{display:block;color:#d7a94c;font-size:9px;font-weight:900;letter-spacing:.2em;margin-bottom:5px}
-.detail-personal-heading h2{font-size:20px;font-weight:850;letter-spacing:-.02em}
-.detail-personal-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.detail-personal-row,.detail-personal-note{min-width:0;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.025));padding:15px 17px}
-.detail-personal-label{display:flex;align-items:center;gap:8px;color:#a8a8b2;font-size:11px;font-weight:700;margin-bottom:8px}
+.detail-personal-heading{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.detail-personal-heading>span{display:block;color:#d7a94c;font-size:9px;font-weight:900;letter-spacing:.2em;white-space:nowrap}
+.detail-personal-heading h2{font-size:19px;font-weight:800;letter-spacing:-.025em}
+.detail-personal-content{display:flex;align-items:stretch;flex-wrap:wrap;gap:10px}
+.detail-personal-platform,.detail-personal-note{min-width:0;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.022));padding:13px 16px}
+.detail-personal-platform{display:flex;flex-direction:column;justify-content:center;min-width:180px;max-width:240px}
+.detail-personal-label{display:flex;align-items:center;gap:7px;color:#92929e;font-size:9px;font-weight:800;letter-spacing:.09em;margin-bottom:9px}
 .detail-personal-label i{color:#d7a94c}
-.detail-personal-row strong{display:block;color:#f5f5f5;font-size:14px;font-weight:750}
-.detail-personal-row a{display:inline-flex;align-items:center;gap:8px;color:#f2c66d;font-size:13px;font-weight:750;text-decoration:none}
-.detail-personal-row a:hover{text-decoration:underline}
-.detail-personal-note{grid-column:1/-1}
-.detail-personal-note p{color:#e1e1e6;font-size:13px;line-height:1.75;white-space:normal;overflow-wrap:anywhere}
-@media(max-width:700px){.detail-personal-info{padding-inline:18px;margin-top:18px}.detail-personal-content{grid-template-columns:1fr}.detail-personal-note{grid-column:auto}}
+.detail-platform-brand{display:flex;align-items:center;min-height:27px;gap:10px}
+.detail-platform-brand img{display:block;max-width:138px;max-height:26px;width:auto;height:auto;object-fit:contain}
+.detail-platform-brand strong{color:#f5f5f5;font-size:14px;font-weight:800}
+.detail-personal-watch{display:inline-flex;align-items:center;justify-content:center;gap:8px;align-self:center;border:1px solid rgba(215,169,76,.3);border-radius:9px;background:rgba(215,169,76,.09);padding:11px 14px;color:#f2c66d;font-size:12px;font-weight:750;text-decoration:none;transition:background .18s,border-color .18s}
+.detail-personal-watch:hover{background:rgba(215,169,76,.17);border-color:rgba(215,169,76,.55)}
+.detail-personal-note{flex:1 1 320px}
+.detail-personal-note p{color:#e1e1e6;font-size:13px;line-height:1.7;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:700px){.detail-personal-info{padding-inline:18px;margin-top:18px}.detail-personal-heading{align-items:flex-start;flex-direction:column;gap:3px}.detail-personal-content{display:grid;grid-template-columns:1fr}.detail-personal-platform{max-width:none}.detail-personal-watch{justify-self:start}.detail-personal-note{grid-column:auto}}
