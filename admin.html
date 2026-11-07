@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d11">
+  <title>Yönetim Merkezi | Perde</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-admin-draft">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <a class="admin-brand" href="index.html#/anasayfa" aria-label="Perde ana sayfa">
+        <span class="brand-symbol"><i class="fa-solid fa-clapperboard"></i></span>
+        <span><b>PERDE</b><small>YÖNETİM MERKEZİ</small></span>
+      </a>
+      <div class="sidebar-caption">GENEL</div>
+      <nav class="admin-nav" aria-label="Yönetim menüsü">
+        <button class="nav-item active" data-page="overview"><i class="fa-solid fa-grid-2"></i><span>Genel Bakış</span></button>
+        <button class="nav-item" data-page="catalog"><i class="fa-solid fa-film"></i><span>Film ve Diziler</span></button>
+        <button class="nav-item" data-page="collections"><i class="fa-solid fa-layer-group"></i><span>Koleksiyonlar</span></button>
+        <button class="nav-item" data-page="hero"><i class="fa-regular fa-images"></i><span>Manşet ve Slider</span></button>
+        <div class="sidebar-caption">KİŞİSEL SİNEMA</div>
+        <button class="nav-item" data-page="watch"><i class="fa-solid fa-bookmark"></i><span>İzleme Günlüğü</span></button>
+        <button class="nav-item" data-page="analytics"><i class="fa-solid fa-chart-line"></i><span>İstatistikler</span></button>
+        <div class="sidebar-caption">SİSTEM</div>
+        <button class="nav-item" data-page="sources"><i class="fa-solid fa-database"></i><span>Veri Kaynakları</span></button>
+        <button class="nav-item" data-page="subtitles"><i class="fa-solid fa-closed-captioning"></i><span>Altyazı Merkezi</span></button>
+        <button class="nav-item" data-page="backups"><i class="fa-solid fa-shield-halved"></i><span>Yedekleme</span></button>
+        <button class="nav-item" data-page="settings"><i class="fa-solid fa-sliders"></i><span>Genel Ayarlar</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-status"><span class="status-dot"></span><span><b>Ön izleme modu</b><small>Veritabanı bağlantısı yok</small></span></div>
+        <a class="back-to-site" href="index.html#/anasayfa"><i class="fa-solid fa-arrow-left"></i> Perde'ye dön</a>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="icon-button mobile-menu" id="mobile-menu" aria-label="Menüyü aç"><i class="fa-solid fa-bars"></i></button>
+        <div class="breadcrumbs"><span>Perde</span><i class="fa-solid fa-chevron-right"></i><b id="breadcrumb-current">Genel Bakış</b></div>
+        <div class="topbar-actions">
+          <span class="preview-pill"><i class="fa-regular fa-eye"></i> Taslak görünüm</span>
+          <a class="icon-button" href="index.html#/anasayfa" title="Siteyi görüntüle" aria-label="Siteyi görüntüle"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <div class="admin-avatar">P</div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <section class="page-view active" id="page-overview">
+          <div class="page-heading">
+            <div><span class="eyebrow">YÖNETİM PANELİ</span><h1>Genel Bakış</h1><p>Perde arşivini ve kişisel sinema deneyimini tek merkezden yönet.</p></div>
+            <div class="heading-date"><i class="fa-regular fa-calendar"></i><span id="today-label">Bugün</span></div>
+          </div>
+          <div class="welcome-banner">
+            <div class="welcome-copy"><span class="eyebrow gold">PERDE YÖNETİM MERKEZİ</span><h2>Her şey kontrol altında.</h2><p>Arşivini düzenle, izleme geçmişini takip et ve ana sayfa deneyimini şekillendir.</p><button class="gold-button" data-goto="catalog"><i class="fa-solid fa-arrow-right"></i> Arşivi yönet</button></div>
+            <div class="welcome-art" aria-hidden="true"><div class="art-ring"></div><i class="fa-solid fa-clapperboard"></i><span>YOUR CINEMA<br>YOUR COLLECTION</span></div>
+          </div>
+          <div class="section-title-row"><div><h2>Arşiv özeti</h2><p>Katalog dosyasından okunan mevcut kayıtlar</p></div><span class="live-label"><i class="fa-solid fa-circle"></i> CANLI KATALOG</span></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-film"></i></div><span class="stat-label">Toplam film</span><strong id="stat-movies">—</strong><small><i class="fa-solid fa-database"></i> Katalog kaydı</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-tv"></i></div><span class="stat-label">Toplam dizi</span><strong id="stat-series">—</strong><small><i class="fa-solid fa-database"></i> Katalog kaydı</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-heart"></i></div><span class="stat-label">Favoriler</span><strong id="stat-favorites">—</strong><small><i class="fa-regular fa-hard-drive"></i> Bu tarayıcı</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-bookmark"></i></div><span class="stat-label">İzleme listesi</span><strong id="stat-watchlist">—</strong><small><i class="fa-regular fa-hard-drive"></i> Bu tarayıcı</small></article>
+          </div>
+          <div class="overview-grid">
+            <section class="surface-card">
+              <div class="card-heading"><div><h2>Son eklenen yapımlar</h2><p>Katalogdaki en yeni kayıtlar</p></div><button class="text-button" data-goto="catalog">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div>
+              <div class="recent-list" id="recent-list"><div class="loading-line">Katalog yükleniyor…</div></div>
+            </section>
+            <section class="surface-card quick-card">
+              <div class="card-heading"><div><h2>Hızlı işlemler</h2><p>Sık kullanılan yönetim alanları</p></div></div>
+              <button class="quick-action" data-goto="catalog"><span><i class="fa-solid fa-plus"></i></span><b>Film / dizi kataloğu</b><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="quick-action" data-goto="hero"><span><i class="fa-regular fa-images"></i></span><b>Manşeti düzenle</b><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="quick-action" data-goto="collections"><span><i class="fa-solid fa-layer-group"></i></span><b>Koleksiyonları yönet</b><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="quick-action" data-goto="backups"><span><i class="fa-solid fa-download"></i></span><b>Verileri dışa aktar</b><i class="fa-solid fa-chevron-right"></i></button>
+            </section>
+          </div>
+          <section class="surface-card system-card">
+            <div class="card-heading"><div><h2>Sistem durumu</h2><p>Bu taslakta tespit edilen bağlantılar</p></div><span class="status-chip warning">Veritabanı aşaması bekliyor</span></div>
+            <div class="system-grid">
+              <div class="system-item"><span class="system-icon good"><i class="fa-solid fa-check"></i></span><span><b>Katalog dosyası</b><small id="catalog-status">Kontrol ediliyor</small></span><em class="status-text good-text">Yerel JSON</em></div>
+              <div class="system-item"><span class="system-icon"><i class="fa-solid fa-hard-drive"></i></span><span><b>Kişisel kayıtlar</b><small>Tarayıcı depolaması</small></span><em class="status-text">Yerel</em></div>
+              <div class="system-item"><span class="system-icon pending"><i class="fa-solid fa-plug"></i></span><span><b>Yönetim API'si</b><small>Henüz bağlanmadı</small></span><em class="status-text pending-text">Sonraki aşama</em></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="page-view" id="page-catalog">
+          <div class="page-heading"><div><span class="eyebrow">İÇERİK YÖNETİMİ</span><h1>Film ve Diziler</h1><p>Mevcut kataloğu görüntüle ve kayıtları incele.</p></div><button class="gold-button" id="add-content-button"><i class="fa-solid fa-plus"></i> Yeni kayıt taslağı</button></div>
+          <div class="catalog-toolbar surface-card"><label class="admin-search"><i class="fa-solid fa-magnifying-glass"></i><input id="catalog-search" type="search" placeholder="Yapım adı, yönetmen veya tür ara…"></label><select id="catalog-type" aria-label="Yapım türü"><option value="all">Tüm yapımlar</option><option value="movie">Filmler</option><option value="tv">Diziler</option></select><span class="result-count" id="catalog-count">Katalog yükleniyor</span></div>
+          <div class="surface-card table-card"><div class="table-scroll"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB ID</th><th></th></tr></thead><tbody id="catalog-table-body"><tr><td colspan="6" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div></div>
+          <p class="info-note"><i class="fa-solid fa-circle-info"></i> Bu ilk taslakta kayıtlar salt okunur. Ekleme, düzenleme ve silme işlemleri gerçek veritabanı / güvenli kayıt katmanı kurulduktan sonra etkinleştirilecek.</p>
+        </section>
+
+        <section class="page-view" id="page-collections">
+          <div class="page-heading"><div><span class="eyebrow">ANA SAYFA DÜZENİ</span><h1>Koleksiyonlar</h1><p>Perde ana sayfasındaki rafların ve özel listelerin yönetim alanı.</p></div><button class="gold-button" data-demo="Yeni koleksiyon oluşturma"> <i class="fa-solid fa-plus"></i> Koleksiyon ekle</button></div>
+          <div class="feature-grid"><article class="feature-card"><i class="fa-solid fa-fire"></i><h3>Trend yapımlar</h3><p>Popüler ve öne çıkan film / diziler.</p><span class="feature-state">Yönetim taslağı</span></article><article class="feature-card"><i class="fa-solid fa-star"></i><h3>Editörün seçimi</h3><p>Özel seçkiler ve küratör listeleri.</p><span class="feature-state">Yönetim taslağı</span></article><article class="feature-card"><i class="fa-solid fa-clock"></i><h3>Yeni eklenenler</h3><p>Son eklenen katalog kayıtları.</p><span class="feature-state">Yönetim taslağı</span></article><article class="feature-card"><i class="fa-solid fa-masks-theater"></i><h3>Türe göre keşfet</h3><p>Tür ve temaya göre koleksiyon rafları.</p><span class="feature-state">Yönetim taslağı</span></article></div>
+        </section>
+
+        <section class="page-view" id="page-hero">
+          <div class="page-heading"><div><span class="eyebrow">VİTRİN YÖNETİMİ</span><h1>Manşet ve Slider</h1><p>Ana sayfa manşetinde gösterilecek yapımları ve sıralamayı yönet.</p></div><button class="gold-button" data-demo="Manşet düzenleme"> <i class="fa-solid fa-pen"></i> Manşeti düzenle</button></div>
+          <div class="surface-card hero-preview"><div class="hero-preview-image"><span>PERDE ÖNE ÇIKANLAR</span><div><small>MANŞET ÖN İZLEMESİ</small><h2>Sinemanın en iyi hikâyeleri burada.</h2><p>Bu alan, seçtiğin yapımın görseli ve tanıtım metniyle dinamik olarak güncellenecek.</p></div></div><div class="hero-preview-foot"><span><i class="fa-solid fa-circle-info"></i> Görsel ve metin ayarları veritabanı aşamasında bağlanacak.</span><span class="status-chip">Ön izleme</span></div></div>
+        </section>
+
+        <section class="page-view" id="page-watch">
+          <div class="page-heading"><div><span class="eyebrow">KİŞİSEL SİNEMA</span><h1>İzleme Günlüğü</h1><p>İzleme geçmişi, devam eden yapımlar ve kişisel listeler.</p></div></div>
+          <div class="feature-grid"><article class="feature-card"><i class="fa-solid fa-circle-play"></i><h3>İzlemeye devam et</h3><p>Yarım kalan film ve dizilerin takibi.</p><span class="feature-state">Yerel kayıtlar</span></article><article class="feature-card"><i class="fa-solid fa-calendar-check"></i><h3>İzleme geçmişi</h3><p>İzlenen yapımlar ve izleme tarihleri.</p><span class="feature-state">Yerel kayıtlar</span></article><article class="feature-card"><i class="fa-solid fa-heart"></i><h3>Favoriler</h3><p>Beğenilen yapımların kişisel arşivi.</p><span class="feature-state">Yerel kayıtlar</span></article><article class="feature-card"><i class="fa-solid fa-bookmark"></i><h3>İzleme listesi</h3><p>Daha sonra izlenecek yapımlar.</p><span class="feature-state">Yerel kayıtlar</span></article></div>
+        </section>
+
+        <section class="page-view" id="page-analytics">
+          <div class="page-heading"><div><span class="eyebrow">RAPORLAMA</span><h1>İstatistikler</h1><p>İzleme alışkanlıklarını ve arşiv dağılımını analiz et.</p></div></div>
+          <div class="stats-grid compact-stats"><article class="stat-card"><span class="stat-label">Arşiv büyüklüğü</span><strong id="analytics-total">—</strong><small>Toplam katalog kaydı</small></article><article class="stat-card"><span class="stat-label">Film oranı</span><strong id="analytics-movie-share">—</strong><small>Katalog içindeki pay</small></article><article class="stat-card"><span class="stat-label">Dizi oranı</span><strong id="analytics-tv-share">—</strong><small>Katalog içindeki pay</small></article></div>
+          <div class="surface-card chart-card"><div class="card-heading"><div><h2>İçerik dağılımı</h2><p>Mevcut katalog kayıtlarına göre</p></div></div><div class="distribution-bar"><span id="movie-bar"></span><span id="tv-bar"></span></div><div class="legend-row"><span><i class="legend-dot movie-dot"></i> Filmler <b id="legend-movies">—</b></span><span><i class="legend-dot tv-dot"></i> Diziler <b id="legend-series">—</b></span></div></div>
+        </section>
+
+        <section class="page-view" id="page-sources">
+          <div class="page-heading"><div><span class="eyebrow">ENTEGRASYONLAR</span><h1>Veri Kaynakları</h1><p>Harici film ve dizi servislerinin bağlantı ayarları.</p></div></div>
+          <div class="integration-list"><article class="integration-card"><span class="integration-logo imdb">IMDb</span><div><h3>IMDb</h3><p>Film ve dizi puanları, temel yapım bilgileri.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo tmdb"><i class="fa-solid fa-database"></i></span><div><h3>TMDB</h3><p>Poster, açıklama, oyuncu ve yapım detayları.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo rt"><i class="fa-solid fa-tomato"></i></span><div><h3>Rotten Tomatoes</h3><p>Eleştirmen ve izleyici puanları.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo popcorn"><i class="fa-solid fa-popcorn"></i></span><div><h3>Popcorn</h3><p>İlgili puan / değerlendirme kaynağı ayarları.</p></div><span class="status-chip">Bağlantı planlandı</span></article></div>
+        </section>
+
+        <section class="page-view" id="page-subtitles">
+          <div class="page-heading"><div><span class="eyebrow">OYNATICI ARAÇLARI</span><h1>Altyazı Merkezi</h1><p>Altyazı servislerini ve dil tercihlerini tek noktadan yönet.</p></div></div>
+          <div class="surface-card settings-list"><div class="setting-row"><div><b>Altyazı arama servisi</b><small>Mevcut altyazı sağlayıcısı bağlantısı</small></div><span class="status-chip">Yapılandırılacak</span></div><div class="setting-row"><div><b>Varsayılan dil</b><small>Türkçe altyazı önceliği</small></div><span class="setting-value">Türkçe</span></div><div class="setting-row"><div><b>Otomatik altyazı eşleştirme</b><small>Yapım adı ve yıl üzerinden eşleştirme</small></div><span class="status-chip">Sonraki aşama</span></div></div>
+        </section>
+
+        <section class="page-view" id="page-backups">
+          <div class="page-heading"><div><span class="eyebrow">VERİ GÜVENLİĞİ</span><h1>Yedekleme ve Geri Yükleme</h1><p>Katalog ve kişisel verilerin için güvenli yedekleme merkezi.</p></div></div>
+          <div class="backup-callout"><i class="fa-solid fa-shield-halved"></i><div><h2>Önce güvenlik, sonra değişiklik.</h2><p>Gerçek kayıt işlemleri açılmadan önce otomatik yedekleme ve geri yükleme akışı kurulacak.</p></div></div>
+          <div class="backup-grid"><article class="surface-card"><i class="fa-solid fa-file-code"></i><h3>Katalog yedeği</h3><p>Film ve dizi kayıtlarının JSON dışa aktarımı.</p><button class="outline-button" id="export-catalog"><i class="fa-solid fa-download"></i> Kataloğu indir</button></article><article class="surface-card"><i class="fa-solid fa-box-archive"></i><h3>Kişisel veriler</h3><p>Bu tarayıcıda tutulan favori ve izleme listesi.</p><button class="outline-button" id="export-personal"><i class="fa-solid fa-download"></i> Kişisel verileri indir</button></article></div>
+          <p class="info-note"><i class="fa-solid fa-lock"></i> Bu taslak yalnızca mevcut tarayıcıda erişilebilen verileri dışa aktarabilir. Sunucu yedeği veya geri yükleme henüz etkin değildir.</p>
+        </section>
+
+        <section class="page-view" id="page-settings">
+          <div class="page-heading"><div><span class="eyebrow">TERCİHLER</span><h1>Genel Ayarlar</h1><p>Yönetim merkezinin görünüm ve çalışma tercihleri.</p></div></div>
+          <div class="surface-card settings-list"><div class="setting-row"><div><b>Yönetim teması</b><small>Koyu arayüz, altın vurgu rengi</small></div><span class="setting-value">Dark Gold</span></div><div class="setting-row"><div><b>Arayüz dili</b><small>Yönetim paneli metin dili</small></div><span class="setting-value">Türkçe</span></div><div class="setting-row"><div><b>Veri kaynağı</b><small>İlk taslakta kullanılan katalog dosyası</small></div><span class="setting-value">data/catalog.json</span></div><div class="setting-row"><div><b>Kayıt modu</b><small>Veritabanı entegrasyonu öncesi güvenli ön izleme</small></div><span class="status-chip warning">Salt okunur</span></div></div>
+        </section>
+      </div>
+      <footer class="admin-footer"><span>PERDE <b>YÖNETİM MERKEZİ</b></span><span>İlk arayüz taslağı · Veritabanı bağlantısı henüz yok</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
+  <script src="assets/js/admin.js?v=20261107-admin-draft"></script>
+</body>
+</html>
