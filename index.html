@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261107-page-photo-home-guard-v2">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261107-search-category-v1">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">\n</head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -55,8 +55,14 @@
         </a>
         <div class="header-actions"><div class="header-search-shell">
                 <label class="search-wrap glass-search">
+                    <select id="search-category" class="search-category" aria-label="Arama kategorisi">
+                        <option value="media">Film / Dizi</option>
+                        <option value="actor">Oyuncu</option>
+                        <option value="director">Yönetmen</option>
+                    </select>
+                    <span class="search-category-divider" aria-hidden="true"></span>
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="search-input" type="search" placeholder="Film, dizi, oyuncu veya yönetmen ara..." aria-label="Film, dizi, oyuncu veya yönetmen ara" autocomplete="off">
+                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara" autocomplete="off">
                 </label>
                 <div id="header-search-results" class="header-search-results" role="listbox" aria-label="Arama sonuçları" hidden></div>
             </div>
@@ -423,7 +429,7 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261107-data-recovery-fix-v1"></script>
+    <script src="assets/js/bundle.js?v=20261107-search-category-v1"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
