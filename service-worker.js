@@ -1,5 +1,5 @@
-const CACHE_NAME='ny7-shell-v16';
-const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/ny7-icon.svg','./data/catalog.json'];
+const CACHE_NAME='ny7-shell-v17';
+const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/ny7-icon.svg','./data/catalog.json','./data/homepage-config.json'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
