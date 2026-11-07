@@ -129,7 +129,32 @@ function fitHeroTitleToWidth() {
             const runtime = item.type === 'tv'
                 ? [item.seasons ? `${item.seasons} sezon` : '', item.episodes ? `${item.episodes} bölüm` : '', item.duration || ''].filter(Boolean).join(' • ')
                 : (item.duration || '');
-            document.getElementById('hero-meta').innerText = [item.year, item.type === 'tv' ? 'Dizi' : 'Film', runtime, item.category].filter(Boolean).join(' • ');
+            const meta = document.getElementById('hero-meta');
+            meta.replaceChildren();
+            const metaItems = [
+                { icon: 'fa-calendar-days', value: item.year },
+                { icon: item.type === 'tv' ? 'fa-tv' : 'fa-film', value: item.type === 'tv' ? 'Dizi' : 'Film' },
+                { icon: 'fa-clock', value: runtime },
+                { icon: 'fa-tags', value: item.category }
+            ].filter(entry => entry.value !== undefined && entry.value !== null && String(entry.value).trim() !== '');
+            metaItems.forEach((entry, index) => {
+                if (index) {
+                    const separator = document.createElement('span');
+                    separator.className = 'hero-meta-separator';
+                    separator.setAttribute('aria-hidden', 'true');
+                    separator.textContent = '·';
+                    meta.appendChild(separator);
+                }
+                const part = document.createElement('span');
+                part.className = 'hero-meta-item';
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid ' + entry.icon;
+                icon.setAttribute('aria-hidden', 'true');
+                const label = document.createElement('span');
+                label.textContent = String(entry.value);
+                part.append(icon, label);
+                meta.appendChild(part);
+            });
             document.getElementById('hero-desc').innerText = item.desc;
             document.querySelectorAll('.hero-thumb').forEach((el,i) => {
                 const active = heroItems[i]?.id === item.id;
