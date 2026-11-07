@@ -628,3 +628,10 @@
 .collection-picker-row .catalog-picker{min-width:0}
 .collection-picker-row>.gold-button{min-height:42px}
 @media(max-width:760px){.catalog-picker-results{max-height:240px}.collection-picker-row{grid-template-columns:minmax(0,1fr)}.collection-picker-row>.gold-button{width:100%}}
+
+
+/* TMDB duplicate result state */
+.tmdb-result-item.is-duplicate{opacity:.62;cursor:not-allowed;border-color:#35483d;background:#121a18}
+.tmdb-result-item.is-duplicate:hover{border-color:#35483d;background:#121a18}
+.tmdb-result-item:disabled{pointer-events:none}
+.tmdb-result-state{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;padding:6px 8px;border:1px solid #315340;border-radius:999px;color:#8ec9a0;background:#173022;font-size:9px;font-weight:700;white-space:nowrap}
