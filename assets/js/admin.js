@@ -14,7 +14,7 @@
   let editorSubtitles = [];
   let editorTmdbCast = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
-  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme ve Geçmiş',settings:'Genel Ayarlar'};
+  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
     node.innerHTML = '<i class="fa-solid fa-circle-info"></i>' + escapeHtml(message);
@@ -637,7 +637,7 @@
     [...new Set(catalog.map(item => String(item.year || '').trim()).filter(Boolean))].sort((a,b) => Number(b)-Number(a)).forEach(year => yearSelect.add(new Option(year,year)));
     $('#catalog-total').textContent = catalog.length.toLocaleString('tr-TR');
     $('#catalog-posters').textContent = catalog.filter(item => item.image || item.poster).length.toLocaleString('tr-TR');
-    $('#catalog-incomplete').textContent = catalog.filter(item => !(item.image || item.poster) || !item.rating || !item.tmdbId).length.toLocaleString('tr-TR');
+    $('#catalog-incomplete').textContent = catalog.filter(item => catalogIssues(item).length).length.toLocaleString('tr-TR');
   }
   function catalogMatches() {
     const query = ($('#catalog-search').value || '').trim().toLocaleLowerCase('tr-TR');
@@ -666,11 +666,7 @@
     return rows;
   }
   function catalogQuality(item) {
-    const missing = [];
-    if (!(item.image || item.poster)) missing.push('Afiş');
-    if (!item.rating) missing.push('Puan');
-    if (!item.tmdbId) missing.push('TMDB');
-    return missing;
+    return catalogIssues(item).map(key=>healthLabels[key]);
   }
   function renderCatalogPagination(totalRows) {
     const pagination = $('#catalog-pagination');
