@@ -676,6 +676,15 @@
   let heroSlides = [];
   let heroActiveIndex = 0;
   let heroPreviewMode = 'desktop';
+  let heroSettings = {desktopCount:6,mobileCount:4,interval:6,autoplay:true,pauseOnHover:true};
+  function normalizeHeroSettings(settings={}) {
+    const desktop=[4,5,6,8,10],mobile=[3,4,5,6],intervals=[4,6,8,10];
+    return {desktopCount:desktop.includes(Number(settings.desktopCount))?Number(settings.desktopCount):6,mobileCount:mobile.includes(Number(settings.mobileCount))?Number(settings.mobileCount):4,interval:intervals.includes(Number(settings.interval))?Number(settings.interval):6,autoplay:settings.autoplay!==false,pauseOnHover:settings.pauseOnHover!==false};
+  }
+  function syncHeroSettingsForm(){
+    $('#hero-desktop-count').value=String(heroSettings.desktopCount);$('#hero-mobile-count').value=String(heroSettings.mobileCount);$('#hero-interval').value=String(heroSettings.interval);$('#hero-autoplay').checked=heroSettings.autoplay;$('#hero-pause-hover').checked=heroSettings.pauseOnHover;
+  }
+  function readHeroSettingsForm(){heroSettings=normalizeHeroSettings({desktopCount:$('#hero-desktop-count').value,mobileCount:$('#hero-mobile-count').value,interval:$('#hero-interval').value,autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause-hover').checked});}
   function heroImage(item) { return item.tmdbBackdrop || item.backdrop || item.image || item.poster || ''; }
   function heroSeed() {
     return [...catalog].filter(item => heroImage(item)).sort((a,b) => (Number.parseFloat(b.rating)||0)-(Number.parseFloat(a.rating)||0)).slice(0,5).map(item => ({id:String(item.id),active:true,headline:'',description:''}));
@@ -701,6 +710,8 @@
       try { const response=await fetch('data/homepage-config.json?ts='+Date.now(),{cache:'no-store'}); if(response.ok)config=await response.json(); }
       catch(error) { console.warn('Manşet ayar dosyası okunamadı:',error); }
     }
+    heroSettings=normalizeHeroSettings(config?.settings||{});
+    syncHeroSettingsForm();
     if(config&&Array.isArray(config.heroSlides)&&config.heroSlides.length) {
       const validIds=new Set(catalog.map(item=>String(item.id)));
       heroSlides=config.heroSlides.filter(slide=>slide&&validIds.has(String(slide.id))).map(slide=>({
@@ -794,7 +805,8 @@
     try {
       const current=await githubHeroConfigRequest('GET');
       if(!current.sha)throw new Error('Yayın ayar dosyasının sürümü okunamadı.');
-      const payload={version:1,updatedAt:new Date().toISOString(),heroSlides:validSlides};
+      readHeroSettingsForm();
+      const payload={version:2,updatedAt:new Date().toISOString(),settings:heroSettings,heroSlides:validSlides};
       await githubHeroConfigRequest('PUT',{
         message:'Update Perde homepage hero and slider settings',
         content:encodeGithubContent(JSON.stringify(payload,null,2)+'\n'),
@@ -1261,7 +1273,8 @@
   $('#diary-new-status').addEventListener('change',event=>{if(event.target.value==='watched'&&!$('#diary-new-date').value)$('#diary-new-date').value=new Date().toISOString().slice(0,10);});
   $('#diary-list-search').addEventListener('input',renderDiary);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
-  $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
+  ['#hero-desktop-count','#hero-mobile-count','#hero-interval','#hero-autoplay','#hero-pause-hover'].forEach(selector=>$(selector).addEventListener('change',readHeroSettingsForm));
+  $('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
     heroPreviewMode=button.dataset.heroPreview;
     $$('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
     renderHeroPreview();
