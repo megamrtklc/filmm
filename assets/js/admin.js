@@ -70,6 +70,8 @@
     $('#catalog-status').textContent = catalog.length+' kayıt başarıyla okundu';
   }
   let catalogView = 'grid';
+  let catalogPage = 1;
+  const catalogPageSize = 15;
   function catalogGenres() {
     return [...new Set(catalog.flatMap(item => String(item.category || item.genre || '').split('/').map(value => value.trim()).filter(Boolean)))].sort((a,b) => a.localeCompare(b,'tr'));
   }
@@ -114,6 +116,31 @@
     if (!item.tmdbId) missing.push('TMDB');
     return missing;
   }
+  function renderCatalogPagination(totalRows) {
+    const pagination = $('#catalog-pagination');
+    const pageCount = Math.max(1,Math.ceil(totalRows/catalogPageSize));
+    catalogPage = Math.min(Math.max(1,catalogPage),pageCount);
+    if (totalRows <= catalogPageSize) {
+      pagination.hidden = true;
+      pagination.innerHTML = '';
+      return;
+    }
+    const first = (catalogPage-1)*catalogPageSize+1;
+    const last = Math.min(catalogPage*catalogPageSize,totalRows);
+    const pages = [];
+    for (let page=1; page<=pageCount; page++) {
+      if (pageCount > 7 && page > 2 && page < pageCount-1 && Math.abs(page-catalogPage)>1) {
+        if (page === 3 || page === pageCount-2) pages.push('<span class="pagination-ellipsis" aria-hidden="true">…</span>');
+        continue;
+      }
+      pages.push('<button type="button" class="pagination-page'+(page===catalogPage?' active':'')+'" data-catalog-page="'+page+'"'+(page===catalogPage?' aria-current="page"':'')+'>'+page+'</button>');
+    }
+    pagination.hidden = false;
+    pagination.innerHTML = '<span class="pagination-summary">'+first.toLocaleString('tr-TR')+'–'+last.toLocaleString('tr-TR')+' / '+totalRows.toLocaleString('tr-TR')+' kayıt</span>'+
+      '<div class="pagination-controls"><button type="button" class="pagination-step" data-catalog-step="-1"'+(catalogPage===1?' disabled':'')+'><i class="fa-solid fa-chevron-left"></i> Önceki</button>'+
+      '<div class="pagination-pages">'+pages.join('')+'</div>'+
+      '<button type="button" class="pagination-step" data-catalog-step="1"'+(catalogPage===pageCount?' disabled':'')+'>Sonraki <i class="fa-solid fa-chevron-right"></i></button></div>';
+  }
   function renderCatalog() {
     const rows = catalogMatches();
     $('#catalog-count').textContent = rows.length.toLocaleString('tr-TR')+' / '+catalog.length.toLocaleString('tr-TR')+' kayıt';
@@ -122,9 +149,13 @@
     if (!rows.length) {
       grid.innerHTML = '<div class="catalog-empty"><i class="fa-solid fa-film"></i><b>Eşleşen yapım bulunamadı</b><span>Filtreleri değiştirmeyi veya aramanı temizlemeyi dene.</span></div>';
       tableBody.innerHTML = '<tr><td colspan="7" class="empty-cell">Aramanla eşleşen yapım bulunamadı.</td></tr>';
+      renderCatalogPagination(0);
       return;
     }
-    grid.innerHTML = rows.map(item => {
+    const pageCount = Math.max(1,Math.ceil(rows.length/catalogPageSize));
+    catalogPage = Math.min(Math.max(1,catalogPage),pageCount);
+    const pageRows = rows.slice((catalogPage-1)*catalogPageSize,catalogPage*catalogPageSize);
+    grid.innerHTML = pageRows.map(item => {
       const image = poster(item);
       const missing = catalogQuality(item);
       const rating = Number.parseFloat(item.rating);
@@ -135,12 +166,13 @@
         (missing.length?'<span class="catalog-warning-badge" title="Eksik: '+escapeHtml(missing.join(', '))+'"><i class="fa-solid fa-triangle-exclamation"></i> '+missing.length+' eksik</span>':'')+'</div>'+
         '<div class="catalog-card-copy"><b title="'+escapeHtml(item.title)+'">'+escapeHtml(item.title)+'</b><span>'+escapeHtml(item.year || 'Yıl bilinmiyor')+' · '+escapeHtml(item.genre || item.category || 'Tür belirtilmemiş')+'</span><div class="catalog-card-foot"><small>'+(item.tmdbId?'TMDB '+escapeHtml(item.tmdbId):'TMDB eşleşmesi yok')+'</small><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></div></div></article>';
     }).join('');
-    tableBody.innerHTML = rows.map(item => {
+    tableBody.innerHTML = pageRows.map(item => {
       const missing = catalogQuality(item);
       return '<tr><td><div class="catalog-name">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td>'+(missing.length?'<span class="catalog-quality-warning">'+escapeHtml(missing.join(' · '))+'</span>':'<span class="catalog-quality-good"><i class="fa-solid fa-check"></i> Tam</span>')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>';
     }).join('');
     grid.hidden = catalogView !== 'grid';
     $('#catalog-table-view').hidden = catalogView !== 'table';
+    renderCatalogPagination(rows.length);
   }
   function setCatalogView(view) {
     catalogView = view === 'table' ? 'table' : 'grid';
@@ -472,7 +504,16 @@
   $$('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
   $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
-  ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',renderCatalog));
+  ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',() => {catalogPage=1;renderCatalog();}));
+  $('#catalog-pagination').addEventListener('click',event => {
+    const pageButton = event.target.closest('[data-catalog-page]');
+    const stepButton = event.target.closest('[data-catalog-step]');
+    if (pageButton) catalogPage = Number(pageButton.dataset.catalogPage);
+    else if (stepButton && !stepButton.disabled) catalogPage += Number(stepButton.dataset.catalogStep);
+    else return;
+    renderCatalog();
+    $('#catalog-poster-grid').scrollIntoView({behavior:'smooth',block:'start'});
+  });
   $$('[data-catalog-view]').forEach(button => button.addEventListener('click',() => setCatalogView(button.dataset.catalogView)));
   $('#catalog-poster-grid').addEventListener('click',event => {
     const button = event.target.closest('[data-inspect]');

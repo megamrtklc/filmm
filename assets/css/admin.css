@@ -269,3 +269,44 @@
 .diary-insight-note i{color:var(--gold);margin-right:5px}
 @media(max-width:1050px){.diary-add-controls{grid-template-columns:1fr 1.4fr}.diary-workspace{grid-template-columns:1fr}.diary-insight-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.diary-insight-panel .card-heading,.diary-insight-total,.diary-insight-note{grid-column:1/-1}}
 @media(max-width:700px){.watch-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.diary-add-controls{grid-template-columns:1fr}.diary-toolbar{align-items:flex-start;flex-direction:column}.diary-filter-search{width:100%}.diary-entry-fields{grid-template-columns:1fr 1fr}.diary-entry-fields label:first-child{grid-column:1/-1}.diary-tabs{margin-right:-5px}.diary-insight-panel{display:block}}
+
+
+/* Katalog sayfalama */
+.catalog-pagination{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 8px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.catalog-pagination[hidden]{display:none!important}
+.pagination-summary{font-size:11px;color:var(--muted);white-space:nowrap}
+.pagination-controls,.pagination-pages{display:flex;align-items:center;gap:5px}
+.pagination-step,.pagination-page{min-width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#11151d;color:#c4cad3;font:600 11px 'DM Sans',sans-serif;cursor:pointer;transition:.18s}
+.pagination-page{min-width:34px;padding:0 8px}
+.pagination-step:hover:not(:disabled),.pagination-page:hover{border-color:#a98243;color:var(--gold-bright)}
+.pagination-page.active{border-color:var(--gold);background:rgba(216,173,85,.15);color:var(--gold-bright);box-shadow:inset 0 0 0 1px rgba(216,173,85,.12)}
+.pagination-step:disabled{opacity:.35;cursor:not-allowed}
+.pagination-ellipsis{padding:0 3px;color:var(--muted);font-size:12px}
+@media(max-width:700px){.catalog-pagination{align-items:stretch;flex-direction:column;gap:10px}.pagination-summary{text-align:center}.pagination-controls{justify-content:space-between;gap:4px}.pagination-pages{gap:3px}.pagination-page{min-width:30px;height:32px;padding:0 5px}.pagination-step{height:32px;padding:0 8px;font-size:10px}}
+@media(max-width:390px){.pagination-step{font-size:0;min-width:34px}.pagination-step i{font-size:11px}.pagination-pages{gap:2px}.pagination-page{min-width:27px;height:30px;font-size:10px}}
+
+/* Yönetim panelinde ikincil metinlerin okunabilirliği */
+.sidebar-caption{font-size:10px}
+.admin-brand small{font-size:10px}
+.sidebar-status small,.back-to-site{font-size:10px}
+.eyebrow{font-size:10px}
+.page-heading p,.section-title-row p,.card-heading p{font-size:12px;line-height:1.55}
+.heading-date,.breadcrumbs{font-size:12px}
+.preview-pill{font-size:11px}
+.stat-label{font-size:12px}
+.stat-card>small{font-size:11px}
+.info-note{font-size:11px;line-height:1.7}
+.result-count{font-size:11px}
+.catalog-summary-strip small,.collection-summary-strip small,.watch-summary-grid small{font-size:10px}
+.catalog-card-copy>span{font-size:10px}
+.catalog-card-foot small{font-size:10px}
+.catalog-quality-warning,.catalog-quality-good{font-size:10px}
+.catalog-empty span,.catalog-empty b{font-size:11px}
+.collection-list-copy small,.collection-create-form>small,.collection-item-copy small,.collection-preview-note{font-size:10px}
+.collection-item-actions button{font-size:11px}
+.hero-live-kicker,.hero-live-meta,.hero-live-copy p,.hero-live-cta,.hero-live-index{font-size:11px}
+.hero-slide-select small,.hero-slide-state,.hero-manager-tip,.hero-manager-status small{font-size:10px}
+.hero-field-label{font-size:10px}
+.diary-toolbar p,.diary-entry-title span,.diary-status-pill,.diary-entry-fields label,.diary-insight-total span,.diary-insight-row,.diary-insight-note{font-size:10px}
+.diary-tabs button{font-size:11px}
+.diary-tabs button b{font-size:10px}
