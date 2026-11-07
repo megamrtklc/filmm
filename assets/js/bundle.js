@@ -448,8 +448,9 @@ async function renderSavedHomeCollections() {
             if(!entries.length)return;
             const railId='saved-collection-rail-'+index;
             const section=document.createElement('section');
-            section.className='collection-section space-y-4';
-            section.innerHTML='<div class="collection-heading"><div><p class="collection-eyebrow">ÖZEL KOLEKSİYON</p><h2>'+esc(collection.title)+'</h2></div><div class="rail-controls" aria-label="'+esc(collection.title)+' rafı kaydırma kontrolleri"><button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Öncekiler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonrakiler"><i class="fa-solid fa-chevron-right"></i></button></div></div><div id="'+railId+'" class="collection-rail">'+entries.map(item=>'<article class="collection-card" data-detail-id="'+esc(item.id)+'" tabindex="0" role="button" aria-label="'+esc(item.title)+' detayını aç"><div class="collection-poster-wrap"><img src="'+esc(item.image)+'" alt="'+esc(item.title)+'" loading="lazy" decoding="async"><span class="collection-rating">★ '+esc(item.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+esc(item.title)+'</h3>'+originalTitleMarkup(item,'collection-original-title')+'<p>'+esc(item.year||'')+' <span>•</span> '+(item.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('')+'</div>';
+            section.className='collection-section saved-collection-section space-y-4';
+            const controls=entries.length>8?'<div class="rail-controls" aria-label="'+esc(collection.title)+' rafı kaydırma kontrolleri"><button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Önceki afişler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonraki afişler"><i class="fa-solid fa-chevron-right"></i></button></div>':'';
+            section.innerHTML='<div class="collection-heading"><div><p class="collection-eyebrow">ÖZEL KOLEKSİYON</p><h2>'+esc(collection.title)+'</h2></div>'+controls+'</div><div id="'+railId+'" class="collection-rail saved-collection-rail">'+entries.map(item=>'<article class="collection-card" data-detail-id="'+esc(item.id)+'" tabindex="0" role="button" aria-label="'+esc(item.title)+' detayını aç"><div class="collection-poster-wrap"><img src="'+esc(item.image)+'" alt="'+esc(item.title)+'" loading="lazy" decoding="async"><span class="collection-rating">★ '+esc(item.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+esc(item.title)+'</h3>'+originalTitleMarkup(item,'collection-original-title')+'<p>'+esc(item.year||'')+' <span>•</span> '+(item.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('')+'</div>';
             host.appendChild(section);
           });
     } catch(error) { console.warn('Özel koleksiyon rafları yüklenemedi:',error); }
@@ -1797,7 +1798,7 @@ document.addEventListener('click',event=>{
  const control=event.target.closest('[data-rail-target][data-rail-direction]');
  if(control){
   const rail=document.getElementById(control.dataset.railTarget);
-  if(rail)rail.scrollBy({left:Number(control.dataset.railDirection)*Math.max(260,rail.clientWidth*.82),behavior:'smooth'});
+  if(rail){const page=rail.classList.contains('saved-collection-rail')?rail.clientWidth*.98:Math.max(260,rail.clientWidth*.82);rail.scrollBy({left:Number(control.dataset.railDirection)*page,behavior:'smooth'});}
   return;
  }
  if(event.target.matches('[data-detail-dismiss]')&&document.body.classList.contains('ny7-detail-open'))showDashboard();
