@@ -6455,3 +6455,14 @@ body.detail-synopsis-open{overflow:hidden}
 .detail-credit-item>strong,.detail-credit-cast>strong{color:#e6e8ed;font-size:12px;font-weight:650;line-height:1.55;overflow-wrap:anywhere}
 .detail-credit-cast{grid-column:1/-1;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
 @media(max-width:700px){.detail-credits{margin-top:14px;padding-inline:0}.detail-credits-card{padding:16px}.detail-credits-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}.detail-credit-item>strong,.detail-credit-cast>strong{font-size:11px}}
+
+/* Oyuncu kartları — film künyesi */
+.detail-cast-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:3px}
+.detail-cast-person{display:flex;align-items:center;gap:9px;min-width:0;padding:8px;border:1px solid rgba(255,255,255,.075);border-radius:10px;background:rgba(255,255,255,.025);color:#f4f4f5;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.detail-cast-person:hover{background:rgba(255,255,255,.07);border-color:rgba(197,166,106,.45);transform:translateY(-1px)}
+.detail-cast-person>img,.detail-cast-avatar{flex:0 0 42px;width:42px;height:48px;border-radius:7px;object-fit:cover;background:#252936}
+.detail-cast-avatar{display:grid;place-items:center;color:#d7c49b;font-size:12px;font-weight:800}
+.detail-cast-person-copy{display:flex;min-width:0;flex-direction:column;gap:3px}
+.detail-cast-person-copy strong{overflow:hidden;color:#f1f2f5;font-size:11px;font-weight:750;text-overflow:ellipsis;white-space:nowrap}
+.detail-cast-person-copy small{overflow:hidden;color:#9298a4;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:700px){.detail-cast-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.detail-cast-person{gap:7px;padding:7px}.detail-cast-person>img,.detail-cast-avatar{flex-basis:36px;width:36px;height:43px}.detail-cast-person-copy strong{font-size:10px}.detail-cast-person-copy small{font-size:9px}}
