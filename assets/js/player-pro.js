@@ -140,12 +140,30 @@
     const select = $('player-subtitle-track');
     if (select) select.value = selected >= 0 ? String(selected) : '-1';
   }
+  function attachSavedSubtitleTracks() {
+    if (typeof mediaDatabase === 'undefined' || !Array.isArray(mediaDatabase)) return;
+    const item = mediaDatabase.find(entry => String(entry.id) === String(mediaId));
+    if (!item || !Array.isArray(item.subtitles)) return;
+    const episode = window.perdeEpisodeContext || null;
+    item.subtitles
+      .filter(track => track && track.url && (!track.season || (episode && Number(track.season) === Number(episode.season) && Number(track.episode) === Number(episode.episode))))
+      .forEach(track => {
+        const node = document.createElement('track');
+        node.kind = 'subtitles';
+        node.label = track.languageLabel || track.language || 'Altyazı';
+        node.srclang = track.language === 'other' ? 'und' : (track.language || 'tr');
+        node.src = track.url;
+        if (track.default) node.default = true;
+        video.appendChild(node);
+      });
+  }
   function attachAdaptive(url) {
     destroyAdaptive();
     video.pause();
     video.removeAttribute('src');
     video.replaceChildren();
     video.load();
+    attachSavedSubtitleTracks();
     if ($('player-empty-state')) $('player-empty-state').hidden = true;
     if ($('player-error')) { $('player-error').hidden = true; $('player-error').textContent = ''; }
     setOptions('player-quality', [], 'Kalite');
