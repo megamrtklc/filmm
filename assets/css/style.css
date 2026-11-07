@@ -5746,3 +5746,14 @@ body.detail-synopsis-open{overflow:hidden}
   #dashboard-view .home-feature-row #hero-section .hero-kicker-wrap{gap:8px}
   #dashboard-view .home-feature-row #hero-section .hero-type-badge{padding:5px 8px;font-size:8px}
 }
+
+
+/* Hero text sizing: remove inherited width and synopsis clamps */
+#dashboard-view .home-feature-row #hero-section .hero-copy{width:min(94%,1120px)!important;max-width:none!important;min-width:0!important}
+#dashboard-view .home-feature-row #hero-section #hero-title,
+#dashboard-view .home-feature-row #hero-section #hero-meta,
+#dashboard-view .home-feature-row #hero-section #hero-desc,
+#dashboard-view .home-feature-row #hero-section #hero-ratings{width:100%!important;max-width:none!important}
+#dashboard-view .home-feature-row #hero-section #hero-title{white-space:normal!important;overflow-wrap:anywhere}
+#dashboard-view .home-feature-row #hero-section #hero-desc{display:block!important;overflow:visible!important;white-space:normal!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;-webkit-box-orient:initial!important;max-height:none!important;text-overflow:clip!important}
+@media(max-width:820px){#dashboard-view .home-feature-row #hero-section .hero-copy{width:100%!important;max-width:none!important}}
