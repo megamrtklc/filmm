@@ -755,3 +755,12 @@
 .history-link:hover{border-color:var(--gold);color:var(--gold)}
 #history-refresh:disabled{opacity:.6;cursor:wait}
 @media(max-width:600px){.history-summary-grid{gap:8px}.history-summary-card{padding:13px}.history-summary-card>strong{font-size:23px}.history-workspace{padding:13px}.history-row{gap:8px;padding:9px}.history-copy>b{font-size:11px}}
+
+
+/* İçerik kontrolü satır işlemleri */
+.health-issue-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.health-issue-actions .row-action{white-space:nowrap}
+.health-issue-actions .row-action-danger{border:1px solid rgba(231,105,105,.22);background:rgba(231,105,105,.08);color:#ef9999}
+.health-issue-actions .row-action-danger:hover{border-color:rgba(231,105,105,.55);background:rgba(231,105,105,.16);color:#ffb0b0}
+.health-issue-actions .row-action:disabled{opacity:.6;cursor:wait}
+@media(max-width:560px){.health-issue-actions{gap:5px}.health-issue-actions .row-action{padding:7px 8px;font-size:10px}.health-issue-actions .row-action-danger i{margin-right:3px}}
