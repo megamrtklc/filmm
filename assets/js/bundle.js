@@ -1889,6 +1889,38 @@ function getYouTubeVideoId(value){
   return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
  }catch(_){return '';}
 }
+function getOKRuVideoId(value){
+ try{
+  const parsed=new URL(String(value||'').trim());
+  const host=parsed.hostname.toLowerCase().replace(/^www\./,'');
+  if(!(host==='ok.ru'||host.endsWith('.ok.ru')||host==='odnoklassniki.ru'||host.endsWith('.odnoklassniki.ru')))return '';
+  const match=parsed.pathname.match(/\/(?:video|videoembed)\/(\d+)/i);
+  return match?match[1]:'';
+ }catch(_){return '';}
+}
+function attachOKRuPlayer(url){
+ const stage=document.getElementById('player-stage'),video=document.getElementById('player-video');
+ if(!stage||!video)return false;
+ const videoId=getOKRuVideoId(url);
+ if(!videoId)return false;
+ clearYouTubePlayer();
+ video.pause();video.removeAttribute('src');video.replaceChildren();video.load();
+ const iframe=document.createElement('iframe');
+ iframe.id='player-youtube-frame';
+ iframe.className='ny7-youtube-frame';
+ iframe.title=(document.getElementById('player-media-title')?.textContent||'Film')+' — OK.ru oynatıcı';
+ iframe.src='https://ok.ru/videoembed/'+encodeURIComponent(videoId);
+ iframe.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+ iframe.allowFullscreen=true;
+ iframe.referrerPolicy='strict-origin-when-cross-origin';
+ stage.insertBefore(iframe,video);
+ stage.classList.add('is-youtube-playing');
+ const empty=document.getElementById('player-empty-state');if(empty)empty.hidden=true;
+ ['player-big-play','player-controls','player-settings-panel','player-skip-intro','player-skip-credits'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=true;});
+ const loading=document.getElementById('player-loading');if(loading)loading.hidden=true;
+ setPlayerError('');
+ return true;
+}
 function attachYouTubePlayer(url){
  const stage=document.getElementById('player-stage'),video=document.getElementById('player-video');
  if(!stage||!video)return false;
@@ -1944,8 +1976,9 @@ async function loadSavedPlayerSource(id, catalogWatchUrl=''){
  const watchUrl=String(catalogWatchUrl||'').trim();
  if(watchUrl){
   if(getYouTubeVideoId(watchUrl)){attachYouTubePlayer(watchUrl);return;}
+  if(getOKRuVideoId(watchUrl)){attachOKRuPlayer(watchUrl);return;}
   if(isDirectPlayablePlayerUrl(watchUrl)){attachPlayerSource(watchUrl,'Yapım izleme bağlantısı');return;}
-  setPlayerError('Bu bağlantı desteklenmiyor. YouTube bağlantısı veya doğrudan .mp4, .webm, .m3u8 ya da .mpd video bağlantısı kullan.');
+  setPlayerError('Bu bağlantı desteklenmiyor. YouTube, OK.ru veya doğrudan MP4, WebM, HLS ya da DASH bağlantısı kullan.');
   return;
  }
  if(source?.type==='local'){
@@ -1954,6 +1987,7 @@ async function loadSavedPlayerSource(id, catalogWatchUrl=''){
  }
  if((source?.type==='youtube'||source?.type==='url')&&source.url){
   if(getYouTubeVideoId(source.url)){attachYouTubePlayer(source.url);return;}
+  if(getOKRuVideoId(source.url)){attachOKRuPlayer(source.url);return;}
   attachPlayerSource(source.url,'Harici yayın');
  }
 }
