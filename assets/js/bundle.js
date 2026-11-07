@@ -431,6 +431,30 @@ function initializeMoodDiscovery() {
     chooseMoodPick('');
 }
 
+async function renderSavedHomeCollections() {
+    const host=document.getElementById('custom-collection-rails');
+    if(!host)return;
+    host.innerHTML='';
+    try {
+        const url=new URL('./data/collections.json?v=20261107-collections-v1',document.baseURI);
+        const response=await fetch(url.href,{cache:'no-store'});
+        if(!response.ok)throw new Error('Koleksiyon dosyası yüklenemedi.');
+        const saved=await response.json();
+        if(!Array.isArray(saved))return;
+        const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        saved.filter(collection=>collection&&collection.active!==false&&collection.title&&Array.isArray(collection.items)&&collection.items.length)
+          .forEach((collection,index)=>{
+            const entries=collection.items.map(id=>mediaDatabase.find(item=>String(item.id)===String(id))).filter(item=>item&&item.title&&item.image);
+            if(!entries.length)return;
+            const railId='saved-collection-rail-'+index;
+            const section=document.createElement('section');
+            section.className='collection-section space-y-4';
+            section.innerHTML='<div class="collection-heading"><div><p class="collection-eyebrow">ÖZEL KOLEKSİYON</p><h2>'+esc(collection.title)+'</h2></div><div class="rail-controls" aria-label="'+esc(collection.title)+' rafı kaydırma kontrolleri"><button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Öncekiler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonrakiler"><i class="fa-solid fa-chevron-right"></i></button></div></div><div id="'+railId+'" class="collection-rail">'+entries.map(item=>'<article class="collection-card" data-detail-id="'+esc(item.id)+'" tabindex="0" role="button" aria-label="'+esc(item.title)+' detayını aç"><div class="collection-poster-wrap"><img src="'+esc(item.image)+'" alt="'+esc(item.title)+'" loading="lazy" decoding="async"><span class="collection-rating">★ '+esc(item.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+esc(item.title)+'</h3>'+originalTitleMarkup(item,'collection-original-title')+'<p>'+esc(item.year||'')+' <span>•</span> '+(item.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('')+'</div>';
+            host.appendChild(section);
+          });
+    } catch(error) { console.warn('Özel koleksiyon rafları yüklenemedi:',error); }
+}
+
 function renderHomeCollections() {
     const score = item => {
         const value = Number.parseFloat(item.rating);
@@ -475,6 +499,7 @@ function renderHomeCollections() {
     });
     document.getElementById('collection-movies').hidden = movies.length === 0;
     document.getElementById('collection-series').hidden = series.length === 0;
+    renderSavedHomeCollections();
 }
 
 function updateHeaderActiveState(){
