@@ -1574,19 +1574,43 @@ async function fetchTmdbActorProfile(name,onPersonResolved){
  }
  return {id:person.id,name:person.name,biography,birthday:person.birthday||'',deathday:person.deathday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||'',headers};
 }
-function renderActorFilmography(person,name,localWorks){
+let actorFilmographyItems=[];
+let actorFilmographyFilter='all';
+let actorFilmographySort='newest';
+let actorFilmographyVisible=12;
+function setActorFilmographyFilter(filter){
+ actorFilmographyFilter=['all','movie','tv'].includes(filter)?filter:'all';
+ actorFilmographyVisible=12;
+ renderActorFilmographyGrid();
+}
+function setActorFilmographySort(sort){
+ actorFilmographySort=['newest','oldest','popular'].includes(sort)?sort:'newest';
+ actorFilmographyVisible=12;
+ renderActorFilmographyGrid();
+}
+function showMoreActorFilmography(){
+ actorFilmographyVisible+=12;
+ renderActorFilmographyGrid();
+}
+function renderActorFilmographyGrid(){
  const grid=document.getElementById('actor-filmography-grid');
- const normalize=value=>normalizeActorName(value);
- const items=[...new Map((Array.isArray(localWorks)?localWorks:[]).filter(item=>item&&item.id).map(item=>[String(item.id),item])).values()];
- items.sort((a,b)=>String(b.tmdbReleaseDate||b.year||'').localeCompare(String(a.tmdbReleaseDate||a.year||'')));
- const films=items.filter(item=>item.type!=='tv').length;
- const series=items.length-films;
- document.getElementById('actor-filmography-title').textContent=name+' — '+items.length+' yapım';
- document.getElementById('actor-education').textContent=films+' film · '+series+' dizi';
- grid.innerHTML=items.map(item=>{
+ const controls=document.getElementById('actor-filmography-controls');
+ const more=document.getElementById('actor-filmography-more');
+ const status=document.getElementById('actor-filmography-status');
+ if(!grid)return;
+ let items=actorFilmographyItems.filter(item=>actorFilmographyFilter==='all'||item.type===actorFilmographyFilter);
+ items.sort((a,b)=>{
+  if(actorFilmographySort==='popular'){
+   return (Number(b.tmdbVoteCount)||0)-(Number(a.tmdbVoteCount)||0)||(Number(b.tmdbRating||b.rating)||0)-(Number(a.tmdbRating||a.rating)||0);
+  }
+  const ad=String(a.tmdbReleaseDate||a.year||'');
+  const bd=String(b.tmdbReleaseDate||b.year||'');
+  return actorFilmographySort==='oldest'?ad.localeCompare(bd):bd.localeCompare(ad);
+ });
+ const visible=items.slice(0,actorFilmographyVisible);
+ grid.innerHTML=visible.map(item=>{
   const cast=Array.isArray(item.tmdbCast)?item.tmdbCast:[];
-  const personCredit=cast.find(entry=>entry&&typeof entry==='object'&&((person?.id&&String(entry.id)===String(person.id))||normalize(entry.name)===normalize(name)));
-  const legacyCast=Array.isArray(item.cast)?item.cast:[];
+  const personCredit=cast.find(entry=>entry&&typeof entry==='object'&&((window.activeActorTmdbId&&String(entry.id)===String(window.activeActorTmdbId))||normalizeActorName(entry.name)===normalizeActorName(window.activeActorFilmographyName)));
   const role=personCredit?.character||'';
   const poster=item.image||item.tmdbPoster||item.poster||'';
   const date=String(item.tmdbReleaseDate||item.year||'').slice(0,4);
@@ -1594,8 +1618,31 @@ function renderActorFilmography(person,name,localWorks){
   const content=(poster?'<img src="'+escapeCastHtml(poster)+'" alt="'+escapeCastHtml(item.title||'')+'" loading="lazy">':'<span class="actor-work-poster-empty"><i class="fa-solid fa-film"></i></span>')+
    '<span class="actor-work-copy"><b>'+escapeCastHtml(item.title||'Yapım adı yok')+'</b><small>'+escapeCastHtml(date)+' · '+kind+(role?' · '+escapeCastHtml(role):'')+'</small></span>';
   return '<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(item.id).replace(/'/g,"\\'")+'\')">'+content+'</button>';
- }).join('')||'<p class="actor-filmography-empty">Perde kataloğunda bu oyuncuyla eşleşen kayıtlı film veya dizi bulunmuyor.</p>';
+ }).join('')||'<p class="actor-filmography-empty">Bu kategoride Perde kataloğunda kayıtlı yapım bulunmuyor.</p>';
+ if(status)status.textContent=items.length+' yapımdan '+Math.min(visible.length,items.length)+' tanesi gösteriliyor';
+ if(more)more.hidden=visible.length>=items.length;
+ if(controls)controls.hidden=actorFilmographyItems.length===0;
 }
+function renderActorFilmography(person,name,localWorks){
+ actorFilmographyItems=[...new Map((Array.isArray(localWorks)?localWorks:[]).filter(item=>item&&item.id).map(item=>[String(item.id),item])).values()];
+ actorFilmographyFilter='all';
+ actorFilmographySort='newest';
+ actorFilmographyVisible=12;
+ window.activeActorTmdbId=person?.id||null;
+ window.activeActorFilmographyName=name;
+ const films=actorFilmographyItems.filter(item=>item.type==='movie').length;
+ const series=actorFilmographyItems.filter(item=>item.type==='tv').length;
+ document.getElementById('actor-filmography-title').textContent=name+' — '+actorFilmographyItems.length+' yapım';
+ document.getElementById('actor-education').textContent=films+' film · '+series+' dizi';
+ const filterButtons=document.querySelectorAll('[data-actor-film-filter]');
+ filterButtons.forEach(button=>button.classList.toggle('is-active',button.dataset.actorFilmFilter==='all'));
+ const sortSelect=document.getElementById('actor-filmography-sort');
+ if(sortSelect)sortSelect.value='newest';
+ renderActorFilmographyGrid();
+}
+window.setActorFilmographyFilter=setActorFilmographyFilter;
+window.setActorFilmographySort=setActorFilmographySort;
+window.showMoreActorFilmography=showMoreActorFilmography;
 function openActorPage(name,update=true){
  const profileRequestId=++actorProfileRequestSequence;
  document.body.classList.remove('ny7-detail-open');document.documentElement.classList.remove('ny7-modal-lock');
