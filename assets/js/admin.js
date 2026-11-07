@@ -32,7 +32,7 @@
   function navigate(page) {
     if (!pageNames[page]) return;
     $$('.page-view').forEach(view => view.classList.toggle('active', view.id === 'page-' + page));
-    $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.page === page));
+    $$$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.page === page));
     $('#breadcrumb-current').textContent = pageNames[page];
     $('#admin-sidebar').classList.remove('open');
     window.scrollTo({top:0,behavior:'smooth'});
@@ -1343,7 +1343,7 @@
     const button=event.target.closest('[data-watch-edit]');if(!button)return;
     const item=catalog.find(row=>String(row.id)===button.dataset.watchEdit);if(item)openEditor(item);
   });
-  $('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
+  $$('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
   $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
   ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',() => {catalogPage=1;renderCatalog();}));
@@ -1606,6 +1606,6 @@
     }
   });
   if(location.hash==='#history')loadChangeHistory();
-  $('.nav-item[data-page="history"]').forEach(item=>item.addEventListener('click',loadChangeHistory));
+  $$('.nav-item[data-page="history"]').forEach(item=>item.addEventListener('click',loadChangeHistory));
   init();
 })();
