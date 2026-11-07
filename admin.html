@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261108-backup-restore1">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261108-history1">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -35,6 +35,7 @@
         <div class="sidebar-caption">SİSTEM</div>
         <button class="nav-item" data-page="sources"><i class="fa-solid fa-database"></i><span>Veri Kaynakları</span></button>
         <button class="nav-item" data-page="backups"><i class="fa-solid fa-shield-halved"></i><span>Yedekleme</span></button>
+        <button class="nav-item" data-page="history"><i class="fa-solid fa-clock-rotate-left"></i><span>Değişiklik Geçmişi</span></button>
         <button class="nav-item" data-page="settings"><i class="fa-solid fa-sliders"></i><span>Genel Ayarlar</span></button>
       </nav>
       <div class="sidebar-bottom">
@@ -472,6 +473,19 @@
           <p class="info-note"><i class="fa-solid fa-lock"></i> Tam arşiv geri yükleme GitHub deposundaki üç dosyayı günceller. İşlem öncesinde mevcut katalog ve yayın ayarları bilgisayarına güvenlik yedeği olarak indirilir. Kişisel veriler ayrı yedekten geri yüklenir.</p>
         </section>
 
+        <section class="page-view" id="page-history">
+          <div class="page-heading"><div><span class="eyebrow">SİSTEM KAYITLARI</span><h1>Değişiklik Geçmişi</h1><p>Perde arşivi, koleksiyonları ve ana sayfa ayarlarında yapılan GitHub kayıtlarını takip et.</p></div><button class="outline-button" id="history-refresh"><i class="fa-solid fa-rotate"></i> Yenile</button></div>
+          <div class="history-summary-grid">
+            <article class="surface-card history-summary-card"><span><i class="fa-solid fa-clock-rotate-left"></i> GÖSTERİLEN KAYIT</span><strong id="history-total">—</strong><small>Son 30 kayıt, en yeniden eskiye</small></article>
+            <article class="surface-card history-summary-card"><span><i class="fa-solid fa-database"></i> TAKİP EDİLEN DOSYA</span><strong>3</strong><small>Katalog, koleksiyon ve ana sayfa ayarları</small></article>
+          </div>
+          <section class="surface-card history-workspace">
+            <div class="card-heading"><div><h2>Son işlemler</h2><p>GitHub kayıt geçmişinden alınır; kişisel tarayıcı hareketlerini içermez.</p></div><span class="insight-kicker" id="history-status">BAĞLANTI BEKLENİYOR</span></div>
+            <div class="history-list" id="history-list"><div class="health-empty"><i class="fa-solid fa-clock"></i><b>Geçmiş yüklenmedi</b><span>GitHub bağlantısı kurulduğunda son kayıtlar burada görünür.</span></div></div>
+          </section>
+          <p class="info-note"><i class="fa-solid fa-circle-info"></i> Bu alan GitHub'ın dosya bazlı kayıt geçmişini gösterir. Sadece bu üç yönetim dosyasına ait commit'ler listelenir; kullanıcı/ziyaretçi hareketleri veya tarayıcıdaki kişisel işlemler izlenmez.</p>
+        </section>
+
         <section class="page-view" id="page-settings">
           <div class="page-heading"><div><span class="eyebrow">TERCİHLER</span><h1>Genel Ayarlar</h1><p>Yönetim merkezinin görünüm ve çalışma tercihleri.</p></div></div>
           <div class="surface-card settings-list"><div class="setting-row"><div><b>Yönetim teması</b><small>Koyu arayüz, altın vurgu rengi</small></div><span class="setting-value">Dark Gold</span></div><div class="setting-row"><div><b>Arayüz dili</b><small>Yönetim paneli metin dili</small></div><span class="setting-value">Türkçe</span></div><div class="setting-row"><div><b>Veri kaynağı</b><small>İlk taslakta kullanılan katalog dosyası</small></div><span class="setting-value">data/catalog.json</span></div><div class="setting-row"><div><b>Kayıt modu</b><small>Veritabanı entegrasyonu öncesi güvenli ön izleme</small></div><span class="status-chip warning">Salt okunur</span></div></div>
@@ -481,6 +495,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261108-backup-restore1"></script>
+  <script src="assets/js/admin.js?v=20261108-history1"></script>
 </body>
 </html>
