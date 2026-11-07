@@ -665,9 +665,46 @@
   let heroSlides = [];
   let heroActiveIndex = 0;
   let heroPreviewMode = 'desktop';
-  function heroImage(item) { return item.backdrop || item.image || item.poster || ''; }
+  function heroImage(item) { return item.tmdbBackdrop || item.backdrop || item.image || item.poster || ''; }
   function heroSeed() {
-    return [...catalog].filter(item => heroImage(item)).sort((a,b) => (Number.parseFloat(b.rating)||0)-(Number.parseFloat(a.rating)||0)).slice(0,5).map(item => ({id:String(item.id),active:true}));
+    return [...catalog].filter(item => heroImage(item)).sort((a,b) => (Number.parseFloat(b.rating)||0)-(Number.parseFloat(a.rating)||0)).slice(0,5).map(item => ({id:String(item.id),active:true,headline:'',description:''}));
+  }
+  async function githubHeroConfigRequest(method,body) {
+    const token=getGithubToken();
+    if(!token) throw new Error('Kalıcı yayın için önce Veri Kaynakları / GitHub bağlantısına erişim anahtarını kaydet.');
+    const response=await fetch('https://api.github.com/repos/'+githubRepo+'/contents/data/homepage-config.json',{
+      method,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28',...(body?{'Content-Type':'application/json'}:{})},
+      ...(body?{body:JSON.stringify(body)}:{})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error('GitHub HTTP '+response.status+': '+(data.message||'Yayın ayarları okunamadı.'));
+    return data;
+  }
+  async function loadHeroConfig() {
+    let config=null;
+    if(getGithubToken()) {
+      try { const saved=await githubHeroConfigRequest('GET'); config=JSON.parse(decodeGithubContent(saved.content)); }
+      catch(error) { console.warn('GitHub manşet ayarları okunamadı, yayınlanan dosya deneniyor:',error); }
+    }
+    if(!config) {
+      try { const response=await fetch('data/homepage-config.json?ts='+Date.now(),{cache:'no-store'}); if(response.ok)config=await response.json(); }
+      catch(error) { console.warn('Manşet ayar dosyası okunamadı:',error); }
+    }
+    if(config&&Array.isArray(config.heroSlides)) {
+      const validIds=new Set(catalog.map(item=>String(item.id)));
+      heroSlides=config.heroSlides.filter(slide=>slide&&validIds.has(String(slide.id))).map(slide=>({
+        id:String(slide.id),active:slide.active!==false,
+        headline:String(slide.headline||''),description:String(slide.description||'')
+      }));
+      $('#hero-save-status-title').textContent='Kayıtlı yayın ayarları';
+      $('#hero-save-status').textContent='GitHub dosyasından yüklendi.';
+    } else {
+      heroSlides=heroSeed();
+      $('#hero-save-status-title').textContent='Henüz özel yayın ayarı yok';
+      $('#hero-save-status').textContent='İlk düzenlemeni yapıp kaydedebilirsin.';
+    }
+    heroActiveIndex=0;
+    renderHeroSlides();
   }
   function heroCurrentItem() {
     const slide = heroSlides[heroActiveIndex];
@@ -680,16 +717,19 @@
     if (!item) {
       $('#hero-live-title').textContent='Henüz manşet seçilmedi';
       $('#hero-live-meta').textContent='';
-      $('#hero-live-desc').textContent='Sağdaki katalog listesinden bir yapım ekleyerek ön izlemeyi oluştur.';
+      $('#hero-live-desc').textContent='Sağdaki katalog listesinden bir yapım ekleyerek ön izlemeyi oluştur.';\n      $('#hero-headline-input').value=''; $('#hero-description-input').value='';
       $('#hero-live-backdrop').style.backgroundImage='';
       $('#hero-live-index').textContent='00 / 00';
       return;
     }
     const image=heroImage(item);
     $('#hero-live-backdrop').style.backgroundImage=image?'linear-gradient(90deg,rgba(7,9,13,.94) 0%,rgba(7,9,13,.62) 52%,rgba(7,9,13,.12) 100%),linear-gradient(0deg,rgba(7,9,13,.55),transparent 65%),url("'+image.replace(/["\\]/g,'')+'")':'linear-gradient(120deg,#202631,#0b0d11)';
-    $('#hero-live-title').textContent=item.title||'Başlıksız yapım';
+    const slide=heroSlides[heroActiveIndex]||{};
+    $('#hero-live-title').textContent=slide.headline||item.title||'Başlıksız yapım';
+    $('#hero-headline-input').value=slide.headline||'';
+    $('#hero-description-input').value=slide.description||'';
     $('#hero-live-meta').innerHTML='<span>'+(item.type==='tv'?'DİZİ':'FİLM')+'</span><i>•</i><span>'+escapeHtml(item.year||'—')+'</span>'+(item.duration?'<i>•</i><span>'+escapeHtml(item.duration)+'</span>':'')+(item.rating?'<i>•</i><b>★ '+escapeHtml(item.rating)+'</b>':'');
-    $('#hero-live-desc').textContent=item.desc||'Bu yapım için katalogda tanıtım metni bulunmuyor.';
+    $('#hero-live-desc').textContent=slide.description||item.tmdbOverview||item.desc||'Bu yapım için katalogda tanıtım metni bulunmuyor.';
     $('#hero-live-index').textContent=String(heroActiveIndex+1).padStart(2,'0')+' / '+String(heroSlides.length).padStart(2,'0');
   }
   function renderHeroSlides() {
@@ -715,7 +755,7 @@
     const id=$('#hero-content-select').value;
     if(!id)return toast('Önce katalogdan bir yapım seç.');
     if(heroSlides.some(slide=>slide.id===id))return toast('Bu yapım zaten slider listesinde.');
-    heroSlides.push({id,active:true});
+    heroSlides.push({id,active:true,headline:'',description:''});
     heroActiveIndex=heroSlides.length-1;
     renderHeroSlides();
     toast('Yapım yerel ön izleme listesine eklendi.');
@@ -726,6 +766,38 @@
     [heroSlides[index],heroSlides[target]]=[heroSlides[target],heroSlides[index]];
     heroActiveIndex=target;
     renderHeroSlides();
+  }
+  async function saveHeroConfig() {
+    const button=$('#hero-save-button');
+    if(!heroSlides.length)return toast('Yayınlamak için slider listesine en az bir yapım ekle.');
+    if(!heroSlides.some(slide=>slide.active))return toast('En az bir yapımı yayında bırakmalısın.');
+    const validSlides=heroSlides.filter(slide=>catalog.some(item=>String(item.id)===slide.id)).map(slide=>({
+      id:slide.id,active:slide.active!==false,
+      headline:String(slide.headline||'').trim().slice(0,90),
+      description:String(slide.description||'').trim().slice(0,360)
+    }));
+    button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor…';
+    $('#hero-save-status').textContent='GitHub deposuna kaydediliyor…';
+    try {
+      const current=await githubHeroConfigRequest('GET');
+      if(!current.sha)throw new Error('Yayın ayar dosyasının sürümü okunamadı.');
+      const payload={version:1,updatedAt:new Date().toISOString(),heroSlides:validSlides};
+      await githubHeroConfigRequest('PUT',{
+        message:'Update Perde homepage hero and slider settings',
+        content:encodeGithubContent(JSON.stringify(payload,null,2)+'\\n'),
+        sha:current.sha,branch:'main'
+      });
+      heroSlides=validSlides;renderHeroSlides();
+      $('#hero-save-status-title').textContent='Yayında';
+      $('#hero-save-status').textContent=new Date().toLocaleString('tr-TR')+' · GitHub’a kaydedildi.';
+      toast('Manşet ve slider ayarları kaydedildi. Ana sayfa yayınlanıyor.');
+    } catch(error) {
+      $('#hero-save-status-title').textContent='Kayıt başarısız';
+      $('#hero-save-status').textContent=error.message;
+      toast('Yayın ayarları kaydedilemedi: '+error.message);
+    } finally {
+      button.disabled=false;button.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Değişiklikleri kaydet ve yayınla';
+    }
   }
   function handleHeroListClick(event) {
     const button=event.target.closest('button');
@@ -1119,6 +1191,9 @@
     if (item) openEditor(item);
   });
   $('#hero-add-button').addEventListener('click',addHeroSlide);
+  $('#hero-save-button').addEventListener('click',saveHeroConfig);
+  $('#hero-headline-input').addEventListener('input',event=>{const slide=heroSlides[heroActiveIndex];if(!slide)return;slide.headline=event.target.value;$('#hero-live-title').textContent=slide.headline||heroCurrentItem()?.title||'Başlıksız yapım';});
+  $('#hero-description-input').addEventListener('input',event=>{const slide=heroSlides[heroActiveIndex];if(!slide)return;slide.description=event.target.value;const item=heroCurrentItem();$('#hero-live-desc').textContent=slide.description||item?.tmdbOverview||item?.desc||'Bu yapım için tanıtım metni bulunmuyor.';});
   $('#collection-list').addEventListener('click',handleCollectionClick);
   $('#collection-items-list').addEventListener('click',handleCollectionClick);
   $('#collection-add-item').addEventListener('click',addCollectionItem);
