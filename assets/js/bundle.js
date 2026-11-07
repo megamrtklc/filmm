@@ -1416,22 +1416,27 @@ function changeActorGalleryPage(){
  renderActorGallery();
 }
 async function fetchWikimediaActorPhotos(name,requestId){
- const query=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrnamespace:'6',gsrsearch:'"'+name+'" filemime:bitmap',gsrlimit:'30',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'720'});
- const response=await fetch('https://commons.wikimedia.org/w/api.php?'+query.toString(),{cache:'no-store'});
- if(!response.ok)throw new Error('Wikimedia Commons HTTP '+response.status);
- const data=await response.json();
- if(requestId!==actorProfileRequestSequence)return [];
- const pages=Object.values(data.query?.pages||{});
- const photos=pages.map(page=>{
-  const info=page.imageinfo?.[0],meta=info?.extmetadata||{};
-  if(!info?.url||!info?.thumburl)return null;
-  const license=String(meta.LicenseShortName?.value||meta.UsageTerms?.value||'').replace(/<[^>]*>/g,' ').trim();
-  const artist=String(meta.Artist?.value||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').trim();
-  const pageUrl=info.descriptionurl||'https://commons.wikimedia.org/wiki/'+encodeURIComponent(page.title||'');
-  return {url:info.url,thumb:info.thumburl,title:name,source:'Wikimedia Commons',page:pageUrl,license:license||'Lisans bilgisi sayfada',artist,width:info.width||0,height:info.height||0,key:String(page.pageid||page.title||info.url)};
- }).filter(Boolean);
- const seen=new Set();
- return photos.filter(photo=>{const key=photo.key.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,20);
+ const searches=['"'+name+'"',name+' portrait',name+' actor'];
+ for(const searchText of searches){
+  const query=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrnamespace:'6',gsrsearch:searchText,gsrlimit:'30',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'720'});
+  const response=await fetch('https://commons.wikimedia.org/w/api.php?'+query.toString(),{cache:'no-store'});
+  if(!response.ok)throw new Error('Wikimedia Commons HTTP '+response.status);
+  const data=await response.json();
+  if(requestId!==actorProfileRequestSequence)return [];
+  const pages=Object.values(data.query?.pages||{});
+  const photos=pages.map(page=>{
+   const info=page.imageinfo?.[0],meta=info?.extmetadata||{};
+   if(!info?.url)return null;
+   const license=String(meta.LicenseShortName?.value||meta.UsageTerms?.value||'').replace(/<[^>]*>/g,' ').trim();
+   const artist=String(meta.Artist?.value||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').trim();
+   const pageUrl=info.descriptionurl||'https://commons.wikimedia.org/wiki/'+encodeURIComponent(page.title||'');
+   return {url:info.url,thumb:info.thumburl||info.url,title:name,source:'Wikimedia Commons',page:pageUrl,license:license||'Lisans bilgisi sayfada',artist,width:info.width||0,height:info.height||0,key:String(page.pageid||page.title||info.url)};
+  }).filter(Boolean);
+  const seen=new Set();
+  const unique=photos.filter(photo=>{const key=photo.key.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,20);
+  if(unique.length)return unique;
+ }
+ return [];
 }
 async function loadActorGallery(personId,name,headers,requestId){
  actorGalleryPhotos=[];actorGalleryPage=0;actorGalleryVisibleCount=5;activeActorPhotoName=name;
@@ -1515,7 +1520,7 @@ async function translateActorBiographyToTurkish(value){
  return translated;
 }
 
-async function fetchTmdbActorProfile(name){
+async function fetchTmdbActorProfile(name,onPersonResolved){
  let token='';
  try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
  if(!token)throw new Error('TMDB Read Access Token yönetim panelinde kayıtlı değil.');
@@ -1540,6 +1545,7 @@ async function fetchTmdbActorProfile(name){
   personId=Number(exact.id);
  }
  if(!Number.isFinite(personId)||personId<=0)throw new Error('Geçerli TMDB oyuncu kimliği bulunamadı.');
+ if(typeof onPersonResolved==='function')onPersonResolved(personId,headers);
  const base='https://api.themoviedb.org/3/person/'+encodeURIComponent(personId);
  const response=await fetch(base+authQuery,{headers});
  if(!response.ok)throw new Error('TMDB oyuncu profili HTTP '+response.status);
@@ -1604,7 +1610,7 @@ function openActorPage(name,update=true){
  document.getElementById('actor-filmography-title').textContent=actorName+' — filmografi yükleniyor';
  document.getElementById('actor-filmography-grid').innerHTML='<p>Perde kataloğundaki yapımlar kontrol ediliyor…</p>';
  closeActorPhoto();window.scrollTo({top:0,behavior:'smooth'});
- fetchTmdbActorProfile(actorName).then(async person=>{
+ fetchTmdbActorProfile(actorName,(personId,headers)=>{loadActorGallery(personId,actorName,headers,profileRequestId).catch(error=>console.warn('Perde oyuncu fotoğraf galerisi yüklenemedi:',error));}).then(async person=>{
   if(profileRequestId!==actorProfileRequestSequence||document.getElementById('actor-page-view').classList.contains('hidden'))return;
   if(!person)throw new Error('TMDB oyuncu eşleşmesi bulunamadı.');
   document.getElementById('actor-banner-name').textContent=person.name||actorName;document.getElementById('actor-biography-title').textContent=person.name||actorName;
@@ -1622,7 +1628,7 @@ function openActorPage(name,update=true){
   const link=document.getElementById('actor-wikipedia-link');link.href='https://www.themoviedb.org/person/'+person.id;link.innerHTML='TMDB üzerinde görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i>';
   document.getElementById('actor-profile-image').src=person.profile||avatar;
   renderActorFilmography(person,actorName,works);
-  await loadActorGallery(person.id,person.name||actorName,person.headers,profileRequestId);
+  if(!actorGalleryPhotos.length&&person.profile){actorGalleryPhotos=[{url:person.profile,thumb:person.profile,title:person.name||actorName,source:'TMDB profil fotoğrafı',page:'https://www.themoviedb.org/person/'+person.id,license:'TMDB görsel kullanım koşulları',key:'profile-'+person.id}];renderActorGallery();}
  }).catch(error=>{
   if(profileRequestId!==actorProfileRequestSequence)return;
   console.error('Perde TMDB oyuncu profili:',error);
