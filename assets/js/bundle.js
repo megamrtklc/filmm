@@ -2015,7 +2015,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
         let heroRailHovered = false;
         let heroSettings = {desktopCount:6,mobileCount:4,interval:6,autoplay:true,pauseOnHover:true};
         let catalogInitialized = false;
-        function applyHeroDisplaySettings(){const rail=document.getElementById('hero-thumbnails-rail');if(!rail)return;const mobile=window.matchMedia('(max-width:767px)').matches;rail.style.setProperty('--hero-visible-count',String(mobile?heroSettings.mobileCount:heroSettings.desktopCount));}
+        function applyHeroDisplaySettings(){const rail=document.getElementById('hero-thumbnails-rail');if(!rail)return;const mobile=window.matchMedia('(max-width:767px)').matches;const count=mobile?heroSettings.mobileCount:heroSettings.desktopCount;const gap=parseFloat(getComputedStyle(rail).columnGap)||10;const width=Math.max(42,(rail.clientWidth-gap*(count-1))/count);rail.style.setProperty('--hero-visible-count',String(count));rail.style.setProperty('--hero-card-width',width+'px');}
         window.addEventListener('resize',applyHeroDisplaySettings,{passive:true});
         function showCatalogSkeletons() {
             const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
