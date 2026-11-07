@@ -429,3 +429,45 @@
 #archive-year-chart .year-chart-bars{grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(3px,1vw,7px);width:100%;min-width:0}
 #archive-year-chart .year-chart-column{min-width:0}
 #archive-year-chart .year-chart-column>span{font-size:clamp(8px,1vw,10px);white-space:normal;text-align:center;overflow-wrap:anywhere}
+
+
+/* Film / Dizi editor — session-only draft workspace */
+.editor-mode-switch{display:flex;gap:8px;margin:0 0 18px}
+.editor-mode-switch button{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:10px;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer}
+.editor-mode-switch button.active{background:rgba(214,174,91,.13);border-color:var(--gold);color:var(--gold)}
+.content-editor-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:18px;align-items:start}
+.content-editor-form{padding:22px}
+.editor-fields-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:20px}
+.editor-field{display:flex;flex-direction:column;gap:7px;color:var(--text);font-size:13px;font-weight:700}
+.editor-field small{font-size:11px;color:var(--muted);font-weight:500}
+.editor-field-wide{grid-column:1/-1}
+.editor-field input,.editor-field textarea{width:100%;min-width:0;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);color:var(--text);padding:12px 13px;font:inherit;font-size:13px;outline:none}
+.editor-field input:focus,.editor-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(214,174,91,.1)}
+.editor-field textarea{resize:vertical;line-height:1.6}
+.editor-divider{height:1px;background:var(--line);margin:25px 0}
+.editor-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap}
+.content-editor-aside{display:grid;gap:16px;position:sticky;top:18px}
+.editor-preview-card,.editor-drafts-card{padding:18px}
+.editor-poster-preview{height:190px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#242832,#101116);display:grid;place-items:center}
+.editor-poster-preview img{width:100%;height:100%;object-fit:cover}
+.editor-poster-preview>div{display:grid;gap:8px;place-items:center;color:#a7aab2;font-size:11px;letter-spacing:.12em}
+.editor-poster-preview>div i{font-size:32px;color:var(--gold)}
+.editor-preview-copy{padding:14px 2px 4px}
+.editor-preview-copy>span{font-size:10px;letter-spacing:.12em;color:var(--gold);font-weight:800}
+.editor-preview-copy h3{font:800 21px Manrope,sans-serif;margin:7px 0}
+.editor-preview-copy p{font-size:12px;color:var(--muted);line-height:1.55;margin:6px 0}
+.editor-preview-copy p:last-child{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.editor-preview-status{border-top:1px solid var(--line);padding-top:12px;margin:12px 0 0;color:var(--muted);font-size:11px;line-height:1.5}
+.editor-preview-status i{color:var(--gold);margin-right:5px}
+.editor-drafts-card .card-heading> b{color:var(--gold);font-size:20px}
+.editor-draft-list{display:grid;gap:7px;margin-top:12px}
+.editor-draft-item{display:flex;align-items:center;gap:10px;text-align:left;width:100%;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);color:var(--text);padding:10px;cursor:pointer}
+.editor-draft-item>span:nth-child(2){display:grid;gap:3px;flex:1;min-width:0}
+.editor-draft-item b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editor-draft-item small,.editor-draft-item>i{font-size:10px;color:var(--muted)}
+.editor-draft-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:8px;background:rgba(214,174,91,.1);color:var(--gold)}
+.editor-draft-empty{padding:16px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:1000px){.content-editor-layout{grid-template-columns:1fr}.content-editor-aside{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.content-editor-form{padding:15px}.editor-fields-grid{grid-template-columns:1fr}.editor-field-wide{grid-column:auto}.content-editor-aside{grid-template-columns:1fr}.editor-mode-switch button{flex:1;padding:10px 8px}.editor-form-actions>*{flex:1}}
+
+.editor-series-field[hidden]{display:none!important}
