@@ -54,3 +54,48 @@
 @media(max-width:1100px){.welcome-art{right:2%}.recent-list{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.insights-grid{grid-template-columns:1fr 1fr}.balance-content{gap:14px}}
 @media(max-width:760px){.welcome-banner{min-height:210px;padding:22px}.welcome-copy{max-width:72%}.welcome-copy h2{font-size:22px}.welcome-copy p{font-size:10px;max-width:280px}.welcome-art{right:-45px;opacity:.55;transform:translateY(-50%) scale(.82)}.recent-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.recent-poster-card:nth-child(n+4){display:none}.insights-grid{grid-template-columns:1fr}.balance-content{justify-content:flex-start;gap:28px}.archive-balance-card,.genre-card{min-height:unset}.genre-insights{gap:11px}}
 @media(max-width:420px){.welcome-copy{max-width:100%}.welcome-art{opacity:.2;right:-90px}.recent-list{grid-template-columns:repeat(2,minmax(0,1fr))}.recent-poster-card:nth-child(n+3){display:none}.stat-card{padding:14px}.balance-content{gap:18px}.overview-donut{width:100px;height:100px;flex-basis:100px}}
+
+/* Catalog management: poster-first, filterable read-only archive */
+.catalog-summary-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:-5px 0 15px}
+.catalog-summary-strip>div{display:flex;align-items:center;gap:11px;padding:13px 15px;background:linear-gradient(120deg,#1b2029,#151922);border:1px solid var(--line);border-radius:11px}
+.catalog-summary-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:var(--gold-soft);color:var(--gold);font-size:13px}
+.catalog-summary-strip small,.catalog-summary-strip b{display:block}
+.catalog-summary-strip small{font-size:8px;letter-spacing:1px;color:var(--muted)}
+.catalog-summary-strip b{font:800 17px Manrope,sans-serif;margin-top:2px}
+.catalog-toolbar-rich{display:flex;flex-wrap:wrap;gap:10px;padding:13px;margin-bottom:14px}
+.catalog-toolbar-rich .admin-search{flex:1 1 250px;min-width:190px}
+.catalog-toolbar-rich select{min-width:112px;max-width:100%}
+.catalog-toolbar-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding-top:10px;border-top:1px solid #ffffff0d}
+.view-switch{display:flex;gap:4px;padding:3px;background:#0f131a;border:1px solid var(--line);border-radius:8px}
+.view-switch-button{border:0;background:transparent;color:#8993a1;padding:7px 10px;border-radius:6px;font-size:9px;cursor:pointer}
+.view-switch-button.active{background:var(--gold-soft);color:var(--gold-bright);box-shadow:inset 0 0 0 1px #d8ad5530}
+.catalog-poster-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.catalog-poster-card{min-width:0;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:11px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.catalog-poster-card:hover{transform:translateY(-3px);border-color:#8b6a36;box-shadow:0 12px 30px #0004}
+.catalog-card-art{height:230px;position:relative;overflow:hidden;background:linear-gradient(145deg,#252b35,#12161d)}
+.catalog-card-art>img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.catalog-poster-card:hover .catalog-card-art>img{transform:scale(1.045)}
+.catalog-type-badge,.catalog-rating-badge,.catalog-warning-badge{position:absolute;z-index:2;display:inline-flex;align-items:center;gap:4px;border-radius:5px;padding:5px 7px;font-size:8px;font-weight:800;backdrop-filter:blur(8px)}
+.catalog-type-badge{top:9px;left:9px;background:#0b0d11c9;color:#e7d5ad;letter-spacing:.6px}
+.catalog-rating-badge{top:9px;right:9px;background:#f5c518;color:#17130a}
+.catalog-warning-badge{bottom:9px;left:9px;background:#5b3c1edb;color:#ffd58c}
+.catalog-poster-fallback{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#9b8154}
+.catalog-poster-fallback i{font-size:30px}
+.catalog-poster-fallback span{font-size:8px;letter-spacing:1.5px}
+.catalog-card-copy{padding:11px 11px 10px}
+.catalog-card-copy>b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;margin-bottom:5px}
+.catalog-card-copy>span{display:block;color:var(--muted);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:13px}
+.catalog-card-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:10px;padding-top:9px;border-top:1px solid #ffffff0d}
+.catalog-card-foot small{font-size:8px;color:#8993a1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.catalog-quality-warning{color:#e9bd75;font-size:9px}
+.catalog-quality-good{color:var(--green);font-size:9px}
+.catalog-quality-good i{margin-right:4px}
+.catalog-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:9px;padding:48px 15px;color:var(--muted);background:var(--surface);border:1px dashed #3a414d;border-radius:12px;text-align:center}
+.catalog-empty>i{font-size:25px;color:var(--gold)}
+.catalog-empty b{font:700 13px Manrope,sans-serif;color:#e4e7eb}
+.catalog-empty span{font-size:10px}
+.catalog-table-view[hidden],.catalog-poster-grid[hidden]{display:none!important}
+@media(max-width:1250px){.catalog-poster-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.catalog-card-art{height:220px}}
+@media(max-width:980px){.catalog-poster-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-toolbar-rich select{flex:1 1 130px}}
+@media(max-width:760px){.catalog-summary-strip{gap:7px}.catalog-summary-strip>div{padding:10px 9px;gap:7px}.catalog-summary-icon{width:29px;height:29px;font-size:11px}.catalog-summary-strip small{font-size:7px}.catalog-summary-strip b{font-size:15px}.catalog-poster-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.catalog-card-art{height:clamp(190px,62vw,270px)}.catalog-toolbar-rich .admin-search{flex-basis:100%}.catalog-toolbar-rich select{flex:1 1 calc(50% - 6px);min-width:0}.catalog-toolbar-bottom{align-items:flex-start;flex-direction:column}.view-switch{align-self:flex-end}}
+@media(max-width:380px){.catalog-summary-strip>div{flex-direction:column;align-items:flex-start}.catalog-card-copy{padding:9px}.catalog-card-copy>b{font-size:10px}}

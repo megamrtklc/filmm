@@ -67,17 +67,88 @@
     $('#genre-insights').innerHTML = topGenres.length ? topGenres.map(([genre,count]) => '<div class="genre-row"><span>'+escapeHtml(genre)+'</span><div class="genre-track"><i style="width:'+(count/maxGenreCount*100)+'%"></i></div><b>'+count+'</b></div>').join('') : '<div class="loading-line">Tür bilgisi bulunamadı.</div>';
     $('#catalog-status').textContent = catalog.length+' kayıt başarıyla okundu';
   }
-  function renderCatalog() {
+  let catalogView = 'grid';
+  function catalogGenres() {
+    return [...new Set(catalog.flatMap(item => String(item.category || item.genre || '').split('/').map(value => value.trim()).filter(Boolean)))].sort((a,b) => a.localeCompare(b,'tr'));
+  }
+  function initCatalogFilters() {
+    const genreSelect = $('#catalog-genre');
+    const yearSelect = $('#catalog-year');
+    catalogGenres().forEach(genre => genreSelect.add(new Option(genre,genre)));
+    [...new Set(catalog.map(item => String(item.year || '').trim()).filter(Boolean))].sort((a,b) => Number(b)-Number(a)).forEach(year => yearSelect.add(new Option(year,year)));
+    $('#catalog-total').textContent = catalog.length.toLocaleString('tr-TR');
+    $('#catalog-posters').textContent = catalog.filter(item => item.image || item.poster).length.toLocaleString('tr-TR');
+    $('#catalog-incomplete').textContent = catalog.filter(item => !(item.image || item.poster) || !item.rating || !item.tmdbId).length.toLocaleString('tr-TR');
+  }
+  function catalogMatches() {
     const query = ($('#catalog-search').value || '').trim().toLocaleLowerCase('tr-TR');
     const type = $('#catalog-type').value;
+    const genre = $('#catalog-genre').value;
+    const year = $('#catalog-year').value;
+    const ratingFilter = $('#catalog-rating').value;
+    const sort = $('#catalog-sort').value;
     const rows = catalog.filter(item => {
       const matchesType = type === 'all' || item.type === type;
-      const haystack = [item.title,item.director,item.genre,item.category,item.year].join(' ').toLocaleLowerCase('tr-TR');
-      return matchesType && haystack.includes(query);
+      const haystack = [item.title,item.director,item.genre,item.category,item.year,item.country].join(' ').toLocaleLowerCase('tr-TR');
+      const matchesGenre = genre === 'all' || String(item.category || item.genre || '').split('/').map(value => value.trim()).includes(genre);
+      const matchesYear = year === 'all' || String(item.year || '') === year;
+      const rating = Number.parseFloat(item.rating);
+      const hasRating = Number.isFinite(rating);
+      const matchesRating = ratingFilter === 'all' || (ratingFilter === 'rated' && hasRating) || (ratingFilter === 'unrated' && !hasRating) || (ratingFilter === 'high' && hasRating && rating >= 8) || (ratingFilter === 'mid' && hasRating && rating >= 6 && rating < 8) || (ratingFilter === 'low' && hasRating && rating < 6);
+      return matchesType && matchesGenre && matchesYear && matchesRating && haystack.includes(query);
     });
-    $('#catalog-count').textContent = rows.length+' / '+catalog.length+' kayıt';
-    $('#catalog-table-body').innerHTML = rows.slice(0,150).map(item => '<tr><td><div class="catalog-name">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>').join('') || '<tr><td colspan="6" class="empty-cell">Aramanla eşleşen yapım bulunamadı.</td></tr>';
-    if (rows.length > 150) $('#catalog-count').textContent += ' · İlk 150 kayıt gösteriliyor';
+    rows.sort((a,b) => {
+      if (sort === 'title-asc') return String(a.title || '').localeCompare(String(b.title || ''),'tr');
+      if (sort === 'rating-desc') return (Number.parseFloat(b.rating)||-1) - (Number.parseFloat(a.rating)||-1);
+      if (sort === 'year-asc') return (Number(a.year)||0) - (Number(b.year)||0);
+      return (Number(b.year)||0) - (Number(a.year)||0);
+    });
+    return rows;
+  }
+  function catalogQuality(item) {
+    const missing = [];
+    if (!(item.image || item.poster)) missing.push('Afiş');
+    if (!item.rating) missing.push('Puan');
+    if (!item.tmdbId) missing.push('TMDB');
+    return missing;
+  }
+  function renderCatalog() {
+    const rows = catalogMatches();
+    $('#catalog-count').textContent = rows.length.toLocaleString('tr-TR')+' / '+catalog.length.toLocaleString('tr-TR')+' kayıt';
+    const grid = $('#catalog-poster-grid');
+    const tableBody = $('#catalog-table-body');
+    if (!rows.length) {
+      grid.innerHTML = '<div class="catalog-empty"><i class="fa-solid fa-film"></i><b>Eşleşen yapım bulunamadı</b><span>Filtreleri değiştirmeyi veya aramanı temizlemeyi dene.</span></div>';
+      tableBody.innerHTML = '<tr><td colspan="7" class="empty-cell">Aramanla eşleşen yapım bulunamadı.</td></tr>';
+      return;
+    }
+    grid.innerHTML = rows.map(item => {
+      const image = poster(item);
+      const missing = catalogQuality(item);
+      const rating = Number.parseFloat(item.rating);
+      const typeLabel = item.type === 'tv' ? 'DİZİ' : 'FİLM';
+      return '<article class="catalog-poster-card">'+
+        '<div class="catalog-card-art">'+(image?'<img src="'+image+'" alt="'+escapeHtml(item.title)+' afişi" loading="lazy" onerror="this.closest(\'.catalog-card-art\').classList.add(\'poster-missing\');this.remove()">':'<div class="catalog-poster-fallback"><i class="fa-solid fa-clapperboard"></i><span>AFİŞ YOK</span></div>')+
+        '<span class="catalog-type-badge">'+typeLabel+'</span>'+(Number.isFinite(rating)?'<span class="catalog-rating-badge"><i class="fa-solid fa-star"></i> '+rating.toFixed(1)+'</span>':'')+
+        (missing.length?'<span class="catalog-warning-badge" title="Eksik: '+escapeHtml(missing.join(', '))+'"><i class="fa-solid fa-triangle-exclamation"></i> '+missing.length+' eksik</span>':'')+'</div>'+
+        '<div class="catalog-card-copy"><b title="'+escapeHtml(item.title)+'">'+escapeHtml(item.title)+'</b><span>'+escapeHtml(item.year || 'Yıl bilinmiyor')+' · '+escapeHtml(item.genre || item.category || 'Tür belirtilmemiş')+'</span><div class="catalog-card-foot"><small>'+(item.tmdbId?'TMDB '+escapeHtml(item.tmdbId):'TMDB eşleşmesi yok')+'</small><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></div></div></article>';
+    }).join('');
+    tableBody.innerHTML = rows.map(item => {
+      const missing = catalogQuality(item);
+      return '<tr><td><div class="catalog-name">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td>'+(missing.length?'<span class="catalog-quality-warning">'+escapeHtml(missing.join(' · '))+'</span>':'<span class="catalog-quality-good"><i class="fa-solid fa-check"></i> Tam</span>')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>';
+    }).join('');
+    grid.hidden = catalogView !== 'grid';
+    $('#catalog-table-view').hidden = catalogView !== 'table';
+  }
+  function setCatalogView(view) {
+    catalogView = view === 'table' ? 'table' : 'grid';
+    $$('[data-catalog-view]').forEach(button => {
+      const active = button.dataset.catalogView === catalogView;
+      button.classList.toggle('active',active);
+      button.setAttribute('aria-pressed',String(active));
+    });
+    $('#catalog-poster-grid').hidden = catalogView !== 'grid';
+    $('#catalog-table-view').hidden = catalogView !== 'table';
   }
   function downloadJson(filename, data) {
     const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
@@ -95,6 +166,7 @@
       if (!Array.isArray(data)) throw new Error('Katalog biçimi geçersiz');
       catalog = data;
       renderOverview();
+      initCatalogFilters();
       renderCatalog();
     } catch (error) {
       $('#catalog-status').textContent = 'Katalog yüklenemedi';
@@ -109,8 +181,14 @@
   $$('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
   $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
-  $('#catalog-search').addEventListener('input',renderCatalog);
-  $('#catalog-type').addEventListener('change',renderCatalog);
+  ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',renderCatalog));
+  $('[data-catalog-view]').forEach(button => button.addEventListener('click',() => setCatalogView(button.dataset.catalogView)));
+  $('#catalog-poster-grid').addEventListener('click',event => {
+    const button = event.target.closest('[data-inspect]');
+    if (!button) return;
+    const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
+    if (item) toast(item.title+' · '+(item.type==='tv'?'Dizi':'Film')+' · '+(item.year||'Yıl bilgisi yok')+' — salt okunur ön izleme');
+  });
   $('#catalog-table-body').addEventListener('click',event => {
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
