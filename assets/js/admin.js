@@ -300,6 +300,7 @@
     const host = $('#editor-tmdb-results');
     tmdbSearchResults = results;
     const filtered = results.map((item,index)=>({item,index})).filter(entry=>entry.item.media_type===editorType);
+    $('#editor-tmdb-search-status').textContent = filtered.length+' '+(editorType==='tv'?'dizi':'film')+' eşleşmesi gösteriliyor.';
     host.innerHTML = filtered.length ? filtered.map(({item,index}) => {
       const name = item.title || item.name || 'İsimsiz yapım';
       const year = String(item.release_date || item.first_air_date || '').slice(0,4);
