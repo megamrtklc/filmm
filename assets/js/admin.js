@@ -46,8 +46,8 @@
   function editorValue(id) { return document.getElementById(id).value.trim(); }
   function setEditorType(type) {
     editorType = type === 'tv' ? 'tv' : 'movie';
-    $('[data-editor-type]').forEach(button => button.classList.toggle('active',button.dataset.editorType===editorType));
-    $('.editor-series-field').forEach(field => field.hidden = editorType !== 'tv');
+    $$('[data-editor-type]').forEach(button => button.classList.toggle('active',button.dataset.editorType===editorType));
+    $$('.editor-series-field').forEach(field => field.hidden = editorType !== 'tv');
     $('#editor-duration-field').querySelector('input').placeholder = editorType === 'tv' ? '45 dk / bölüm' : '120 dk';
     $('#editor-page-title').textContent = editorEditingId ? 'Yapımı Düzenle' : (editorType === 'tv' ? 'Dizi Ekle' : 'Film Ekle');
     renderEditorPreview();
