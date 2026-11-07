@@ -6690,3 +6690,37 @@ body.detail-synopsis-open{overflow:hidden}
  #detail-page-view .perde-cast-navigation button{width:31px;height:31px}
 }
 @media(prefers-reduced-motion:reduce){#detail-page-view .perde-cast-portrait img{transition:none!important}}
+
+
+/* Perde oyuncu kartları — daha kompakt, yumuşak köşeli ve rafine */
+#detail-page-view .perde-cast-roster{max-width:1120px;margin-top:28px;padding-inline:clamp(18px,3.2vw,42px)}
+#detail-page-view .perde-cast-header{padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,.10)}
+#detail-page-view .perde-cast-header h2{font-size:clamp(20px,2.2vw,26px);font-weight:650;letter-spacing:-.03em}
+#detail-page-view .perde-cast-navigation button{width:31px;height:31px;border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.035);font-size:17px;transition:transform .22s ease,background .22s ease,color .22s ease,border-color .22s ease}
+#detail-page-view .perde-cast-navigation button:not(:disabled):hover{transform:translateY(-1px);border-color:#d0b078;background:#d0b078;color:#111}
+#detail-page-view .perde-cast-list{grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1.45vw,18px);padding-top:13px;transition:opacity .13s ease,transform .13s ease}
+#detail-page-view .perde-cast-list.is-leaving{opacity:0;transform:translateX(9px)}
+#detail-page-view .perde-cast-entry{gap:7px;padding:0 0 7px;border-radius:8px;transition:transform .22s ease,background .22s ease}
+#detail-page-view .perde-cast-entry:hover{transform:translateY(-3px);background:rgba(255,255,255,.035)}
+#detail-page-view .perde-cast-portrait{height:clamp(92px,11.2vw,124px);border-radius:7px;background:#20232a;box-shadow:0 3px 12px rgba(0,0,0,.16)}
+#detail-page-view .perde-cast-portrait img{transition:transform .38s cubic-bezier(.2,.75,.25,1),filter .3s ease}
+#detail-page-view .perde-cast-entry:hover .perde-cast-portrait img{transform:scale(1.055);filter:brightness(1.06)}
+#detail-page-view .perde-cast-identity{gap:4px;min-height:39px;padding:0 2px}
+#detail-page-view .perde-cast-identity strong{font-size:12px;line-height:1.3}
+#detail-page-view .perde-cast-identity small{font-size:11px;line-height:1.3;color:#aeb2ba}
+#detail-page-view .perde-cast-number{top:auto;right:6px;bottom:4px;transform:none;font-size:9px;color:#747984}
+@keyframes perdeCastPageEnter{from{opacity:0;transform:translateX(-7px)}to{opacity:1;transform:translateX(0)}}
+#detail-page-view .perde-cast-list{animation:perdeCastPageEnter .24s ease both}
+@media(max-width:900px){
+ #detail-page-view .perde-cast-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+ #detail-page-view .perde-cast-portrait{height:clamp(104px,19vw,138px)}
+}
+@media(max-width:520px){
+ #detail-page-view .perde-cast-roster{margin-top:23px;padding-inline:16px}
+ #detail-page-view .perde-cast-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+ #detail-page-view .perde-cast-portrait{height:clamp(88px,27vw,112px);border-radius:6px}
+ #detail-page-view .perde-cast-identity strong{font-size:11px}
+ #detail-page-view .perde-cast-identity small{font-size:10px}
+ #detail-page-view .perde-cast-number{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){#detail-page-view .perde-cast-list,#detail-page-view .perde-cast-entry,#detail-page-view .perde-cast-portrait img{animation:none!important;transition:none!important}}
