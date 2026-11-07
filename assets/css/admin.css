@@ -218,3 +218,54 @@
 .collection-preview-note i{color:var(--gold);margin-right:5px}
 @media(max-width:1120px){.collection-manager-layout{grid-template-columns:minmax(220px,.8fr) minmax(300px,1.2fr)}.collection-preview-panel{grid-column:1/-1}.collection-preview-rail{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(max-width:720px){.collection-summary-strip{grid-template-columns:1fr}.collection-manager-layout{grid-template-columns:1fr}.collection-preview-panel{grid-column:auto}.collection-preview-rail{grid-template-columns:repeat(3,minmax(0,1fr))}.collection-editor-title{flex-direction:column}.collection-add-row>div{flex-direction:column}.collection-add-row .gold-button{min-height:38px}.collection-create-fields{flex-direction:column}.collection-create-fields .gold-button{min-height:38px}}
+
+
+/* Kişisel izleme günlüğü */
+.watch-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.watch-summary-grid>article{display:flex;align-items:center;gap:12px;padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.watch-summary-grid>article>span:last-child{display:grid;gap:4px}
+.watch-summary-grid small{font-size:9px;letter-spacing:.1em;color:var(--muted);font-weight:800}
+.watch-summary-grid b{font:800 21px Manrope,sans-serif}
+.watch-summary-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:rgba(199,157,83,.12);color:var(--gold)}
+.diary-add-panel,.diary-list-panel,.diary-insight-panel{padding:18px;min-width:0}
+.diary-add-controls{display:grid;grid-template-columns:1.05fr 1.5fr 1fr auto;gap:9px;margin-top:14px}
+.diary-search-wrap,.diary-filter-search{position:relative;min-width:0}
+.diary-search-wrap>i,.diary-filter-search>i{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--muted)}
+.diary-search-wrap input,.diary-filter-search input,.diary-add-controls select{width:100%;height:40px;padding:0 11px;border:1px solid var(--line);border-radius:8px;background:#11151d;color:var(--text);font:500 11px 'DM Sans',sans-serif;min-width:0}
+.diary-search-wrap input,.diary-filter-search input{padding-left:32px}
+.diary-add-controls .gold-button{white-space:nowrap;padding:0 13px}
+.diary-workspace{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(220px,.7fr);gap:14px;margin-top:16px;align-items:start}
+.diary-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.diary-toolbar h2{font:800 15px Manrope,sans-serif;margin:0 0 4px}
+.diary-toolbar p{font-size:10px;color:var(--muted);line-height:1.5}
+.diary-filter-search{width:min(210px,45%)}
+.diary-tabs{display:flex;gap:5px;overflow-x:auto;padding:15px 0 12px;border-bottom:1px solid var(--line)}
+.diary-tabs button{display:flex;align-items:center;gap:6px;white-space:nowrap;padding:8px 10px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);font-size:10px;cursor:pointer}
+.diary-tabs button.active{border-color:rgba(199,157,83,.4);background:rgba(199,157,83,.1);color:var(--gold)}
+.diary-tabs button b{font-size:9px;opacity:.8}
+.diary-entry-list{display:grid;gap:9px;padding-top:12px}
+.diary-entry{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid rgba(255,255,255,.065);border-radius:10px;background:rgba(255,255,255,.02);min-width:0}
+.diary-entry-poster{width:58px;height:82px;flex:0 0 auto;object-fit:cover;border-radius:6px;background:#20242c}
+.diary-poster-empty{display:grid;place-items:center;color:var(--muted)}
+.diary-entry-main{flex:1;min-width:0}
+.diary-entry-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin:1px 0 6px}
+.diary-entry-title b{font-size:12px}
+.diary-entry-title span{font-size:9px;color:var(--muted)}
+.diary-status-pill{display:inline-block;padding:4px 7px;border-radius:5px;background:rgba(199,157,83,.1);color:#d4b77f;font-size:9px;margin-bottom:8px}
+.diary-entry-fields{display:grid;grid-template-columns:1.1fr 1fr .8fr;gap:7px}
+.diary-entry-fields label{display:grid;gap:4px;color:var(--muted);font-size:9px}
+.diary-entry-fields input,.diary-entry-fields select{width:100%;min-width:0;height:31px;padding:0 7px;border:1px solid var(--line);border-radius:6px;background:#11151d;color:var(--text);font:500 10px 'DM Sans',sans-serif}
+.diary-remove-button{width:29px;height:29px;flex:0 0 auto;border:1px solid var(--line);border-radius:7px;background:transparent;color:var(--muted);cursor:pointer}
+.diary-remove-button:hover{color:#e18a8a;border-color:rgba(225,138,138,.45)}
+.diary-empty{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--muted);font-size:10px;line-height:1.5;padding:22px}
+.diary-empty i{font-size:25px;color:var(--gold);opacity:.8}
+.diary-empty b{color:var(--text);font-size:12px}
+.diary-insight-total{display:flex;align-items:baseline;gap:9px;padding:20px 0;border-bottom:1px solid var(--line)}
+.diary-insight-total b{font:800 32px Manrope,sans-serif;color:var(--gold)}
+.diary-insight-total span{font-size:10px;color:var(--muted)}
+.diary-insight-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.055);font-size:10px;color:var(--muted)}
+.diary-insight-row b{color:var(--text);font-size:11px}
+.diary-insight-note{margin-top:15px;padding:11px;border-radius:8px;background:rgba(199,157,83,.07);font-size:9px;line-height:1.6;color:var(--muted)}
+.diary-insight-note i{color:var(--gold);margin-right:5px}
+@media(max-width:1050px){.diary-add-controls{grid-template-columns:1fr 1.4fr}.diary-workspace{grid-template-columns:1fr}.diary-insight-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.diary-insight-panel .card-heading,.diary-insight-total,.diary-insight-note{grid-column:1/-1}}
+@media(max-width:700px){.watch-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.diary-add-controls{grid-template-columns:1fr}.diary-toolbar{align-items:flex-start;flex-direction:column}.diary-filter-search{width:100%}.diary-entry-fields{grid-template-columns:1fr 1fr}.diary-entry-fields label:first-child{grid-column:1/-1}.diary-tabs{margin-right:-5px}.diary-insight-panel{display:block}}
