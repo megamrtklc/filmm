@@ -920,12 +920,38 @@ function renderFilteredCatalog() {
             };
             const config=configs[route]||['fa-compass',String(title||'KEŞFET').toLocaleUpperCase('tr-TR'),'Perde arşivini keşfet.'];
             card.dataset.route=route;
+            const normalizeTheme=value=>String(value||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim();
+            const categoryThemes=[
+                {keys:['animasyon','animation'],id:'animation',icon:'fa-wand-magic-sparkles',desc:'Renkli dünyalara, sıra dışı karakterlere ve sınırsız hayal gücüne dal.'},
+                {keys:['aksiyon','action'],id:'action',icon:'fa-bolt',desc:'Yüksek tempo, nefes kesen kovalamacalar ve unutulmaz mücadeleler.'},
+                {keys:['komedi','comedy'],id:'comedy',icon:'fa-face-laugh',desc:'Modunu yükseltecek kahkaha dolu film ve dizileri keşfet.'},
+                {keys:['dram','drama'],id:'drama',icon:'fa-masks-theater',desc:'Güçlü karakterler ve akılda kalan hikâyeler seni bekliyor.'},
+                {keys:['korku','horror'],id:'horror',icon:'fa-ghost',desc:'Karanlığa adım at; gerilim ve korku dolu hikâyeleri keşfet.'},
+                {keys:['gerilim','thriller'],id:'thriller',icon:'fa-eye',desc:'Gizem, tehlike ve beklenmedik dönemeçlerle dolu yapımlar.'},
+                {keys:['bilim kurgu','science fiction','sci fi'],id:'scifi',icon:'fa-rocket',desc:'Geleceğe, uzak galaksilere ve hayal gücünün ötesine yolculuk.'},
+                {keys:['fantastik','fantasy'],id:'fantasy',icon:'fa-dragon',desc:'Büyülü evrenler, efsaneler ve olağanüstü maceralar.'},
+                {keys:['romantik','romance','ask','aşk'],id:'romance',icon:'fa-heart',desc:'Aşkın farklı hâllerini anlatan sıcak ve unutulmaz hikâyeler.'},
+                {keys:['macera','adventure'],id:'adventure',icon:'fa-compass',desc:'Keşfedilmeyi bekleyen dünyalar ve heyecan dolu yolculuklar.'},
+                {keys:['suç','crime'],id:'crime',icon:'fa-user-secret',desc:'Suç dünyasının karanlık sırlarını ve zekice kurguları keşfet.'},
+                {keys:['gizem','mystery'],id:'mystery',icon:'fa-magnifying-glass',desc:'İpuçlarını takip et; sırları ve şaşırtıcı gerçekleri çöz.'},
+                {keys:['belgesel','documentary'],id:'documentary',icon:'fa-earth-americas',desc:'Gerçek hikâyelerden, keşiflerden ve dünyadan ilham al.'},
+                {keys:['tarih','history'],id:'history',icon:'fa-landmark',desc:'Geçmişin izinde, tarihe yön veren olaylara tanıklık et.'},
+                {keys:['savas','war','savaş'],id:'war',icon:'fa-shield-halved',desc:'Tarihin ve insan hikâyelerinin iç içe geçtiği savaş filmleri.'},
+                {keys:['muzik','music','müzik'],id:'music',icon:'fa-music',desc:'Müziğin ritmini ve sahne ışıklarının büyüsünü hisset.'},
+                {keys:['aile','family'],id:'family',icon:'fa-people-roof',desc:'Birlikte izlemelik, her yaştan izleyiciye hitap eden hikâyeler.'},
+                {keys:['spor','sport'],id:'sport',icon:'fa-trophy',desc:'Azim, rekabet ve zafer hikâyeleriyle ilham bul.'},
+                {keys:['western'],id:'western',icon:'fa-hat-cowboy',desc:'Vahşi Batı’nın tozlu yollarında unutulmaz maceralar.'}
+            ];
+            const selectedCategory=normalizeTheme(title||'');
+            const categoryTheme=['kategori','tur'].includes(route)?categoryThemes.find(theme=>theme.keys.some(key=>selectedCategory===normalizeTheme(key)||selectedCategory.includes(normalizeTheme(key)))):null;
+            if(categoryTheme){card.dataset.theme=categoryTheme.id;config[0]=categoryTheme.icon;}
+            else{delete card.dataset.theme;}
             const icon=document.getElementById('page-context-icon');
             const heading=document.getElementById('page-context-title');
             const description=document.getElementById('page-context-description');
             if(icon)icon.className='fa-solid '+config[0];
             if(heading)heading.textContent=config[1];
-            if(description)description.textContent=['kategori','ulke','yonetmen','tur'].includes(route)?String(title||config[2]):config[2];
+            if(description)description.textContent=categoryTheme?categoryTheme.desc:(['kategori','ulke','yonetmen','tur'].includes(route)?String(title||config[2]):config[2]);
         }
         function showCatalogView(title) {
             // Katalog rotasına geçerken detay/oyuncu görünümünü de kapat.
