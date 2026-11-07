@@ -1448,14 +1448,16 @@ async function loadActorGallery(personId,name,headers,requestId){
   const data=await response.json();
   if(requestId!==actorProfileRequestSequence)return;
   const seen=new Set();
-  actorGalleryPhotos=(data.profiles||[]).filter(photo=>photo.file_path).map(photo=>({url:'https://image.tmdb.org/t/p/original'+photo.file_path,thumb:'https://image.tmdb.org/t/p/w500'+photo.file_path,title:name,source:'TMDB',page:'https://www.themoviedb.org/person/'+encodeURIComponent(personId),license:'TMDB görsel kullanım koşulları',width:photo.width||0,height:photo.height||0,key:photo.file_path})).filter(photo=>{const key=photo.key.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,30);
+  const tmdbPhotos=(data.profiles||[]).filter(photo=>photo.file_path).map(photo=>({url:'https://image.tmdb.org/t/p/original'+photo.file_path,thumb:'https://image.tmdb.org/t/p/w500'+photo.file_path,title:name,source:'TMDB',page:'https://www.themoviedb.org/person/'+encodeURIComponent(personId),license:'TMDB görsel kullanım koşulları',width:photo.width||0,height:photo.height||0,key:photo.file_path})).filter(photo=>{const key=photo.key.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,30);
+  if(tmdbPhotos.length)actorGalleryPhotos=tmdbPhotos;
  }catch(error){tmdbError=error;console.warn('Perde TMDB oyuncu fotoğrafları:',error);}
  if(requestId!==actorProfileRequestSequence)return;
  if(!actorGalleryPhotos.length){
-  try{actorGalleryPhotos=await fetchWikimediaActorPhotos(name,requestId);}
+  try{const commonsPhotos=await fetchWikimediaActorPhotos(name,requestId);if(commonsPhotos.length)actorGalleryPhotos=commonsPhotos;}
   catch(error){console.warn('Perde Wikimedia Commons oyuncu fotoğrafları:',error);}
  }
  if(requestId!==actorProfileRequestSequence)return;
+ if(!actorGalleryPhotos.length){const profileUrl=document.getElementById('actor-profile-image')?.src||'';if(profileUrl&&!profileUrl.includes('ui-avatars.com'))actorGalleryPhotos=[{url:profileUrl,thumb:profileUrl,title:name,source:'TMDB profil fotoğrafı',page:'https://www.themoviedb.org/person/'+encodeURIComponent(personId),license:'TMDB görsel kullanım koşulları',key:'profile-'+personId}];}
  renderActorGallery();
  const hero=document.getElementById('actor-featured-photos');
  const photos=actorGalleryPhotos.slice(0,5);
