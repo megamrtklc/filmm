@@ -5902,3 +5902,18 @@ body.detail-synopsis-open{overflow:hidden}
       linear-gradient(0deg,#08090c 0%,rgba(8,9,12,.58) 20%,transparent 65%) !important;
   }
 }
+
+
+/* Manşet konu metni: slider afiş şeridinin kullanılabilir genişliğinde, en fazla 3 satır */
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+  width:100%!important;
+  max-width:var(--hero-desc-rail-width,100%)!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:3!important;
+  line-clamp:3!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:normal!important;
+  overflow-wrap:break-word!important;
+}
