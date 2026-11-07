@@ -1541,7 +1541,7 @@ function renderActorFilmography(person,name,localWorks){
  const localByKey=new Map();
  localWorks.forEach(item=>{if(item.tmdbId)localByKey.set(String(item.tmdbId),item);});
  const seen=new Set(),items=[];
- (person.credits||[]).forEach(credit=>{
+ (person.credits||[]).filter(credit=>credit.media_type==='movie'||credit.media_type==='tv').forEach(credit=>{
   if(!credit||!credit.id)return;
   const key=String(credit.media_type||'')+':'+String(credit.id);
   if(seen.has(key))return;seen.add(key);
