@@ -1771,3 +1771,26 @@ document.addEventListener('keydown',event=>{
  const title=$('player-media-title'),under=$('player-underbar-title');if(title&&under){new MutationObserver(()=>under.textContent=title.textContent).observe(title,{childList:true,subtree:true,characterData:true});under.textContent=title.textContent;}
  syncPlay();syncVolume();syncTime();
 })();
+
+
+// Konu metnini slider afiş şeridinin görünür genişliğine göre sınırla.
+function fitHeroDescriptionToRail() {
+    const rail = document.getElementById('hero-thumbnails-rail');
+    const section = document.getElementById('hero-section');
+    if (!rail || !section) return;
+    const width = Math.floor(rail.getBoundingClientRect().width);
+    if (width > 0) section.style.setProperty('--hero-desc-rail-width', width + 'px');
+}
+window.addEventListener('resize', fitHeroDescriptionToRail, { passive: true });
+if (typeof ResizeObserver !== 'undefined') {
+    const heroRailResizeObserver = new ResizeObserver(fitHeroDescriptionToRail);
+    const observeHeroRail = () => {
+        const rail = document.getElementById('hero-thumbnails-rail');
+        if (rail) heroRailResizeObserver.observe(rail);
+    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', observeHeroRail, { once: true });
+    } else {
+        observeHeroRail();
+    }
+}
