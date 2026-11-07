@@ -200,6 +200,11 @@
                   <label class="editor-field editor-series-field">Sezon (isteğe bağlı<input id="editor-subtitle-season" type="number" min="1" max="300" placeholder="Dizi bölümü için"></label>
                   <label class="editor-field editor-series-field">Bölüm (isteğe bağlı<input id="editor-subtitle-episode" type="number" min="1" max="10000" placeholder="Dizi bölümü için"></label>
                 </div>
+                <div class="subtitle-online-search">
+                  <div class="subtitle-online-heading"><strong><i class="fa-solid fa-magnifying-glass"></i> OpenSubtitles'ta çevrim içi ara</strong><span>Türkçe öncelikli</span></div>
+                  <div class="subtitle-online-controls"><button type="button" class="outline-button" id="editor-subtitle-search"><i class="fa-solid fa-cloud-arrow-down"></i> Altyazı ara</button><span id="editor-subtitle-search-status" role="status">Yapım adı ve varsa IMDb/TMDB bilgisiyle arama yapabilirsin.</span></div>
+                  <div id="editor-subtitle-search-results" class="subtitle-online-results" aria-live="polite"></div>
+                </div>
                 <div class="subtitle-upload-actions"><label class="subtitle-default-choice"><input id="editor-subtitle-default" type="checkbox" checked> Varsayılan altyazı olarak ayarla</label><button class="outline-button" type="button" id="editor-subtitle-add"><i class="fa-solid fa-cloud-arrow-up"></i> Altyazıyı yükle ve ekle</button></div>
                 <div id="editor-subtitle-status" class="editor-subtitle-status" role="status">Henüz altyazı eklenmedi.</div>
                 <div id="editor-subtitle-list" class="editor-subtitle-list"></div>
@@ -495,6 +500,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261108-backupstatusfix1"></script>
+  <script src="assets/js/admin.js?v=20261108-subtitle-online-v1"></script>
 </body>
 </html>
