@@ -1735,7 +1735,8 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
             { name: 'Discovery HD', icon: 'fa-earth-americas', tag: 'Belgesel' }
         ];
 
-        let heroItems = [];\n        let heroPresentationById = {};
+        let heroItems = [];
+        let heroPresentationById = {};
         let heroIndex = 0;
         let heroTimer = null;
         let heroRailHovered = false;
