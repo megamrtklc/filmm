@@ -6752,3 +6752,18 @@ body.detail-synopsis-open{overflow:hidden}
 .actor-filmography-empty{grid-column:1/-1;padding:22px;border:1px dashed #ffffff20;border-radius:10px;color:#aeb7c6;font-size:13px}
 @media(max-width:900px){.actor-profile-facts-horizontal .actor-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important}.actor-filmography-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
 @media(max-width:600px){.actor-intro{grid-template-columns:104px minmax(0,1fr);gap:13px}.actor-intro-card{padding:14px!important}.actor-intro .actor-profile-photo{border-radius:9px}.actor-intro-copy h2{font-size:18px!important}.actor-intro-copy p{font-size:11px!important;line-height:1.7!important;-webkit-line-clamp:5!important}.actor-profile-facts-horizontal{width:calc(100% - 24px)!important;padding:0!important}.actor-profile-facts-horizontal .actor-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}.actor-profile-facts-horizontal .actor-facts>div{padding:10px!important;min-height:68px!important}.actor-profile-facts-horizontal .actor-facts>div>b{font-size:11px!important}.actor-filmography-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.actor-work-copy{padding:0 7px 8px!important}.actor-work-copy b{font-size:10px!important}.actor-work-copy small{font-size:9px!important}}
+
+
+/* Oyuncu fotoğraf arşivi — kaynak etiketi ve erişilebilir galeri */
+.actor-gallery-photo{border-radius:8px!important;overflow:hidden;transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease}
+.actor-gallery-photo:hover{transform:translateY(-2px);border-color:#d7b66b88;box-shadow:0 10px 24px #0006}
+.actor-gallery-photo img{transition:transform .42s cubic-bezier(.2,.75,.25,1),filter .3s}
+.actor-gallery-photo:hover img{transform:scale(1.045);filter:brightness(1.05)}
+.actor-gallery-photo>em{position:absolute;left:7px;bottom:7px;padding:4px 6px;border:1px solid #ffffff20;border-radius:4px;background:#080a0dcc;color:#e4e7ed;font-size:9px;font-style:normal;line-height:1}
+.actor-gallery-photo>small{position:absolute;top:7px;left:7px;padding:3px 5px;border-radius:4px;background:#080a0dcc;color:#fff;font-size:9px}
+.actor-gallery-more{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #ffffff20;border-radius:7px;background:#ffffff08;color:#e9c778;font-size:11px;font-weight:650;cursor:pointer;transition:background .2s,border-color .2s}
+.actor-gallery-more:hover{background:#d7b66b18;border-color:#d7b66b77}
+.actor-photo-modal-caption{max-width:min(90vw,900px);line-height:1.65}
+.actor-photo-modal-caption a{color:#e9c778;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:700px){.actor-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.actor-gallery-photo{aspect-ratio:4/3}.actor-gallery-toolbar{align-items:flex-start;flex-direction:column}.actor-gallery-more{min-height:36px}}
+@media(prefers-reduced-motion:reduce){.actor-gallery-photo,.actor-gallery-photo img,.actor-gallery-more{transition:none!important}}
