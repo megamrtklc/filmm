@@ -7659,5 +7659,47 @@
     "id": "perde-mw5zwmbz",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Oyuncak Hikayesi",
+    "originalTitle": "Toy Story",
+    "year": 1995,
+    "category": "Aile / Komedi / Animasyon / Macera",
+    "genre": "Aile",
+    "rating": "8.0",
+    "duration": "81 dk",
+    "country": "United States of America",
+    "director": "John Lasseter",
+    "tmdbId": 862,
+    "desc": "Buzz Lightyear adlı yeni çıkan oyuncak, Andy'e hediye edilir. Oyuncağı çok seven Andy, eski gözdesi Şerif Woody'e olan ilgisini yitirir. Bir gün Buzz yanlışlıkla pencereden aşağı uçunca, herkes Woody'nin onu öldürdüğüne inanır. Woody, kendisini kurtarabilmek için Buzz'ın arkasından giderek onu geri getirmeye karar verir. Fakat ikiliyi dış dünyada büyük tehlikelerle dolu maceralar beklemektedir.",
+    "image": "https://image.tmdb.org/t/p/w500/4KAtscEx3Pt9YPpNuK3BO6irQn1.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/3Rfvhy1Nl6sSGJwyjb0QiZzZYlB.jpg",
+    "imdbId": "tt0114709",
+    "watchUrl": "",
+    "platform": [
+      "Netflix",
+      "Apple TV+"
+    ],
+    "personalNote": "Mükemmel aksiyon filmi",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Tom Hanks",
+      "Tim Allen",
+      "Don Rickles",
+      "Jim Varney",
+      "Wallace Shawn",
+      "John Ratzenberger",
+      "Annie Potts",
+      "John Morris",
+      "Erik von Detten",
+      "Laurie Metcalf",
+      "R. Lee Ermey",
+      "Sarah Rayne"
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw5zyt37",
+    "seasons": null,
+    "episodes": null
   }
 ]
