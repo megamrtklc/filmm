@@ -1351,7 +1351,7 @@ function openDetailPage(id,update=true){
  updateDetailButtons(item.id);
  
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
- const watchPlayButton=document.getElementById('detail-watch-play-btn');if(watchPlayButton){watchPlayButton.hidden=item.type==='tv';watchPlayButton.onclick=()=>openPlayerForMedia(item.id);}
+ const watchPlayButton=document.getElementById('detail-watch-play-btn');if(watchPlayButton){watchPlayButton.hidden=item.type==='tv'&&!item.watchUrl;watchPlayButton.onclick=()=>openPlayerForMedia(item.id);}
  const related=getRelatedMedia(item,10);
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  renderDetailSeries(item);
@@ -1624,9 +1624,23 @@ function attachPlayerSource(url,label){
  const subtitleInput=document.getElementById('player-subtitle-file');if(subtitleInput)subtitleInput.value='';
  video.play().catch(()=>{});
 }
-async function loadSavedPlayerSource(id){
+function isDirectPlayablePlayerUrl(value){
+ try{
+  const url=new URL(String(value||''));
+  if(!['http:','https:'].includes(url.protocol))return false;
+  return /\.(?:mp4|m4v|webm|ogv|ogg|mov|m3u8|mpd)$/i.test(url.pathname);
+ }catch(_){return false;}
+}
+async function loadSavedPlayerSource(id, catalogWatchUrl=''){
  const source=readPlayerSources()[String(id)];
  const urlInput=document.getElementById('player-stream-url');
+ const watchUrl=String(catalogWatchUrl||'').trim();
+ if(watchUrl){
+  if(urlInput)urlInput.value=watchUrl;
+  if(isDirectPlayablePlayerUrl(watchUrl)){attachPlayerSource(watchUrl,'Yapım izleme bağlantısı');return;}
+  setPlayerError('Eklediğin bağlantı doğrudan video akışı değil. Perde oynatıcısında oynatmak için .mp4, .webm, .m3u8 veya .mpd gibi doğrudan video bağlantısı kullanmalısın. Netflix, Prime Video gibi platform sayfaları DRM ve erişim korumaları nedeniyle bu oynatıcıya aktarılamaz.');
+  return;
+ }
  if(urlInput)urlInput.value=source?.type==='url'?source.url:'';
  if(source?.type==='local'){
   try{const file=await getNY7LocalVideo(id);if(file){activePlayerObjectUrl=URL.createObjectURL(file);attachPlayerSource(activePlayerObjectUrl,file.name);return;}}
@@ -1637,7 +1651,7 @@ async function loadSavedPlayerSource(id){
 function openPlayerForMedia(id){
  const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
  if(!item)return;
- if(item.type==='tv'&&!window.perdeEpisodeContext){return;}
+ if(item.type==='tv'&&!window.perdeEpisodeContext&&!item.watchUrl){return;}
  activePlayerMediaId=String(window.perdeEpisodeContext?.playerId||item.id);
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
  document.getElementById('player-media-title').textContent=window.perdeEpisodeContext ? item.title+' · S'+window.perdeEpisodeContext.season+' B'+window.perdeEpisodeContext.episode+' — '+(window.perdeEpisodeContext.episodeTitle||'Bölüm') : item.title+' · '+(item.year||'');
@@ -1648,7 +1662,7 @@ function openPlayerForMedia(id){
  document.getElementById('player-local-file').value='';
  document.getElementById('player-subtitle-file').value='';
  setPlayerError('');
- loadSavedPlayerSource(activePlayerMediaId);
+ loadSavedPlayerSource(activePlayerMediaId,window.perdeEpisodeContext?'':item.watchUrl);
 }
 async function saveAndPlayLocalVideo(){
  if(!activePlayerMediaId)return;
@@ -1798,7 +1812,7 @@ document.addEventListener('click',event=>{
  const control=event.target.closest('[data-rail-target][data-rail-direction]');
  if(control){
   const rail=document.getElementById(control.dataset.railTarget);
-  if(rail){const page=rail.classList.contains('saved-collection-rail')?rail.clientWidth*.98:Math.max(260,rail.clientWidth*.82);rail.scrollBy({left:Number(control.dataset.railDirection)*page,behavior:'smooth'});}
+  if(rail){const page=rail.classList.contains('saved-collection-rail')?rail.clientWidth:Math.max(260,rail.clientWidth*.82);rail.scrollBy({left:Number(control.dataset.railDirection)*page,behavior:'smooth'});}
   return;
  }
  if(event.target.matches('[data-detail-dismiss]')&&document.body.classList.contains('ny7-detail-open'))showDashboard();
