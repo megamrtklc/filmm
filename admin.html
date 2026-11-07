@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261108-editor-flow-v2">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261108-hero-settings-v1">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -293,6 +293,17 @@
               <label class="hero-field-label" for="hero-content-search">Katalogda yapım ara</label><div class="catalog-picker" id="hero-catalog-picker" data-picker-select="hero-content-select"><div class="catalog-picker-search"><i class="fa-solid fa-magnifying-glass"></i><input id="hero-content-search" type="search" placeholder="Film veya dizi adı yaz…" autocomplete="off"></div><div class="catalog-picker-filters" role="group" aria-label="Yapım türü"><button type="button" class="active" data-picker-filter="all">Tümü</button><button type="button" data-picker-filter="movie">Filmler</button><button type="button" data-picker-filter="tv">Diziler</button></div><div class="catalog-picker-results" id="hero-catalog-results" aria-live="polite"><span class="catalog-picker-hint">Yapım aramak için adını yaz.</span></div><div class="catalog-picker-selected" id="hero-catalog-selected">Henüz yapım seçilmedi.</div></div><select id="hero-content-select" class="catalog-picker-native" aria-hidden="true" tabindex="-1"><option value="">Yapım seç…</option></select>
               <button class="gold-button hero-add-button" id="hero-add-button"><i class="fa-solid fa-plus"></i> Slider'a ekle</button>
               <div class="hero-manager-divider"></div>
+              <section class="hero-settings-editor" aria-labelledby="hero-settings-title">
+                <span class="eyebrow">SLIDER GÖRÜNÜMÜ</span><h3 id="hero-settings-title">Afiş ve geçiş ayarları</h3>
+                <div class="hero-settings-grid">
+                  <label><span>Masaüstünde görünen afiş</span><select id="hero-desktop-count"><option value="4">4 afiş</option><option value="5">5 afiş</option><option value="6" selected>6 afiş</option><option value="8">8 afiş</option><option value="10">10 afiş</option></select></label>
+                  <label><span>Mobilde görünen afiş</span><select id="hero-mobile-count"><option value="3">3 afiş</option><option value="4" selected>4 afiş</option><option value="5">5 afiş</option><option value="6">6 afiş</option></select></label>
+                  <label><span>Otomatik geçiş süresi</span><select id="hero-interval"><option value="4">4 saniye</option><option value="6" selected>6 saniye</option><option value="8">8 saniye</option><option value="10">10 saniye</option></select></label>
+                </div>
+                <label class="hero-setting-check"><input id="hero-autoplay" type="checkbox" checked><span><b>Otomatik geçiş açık</b><small>Manşet belirlenen sürede sonraki yapıma geçer.</small></span></label>
+                <label class="hero-setting-check"><input id="hero-pause-hover" type="checkbox" checked><span><b>Üzerine gelince duraklat</b><small>Fare afişlerin üzerindeyken otomatik geçiş bekler.</small></span></label>
+                <p class="hero-settings-note">Afiş sayısı yalnızca aynı anda görünen kartları belirler. Slider listendeki diğer yapımlar silinmez; yatay kaydırma ve oklarla erişilebilir.</p>
+              </section>
               <div class="hero-copy-editor">
                 <span class="eyebrow">MANŞET METİNLERİ</span>
                 <label class="hero-field-label" for="hero-headline-input">Manşet başlığı</label>
@@ -421,6 +432,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261108-editor-flow-v2"></script>
+  <script src="assets/js/admin.js?v=20261108-hero-settings-v1"></script>
 </body>
 </html>
