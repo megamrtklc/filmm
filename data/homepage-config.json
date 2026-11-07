@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "updatedAt": "2026-11-07T22:15:45.198Z",
   "heroSlides": [
     {
@@ -86,5 +86,12 @@
       "headline": "",
       "description": ""
     }
-  ]
+  ],
+  "settings": {
+    "desktopCount": 6,
+    "mobileCount": 4,
+    "interval": 6,
+    "autoplay": true,
+    "pauseOnHover": true
+  }
 }
