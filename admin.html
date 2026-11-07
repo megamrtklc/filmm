@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-brand-logos">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-collections-clean-v1">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -204,39 +204,50 @@
         </section>
 
         <section class="page-view" id="page-collections">
-          <div class="page-heading"><div><span class="eyebrow">ANA SAYFA DÜZENİ</span><h1>Koleksiyonlar</h1><p>Perde ana sayfasındaki rafları oluştur, katalogdan yapımlar seç ve sıralamalarını ön izle.</p></div><span class="status-chip warning"><i class="fa-solid fa-eye"></i> Yerel taslak</span></div>
+          <div class="page-heading">
+            <div><span class="eyebrow">ANA SAYFA DÜZENİ</span><h1>Koleksiyonlar</h1><p>Ana sayfadaki film ve dizi raflarını tek ekrandan düzenle.</p></div>
+            <span class="status-chip warning"><i class="fa-solid fa-file-pen"></i> Taslak çalışma</span>
+          </div>
+
+          <div class="collection-workflow-note">
+            <i class="fa-solid fa-circle-info"></i>
+            <div><b>Önce rafı seç, sonra içeriğini düzenle.</b><span>Buradaki işlemler şu an yalnızca yönetim ön izlemesidir; canlı siteye kaydedilmez.</span></div>
+          </div>
+
           <div class="collection-summary-strip">
-            <div><span class="catalog-summary-icon"><i class="fa-solid fa-layer-group"></i></span><span><small>KOLEKSİYON</small><b id="collection-total">—</b></span></div>
+            <div><span class="catalog-summary-icon"><i class="fa-solid fa-layer-group"></i></span><span><small>TOPLAM KOLEKSİYON</small><b id="collection-total">—</b></span></div>
             <div><span class="catalog-summary-icon"><i class="fa-solid fa-film"></i></span><span><small>SEÇİLİ YAPIM</small><b id="collection-item-total">—</b></span></div>
             <div><span class="catalog-summary-icon"><i class="fa-solid fa-eye"></i></span><span><small>GÖRÜNÜR RAF</small><b id="collection-active-total">—</b></span></div>
           </div>
+
           <div class="collection-manager-layout">
             <section class="surface-card collection-library">
-              <div class="card-heading"><div><h2>Koleksiyon rafları</h2><p>Bir raf seçerek içeriğini düzenle.</p></div><span class="insight-kicker">YÖNETİM</span></div>
+              <div class="collection-step-heading"><span>1</span><div><h2>Koleksiyon seç</h2><p>Düzenlemek istediğin rafı seç.</p></div></div>
               <div class="collection-list" id="collection-list"><div class="loading-line">Koleksiyonlar hazırlanıyor…</div></div>
               <form class="collection-create-form" id="collection-create-form">
-                <label for="collection-new-title">Yeni koleksiyon oluştur</label>
+                <label for="collection-new-title">Yeni raf oluştur</label>
                 <div class="collection-create-fields"><input id="collection-new-title" maxlength="48" placeholder="Örn. Zamansız başyapıtlar" required><button class="gold-button" type="submit"><i class="fa-solid fa-plus"></i> Oluştur</button></div>
-                <small>Yeni raflar yalnızca bu yönetim taslağında tutulur.</small>
               </form>
             </section>
+
             <section class="surface-card collection-editor">
-              <div class="card-heading"><div><h2>Koleksiyon düzenleyici</h2><p>Seçili rafın içeriğini ve görünürlüğünü yönet.</p></div><span class="status-chip">Ön izleme</span></div>
-              <div class="collection-editor-empty" id="collection-editor-empty"><i class="fa-solid fa-layer-group"></i><b>Bir koleksiyon seç</b><span>Soldaki raflardan birini seçerek düzenlemeye başlayabilirsin.</span></div>
+              <div class="collection-step-heading"><span>2</span><div><h2>Raf içeriğini düzenle</h2><p>Yapım ekle, sıralamasını değiştir veya kaldır.</p></div></div>
+              <div class="collection-editor-empty" id="collection-editor-empty"><i class="fa-solid fa-arrow-left"></i><b>Önce bir koleksiyon seç</b><span>Soldaki listeden bir raf seçtiğinde düzenleme alanı burada açılır.</span></div>
               <div id="collection-editor-content" hidden>
-                <div class="collection-editor-title"><div><span class="eyebrow">SEÇİLİ KOLEKSİYON</span><h3 id="collection-editor-name"></h3><p id="collection-editor-description"></p></div><button class="outline-button collection-visibility" id="collection-visibility" type="button"><i class="fa-solid fa-eye"></i> Yayında</button></div>
-                <div class="collection-add-row"><label class="hero-field-label" for="collection-item-select">Katalogdan yapım ekle</label><div><select id="collection-item-select"><option value="">Film veya dizi seç…</option></select><button class="gold-button" id="collection-add-item" type="button"><i class="fa-solid fa-plus"></i> Ekle</button></div></div>
-                <div class="collection-items-heading"><b>Raf içeriği</b><span id="collection-items-count">0 yapım</span></div>
+                <div class="collection-editor-title"><div><span class="eyebrow">DÜZENLENEN RAF</span><h3 id="collection-editor-name"></h3><p id="collection-editor-description"></p></div><button class="outline-button collection-visibility" id="collection-visibility" type="button"><i class="fa-solid fa-eye"></i> Yayında</button></div>
+                <div class="collection-add-row"><label class="hero-field-label" for="collection-item-select">Katalogdan film veya dizi ekle</label><div><select id="collection-item-select"><option value="">Film veya dizi seç…</option></select><button class="gold-button" id="collection-add-item" type="button"><i class="fa-solid fa-plus"></i> Ekle</button></div></div>
+                <div class="collection-items-heading"><b>Bu raftaki yapımlar</b><span id="collection-items-count">0 yapım</span></div>
                 <div class="collection-items-list" id="collection-items-list"><div class="loading-line">İçerik bekleniyor.</div></div>
+                <p class="collection-order-hint"><i class="fa-solid fa-arrow-up-down"></i> Oklarla sıralamayı değiştir. Çarpı ile raftan çıkar.</p>
               </div>
             </section>
-            <aside class="surface-card collection-preview-panel">
-              <div class="card-heading"><div><h2>Raf ön izlemesi</h2><p>Ana sayfada görünecek seçki</p></div></div>
-              <div class="collection-preview" id="collection-preview"><div class="collection-preview-empty"><i class="fa-regular fa-images"></i><span>Ön izleme burada görünecek.</span></div></div>
-              <p class="collection-preview-note"><i class="fa-solid fa-lock"></i> Taslak değişiklikleri canlı siteye aktarılmaz.</p>
-            </aside>
           </div>
-          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Koleksiyon oluşturma, sıralama ve görünürlük ayarları geçici yönetim ön izlemesidir. Ana sayfa ve katalog dosyaları değiştirilmez; kalıcı kayıt için veritabanı aşaması beklenecek.</p>
+
+          <section class="surface-card collection-preview-panel">
+            <div class="collection-step-heading"><span>3</span><div><h2>Ana sayfa ön izlemesi</h2><p>Seçtiğin rafın ziyaretçilere nasıl görüneceğini kontrol et.</p></div></div>
+            <div class="collection-preview" id="collection-preview"><div class="collection-preview-empty"><i class="fa-regular fa-images"></i><span>Bir koleksiyon seçtiğinde ön izlemesi burada görünür.</span></div></div>
+            <p class="collection-preview-note"><i class="fa-solid fa-lock"></i> Ön izleme taslaktır; canlı siteye henüz uygulanmaz.</p>
+          </section>
         </section>
 
         <section class="page-view" id="page-hero">
