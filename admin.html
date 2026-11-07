@@ -126,7 +126,7 @@
           <div class="catalog-poster-grid" id="catalog-poster-grid" aria-live="polite"><div class="loading-line">Katalog yükleniyor…</div></div>
           <div class="surface-card table-card catalog-table-view" id="catalog-table-view" hidden><div class="table-scroll"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB ID</th><th>VERİ DURUMU</th><th></th></tr></thead><tbody id="catalog-table-body"><tr><td colspan="7" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div></div>
           <nav class="catalog-pagination" id="catalog-pagination" aria-label="Katalog sayfaları" hidden></nav>
-          <p class="info-note"><i class="fa-solid fa-lock"></i> Katalog şu anda salt okunur. Ekleme, düzenleme ve silme işlemleri gerçek veritabanı ve güvenli kayıt katmanı kurulduktan sonra açılacak. Mevcut JSON verilerine dokunulmaz.</p>
+          <p class="info-note"><i class="fa-solid fa-lock"></i> Katalog kayıtları GitHub deposundaki data/catalog.json dosyasından okunur. Yeni yapımlar GitHub’a kalıcı olarak kaydedilebilir.</p>
         </section>
 
         <section class="page-view" id="page-editor">
@@ -139,6 +139,11 @@
             <button type="button" data-editor-type="tv"><i class="fa-solid fa-tv"></i> Dizi</button>
           </div>
 
+          <section class="surface-card tmdb-setup-card">
+            <div class="tmdb-setup-copy"><span class="tmdb-mark"><i class="fa-brands fa-github"></i></span><div><b>GitHub kalıcı kayıt bağlantısı</b><p>Yeni yapımlar data/catalog.json dosyasına kaydedilir.</p></div></div>
+            <div class="tmdb-token-controls"><input id="editor-github-token" type="password" autocomplete="off" placeholder="GitHub Fine-grained Personal Access Token"><button class="outline-button" type="button" id="editor-save-github-token">GitHub bağlantısını kaydet</button><span id="editor-github-status" role="status">Kayıt bağlantısı kurulmadı</span></div>
+            <small>Yalnızca megamrtklc/filmm deposu için Contents: Read and write izni ver. Anahtar yalnızca bu tarayıcıda saklanır; kaynak koda eklenmez. Kimseyle paylaşma.</small>
+          </section>
           <section class="surface-card tmdb-setup-card">
             <div class="tmdb-setup-copy"><span class="tmdb-mark">TMDB</span><div><b>TMDB bağlantısı</b><p>API Key (v3) veya Read Access Token ekle. Anahtar yalnızca bu tarayıcıda saklanır.</p></div></div>
             <div class="tmdb-token-controls"><input id="editor-tmdb-token" type="password" autocomplete="off" placeholder="TMDB API Key (v3) veya Read Access Token"><button class="outline-button" type="button" id="editor-save-token">Anahtarı kaydet</button><span id="editor-token-status" role="status">Bağlantı kurulmadı</span></div>
@@ -189,7 +194,7 @@
               </div>
               <div class="editor-form-actions">
                 <button class="outline-button" type="button" id="editor-reset"><i class="fa-solid fa-rotate-left"></i> Formu temizle</button>
-                <button class="gold-button" type="submit"><i class="fa-solid fa-eye"></i> Taslağı ön izle</button>
+                <button class="gold-button" type="submit"><i class="fa-solid fa-cloud-arrow-up"></i> Kataloğa kaydet</button>
               </div>
             </form>
             <aside class="content-editor-aside">
@@ -205,7 +210,7 @@
               </section>
             </aside>
           </div>
-          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Bu ekran hâlâ oturum içi taslak oluşturur. TMDB token'ı bu tarayıcının yerel depolamasında saklanır; yapım taslakları kataloğa veya sunucuya yazılmaz.</p>
+          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Kayıt işlemi GitHub üzerinden data/catalog.json dosyasına yapılır. GitHub erişim anahtarı yalnızca bu tarayıcıda saklanır; kaynak koda yazılmaz.</p>
         </section>
 
         <section class="page-view" id="page-collections">
