@@ -1158,21 +1158,24 @@
   $$('[data-demo]').forEach(button => button.addEventListener('click',() => toast(button.dataset.demo+' alanı veritabanı aşamasında etkinleştirilecek.')));
   $('#export-catalog').addEventListener('click',() => {
     if (!catalog.length) return toast('Dışa aktarılacak katalog verisi bulunamadı.');
-    downloadJson('perde-katalog-yedegi.json',catalog);
-    toast('Katalog JSON yedeği indirildi.');
+    const data = {app:'Perde',backupType:'archive-data',version:1,catalog,collections,exportedAt:new Date().toISOString()};
+    downloadJson('perde-arsiv-yedegi-'+new Date().toISOString().slice(0,10)+'.json',data);
+    toast('Katalog ve koleksiyonların yedeği indirildi.');
   });
   $('#export-personal').addEventListener('click',() => {
+    const keys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist','perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1'];
+    const deviceData={};
+    keys.forEach(key=>{try{const raw=localStorage.getItem(key);if(raw!==null)deviceData[key]=JSON.parse(raw);}catch(error){console.warn('Yedeklenemeyen yerel kayıt:',key,error);}});
     const data = {
-      app:'Perde',
-      backupType:'personal-data',
-      version:1,
+      app:'Perde',backupType:'personal-data',version:2,
       diary:localArray('perde_watch_diary_v1'),
       favorites:localArray('ny7_favorites'),
       watchlist:localArray('ny7_watchlist'),
+      deviceData,
       exportedAt:new Date().toISOString()
     };
     downloadJson('perde-kisisel-yedek-'+new Date().toISOString().slice(0,10)+'.json',data);
-    toast('Kişisel verilerin yedeği indirildi.');
+    toast('Kişisel veriler ve cihazdaki izleme ilerlemeleri yedeklendi.');
   });
   $('#import-personal').addEventListener('click',() => $('#personal-backup-file').click());
   $('#personal-backup-file').addEventListener('change',async event => {
@@ -1186,32 +1189,42 @@
       if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw new Error('JSON yedek biçimi geçersiz.');
       if(parsed.backupType&&parsed.backupType!=='personal-data')throw new Error('Bu dosya kişisel Perde yedeği değil.');
       if(!Array.isArray(parsed.diary)||!Array.isArray(parsed.favorites)||!Array.isArray(parsed.watchlist))throw new Error('Yedekte günlük, favoriler veya izleme listesi eksik.');
+      if(!catalog.length)throw new Error('Katalog henüz yüklenmedi. Sayfayı yenileyip tekrar dene.');
       const allowedStatuses=['watching','watched','favorite','watchlist'];
       const restoredDiary=parsed.diary.filter(entry=>entry&&typeof entry==='object'&&catalog.some(item=>String(item.id)===String(entry.id))&&allowedStatuses.includes(entry.status)).map(entry=>({
-        ...entry,
-        id:String(entry.id),
+        ...entry,id:String(entry.id),
         ...(Number.isFinite(Number(entry.personalRating))?{personalRating:Math.min(10,Math.max(1,Number(entry.personalRating)))}:{})
       }));
-      if(!catalog.length)throw new Error('Katalog henüz yüklenmedi. Sayfayı yenileyip tekrar dene.');
-      if(!window.confirm('Mevcut izleme günlüğü, favoriler ve izleme listesi bu yedekteki verilerle değiştirilsin mi? Bu işlem geri alınamaz.')) {
+      const allowedKeys=['perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1'];
+      const deviceData=parsed.deviceData&&typeof parsed.deviceData==='object'&&!Array.isArray(parsed.deviceData)?parsed.deviceData:{};
+      const restoredValues={
+        'perde_watch_diary_v1':restoredDiary,
+        'ny7_favorites':parsed.favorites,
+        'ny7_watchlist':parsed.watchlist
+      };
+      allowedKeys.forEach(key=>{
+        if(!Object.prototype.hasOwnProperty.call(deviceData,key))return;
+        const value=deviceData[key];
+        if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('Yedekte '+key+' verisinin biçimi geçersiz.');
+        restoredValues[key]=value;
+      });
+      if(!window.confirm('İzleme günlüğü, favoriler, listeler ve yedekte bulunan cihaz ilerlemeleri mevcut kayıtların yerine yüklensin mi? Önceki kayıtların yerine geçecek.')) {
         hint.textContent='Geri yükleme iptal edildi.';
         return;
       }
-      const storageKeys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist'];
+      const storageKeys=Object.keys(restoredValues);
       const previousValues=storageKeys.map(key=>localStorage.getItem(key));
       try {
-        localStorage.setItem(storageKeys[0],JSON.stringify(restoredDiary));
-        localStorage.setItem(storageKeys[1],JSON.stringify(parsed.favorites));
-        localStorage.setItem(storageKeys[2],JSON.stringify(parsed.watchlist));
+        storageKeys.forEach(key=>localStorage.setItem(key,JSON.stringify(restoredValues[key])));
       } catch(storageError) {
-        storageKeys.forEach((key,index)=>previousValues[index]===null?localStorage.removeItem(key):localStorage.setItem(key,previousValues[index]));
-        throw new Error('Tarayıcı depolamasına yazılamadı; önceki kayıtlar korundu.');
+        storageKeys.forEach((key,index)=>{try{previousValues[index]===null?localStorage.removeItem(key):localStorage.setItem(key,previousValues[index]);}catch(_){}});
+        throw new Error('Tarayıcı depolamasına yazılamadı; önceki kayıtlar geri alınmaya çalışıldı.');
       }
       diaryEntries=restoredDiary;
       renderDiary();
       renderOverview();
       if(typeof renderPersonalAnalytics==='function')renderPersonalAnalytics();
-      hint.textContent=restoredDiary.length+' günlük kaydı geri yüklendi.';
+      hint.textContent=restoredDiary.length+' günlük kaydı ve yedekte bulunan diğer kişisel veriler geri yüklendi.';
       toast('Kişisel yedek başarıyla geri yüklendi.');
     } catch(error) {
       hint.textContent='Geri yükleme yapılamadı: '+error.message;
