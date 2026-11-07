@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-collection-studio">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-watch-diary">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -190,8 +190,32 @@
         </section>
 
         <section class="page-view" id="page-watch">
-          <div class="page-heading"><div><span class="eyebrow">KİŞİSEL SİNEMA</span><h1>İzleme Günlüğü</h1><p>İzleme geçmişi, devam eden yapımlar ve kişisel listeler.</p></div></div>
-          <div class="feature-grid"><article class="feature-card"><i class="fa-solid fa-circle-play"></i><h3>İzlemeye devam et</h3><p>Yarım kalan film ve dizilerin takibi.</p><span class="feature-state">Yerel kayıtlar</span></article><article class="feature-card"><i class="fa-solid fa-calendar-check"></i><h3>İzleme geçmişi</h3><p>İzlenen yapımlar ve izleme tarihleri.</p><span class="feature-state">Yerel kayıtlar</span></article><article class="feature-card"><i class="fa-solid fa-heart"></i><h3>Favoriler</h3><p>Beğenilen yapımların kişisel arşivi.</p><span class="feature-state">Yerel kayıtlar</span></article><article class="feature-card"><i class="fa-solid fa-bookmark"></i><h3>İzleme listesi</h3><p>Daha sonra izlenecek yapımlar.</p><span class="feature-state">Yerel kayıtlar</span></article></div>
+          <div class="page-heading"><div><span class="eyebrow">KİŞİSEL SİNEMA</span><h1>İzleme Günlüğü</h1><p>İzlediğin yapımları, sıradaki filmlerini ve kişisel puanlarını tek yerden takip et.</p></div><span class="status-chip warning"><i class="fa-solid fa-mobile-screen"></i> Bu tarayıcıya özel</span></div>
+          <div class="watch-summary-grid">
+            <article><span class="watch-summary-icon"><i class="fa-solid fa-circle-play"></i></span><span><small>İZLEMEYE DEVAM</small><b id="diary-watching-count">0</b></span></article>
+            <article><span class="watch-summary-icon"><i class="fa-solid fa-calendar-check"></i></span><span><small>İZLENDİ</small><b id="diary-watched-count">0</b></span></article>
+            <article><span class="watch-summary-icon"><i class="fa-solid fa-heart"></i></span><span><small>FAVORİ</small><b id="diary-favorite-count">0</b></span></article>
+            <article><span class="watch-summary-icon"><i class="fa-solid fa-bookmark"></i></span><span><small>İZLEME LİSTESİ</small><b id="diary-watchlist-count">0</b></span></article>
+          </div>
+          <div class="surface-card diary-add-panel">
+            <div class="card-heading"><div><h2>Günlüğüne yapım ekle</h2><p>Katalogdan bir film veya dizi seçerek kişisel listene al.</p></div><span class="insight-kicker">KİŞİSEL ARŞİV</span></div>
+            <div class="diary-add-controls"><div class="diary-search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="diary-catalog-search" type="search" placeholder="Film veya dizi ara…"></div><select id="diary-catalog-select"><option value="">Katalogdan yapım seç…</option></select><select id="diary-new-status" aria-label="Eklenecek listenin durumu"><option value="watchlist">İzleme listesi</option><option value="watching">İzlemeye devam</option><option value="watched">İzlendi</option><option value="favorite">Favoriler</option></select><button class="gold-button" id="diary-add-button" type="button"><i class="fa-solid fa-plus"></i> Günlüğe ekle</button></div>
+          </div>
+          <div class="diary-workspace">
+            <section class="surface-card diary-list-panel">
+              <div class="diary-toolbar"><div><h2>Kişisel listelerin</h2><p>Durumları değiştir, tarih ve kendi puanını ekle.</p></div><div class="diary-filter-search"><i class="fa-solid fa-magnifying-glass"></i><input id="diary-list-search" type="search" placeholder="Listede ara…"></div></div>
+              <div class="diary-tabs" id="diary-tabs" role="tablist">
+                <button type="button" class="active" data-diary-tab="all">Tümü <b id="diary-tab-all">0</b></button>
+                <button type="button" data-diary-tab="watching">Devam <b id="diary-tab-watching">0</b></button>
+                <button type="button" data-diary-tab="watched">İzlendi <b id="diary-tab-watched">0</b></button>
+                <button type="button" data-diary-tab="favorite">Favoriler <b id="diary-tab-favorite">0</b></button>
+                <button type="button" data-diary-tab="watchlist">İzleme listesi <b id="diary-tab-watchlist">0</b></button>
+              </div>
+              <div class="diary-entry-list" id="diary-entry-list"><div class="diary-empty"><i class="fa-solid fa-film"></i><b>Günlüğün hazır</b><span>Katalogdan ilk yapımını ekleyerek başlayabilirsin.</span></div></div>
+            </section>
+            <aside class="surface-card diary-insight-panel"><div class="card-heading"><div><h2>Sinema notların</h2><p>Kişisel arşivinin kısa özeti</p></div></div><div class="diary-insight-total"><b id="diary-total-count">0</b><span>toplam kayıt</span></div><div class="diary-insight-row"><span>İzlenen</span><b id="diary-insight-watched">0</b></div><div class="diary-insight-row"><span>Devam eden</span><b id="diary-insight-watching">0</b></div><div class="diary-insight-row"><span>Ortalama kişisel puan</span><b id="diary-average-rating">—</b></div><div class="diary-insight-note"><i class="fa-solid fa-shield-halved"></i> Kayıtlar yalnızca bu tarayıcıda saklanır. Henüz sunucuya gönderilmez.</div></aside>
+          </div>
+          <p class="info-note"><i class="fa-solid fa-lock"></i> İzleme Günlüğü kayıtları mevcut katalogdan bağımsız olarak <b>bu tarayıcıdaki yerel depolamada</b> tutulur. Tarayıcı verileri temizlenirse silinebilir; sunucu senkronizasyonu veritabanı aşamasında eklenecek.</p>
         </section>
 
         <section class="page-view" id="page-analytics">
@@ -226,6 +250,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-collection-studio"></script>
+  <script src="assets/js/admin.js?v=20261107-watch-diary"></script>
 </body>
 </html>

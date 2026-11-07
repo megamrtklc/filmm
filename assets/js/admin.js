@@ -330,6 +330,94 @@
     renderCollections();
     toast(item.active?'Koleksiyon ön izlemede görünür.':'Koleksiyon ön izlemede gizlendi.');
   }
+  const DIARY_STORAGE_KEY = 'perde_watch_diary_v1';
+  let diaryEntries = [];
+  let diaryActiveTab = 'all';
+  function loadDiary() {
+    try {
+      const parsed=JSON.parse(localStorage.getItem(DIARY_STORAGE_KEY)||'[]');
+      diaryEntries=Array.isArray(parsed)?parsed.filter(entry=>entry&&catalog.some(item=>String(item.id)===String(entry.id))):[];
+    } catch (_) { diaryEntries=[]; }
+  }
+  function saveDiary() {
+    try { localStorage.setItem(DIARY_STORAGE_KEY,JSON.stringify(diaryEntries)); }
+    catch (_) { toast('Tarayıcı depolaması kullanılamıyor. Kayıt saklanamadı.'); }
+  }
+  function diaryItem(id) { return catalog.find(item=>String(item.id)===String(id)); }
+  function diaryStatusLabel(status) {
+    return ({watching:'İzlemeye devam',watched:'İzlendi',favorite:'Favori',watchlist:'İzleme listesi'})[status]||'İzleme listesi';
+  }
+  function renderDiary() {
+    const counts={watching:0,watched:0,favorite:0,watchlist:0};
+    diaryEntries.forEach(entry=>{if(counts[entry.status]!==undefined)counts[entry.status]++;});
+    $('#diary-watching-count').textContent=counts.watching;
+    $('#diary-watched-count').textContent=counts.watched;
+    $('#diary-favorite-count').textContent=counts.favorite;
+    $('#diary-watchlist-count').textContent=counts.watchlist;
+    $('#diary-total-count').textContent=diaryEntries.length;
+    $('#diary-insight-watched').textContent=counts.watched;
+    $('#diary-insight-watching').textContent=counts.watching;
+    const rated=diaryEntries.filter(entry=>Number(entry.personalRating)>0);
+    $('#diary-average-rating').textContent=rated.length?(rated.reduce((sum,entry)=>sum+Number(entry.personalRating),0)/rated.length).toFixed(1).replace('.',',')+'/10':'—';
+    $('#diary-tab-all').textContent=diaryEntries.length;
+    Object.keys(counts).forEach(key=>$('#diary-tab-'+key).textContent=counts[key]);
+    const query=$('#diary-list-search').value.trim().toLocaleLowerCase('tr-TR');
+    const visible=diaryEntries.filter(entry=>{
+      const item=diaryItem(entry.id);
+      return item&&(diaryActiveTab==='all'||entry.status===diaryActiveTab)&&(!query||String(item.title).toLocaleLowerCase('tr-TR').includes(query));
+    });
+    $('#diary-tabs [data-diary-tab]').forEach(button=>button.classList.toggle('active',button.dataset.diaryTab===diaryActiveTab));
+    $('#diary-entry-list').innerHTML=visible.length?visible.map(entry=>{
+      const item=diaryItem(entry.id),image=poster(item);
+      return '<article class="diary-entry" data-diary-entry="'+escapeHtml(entry.id)+'">'+(image?'<img class="diary-entry-poster" src="'+image+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<span class="diary-entry-poster diary-poster-empty"><i class="fa-solid fa-film"></i></span>')+'<div class="diary-entry-main"><div class="diary-entry-title"><b>'+escapeHtml(item.title)+'</b><span>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</span></div><span class="diary-status-pill status-'+entry.status+'">'+diaryStatusLabel(entry.status)+'</span><div class="diary-entry-fields"><label>Durum<select data-diary-field="status" data-id="'+escapeHtml(entry.id)+'"><option value="watchlist" '+(entry.status==='watchlist'?'selected':'')+'>İzleme listesi</option><option value="watching" '+(entry.status==='watching'?'selected':'')+'>İzlemeye devam</option><option value="watched" '+(entry.status==='watched'?'selected':'')+'>İzlendi</option><option value="favorite" '+(entry.status==='favorite'?'selected':'')+'>Favori</option></select></label><label>İzleme tarihi<input type="date" data-diary-field="date" data-id="'+escapeHtml(entry.id)+'" value="'+escapeHtml(entry.date||'')+'"></label><label>Benim puanım<input type="number" min="1" max="10" step="0.5" placeholder="—" data-diary-field="personalRating" data-id="'+escapeHtml(entry.id)+'" value="'+escapeHtml(entry.personalRating||'')+'"></label></div></div><button class="diary-remove-button" type="button" data-diary-remove="'+escapeHtml(entry.id)+'" aria-label="Günlükten çıkar"><i class="fa-solid fa-trash-can"></i></button></article>';
+    }).join(''):'<div class="diary-empty"><i class="fa-solid fa-film"></i><b>'+(diaryEntries.length?'Bu listede henüz yapım yok':'Günlüğün hazır')+'</b><span>'+(diaryEntries.length?'Başka bir sekme seç veya katalogdan yeni yapım ekle.':'Katalogdan ilk yapımını ekleyerek başlayabilirsin.')+'</span></div>';
+  }
+  function initDiary() {
+    loadDiary();
+    const select=$('#diary-catalog-select');
+    [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    renderDiary();
+  }
+  function filterDiaryCatalog() {
+    const query=$('#diary-catalog-search').value.trim().toLocaleLowerCase('tr-TR');
+    const select=$('#diary-catalog-select');
+    const previous=select.value;
+    [...select.options].forEach((option,index)=>{
+      if(index===0)return;
+      const item=diaryItem(option.value);
+      option.hidden=!!query&&item&&!String(item.title||'').toLocaleLowerCase('tr-TR').includes(query);
+    });
+    if(previous&&select.selectedOptions[0]?.hidden)select.value='';
+  }
+  function addDiaryEntry() {
+    const id=$('#diary-catalog-select').value;
+    const status=$('#diary-new-status').value;
+    if(!id)return toast('Önce katalogdan bir yapım seç.');
+    const existing=diaryEntries.find(entry=>String(entry.id)===id);
+    if(existing){existing.status=status;toast('Yapımın günlük durumu güncellendi.');}
+    else{diaryEntries.unshift({id,status,date:status==='watched'?new Date().toISOString().slice(0,10):'',personalRating:'',addedAt:new Date().toISOString()});toast('Yapım kişisel günlüğüne eklendi.');}
+    saveDiary();renderDiary();$('#diary-catalog-select').value='';
+  }
+  function handleDiaryClick(event) {
+    const tab=event.target.closest('[data-diary-tab]');
+    if(tab){diaryActiveTab=tab.dataset.diaryTab;renderDiary();return;}
+    const remove=event.target.closest('[data-diary-remove]');
+    if(remove){diaryEntries=diaryEntries.filter(entry=>String(entry.id)!==remove.dataset.diaryRemove);saveDiary();renderDiary();toast('Yapım günlüğünden çıkarıldı.');}
+  }
+  function handleDiaryChange(event) {
+    const control=event.target.closest('[data-diary-field]');
+    if(!control)return;
+    const entry=diaryEntries.find(item=>String(item.id)===control.dataset.id);
+    if(!entry)return;
+    const field=control.dataset.diaryField;
+    if(field==='personalRating'){
+      const value=control.value===''?'':Number(control.value);
+      if(value!==''&&(value<1||value>10||!Number.isFinite(value))){control.value=entry.personalRating||'';return toast('Kişisel puan 1 ile 10 arasında olmalı.');}
+      entry.personalRating=value;
+    }else entry[field]=control.value;
+    saveDiary();renderDiary();
+    toast('Kişisel günlük güncellendi.');
+  }
   function downloadJson(filename, data) {
     const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
     const url = URL.createObjectURL(blob);
@@ -366,6 +454,7 @@
       renderCatalog();
       initHeroManager();
       initCollections();
+      initDiary();
     } catch (error) {
       $('#catalog-status').textContent = 'Veri bağlantısı kurulamadı';
       ['#stat-movies','#stat-series','#analytics-total','#overview-movie-count','#overview-series-count','#donut-total'].forEach(selector => {
@@ -403,6 +492,12 @@
   $('#collection-add-item').addEventListener('click',addCollectionItem);
   $('#collection-visibility').addEventListener('click',toggleCollectionVisibility);
   $('#collection-create-form').addEventListener('submit',createCollection);
+  $('#diary-tabs').addEventListener('click',handleDiaryClick);
+  $('#diary-entry-list').addEventListener('click',handleDiaryClick);
+  $('#diary-entry-list').addEventListener('change',handleDiaryChange);
+  $('#diary-catalog-search').addEventListener('input',filterDiaryCatalog);
+  $('#diary-add-button').addEventListener('click',addDiaryEntry);
+  $('#diary-list-search').addEventListener('input',renderDiary);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
   $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
     heroPreviewMode=button.dataset.heroPreview;
@@ -417,7 +512,7 @@
     toast('Katalog JSON yedeği indirildi.');
   });
   $('#export-personal').addEventListener('click',() => {
-    const data = {favorites:localArray('ny7_favorites'),watchlist:localArray('ny7_watchlist'),exportedAt:new Date().toISOString()};
+    const data = {diary:localArray('perde_watch_diary_v1'),favorites:localArray('ny7_favorites'),watchlist:localArray('ny7_watchlist'),exportedAt:new Date().toISOString()};
     downloadJson('perde-kisisel-veriler.json',data);
     toast('Tarayıcıda bulunan kişisel kayıtlar indirildi.');
   });
