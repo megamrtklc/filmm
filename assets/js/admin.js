@@ -1499,7 +1499,7 @@
         try{
           const artifactResponse=await fetch(run.artifacts_url,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
           const artifactData=await artifactResponse.json().catch(()=>({}));
-          const artifact=Array.isArray(artifactData.artifacts)?artifactData.artifacts.find(item=>item.name==='perde-automatic-backup'&&!item.expired):null;
+          const artifact=Array.isArray(artifactData.artifacts)?artifactData.artifacts.find(item=>String(item.name||'').startsWith('perde-otomatik-yedek-')&&!item.expired):null;
           artifactLabel=artifact?' · Yedek dosyası hazır':' · Yedek dosyası bulunamadı';
         }catch(_){artifactLabel='';}
       }
