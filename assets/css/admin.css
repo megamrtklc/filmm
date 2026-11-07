@@ -764,3 +764,6 @@
 .health-issue-actions .row-action-danger:hover{border-color:rgba(231,105,105,.55);background:rgba(231,105,105,.16);color:#ffb0b0}
 .health-issue-actions .row-action:disabled{opacity:.6;cursor:wait}
 @media(max-width:560px){.health-issue-actions{gap:5px}.health-issue-actions .row-action{padding:7px 8px;font-size:10px}.health-issue-actions .row-action-danger i{margin-right:3px}}
+
+/* Automatic backup status */
+.auto-backup-status{display:flex;align-items:center;gap:11px;padding:12px;margin:0 0 9px;border:1px solid #343c49;border-radius:9px;background:#11161e;min-width:0}.auto-backup-status>span:nth-child(2){min-width:0;flex:1}.auto-backup-status b,.auto-backup-status small{display:block}.auto-backup-status b{font-size:10px;color:#e8ebef}.auto-backup-status small{font-size:9px;line-height:1.5;color:var(--muted);margin-top:4px}.auto-backup-status-icon{width:29px;height:29px;flex:0 0 29px;display:grid;place-items:center;border-radius:8px;background:#252b35;color:#aeb8c7}.auto-backup-status-icon.good{background:#76c79a18;color:var(--green)}.auto-backup-status-icon.pending{background:var(--gold-soft);color:var(--gold)}.auto-backup-status-icon.failed{background:#df85851a;color:var(--red)}.auto-backup-run-link{color:var(--gold);padding:7px}.auto-backup-refresh{padding:4px 0;margin:0 0 8px}.auto-backup-refresh:disabled{opacity:.55;cursor:wait}
