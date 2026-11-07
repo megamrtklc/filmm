@@ -1631,9 +1631,13 @@ function attachPlayerSource(url,label){
  const video=document.getElementById('player-video'),empty=document.getElementById('player-empty-state');
  if(!video||!url)return;
  video.pause();video.innerHTML='';video.src=url;video.load();
+ const currentItem=mediaDatabase.find(entry=>String(entry.id)===String(activePlayerMediaId));
+ if(currentItem&&Array.isArray(currentItem.subtitles)){
+  const episode=window.perdeEpisodeContext||null;
+  currentItem.subtitles.filter(track=>track&&track.url&&(!track.season||!episode||(Number(track.season)===Number(episode.season)&&Number(track.episode)===Number(episode.episode)))).forEach(track=>{const node=document.createElement('track');node.kind='subtitles';node.label=track.languageLabel||track.language||'Altyazı';node.srclang=track.language||'tr';node.src=track.url;if(track.default)node.default=true;video.appendChild(node);});
+ }
  if(empty)empty.hidden=true;
  setPlayerError('');
- const subtitleInput=document.getElementById('player-subtitle-file');if(subtitleInput)subtitleInput.value='';
  video.play().catch(()=>{});
 }
 function isDirectPlayablePlayerUrl(value){
@@ -1668,8 +1672,6 @@ function openPlayerForMedia(id){
  document.documentElement.classList.add('ny7-modal-lock');
  if(video){video.pause();video.removeAttribute('src');video.innerHTML='';video.poster=item.image||'';video.load();}
  document.getElementById('player-empty-state').hidden=false;
- document.getElementById('player-local-file').value='';
- document.getElementById('player-subtitle-file').value='';
  setPlayerError('');
  loadSavedPlayerSource(activePlayerMediaId,window.perdeEpisodeContext?'':item.watchUrl);
 }
@@ -1710,8 +1712,6 @@ function closePlayer(){
  if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}
  document.documentElement.classList.remove('ny7-modal-lock');
 }
-document.getElementById('player-save-local')?.addEventListener('click',saveAndPlayLocalVideo);
-document.getElementById('player-subtitle-file')?.addEventListener('change',attachPlayerSubtitle);
 document.getElementById('player-video')?.addEventListener('error',()=>setPlayerError('Bu video kaynağı açılamadı. Bağlantıyı, dosya biçimini veya erişim iznini kontrol et.'));
 
 
