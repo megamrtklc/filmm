@@ -414,3 +414,12 @@
 @media(max-width:420px){.analytics-personal-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-personal-stats .stat-card{min-height:125px;padding:13px}.analytics-personal-stats .stat-card strong{font-size:24px}.personal-type-donut{width:118px;height:118px;flex-basis:118px}.personal-genre-row,.personal-rating-row{grid-template-columns:82px minmax(35px,1fr) 20px}}
 
 .backup-restore-card{border-color:#d8ad5540;background:linear-gradient(145deg,#d8ad550b,var(--surface))}.backup-restore-hint{display:block;margin-top:12px;color:#a7afba;font-size:11px;line-height:1.5}.backup-grid .surface-card{min-width:0}.backup-grid .outline-button{font-size:12px;padding:11px 14px}
+
+/* Catalog-backed analytics section */
+.analytics-section-heading{margin:26px 0 14px}
+.analytics-section-heading h2{font-size:20px;margin:5px 0}
+.analytics-section-heading p{margin:0;color:var(--muted);font-size:13px}
+.catalog-analytics-stats{margin-bottom:16px}
+.catalog-analytics-grid{margin-bottom:26px}
+.personal-section-heading{padding-top:22px;border-top:1px solid var(--line)}
+@media(max-width:760px){.catalog-analytics-grid{grid-template-columns:1fr}}
