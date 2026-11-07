@@ -56,6 +56,9 @@
     $('#content-editor-form').reset();
     $('#editor-record-id').value = '';
     editorEditingId = null;
+    $('#editor-tmdb-query').value = '';
+    $('#editor-tmdb-results').innerHTML = '';
+    $('#editor-tmdb-search-status').textContent = 'Aramaya başlamak için bir yapım adı yaz.';
     setEditorType('movie');
     $('#editor-page-title').textContent = 'Film / Dizi Ekle';
     $('#editor-preview-status').innerHTML = '<i class="fa-solid fa-circle-info"></i> Henüz taslak oluşturulmadı.';
@@ -147,7 +150,7 @@
       const image = tmdbImage(item.poster_path,'w185');
       return '<button type="button" class="tmdb-result-item" data-tmdb-result="'+index+'">'+
         (image ? '<img src="'+escapeHtml(image)+'" alt="" loading="lazy">' : '<span class="tmdb-result-placeholder"><i class="fa-solid fa-clapperboard"></i></span>')+
-        '<span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+(item.media_type==='tv'||editorType==='tv'?'Dizi':'Film')+' · '+escapeHtml(year||'Yıl bilinmiyor')+'</small><em>'+escapeHtml(item.overview||'Konu bilgisi bulunmuyor.')+'</em></span><i class="fa-solid fa-chevron-right"></i></button>';
+        '<span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+(item.media_type==='tv'?'Dizi':'Film')+' · '+escapeHtml(year||'Yıl bilinmiyor')+'</small><em>'+escapeHtml(item.overview||'Konu bilgisi bulunmuyor.')+'</em></span><i class="fa-solid fa-chevron-right"></i></button>';
     }).join('') : '<div class="tmdb-result-empty">Bu aramayla eşleşen yapım bulunamadı.</div>';
   }
   async function searchTmdb() {
@@ -159,7 +162,7 @@
     $('#editor-tmdb-results').innerHTML = '';
     try {
       let results = [];
-      if (/^tt\\d{5,}$/i.test(query)) {
+      if (/^tt\d{5,}$/i.test(query)) {
         const found = await tmdbRequest('/find/'+encodeURIComponent(query)+'?external_source=imdb_id&language=tr-TR');
         results = [
           ...(found.movie_results || []).map(item=>({...item,media_type:'movie'})),
