@@ -6724,3 +6724,31 @@ body.detail-synopsis-open{overflow:hidden}
  #detail-page-view .perde-cast-number{font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){#detail-page-view .perde-cast-list,#detail-page-view .perde-cast-entry,#detail-page-view .perde-cast-portrait img{animation:none!important;transition:none!important}}
+
+
+/* Oyuncu profili: sade portre + biyografi, katalog odaklı filmografi */
+.actor-profile-layout{display:block!important;max-width:1320px!important;margin:22px auto 18px!important}
+.actor-intro-card{padding:22px!important}
+.actor-intro{display:grid;grid-template-columns:168px minmax(0,1fr);gap:24px;align-items:start}
+.actor-intro .actor-profile-photo{display:block!important;width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 20%;border-radius:12px;border:1px solid #ffffff1a;background:#171a21;box-shadow:0 12px 30px #0008}
+.actor-intro-copy{min-width:0}
+.actor-intro-copy h2{font-size:clamp(22px,2.3vw,30px)!important;margin:8px 0 12px!important}
+.actor-intro-copy p{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:5!important;overflow:hidden!important;white-space:normal!important;line-height:1.8!important}
+.actor-intro-copy p.is-expanded{-webkit-line-clamp:unset!important;overflow:visible!important}
+.actor-bio-toggle{display:inline-flex;align-items:center;gap:8px;margin-top:9px;padding:7px 0;color:#d7b66b;font-size:12px;font-weight:750}
+.actor-bio-toggle[hidden]{display:none!important}
+.actor-profile-facts-horizontal{max-width:1320px!important;margin:0 auto 30px!important;padding:0 clamp(16px,4vw,58px)!important}
+.actor-profile-facts-horizontal .actor-facts{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
+.actor-profile-facts-horizontal .actor-facts>div{min-width:0!important;border:1px solid #ffffff12!important;border-radius:11px!important;background:#ffffff05!important}
+.actor-profile-facts-horizontal .actor-facts>div>b{overflow-wrap:anywhere!important}
+.actor-filmography-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+.actor-work-card{min-width:0!important;display:flex!important;flex-direction:column!important;gap:9px!important;text-align:left!important;overflow:hidden!important;border:1px solid #ffffff12!important;border-radius:10px!important;background:#11141b!important;transition:transform .2s,border-color .2s,box-shadow .2s!important}
+.actor-work-card:hover{transform:translateY(-3px)!important;border-color:#d7b66b66!important;box-shadow:0 10px 24px #0006!important}
+.actor-work-card>img,.actor-work-poster-empty{display:block!important;width:100%!important;aspect-ratio:2/3!important;object-fit:cover!important;border-radius:0!important}
+.actor-work-poster-empty{display:grid!important;place-items:center!important;background:#20232c!important;color:#858d9b!important;font-size:28px!important}
+.actor-work-copy{display:flex!important;flex-direction:column!important;gap:5px!important;padding:0 9px 10px!important}
+.actor-work-copy b{font-size:12px!important;line-height:1.4!important;color:#f4f5f7!important}
+.actor-work-copy small{font-size:10px!important;line-height:1.5!important;color:#9da6b5!important}
+.actor-filmography-empty{grid-column:1/-1;padding:22px;border:1px dashed #ffffff20;border-radius:10px;color:#aeb7c6;font-size:13px}
+@media(max-width:900px){.actor-profile-facts-horizontal .actor-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important}.actor-filmography-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(max-width:600px){.actor-intro{grid-template-columns:104px minmax(0,1fr);gap:13px}.actor-intro-card{padding:14px!important}.actor-intro .actor-profile-photo{border-radius:9px}.actor-intro-copy h2{font-size:18px!important}.actor-intro-copy p{font-size:11px!important;line-height:1.7!important;-webkit-line-clamp:5!important}.actor-profile-facts-horizontal{width:calc(100% - 24px)!important;padding:0!important}.actor-profile-facts-horizontal .actor-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}.actor-profile-facts-horizontal .actor-facts>div{padding:10px!important;min-height:68px!important}.actor-profile-facts-horizontal .actor-facts>div>b{font-size:11px!important}.actor-filmography-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.actor-work-copy{padding:0 7px 8px!important}.actor-work-copy b{font-size:10px!important}.actor-work-copy small{font-size:9px!important}}
