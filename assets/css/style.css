@@ -6025,3 +6025,46 @@ body.detail-synopsis-open{overflow:hidden}
     line-height:1.55!important;
   }
 }
+
+
+/* Keep the new hero sizing rules above legacy high-specificity declarations. */
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-ratings{
+  width:auto!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{
+  display:flex!important;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px 9px;
+  width:100%!important;
+  max-width:100%!important;
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.55;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+  width:calc(100% - 44px)!important;
+  max-width:calc(var(--hero-desc-rail-width,100%) - 44px)!important;
+  font-size:14px!important;
+  line-height:1.68!important;
+}
+@media(max-width:820px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{font-size:12px;gap:6px 8px}
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    width:calc(100% - 24px)!important;
+    max-width:calc(100% - 24px)!important;
+    font-size:13px!important;
+  }
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{font-size:11px;gap:5px 7px;margin-top:8px}
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    width:calc(100% - 12px)!important;
+    max-width:calc(100% - 12px)!important;
+    font-size:12px!important;
+    line-height:1.55!important;
+  }
+}
