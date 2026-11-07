@@ -1704,11 +1704,8 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 if (!loadedCatalog) throw new Error(errors.join(' | ')||'Hiçbir katalog kaynağı yanıt vermedi.');
                 mediaDatabase = loadedCatalog;
                 const heroCandidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-                for (let i = heroCandidates.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [heroCandidates[i], heroCandidates[j]] = [heroCandidates[j], heroCandidates[i]];
-                }
-                heroItems = heroCandidates.slice(0, 10);
+                // Katalog dosyasına eklenme sırası korunur; son eklenenler manşette ilk görünür.
+                heroItems = heroCandidates.slice(-10).reverse();
                 setHeroMedia(heroItems[0]?.id ?? mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
