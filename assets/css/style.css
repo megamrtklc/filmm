@@ -6466,3 +6466,40 @@ body.detail-synopsis-open{overflow:hidden}
 .detail-cast-person-copy strong{overflow:hidden;color:#f1f2f5;font-size:11px;font-weight:750;text-overflow:ellipsis;white-space:nowrap}
 .detail-cast-person-copy small{overflow:hidden;color:#9298a4;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:700px){.detail-cast-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.detail-cast-person{gap:7px;padding:7px}.detail-cast-person>img,.detail-cast-avatar{flex-basis:36px;width:36px;height:43px}.detail-cast-person-copy strong{font-size:10px}.detail-cast-person-copy small{font-size:9px}}
+
+
+/* Oyuncu şeridi: 5 kartlık sayfalar, en fazla 10 oyuncu */
+#detail-page-view .detail-credits{max-width:1240px;margin:24px auto 0;padding:0}
+#detail-page-view .detail-credits-card{padding:0;border:0;border-radius:0;background:transparent}
+#detail-page-view .detail-cast-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 14px;padding:0 0 12px;border-bottom:1px solid rgba(255,255,255,.12)}
+#detail-page-view .detail-cast-title-group h2{margin:0;color:#f4f4f5;font-size:clamp(18px,2vw,23px);font-weight:750;letter-spacing:-.03em}
+#detail-page-view .detail-cast-controls{display:flex;align-items:center;gap:8px}
+#detail-page-view .detail-cast-controls[hidden]{display:none!important}
+#detail-page-view .detail-cast-controls button{display:grid;place-items:center;width:36px;height:36px;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:#ffffff08;color:#f5f5f5;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+#detail-page-view .detail-cast-controls button:not(:disabled):hover{transform:scale(1.08);border-color:rgba(197,166,106,.7);background:rgba(197,166,106,.16)}
+#detail-page-view .detail-cast-controls button:disabled{opacity:.28;cursor:default}
+#detail-page-view .detail-cast-viewport{width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;scroll-snap-type:x mandatory}
+#detail-page-view .detail-cast-viewport::-webkit-scrollbar{display:none}
+#detail-page-view .detail-cast-grid{display:flex;flex-wrap:nowrap;gap:14px;width:100%;margin:0;padding:8px 4px 18px}
+#detail-page-view .detail-cast-person{position:relative;display:flex;flex:0 0 calc((100% - 56px)/5);flex-direction:column;gap:9px;min-width:0;padding:0;overflow:visible;border:0;border-radius:0;background:transparent;color:#f4f4f5;text-align:left;cursor:pointer;scroll-snap-align:start;transition:opacity .25s}
+#detail-page-view .detail-cast-person:hover,#detail-page-view .detail-cast-person:focus-visible{z-index:3;outline:none;background:transparent;transform:none}
+#detail-page-view .detail-cast-photo{position:relative;display:block;width:100%;overflow:visible;aspect-ratio:3/4;border:1px solid rgba(255,255,255,.1);border-radius:9px;background:linear-gradient(145deg,#272b34,#11141a);isolation:isolate}
+#detail-page-view .detail-cast-photo>img,#detail-page-view .detail-cast-avatar{display:grid;width:100%;height:100%;object-fit:cover;object-position:center 22%;border-radius:8px;transition:transform .42s cubic-bezier(.2,.75,.2,1),filter .35s,box-shadow .35s}
+#detail-page-view .detail-cast-avatar{place-items:center;color:#d7c49b;font-size:clamp(16px,2vw,25px);font-weight:800;background:#252936}
+#detail-page-view .detail-cast-person:hover .detail-cast-photo>img,#detail-page-view .detail-cast-person:focus-visible .detail-cast-photo>img,#detail-page-view .detail-cast-person:hover .detail-cast-avatar,#detail-page-view .detail-cast-person:focus-visible .detail-cast-avatar{position:relative;z-index:5;transform:scale(1.5);filter:saturate(1.12) brightness(1.08);box-shadow:0 14px 36px rgba(0,0,0,.72),0 0 0 1px rgba(197,166,106,.7)}
+#detail-page-view .detail-cast-index{position:absolute;z-index:2;left:9px;bottom:8px;color:#fff;font-size:10px;font-weight:800;text-shadow:0 1px 7px #000}
+#detail-page-view .detail-cast-person-copy{display:flex;flex-direction:column;gap:4px;min-width:0;padding:0 2px}
+#detail-page-view .detail-cast-person-copy strong{overflow:hidden;color:#f1f2f4;font-size:12px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+#detail-page-view .detail-cast-person-copy small{overflow:hidden;color:#999fac;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:700px){
+ #detail-page-view .detail-credits{margin-top:18px;padding-inline:0}
+ #detail-page-view .detail-cast-grid{gap:10px;padding-inline:3px}
+ #detail-page-view .detail-cast-person{flex-basis:calc((100% - 20px)/3)}
+ #detail-page-view .detail-cast-controls button{width:32px;height:32px}
+ #detail-page-view .detail-cast-person-copy strong{font-size:10px}
+ #detail-page-view .detail-cast-person-copy small{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+ #detail-page-view .detail-cast-person,#detail-page-view .detail-cast-photo>img{transition:none!important}
+ #detail-page-view .detail-cast-viewport{scroll-behavior:auto}
+}
