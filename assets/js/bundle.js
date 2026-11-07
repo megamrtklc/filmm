@@ -114,7 +114,7 @@ function fitHeroTitleToWidth() {
             heroImageSwapTimer = window.setTimeout(() => { bg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
             const typeBadge = document.getElementById('hero-type-badge');
             if (typeBadge) typeBadge.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i><span>DİZİ</span>' : '<i class="fa-solid fa-film" aria-hidden="true"></i><span>FİLM</span>';
-            document.getElementById('hero-title').innerText = item.title;
+            const heroPresentation = heroPresentationById[String(item.id)] || {};\n            document.getElementById('hero-title').innerText = heroPresentation.headline || item.title;
             let heroOriginal = document.getElementById('hero-original-title');
             if (!heroOriginal) { heroOriginal = document.createElement('small'); heroOriginal.id = 'hero-original-title'; heroOriginal.className = 'media-original-title hero-original-title'; document.getElementById('hero-title').after(heroOriginal); }
             heroOriginal.textContent = item.originalTitle || ''; heroOriginal.hidden = !item.originalTitle;
@@ -155,7 +155,7 @@ function fitHeroTitleToWidth() {
                 part.append(icon, label);
                 meta.appendChild(part);
             });
-            document.getElementById('hero-desc').innerText = item.tmdbOverview || item.desc || '';
+            document.getElementById('hero-desc').innerText = heroPresentation.description || item.tmdbOverview || item.desc || '';
             document.querySelectorAll('.hero-thumb').forEach((el,i) => {
                 const active = heroItems[i]?.id === item.id;
                 el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
@@ -1735,7 +1735,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
             { name: 'Discovery HD', icon: 'fa-earth-americas', tag: 'Belgesel' }
         ];
 
-        let heroItems = [];
+        let heroItems = [];\n        let heroPresentationById = {};
         let heroIndex = 0;
         let heroTimer = null;
         let heroRailHovered = false;
@@ -1791,9 +1791,25 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 }
                 if (!loadedCatalog) throw new Error(errors.join(' | ')||'Hiçbir katalog kaynağı yanıt vermedi.');
                 mediaDatabase = loadedCatalog;
-                const heroCandidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-                // Katalog dosyasına eklenme sırası korunur; son eklenenler manşette ilk görünür.
-                heroItems = heroCandidates.slice(-10).reverse();
+                heroPresentationById = {};
+                let savedHeroConfig = null;
+                try {
+                    const configResponse = await fetch(new URL('./data/homepage-config.json?v=20261107-home-hero-v1', document.baseURI).href,{cache:'no-store',credentials:'omit'});
+                    if (configResponse.ok) savedHeroConfig = await configResponse.json();
+                } catch (configError) { console.warn('Manşet ayarları yüklenemedi; varsayılan vitrin kullanılacak.',configError); }
+                const heroCandidates = mediaDatabase.filter(item => item && item.id != null && item.title && (item.tmdbBackdrop || item.backdrop || item.image || item.tmdbPoster || item.poster));
+                const savedSlides = Array.isArray(savedHeroConfig?.heroSlides) ? savedHeroConfig.heroSlides : [];
+                const configuredSlides = savedSlides.filter(slide => slide && slide.active !== false && mediaDatabase.some(item => String(item.id) === String(slide.id)));
+                if (configuredSlides.length) {
+                    heroItems = configuredSlides.map(slide => mediaDatabase.find(item => String(item.id) === String(slide.id))).filter(Boolean);
+                    heroPresentationById = Object.fromEntries(configuredSlides.map(slide => [String(slide.id),{
+                        headline: typeof slide.headline === 'string' ? slide.headline.trim() : '',
+                        description: typeof slide.description === 'string' ? slide.description.trim() : ''
+                    }]));
+                } else {
+                    // Henüz yayın ayarı yoksa mevcut varsayılan vitrin düzeni korunur.
+                    heroItems = heroCandidates.slice(-10).reverse();
+                }
                 setHeroMedia(heroItems[0]?.id ?? mediaDatabase[0].id);
                 renderHeroThumbnails();
                 renderHomeCollections();
