@@ -5690,3 +5690,16 @@ body.detail-synopsis-open{overflow:hidden}
   #dashboard-view .home-feature-row #hero-section .hero-thumb img,
   #dashboard-view .home-feature-row #hero-section .hero-actions button{transition:none!important}
 }
+
+/* Manşet metin alanı: eski kart/gradyan arka planını kaldır */
+#dashboard-view .home-feature-row #hero-section .hero-copy{
+  background:none!important;
+  background-image:none!important;
+  background-color:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  padding:0 0 8px!important;
+}
