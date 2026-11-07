@@ -275,16 +275,16 @@
         </section>
 
         <section class="page-view" id="page-hero">
-          <div class="page-heading"><div><span class="eyebrow">VİTRİN YÖNETİMİ</span><h1>Manşet ve Slider</h1><p>Öne çıkan yapımları seç, sıralamasını düzenle ve farklı ekranlarda ön izle.</p></div><span class="status-chip warning"><i class="fa-solid fa-lock"></i> Taslak modu</span></div>
+          <div class="page-heading"><div><span class="eyebrow">VİTRİN YÖNETİMİ</span><h1>Manşet ve Slider</h1><p>Öne çıkan yapımları seç, sıralamasını düzenle ve farklı ekranlarda ön izle.</p></div><span class="status-chip"><i class="fa-solid fa-cloud"></i> Yayın yönetimi</span></div>
           <div class="hero-manager-layout">
             <div class="hero-manager-main">
               <section class="surface-card hero-stage-card">
                 <div class="card-heading"><div><h2>Manşet ön izlemesi</h2><p>Seçili yapımın vitrin görünümü</p></div><div class="view-switch" role="group" aria-label="Ön izleme boyutu"><button class="view-switch-button active" type="button" data-hero-preview="desktop" aria-pressed="true">Masaüstü</button><button class="view-switch-button" type="button" data-hero-preview="mobile" aria-pressed="false">Mobil</button></div></div>
                 <div class="hero-live-preview" id="hero-live-preview"><div class="hero-live-backdrop" id="hero-live-backdrop"></div><div class="hero-live-copy"><span class="hero-live-kicker">PERDE ÖNE ÇIKANLAR</span><h2 id="hero-live-title">Katalog yükleniyor…</h2><div class="hero-live-meta" id="hero-live-meta"></div><p id="hero-live-desc"></p><span class="hero-live-cta"><i class="fa-solid fa-play"></i> ŞİMDİ KEŞFET</span></div><div class="hero-live-index" id="hero-live-index">01 / 01</div></div>
-                <div class="hero-preview-foot"><span><i class="fa-solid fa-circle-info"></i> Bu ön izleme yalnızca yönetim taslağında geçerlidir.</span><span class="status-chip">Canlıya gönderilmedi</span></div>
+                <div class="hero-preview-foot"><span><i class="fa-solid fa-circle-info"></i> Ön izleme kaydedilecek görünümü gösterir.</span><span class="status-chip">Yayın ön izlemesi</span></div>
               </section>
               <section class="surface-card hero-slides-card">
-                <div class="card-heading"><div><h2>Slider sıralaması</h2><p>Öncelik sırasını oklarla değiştir</p></div><span class="result-count" id="hero-slide-count">0 yapım</span></div>
+                <div class="card-heading"><div><h2>Slider sıralaması</h2><p>Yukarı / aşağı oklarıyla sırala, göz simgesiyle yayına al veya gizle</p></div><span class="result-count" id="hero-slide-count">0 yapım</span></div>
                 <div class="hero-slide-list" id="hero-slide-list"><div class="loading-line">Katalog yükleniyor…</div></div>
               </section>
             </div>
@@ -293,11 +293,20 @@
               <label class="hero-field-label" for="hero-content-select">Katalogdan seç</label><select id="hero-content-select"><option value="">Yapım seç…</option></select>
               <button class="gold-button hero-add-button" id="hero-add-button"><i class="fa-solid fa-plus"></i> Slider'a ekle</button>
               <div class="hero-manager-divider"></div>
-              <div class="hero-manager-tip"><i class="fa-solid fa-lightbulb"></i><span><b>İpucu</b> En güçlü yatay arka plan görseline sahip yapımlar manşette daha etkileyici görünür.</span></div>
-              <div class="hero-manager-status"><span class="status-dot"></span><span><b>Yerel ön izleme</b><small>Değişiklikler sunucuya kaydedilmez.</small></span></div>
+              <div class="hero-copy-editor">
+                <span class="eyebrow">MANŞET METİNLERİ</span>
+                <label class="hero-field-label" for="hero-headline-input">Manşet başlığı</label>
+                <input id="hero-headline-input" type="text" maxlength="90" placeholder="Varsayılan: yapım adı">
+                <label class="hero-field-label" for="hero-description-input">Tanıtım metni</label>
+                <textarea id="hero-description-input" rows="4" maxlength="360" placeholder="Varsayılan: katalog açıklaması"></textarea>
+                <small>Boş bıraktığında yapımın katalog bilgileri kullanılır.</small>
+              </div>
+              <button class="gold-button hero-save-button" id="hero-save-button" type="button"><i class="fa-solid fa-cloud-arrow-up"></i> Değişiklikleri kaydet ve yayınla</button>
+              <div class="hero-manager-tip"><i class="fa-solid fa-lightbulb"></i><span><b>Bilgi</b> Kaydettiğinde manşet ve slider ana sayfada tüm ziyaretçilere uygulanır.</span></div>
+              <div class="hero-manager-status"><span class="status-dot"></span><span><b id="hero-save-status-title">Yayın ayarları</b><small id="hero-save-status">Henüz kaydedilmedi.</small></span></div>
             </aside>
           </div>
-          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Bu aşama güvenli taslak aracıdır. Sıralama ve seçimler yalnızca açık oturumdaki ön izlemede tutulur; ana sayfa slider'ı veya katalog verisi değiştirilmez.</p>
+          <p class="info-note"><i class="fa-solid fa-circle-info"></i> Yayın ayarları GitHub deposundaki <code>data/homepage-config.json</code> dosyasına kaydedilir. Katalog kayıtları değiştirilmez.</p>
         </section>
 
         <section class="page-view" id="page-watch">
