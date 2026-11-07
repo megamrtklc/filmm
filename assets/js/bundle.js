@@ -1054,47 +1054,17 @@ function cleanActorBiography(text){
 }
 async function fetchActorSummary(name,fullBiography=true){
  const title=String(name||'').trim().replace(/_/g,' ');
- const params=new URLSearchParams({
-  action:'query',titles:title,redirects:'1',
-  prop:'extracts|pageimages|info|pageprops',
-  explaintext:'1',exchars:fullBiography?'20000':'2600',
-  piprop:'thumbnail',pithumbsize:'1200',inprop:'url',
-  format:'json',origin:'*'
- });
- if(!fullBiography)params.set('exintro','1');
- let page=null;
- try{
-  const response=await fetch('https://tr.wikipedia.org/w/api.php?'+params.toString(),{headers:{'Accept':'application/json'}});
-  if(response.ok){
-   const data=await response.json();
-   page=Object.values(data.query?.pages||{}).find(item=>item.extract);
-  }
- }catch(e){}
- // Başlık eşleşmezse Türkçe Wikipedia aramasından ilgili oyuncu sayfasını bul.
- if(!page){
-  const searchParams=new URLSearchParams({
-   action:'query',generator:'search',gsrsearch:title,gsrlimit:'5',
-   prop:'extracts|pageimages|info|pageprops',
-   explaintext:'1',exchars:fullBiography?'20000':'1200',
-   piprop:'thumbnail',pithumbsize:'1200',inprop:'url',
-   format:'json',origin:'*'
-  });
-  if(!fullBiography)searchParams.set('exintro','1');
-  const response=await fetch('https://tr.wikipedia.org/w/api.php?'+searchParams.toString(),{headers:{'Accept':'application/json'}});
-  if(!response.ok)throw new Error('Türkçe oyuncu profili bulunamadı');
-  const data=await response.json();
-  const pages=Object.values(data.query?.pages||{});
-  const wanted=title.toLocaleLowerCase('tr-TR');
-  page=pages.find(item=>String(item.title||'').toLocaleLowerCase('tr-TR')===wanted)||pages.find(item=>item.extract);
- }
- if(!page?.extract)throw new Error('Türkçe biyografi bulunamadı');
- return {
-  extract:fullBiography?cleanActorBiography(page.extract):page.extract,
-  thumbnail:page.thumbnail?{source:page.thumbnail.source}:undefined,
-  content_urls:{desktop:{page:page.fullurl||('https://tr.wikipedia.org/wiki/'+encodeURIComponent(page.title.replace(/ /g,'_')))}},
-  wikibase_item:page.pageprops?.wikibase_item,
-  title:page.title
+ const requestPage=async(language)=>{
+  const base='https://'+language+'.wikipedia.org/w/api.php?';
+  const makeParams=(extra={})=>new URLSearchParams({action:'query',titles:title,redirects:'1',prop:'extracts|pageimages|info|pageprops',explaintext:'1',exchars:fullBiography?'20000':'2600',piprop:'thumbnail',pithumbsize:'1200',inprop:'url',format:'json',origin:'*',...extra});
+  let page=null,lastError=null;
+  try{const params=makeParams();if(!fullBiography)params.set('exintro','1');const response=await fetch(base+params.toString(),{headers:{'Accept':'application/json'}});if(!response.ok)throw new Error('Wikipedia HTTP '+response.status);const data=await response.json();page=Object.values(data.query?.pages||{}).find(item=>item.extract);}
+  catch(error){lastError=error;}
+  if(!page){try{const params=makeParams({generator:'search',gsrsearch:title,gsrlimit:'8'});if(!fullBiography)params.set('exintro','1');const response=await fetch(base+params.toString(),{headers:{'Accept':'application/json'}});if(!response.ok)throw new Error('Wikipedia search HTTP '+response.status);const data=await response.json();const pages=Object.values(data.query?.pages||{});const wanted=title.toLocaleLowerCase('tr-TR');page=pages.find(item=>String(item.title||'').toLocaleLowerCase('tr-TR')===wanted)||pages.find(item=>item.extract);}catch(error){lastError=error;}}
+  if(!page?.extract)throw lastError||new Error(language+' Wikipedia biography not found');
+  return {extract:fullBiography?cleanActorBiography(page.extract):page.extract,thumbnail:page.thumbnail?{source:page.thumbnail.source}:undefined,content_urls:{desktop:{page:page.fullurl||('https://'+language+'.wikipedia.org/wiki/'+encodeURIComponent(page.title.replace(/ /g,'_')))}},wikibase_item:page.pageprops?.wikibase_item,title:page.title};
  };
+ try{return await requestPage('tr');}catch(error){return await requestPage('en');}
 }
 function getRelatedMedia(item,limit=10){
  const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
@@ -1562,6 +1532,7 @@ async function fetchTmdbActorProfile(name){
  return {id:person.id,name:person.name,biography:person.biography||'',birthday:person.birthday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||''};
 }
 function openActorPage(name,update=true){
+ const profileRequestId=++actorProfileRequestSequence;
  document.body.classList.remove('ny7-detail-open');
  document.documentElement.classList.remove('ny7-modal-lock');
  const actorName=decodeURIComponent(String(name||'')).trim();
@@ -1591,9 +1562,10 @@ function openActorPage(name,update=true){
  loadActorGallery(actorName);
  window.scrollTo({top:0,behavior:'smooth'});
  fetchActorSummary(actorName,false).then(async data=>{
-  if(document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-banner-name').textContent!==actorName)return;
+  if(profileRequestId!==actorProfileRequestSequence||document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-banner-name').textContent!==actorName)return;
   document.getElementById('actor-biography-text').textContent=data.extract||'Oyuncu hakkında biyografi bilgisi bulunamadı.';
   document.getElementById('actor-profile-image').src=data.thumbnail?.source||avatar;
+  if(data.thumbnail?.source&&!actorGalleryPhotos.length&&activeActorPhotoName===actorName){const hero=document.getElementById('actor-featured-photos');if(hero)hero.innerHTML='<div class="actor-banner-tile actor-banner-tile-1"><img src="'+escapeCastHtml(data.thumbnail.source)+'" alt="'+escapeCastHtml(actorName)+'" loading="eager"></div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';}
   document.getElementById('actor-wikipedia-link').href=data.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(actorName.replace(/ /g,'_'));
   try{
    if(data.wikibase_item){
@@ -1634,6 +1606,7 @@ function openActorPage(name,update=true){
    }
   }catch(e){}
  }).catch(()=>{
+  if(profileRequestId!==actorProfileRequestSequence)return;
   document.getElementById('actor-biography-text').textContent='Bu oyuncu için çevrimiçi biyografi bilgisi şu anda alınamadı. Filmografisi sitenin mevcut kataloğundan listelenmiştir.';
   document.getElementById('actor-wikipedia-link').href='https://en.wikipedia.org/w/index.php?search='+encodeURIComponent(actorName);
  });
