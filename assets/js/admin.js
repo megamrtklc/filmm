@@ -625,13 +625,21 @@
         id:String(entry.id),
         ...(Number.isFinite(Number(entry.personalRating))?{personalRating:Math.min(10,Math.max(1,Number(entry.personalRating)))}:{})
       }));
+      if(!catalog.length)throw new Error('Katalog henüz yüklenmedi. Sayfayı yenileyip tekrar dene.');
       if(!window.confirm('Mevcut izleme günlüğü, favoriler ve izleme listesi bu yedekteki verilerle değiştirilsin mi? Bu işlem geri alınamaz.')) {
         hint.textContent='Geri yükleme iptal edildi.';
         return;
       }
-      localStorage.setItem('perde_watch_diary_v1',JSON.stringify(restoredDiary));
-      localStorage.setItem('ny7_favorites',JSON.stringify(parsed.favorites));
-      localStorage.setItem('ny7_watchlist',JSON.stringify(parsed.watchlist));
+      const storageKeys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist'];
+      const previousValues=storageKeys.map(key=>localStorage.getItem(key));
+      try {
+        localStorage.setItem(storageKeys[0],JSON.stringify(restoredDiary));
+        localStorage.setItem(storageKeys[1],JSON.stringify(parsed.favorites));
+        localStorage.setItem(storageKeys[2],JSON.stringify(parsed.watchlist));
+      } catch(storageError) {
+        storageKeys.forEach((key,index)=>previousValues[index]===null?localStorage.removeItem(key):localStorage.setItem(key,previousValues[index]));
+        throw new Error('Tarayıcı depolamasına yazılamadı; önceki kayıtlar korundu.');
+      }
       diaryEntries=restoredDiary;
       renderDiary();
       renderOverview();
