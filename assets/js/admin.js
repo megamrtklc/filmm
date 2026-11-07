@@ -444,7 +444,34 @@
     saveDiary();renderDiary();
     toast('Kişisel günlük güncellendi.');
   }
+  function renderCatalogAnalytics() {
+    const movies=catalog.filter(item=>item.type==='movie');
+    const series=catalog.filter(item=>item.type==='tv');
+    const ratings=catalog.map(item=>Number.parseFloat(item.rating)).filter(value=>Number.isFinite(value)&&value>0&&value<=10);
+    const average=ratings.length?ratings.reduce((sum,value)=>sum+value,0)/ratings.length:0;
+    $('#archive-stat-total').textContent=catalog.length.toLocaleString('tr-TR');
+    $('#archive-stat-movies').textContent=movies.length.toLocaleString('tr-TR');
+    $('#archive-stat-series').textContent=series.length.toLocaleString('tr-TR');
+    $('#archive-stat-rating').textContent=ratings.length?average.toFixed(1).replace('.',',')+'/10':'—';
+    $('#archive-stat-rated').textContent=ratings.length.toLocaleString('tr-TR')+' puanlı yapım';
+
+    const years={};
+    catalog.forEach(item=>{const year=Number.parseInt(item.year,10);if(year>=1880&&year<=new Date().getFullYear()+2)years[year]=(years[year]||0)+1;});
+    const yearRows=Object.entries(years).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,8).reverse();
+    const maxYear=Math.max(1,...yearRows.map(row=>row[1]));
+    $('#archive-year-chart').innerHTML=yearRows.length?'<div class="year-chart-bars">'+yearRows.map(([year,count])=>'<div class="year-chart-column"><b>'+count+'</b><div class="year-chart-track"><i style="height:'+Math.max(5,count/maxYear*100)+'%"></i></div><span>'+escapeHtml(year)+'</span></div>').join('')+'</div><div class="year-chart-foot">'+Object.values(years).reduce((sum,count)=>sum+count,0).toLocaleString('tr-TR')+' tarih bilgili katalog kaydı · Son 8 yıl grubu</div>':'<div class="analytics-empty">Yapım yılı bilgisi bulunamadı.</div>';
+
+    const genres={};
+    catalog.forEach(item=>{
+      const values=String(item.category||item.genre||'Diğer').split('/').map(value=>value.trim()).filter(Boolean);
+      [...new Set(values)].forEach(genre=>{genres[genre]=(genres[genre]||0)+1;});
+    });
+    const top=Object.entries(genres).sort((a,b)=>b[1]-a[1]).slice(0,7);
+    const maxGenre=Math.max(1,...top.map(row=>row[1]));
+    $('#archive-genre-list').innerHTML=top.length?top.map(([genre,count])=>'<div class="personal-genre-row"><span>'+escapeHtml(genre)+'</span><div class="personal-genre-track"><i style="width:'+(count/maxGenre*100)+'%"></i></div><b>'+count+'</b></div>').join(''):'<div class="analytics-empty">Tür bilgisi bulunamadı.</div>';
+  }
   function renderPersonalAnalytics() {
+    renderCatalogAnalytics();
     const counts={watching:0,watched:0,favorite:0,watchlist:0};
     diaryEntries.forEach(entry=>{if(counts[entry.status]!==undefined)counts[entry.status]++;});
     const rated=diaryEntries.filter(entry=>Number.isFinite(Number(entry.personalRating))&&Number(entry.personalRating)>=1&&Number(entry.personalRating)<=10&&entry.personalRating!=='');
