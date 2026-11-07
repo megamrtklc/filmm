@@ -114,7 +114,8 @@ function fitHeroTitleToWidth() {
             heroImageSwapTimer = window.setTimeout(() => { bg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
             const typeBadge = document.getElementById('hero-type-badge');
             if (typeBadge) typeBadge.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i><span>DİZİ</span>' : '<i class="fa-solid fa-film" aria-hidden="true"></i><span>FİLM</span>';
-            const heroPresentation = heroPresentationById[String(item.id)] || {};\n            document.getElementById('hero-title').innerText = heroPresentation.headline || item.title;
+            const heroPresentation = heroPresentationById[String(item.id)] || {};
+            document.getElementById('hero-title').innerText = heroPresentation.headline || item.title;
             let heroOriginal = document.getElementById('hero-original-title');
             if (!heroOriginal) { heroOriginal = document.createElement('small'); heroOriginal.id = 'hero-original-title'; heroOriginal.className = 'media-original-title hero-original-title'; document.getElementById('hero-title').after(heroOriginal); }
             heroOriginal.textContent = item.originalTitle || ''; heroOriginal.hidden = !item.originalTitle;
