@@ -904,6 +904,28 @@ function renderFilteredCatalog() {
                 button.classList.toggle('text-slate-400', !selected);
             });
         }
+        function updatePageContext(title){
+            const card=document.getElementById('page-context-card');
+            if(!card)return;
+            const route=decodeURIComponent((location.hash||'').replace(/^#\/?/,'')).split('/')[0]||'kesfet';
+            const configs={
+                filmler:['fa-film','FİLMLER','Film arşivindeki yapımları keşfet.'],
+                diziler:['fa-tv','DİZİLER','Dizi arşivini ve bölümlük hikâyeleri keşfet.'],
+                kesfet:['fa-compass','KEŞFET','Perde kataloğundaki tüm yapımları keşfet.'],
+                listem:['fa-bookmark','İZLEME LİSTEM','Kaydettiğin film ve diziler burada.'],
+                kategori:['fa-layer-group',String(title||'KATEGORİ').toLocaleUpperCase('tr-TR'),'Seçtiğin kategoriye ait yapımları incele.'],
+                ulke:['fa-globe','ÜLKE ARŞİVİ','Seçtiğin ülkeden yapımları keşfet.'],
+                yonetmen:['fa-video','YÖNETMEN FİLMOGRAFİSİ','Yönetmenin Perde kataloğundaki yapımları.'],
+                tur:['fa-tags','TÜR ARŞİVİ','Seçtiğin türe ait yapımları keşfet.']
+            };
+            const config=configs[route]||['fa-compass',String(title||'KEŞFET').toLocaleUpperCase('tr-TR'),'Perde arşivini keşfet.'];
+            const icon=document.getElementById('page-context-icon');
+            const heading=document.getElementById('page-context-title');
+            const description=document.getElementById('page-context-description');
+            if(icon)icon.className='fa-solid '+config[0];
+            if(heading)heading.textContent=config[1];
+            if(description)description.textContent=['kategori','ulke','yonetmen','tur'].includes(route)?String(title||config[2]):config[2];
+        }
         function showCatalogView(title) {
             // Katalog rotasına geçerken detay/oyuncu görünümünü de kapat.
             const dashboard=document.getElementById('dashboard-view');
@@ -918,6 +940,11 @@ function renderFilteredCatalog() {
             if(themeBody)themeBody.style.backgroundColor='#0b0c10';
             const related=document.getElementById('detail-related');
             if(related)related.classList.add('hidden');
+            const homeFeature=document.querySelector('.home-feature-row');
+            if(homeFeature)homeFeature.classList.add('hidden');
+            const context=document.getElementById('page-context-card');
+            if(context)context.hidden=false;
+            updatePageContext(title);
             document.getElementById('hero-section').classList.add('hidden');
             document.getElementById('home-collections').classList.add('hidden');
             const live = document.getElementById('live-tv-section'); if (live) live.classList.add('hidden');
@@ -1072,6 +1099,8 @@ function showDashboard(update=true){
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
+ const homeFeature=document.querySelector('.home-feature-row');if(homeFeature)homeFeature.classList.remove('hidden');
+ const context=document.getElementById('page-context-card');if(context)context.hidden=true;
  document.getElementById('hero-section').classList.remove('hidden');
  document.getElementById('home-collections').classList.remove('hidden');
  const live=document.getElementById('live-tv-section');if(live)live.classList.remove('hidden');
@@ -1590,7 +1619,7 @@ function openActorPage(name,update=true){
  const normalized=normalizeActorName(actorName);
  const works=mediaDatabase.filter(m=>{const names=[...(Array.isArray(m.cast)?m.cast:[]),...(Array.isArray(m.tmdbCast)?m.tmdbCast.map(p=>typeof p==='string'?p:p?.name):[])];return names.some(v=>normalizeActorName(v)===normalized);});
  if(update){const path='#/oyuncu/'+encodeURIComponent(actorName);if(location.hash!==path)history.pushState(null,'',path);}
- document.getElementById('dashboard-view').classList.add('hidden');document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');document.getElementById('actor-page-view').classList.remove('hidden');document.getElementById('theme-body').style.backgroundColor='#07080c';
+ document.getElementById('dashboard-view').classList.add('hidden');document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');document.getElementById('actor-page-view').classList.remove('hidden');const actorContext=document.getElementById('actor-context-description');if(actorContext)actorContext.textContent=actorName+' — yaşamı, kariyeri ve Perde kataloğundaki yapımları.';document.getElementById('theme-body').style.backgroundColor='#07080c';
 document.getElementById('actor-biography-title').textContent=actorName;document.getElementById('actor-biography-text').textContent='TMDB oyuncu bilgileri yükleniyor…';
  ['actor-birth-date','actor-birth-place','actor-country','actor-education'].forEach(id=>document.getElementById(id).textContent='Bilgi bulunamadı');
  const deathInfoNode=document.getElementById('actor-death-info');if(deathInfoNode){deathInfoNode.hidden=true;deathInfoNode.textContent='';}
