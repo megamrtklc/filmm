@@ -188,7 +188,7 @@
       const safe=file.name.replace(/\.[^.]+$/,'').normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'subtitle';
       const episodeTag=season&&episode?'-s'+season+'e'+episode:'',path='assets/subtitles/'+key+'/'+language+episodeTag+'-'+safe+'-'+Date.now()+'.vtt';
       const url=await githubUploadSubtitle(path,vtt);
-      if($('#editor-subtitle-default').checked)editorSubtitles=editorSubtitles.map(item=>({...item,default:false}));
+      if($('#editor-subtitle-default').checked)editorSubtitles=editorSubtitles.map(item=>({...item,default:(Number(item.season)||0)!==season||(Number(item.episode)||0)!==episode?item.default:false}));
       editorSubtitles.push({language,languageLabel:subtitleLanguages[language]||language,fileName:file.name,url,default:$('#editor-subtitle-default').checked,season,episode});
       renderEditorSubtitles();$('#editor-subtitle-file').value='';status.textContent='Altyazı yüklendi. Yapım kaydını kaydettiğinde kataloğa bağlanacak.';toast('Altyazı GitHub’a yüklendi; şimdi yapımı kaydet.');
     }catch(error){status.textContent='Yükleme başarısız: '+error.message;toast(error.message);}
