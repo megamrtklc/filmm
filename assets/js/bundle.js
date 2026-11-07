@@ -1440,108 +1440,6 @@ function openDetailPage(id,update=true){
  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-let actorGalleryPhotos=[];
-let actorGalleryPage=0;
-let actorGalleryVisibleCount=5;
-let activeActorPhoto=0;
-let activeActorPhotoName='';
-function renderActorGallery(){
- const grid=document.getElementById('actor-gallery-grid');
- const visible=actorGalleryPhotos.slice(0,actorGalleryVisibleCount);
- grid.innerHTML=visible.map((photo,index)=>'<button type="button" class="actor-gallery-photo'+(index===0?' actor-gallery-photo-featured':'')+'" data-gallery-index="'+index+'" aria-label="Fotoğrafı büyüt"><img src="'+escapeCastHtml(photo.thumb||photo.url)+'" alt="'+escapeCastHtml(activeActorPhotoName)+' fotoğraf '+(index+1)+'" loading="'+(index<5?'eager':'lazy')+'"><span><i class="fa-solid fa-expand"></i></span><small>'+(index+1).toString().padStart(2,'0')+'</small><em>'+escapeCastHtml(photo.source||'Fotoğraf')+'</em></button>').join('')||'<p class="actor-gallery-empty">Bu oyuncu için fotoğraf bulunamadı.</p>';
- document.getElementById('actor-gallery-count').textContent=actorGalleryPhotos.length?Math.min(actorGalleryVisibleCount,actorGalleryPhotos.length)+' / '+actorGalleryPhotos.length+' fotoğraf gösteriliyor':'Fotoğraf bulunamadı';
- const more=document.getElementById('actor-gallery-more');
- if(more){more.hidden=actorGalleryVisibleCount>=actorGalleryPhotos.length;more.textContent='Daha fazla fotoğraf göster';}
-}
-function changeActorGalleryPage(){
- actorGalleryVisibleCount=Math.min(actorGalleryVisibleCount+5,actorGalleryPhotos.length);
- renderActorGallery();
-}
-async function fetchWikimediaActorPhotos(name,requestId){
- const searches=['"'+name+'"',name+' portrait',name+' actor'];
- for(const searchText of searches){
-  const query=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrnamespace:'6',gsrsearch:searchText,gsrlimit:'30',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'720'});
-  const response=await fetch('https://commons.wikimedia.org/w/api.php?'+query.toString(),{cache:'no-store'});
-  if(!response.ok)throw new Error('Wikimedia Commons HTTP '+response.status);
-  const data=await response.json();
-  if(requestId!==actorProfileRequestSequence)return [];
-  const pages=Object.values(data.query?.pages||{});
-  const photos=pages.map(page=>{
-   const info=page.imageinfo?.[0],meta=info?.extmetadata||{};
-   if(!info?.url)return null;
-   const license=String(meta.LicenseShortName?.value||meta.UsageTerms?.value||'').replace(/<[^>]*>/g,' ').trim();
-   const artist=String(meta.Artist?.value||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').trim();
-   const pageUrl=info.descriptionurl||'https://commons.wikimedia.org/wiki/'+encodeURIComponent(page.title||'');
-   return {url:info.url,thumb:info.thumburl||info.url,title:name,source:'Wikimedia Commons',page:pageUrl,license:license||'Lisans bilgisi sayfada',artist,width:info.width||0,height:info.height||0,key:String(page.pageid||page.title||info.url)};
-  }).filter(Boolean);
-  const seen=new Set();
-  const unique=photos.filter(photo=>{const key=photo.key.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,20);
-  if(unique.length)return unique;
- }
- return [];
-}
-async function loadActorGallery(personId,name,headers,requestId){
- actorGalleryPhotos=[];actorGalleryPage=0;actorGalleryVisibleCount=5;activeActorPhotoName=name;
- renderActorGallery();
- let tmdbError=null;
- try{
-  const response=await fetch('https://api.themoviedb.org/3/person/'+encodeURIComponent(personId)+'/images',{headers,cache:'no-store'});
-  if(!response.ok)throw new Error('TMDB fotoğraf galerisi HTTP '+response.status);
-  const data=await response.json();
-  if(requestId!==actorProfileRequestSequence)return;
-  const seen=new Set();
-  const tmdbPhotos=(data.profiles||[]).filter(photo=>photo.file_path).map(photo=>({url:'https://image.tmdb.org/t/p/original'+photo.file_path,thumb:'https://image.tmdb.org/t/p/w500'+photo.file_path,title:name,source:'TMDB',page:'https://www.themoviedb.org/person/'+encodeURIComponent(personId),license:'TMDB görsel kullanım koşulları',width:photo.width||0,height:photo.height||0,key:photo.file_path})).filter(photo=>{const key=photo.key.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,30);
-  if(tmdbPhotos.length)actorGalleryPhotos=tmdbPhotos;
- }catch(error){tmdbError=error;console.warn('Perde TMDB oyuncu fotoğrafları:',error);}
- if(requestId!==actorProfileRequestSequence)return;
- if(!actorGalleryPhotos.length){
-  try{const commonsPhotos=await fetchWikimediaActorPhotos(name,requestId);if(commonsPhotos.length)actorGalleryPhotos=commonsPhotos;}
-  catch(error){console.warn('Perde Wikimedia Commons oyuncu fotoğrafları:',error);}
- }
- if(requestId!==actorProfileRequestSequence)return;
- if(!actorGalleryPhotos.length){const profileUrl=document.getElementById('actor-profile-image')?.src||'';if(profileUrl&&!profileUrl.includes('ui-avatars.com'))actorGalleryPhotos=[{url:profileUrl,thumb:profileUrl,title:name,source:'TMDB profil fotoğrafı',page:'https://www.themoviedb.org/person/'+encodeURIComponent(personId),license:'TMDB görsel kullanım koşulları',key:'profile-'+personId}];}
- renderActorGallery();
- const hero=document.getElementById('actor-featured-photos');
- const photos=actorGalleryPhotos.slice(0,5);
- const heroPhotos=photos.length?photos:[{url:document.getElementById('actor-profile-image')?.src||'',thumb:document.getElementById('actor-profile-image')?.src||''}].filter(photo=>photo.url&&!photo.url.includes('ui-avatars.com'));
- if(heroPhotos.length){
-  const collage=heroPhotos.map((photo,index)=>'<div class="actor-banner-tile actor-banner-tile-'+(index+1)+'"><img src="'+escapeCastHtml(photo.thumb||photo.url)+'" alt="'+escapeCastHtml(name)+' fotoğraf '+(index+1)+'" loading="'+(index===0?'eager':'lazy')+'"></div>').join('');
-  hero.innerHTML='<div class="actor-banner-collage" aria-label="'+escapeCastHtml(name)+' fotoğraf kolajı">'+collage+'</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
- }else{
-  hero.innerHTML='<div class="actor-banner-placeholder">Oyuncu fotoğrafı bulunamadı</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(name)+'</h1></div>';
- }
- if(!actorGalleryPhotos.length){
-  document.getElementById('actor-gallery-count').textContent=tmdbError?'TMDB ve Wikimedia Commons üzerinde fotoğraf bulunamadı.':'Bu oyuncu için erişilebilir fotoğraf bulunamadı.';
- }
-}
-function openActorPhoto(index){
- if(!actorGalleryPhotos.length)return;
- activeActorPhoto=(index+actorGalleryPhotos.length)%actorGalleryPhotos.length;
- const photo=actorGalleryPhotos[activeActorPhoto];
- document.getElementById('actor-photo-modal-image').src=photo.url||photo.thumb;
- const caption=document.getElementById('actor-photo-modal-caption');caption.innerHTML=(activeActorPhoto+1)+' / '+actorGalleryPhotos.length+' · '+escapeCastHtml(photo.source||'Fotoğraf kaynağı')+(photo.license?' · '+escapeCastHtml(photo.license):'')+(photo.artist?' · '+escapeCastHtml(photo.artist):'')+(photo.page?' · <a href=\"'+escapeCastHtml(photo.page)+'\" target=\"_blank\" rel=\"noopener noreferrer\">Kaynak sayfası</a>':'');
- document.getElementById('actor-photo-modal').classList.remove('hidden');
- document.body.classList.add('actor-modal-open');
-}
-function stepActorPhoto(direction){openActorPhoto(activeActorPhoto+direction)}
-function closeActorPhoto(){
- document.getElementById('actor-photo-modal').classList.add('hidden');
- document.body.classList.remove('actor-modal-open');
-}
-window.closeActorPhoto=closeActorPhoto;
-window.stepActorPhoto=stepActorPhoto;
-window.changeActorGalleryPage=changeActorGalleryPage;
-document.addEventListener('click',function(event){
- const photo=event.target.closest('[data-gallery-index]');
- if(photo&&document.getElementById('actor-page-view').contains(photo)){openActorPhoto(Number(photo.dataset.galleryIndex));return;}
- if(event.target.id==='actor-photo-modal')closeActorPhoto();
-});
-document.addEventListener('keydown',function(event){
- if(document.getElementById('actor-photo-modal').classList.contains('hidden'))return;
- if(event.key==='Escape')closeActorPhoto();
- if(event.key==='ArrowLeft')stepActorPhoto(-1);
- if(event.key==='ArrowRight')stepActorPhoto(1);
-});
 let actorProfileRequestSequence=0;
 function escapeCastHtml(value){return escapeCountryHtml(value);}
 function normalizeActorName(value){
@@ -1564,7 +1462,7 @@ async function translateActorBiographyToTurkish(value){
  return translated;
 }
 
-async function fetchTmdbActorProfile(name,onPersonResolved){
+async function fetchTmdbActorProfile(name){
  let token='';
  try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
  if(!token)throw new Error('TMDB Read Access Token yönetim panelinde kayıtlı değil.');
@@ -1589,7 +1487,6 @@ async function fetchTmdbActorProfile(name,onPersonResolved){
   personId=Number(exact.id);
  }
  if(!Number.isFinite(personId)||personId<=0)throw new Error('Geçerli TMDB oyuncu kimliği bulunamadı.');
- if(typeof onPersonResolved==='function')onPersonResolved(personId,headers);
  const base='https://api.themoviedb.org/3/person/'+encodeURIComponent(personId);
  const response=await fetch(base+authQuery,{headers});
  if(!response.ok)throw new Error('TMDB oyuncu profili HTTP '+response.status);
@@ -1694,22 +1591,21 @@ function openActorPage(name,update=true){
  const works=mediaDatabase.filter(m=>{const names=[...(Array.isArray(m.cast)?m.cast:[]),...(Array.isArray(m.tmdbCast)?m.tmdbCast.map(p=>typeof p==='string'?p:p?.name):[])];return names.some(v=>normalizeActorName(v)===normalized);});
  if(update){const path='#/oyuncu/'+encodeURIComponent(actorName);if(location.hash!==path)history.pushState(null,'',path);}
  document.getElementById('dashboard-view').classList.add('hidden');document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');document.getElementById('actor-page-view').classList.remove('hidden');document.getElementById('theme-body').style.backgroundColor='#07080c';
- document.getElementById('actor-banner-name').textContent=actorName;document.getElementById('actor-biography-title').textContent=actorName;document.getElementById('actor-biography-text').textContent='TMDB oyuncu bilgileri yükleniyor…';
+document.getElementById('actor-biography-title').textContent=actorName;document.getElementById('actor-biography-text').textContent='TMDB oyuncu bilgileri yükleniyor…';
  ['actor-birth-date','actor-birth-place','actor-country','actor-education'].forEach(id=>document.getElementById(id).textContent='Bilgi bulunamadı');
  const deathInfoNode=document.getElementById('actor-death-info');if(deathInfoNode){deathInfoNode.hidden=true;deathInfoNode.textContent='';}
  const avatar='https://ui-avatars.com/api/?name='+encodeURIComponent(actorName)+'&background=252936&color=ffffff&size=512&bold=true';
- document.getElementById('actor-profile-image').src=avatar;document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">TMDB oyuncu görselleri yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
- actorGalleryPhotos=[];actorGalleryVisibleCount=5;activeActorPhotoName=actorName;renderActorGallery();
+ document.getElementById('actor-profile-image').src=avatar;
  document.getElementById('actor-filmography-title').textContent=actorName+' — filmografi yükleniyor';
  document.getElementById('actor-filmography-controls').hidden=true;
  document.getElementById('actor-filmography-more').hidden=true;
  document.getElementById('actor-filmography-status').textContent='';
  document.getElementById('actor-filmography-grid').innerHTML='<p>Perde kataloğundaki yapımlar kontrol ediliyor…</p>';
- closeActorPhoto();window.scrollTo({top:0,behavior:'smooth'});
- fetchTmdbActorProfile(actorName,(personId,headers)=>{loadActorGallery(personId,actorName,headers,profileRequestId).catch(error=>console.warn('Perde oyuncu fotoğraf galerisi yüklenemedi:',error));}).then(async person=>{
+ window.scrollTo({top:0,behavior:'smooth'});
+ fetchTmdbActorProfile(actorName).then(async person=>{
   if(profileRequestId!==actorProfileRequestSequence||document.getElementById('actor-page-view').classList.contains('hidden'))return;
   if(!person)throw new Error('TMDB oyuncu eşleşmesi bulunamadı.');
-  document.getElementById('actor-banner-name').textContent=person.name||actorName;document.getElementById('actor-biography-title').textContent=person.name||actorName;
+document.getElementById('actor-biography-title').textContent=person.name||actorName;
   document.getElementById('actor-biography-text').textContent=person.biography||'TMDB bu oyuncu için henüz biyografi bilgisi sağlamıyor.';
   const biographyNode=document.getElementById('actor-biography-text'),bioToggle=document.getElementById('actor-bio-toggle');
   biographyNode.classList.remove('is-expanded');
@@ -1733,7 +1629,6 @@ function openActorPage(name,update=true){
   const link=document.getElementById('actor-wikipedia-link');link.href='https://www.themoviedb.org/person/'+person.id;link.innerHTML='TMDB üzerinde görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i>';
   document.getElementById('actor-profile-image').src=person.profile||avatar;
   renderActorFilmography(person,actorName,works);
-  if(!actorGalleryPhotos.length&&person.profile){actorGalleryPhotos=[{url:person.profile,thumb:person.profile,title:person.name||actorName,source:'TMDB profil fotoğrafı',page:'https://www.themoviedb.org/person/'+person.id,license:'TMDB görsel kullanım koşulları',key:'profile-'+person.id}];renderActorGallery();}
  }).catch(error=>{
   if(profileRequestId!==actorProfileRequestSequence)return;
   console.error('Perde TMDB oyuncu profili:',error);
