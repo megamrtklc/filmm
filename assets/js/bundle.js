@@ -1630,12 +1630,15 @@ function releasePlayerUrls(){
 function attachPlayerSource(url,label){
  const video=document.getElementById('player-video'),empty=document.getElementById('player-empty-state');
  if(!video||!url)return;
- video.pause();video.innerHTML='';video.src=url;video.load();
+ video.pause();video.removeAttribute('src');video.replaceChildren();
  const currentItem=mediaDatabase.find(entry=>String(entry.id)===String(activePlayerMediaId));
  if(currentItem&&Array.isArray(currentItem.subtitles)){
   const episode=window.perdeEpisodeContext||null;
-  currentItem.subtitles.filter(track=>track&&track.url&&(!track.season||(episode&&Number(track.season)===Number(episode.season)&&Number(track.episode)===Number(episode.episode)))).forEach(track=>{const node=document.createElement('track');node.kind='subtitles';node.label=track.languageLabel||track.language||'Altyazı';node.srclang=track.language||'tr';node.src=track.url;if(track.default)node.default=true;video.appendChild(node);});
+  currentItem.subtitles.filter(track=>track&&track.url&&(!track.season||(episode&&Number(track.season)===Number(episode.season)&&Number(track.episode)===Number(episode.episode)))).forEach(track=>{
+   const node=document.createElement('track');node.kind='subtitles';node.label=track.languageLabel||track.language||'Altyazı';node.srclang=track.language==='other'?'und':(track.language||'tr');node.src=track.url;if(track.default)node.default=true;video.appendChild(node);
+  });
  }
+ video.src=url;video.load();
  if(empty)empty.hidden=true;
  setPlayerError('');
  video.play().catch(()=>{});
