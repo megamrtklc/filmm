@@ -1342,9 +1342,9 @@ async function loadTmdbDetailCast(item){
  const mediaType=item.type==='tv'?'tv':'movie';
  const cacheKey=mediaType+':'+id;
  const cached=readDetailCastCache(cacheKey);
- if(cached&&cached.length){item.tmdbCast=cached;renderDetailCredits(item);}
- const hasCompleteCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.some(person=>person&&typeof person==='object'&&person.character&&person.profile);
- if(hasCompleteCast&&!cached)return;
+ if(cached&&cached.length){item.tmdbCast=cached;renderDetailCredits(item);return;}
+ const hasCompleteCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.length>0&&item.tmdbCast.every(person=>person&&typeof person==='object'&&person.name&&typeof person.character==='string');
+ if(hasCompleteCast)return;
  let token='';
  try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
  if(!token)return;
