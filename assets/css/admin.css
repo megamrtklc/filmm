@@ -635,3 +635,15 @@
 .tmdb-result-item.is-duplicate:hover{border-color:#35483d;background:#121a18}
 .tmdb-result-item:disabled{pointer-events:none}
 .tmdb-result-state{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;padding:6px 8px;border:1px solid #315340;border-radius:999px;color:#8ec9a0;background:#173022;font-size:9px;font-weight:700;white-space:nowrap}
+
+/* Slider display settings */
+.hero-settings-editor{display:grid;gap:12px;margin:18px 0 14px;padding:16px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-settings-editor h3{margin:-5px 0 2px;color:#f0eee8;font:800 14px Manrope,sans-serif}
+.hero-settings-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.hero-settings-grid label{display:grid;gap:6px;color:#dce0e6;font-size:11px;font-weight:700}
+.hero-settings-grid label span{color:#c8cdd5}
+.hero-settings-grid select{width:100%;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#10151d;color:#f0f1f3;font:inherit;font-size:11px}
+.hero-setting-check{display:flex;align-items:flex-start;gap:9px;color:#e4e7eb;cursor:pointer}
+.hero-setting-check input{width:15px;height:15px;margin:2px 0 0;accent-color:#d8ad55}
+.hero-setting-check b,.hero-setting-check small{display:block}.hero-setting-check b{font-size:11px}.hero-setting-check small{margin-top:3px;color:var(--muted);font-size:9px;line-height:1.4}
+.hero-settings-note{margin:0;color:#9da5b2;font-size:10px;line-height:1.55}
