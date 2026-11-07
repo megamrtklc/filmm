@@ -1498,6 +1498,23 @@ function escapeCastHtml(value){return escapeCountryHtml(value);}
 function normalizeActorName(value){
  return String(value||'').normalize('NFD').replace(/\p{M}/gu,'').toLocaleLowerCase('tr-TR').replace(/ı/g,'i').trim().replace(/\s+/g,' ');
 }
+function looksLikeTurkishBiography(value){
+ const text=String(value||'');
+ return /[çğıöşü]/i.test(text)||/\\b(ve|bir|ile|olarak|için|olan|daha|sonra|yılında|doğdu|oyuncu|yönetmen|kariyerine|başladı|tanınır)\\b/i.test(text);
+}
+async function translateActorBiographyToTurkish(value){
+ const source=String(value||'').trim();
+ if(!source)return '';
+ if(looksLikeTurkishBiography(source))return source;
+ const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=tr&dt=t&q='+encodeURIComponent(source);
+ const response=await fetch(url,{headers:{Accept:'application/json'}});
+ if(!response.ok)throw new Error('Biyografi çevirisi HTTP '+response.status);
+ const data=await response.json();
+ const translated=Array.isArray(data?.[0])?data[0].map(part=>part?.[0]||'').join('').trim():'';
+ if(!translated)throw new Error('Türkçe çeviri alınamadı.');
+ return translated;
+}
+
 async function fetchTmdbActorProfile(name){
  let token='';
  try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
@@ -1527,10 +1544,27 @@ async function fetchTmdbActorProfile(name){
  const response=await fetch(base+authQuery,{headers});
  if(!response.ok)throw new Error('TMDB oyuncu profili HTTP '+response.status);
  let person=await response.json();
- if(!person.biography){
-  try{const english=await fetch(base+'?language=en-US'+(authQuery.includes('api_key=')?'&api_key='+encodeURIComponent(token):''),{headers});if(english.ok){const data=await english.json();if(data.biography)person={...person,biography:data.biography};}}catch(_){}
+ let biography=String(person.biography||'').trim();
+ try{
+  const translations=await fetch(base+'/translations'+authQuery,{headers});
+  if(translations.ok){
+   const data=await translations.json();
+   const tr=(data.translations||[]).find(item=>String(item.iso_639_1||'').toLowerCase()==='tr');
+   const translatedBio=String(tr?.data?.biography||'').trim();
+   if(translatedBio)biography=translatedBio;
+  }
+ }catch(_){}
+ if(!biography){
+  try{const english=await fetch(base+'?language=en-US'+(authQuery.includes('api_key=')?'&api_key='+encodeURIComponent(token):''),{headers});if(english.ok){const data=await english.json();if(data.biography)biography=String(data.biography).trim();}}catch(_){}
  }
- return {id:person.id,name:person.name,biography:person.biography||'',birthday:person.birthday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||'',headers};
+ if(biography){
+  try{biography=await translateActorBiographyToTurkish(biography);}
+  catch(error){
+   console.warn('Perde oyuncu biyografisi Türkçeye çevrilemedi:',error);
+   if(!looksLikeTurkishBiography(biography))biography='Bu oyuncunun biyografisi şu anda Türkçe olarak alınamıyor.';
+  }
+ }
+ return {id:person.id,name:person.name,biography,birthday:person.birthday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||'',headers};
 }
 function renderActorFilmography(person,name,localWorks){
  const grid=document.getElementById('actor-filmography-grid');
