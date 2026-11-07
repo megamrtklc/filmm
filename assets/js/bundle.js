@@ -1562,7 +1562,6 @@ async function fetchTmdbActorProfile(name){
  return {id:person.id,name:person.name,biography:person.biography||'',birthday:person.birthday||'',placeOfBirth:person.place_of_birth||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',department:person.known_for_department||''};
 }
 function openActorPage(name,update=true){
- const profileRequest=++actorProfileRequestSequence;
  document.body.classList.remove('ny7-detail-open');
  document.documentElement.classList.remove('ny7-modal-lock');
  const actorName=decodeURIComponent(String(name||'')).trim();
@@ -1583,35 +1582,18 @@ function openActorPage(name,update=true){
  document.getElementById('actor-country').textContent='Bilgi bulunamadı';
  document.getElementById('actor-education').textContent='Bilgi bulunamadı';
  const avatar='https://ui-avatars.com/api/?name='+encodeURIComponent(actorName)+'&background=252936&color=ffffff&size=512&bold=true';
- const catalogActor=mediaDatabase.flatMap(media=>Array.isArray(media.tmdbCast)?media.tmdbCast:[]).find(person=>person&&typeof person==='object'&&normalizeActorName(person.name)===normalizeActorName(actorName));
- const catalogActorPhoto=catalogActor?.profile||'';
- document.getElementById('actor-profile-image').src=catalogActorPhoto||avatar;
- const actorHero=document.getElementById('actor-featured-photos');
- if(catalogActorPhoto){
-  actorHero.innerHTML='<div class="actor-banner-tile actor-banner-tile-1"><img src="'+escapeCastHtml(catalogActorPhoto.replace('/w185/','/w500/'))+'" alt="'+escapeCastHtml(actorName)+'" loading="eager"></div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
- }else{
-  actorHero.innerHTML='<div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
- }
+ document.getElementById('actor-profile-image').src=avatar;
+ document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">Oyuncu görseli yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
  document.getElementById('actor-gallery-grid').innerHTML='';
  document.getElementById('actor-filmography-title').textContent=actorName+' — '+works.length+' yapım';
  document.getElementById('actor-filmography-grid').innerHTML=works.map(m=>'<button type="button" class="actor-work-card" onclick="openDetailPage(\''+String(m.id).replace(/'/g,"\\'")+'\')"><img src="'+m.image+'" alt="'+escapeCastHtml(m.title)+'" loading="lazy"><span><b>'+escapeCastHtml(m.title)+'</b>'+originalTitleMarkup(m,'actor-work-original-title')+'<small>'+escapeCastHtml(m.year||'')+' · '+(m.type==='tv'?'Dizi':'Film')+'</small></span></button>').join('')||'<p>Bu oyuncunun yer aldığı bir yapım henüz katalogda bulunmuyor.</p>';
  closeActorPhoto();
  loadActorGallery(actorName);
  window.scrollTo({top:0,behavior:'smooth'});
- fetchTmdbActorProfile(actorName).then(person=>{
-  if(!person||profileRequest!==actorProfileRequestSequence||document.getElementById('actor-page-view').classList.contains('hidden'))return;
-  if(person.biography)document.getElementById('actor-biography-text').textContent=person.biography;
-  if(person.profile)document.getElementById('actor-profile-image').src=person.profile;
-  if(person.birthday){
-   const parts=person.birthday.split('-');
-   if(parts.length===3)document.getElementById('actor-birth-date').textContent=parts[2]+'.'+parts[1]+'.'+parts[0];
-  }
-  if(person.placeOfBirth)document.getElementById('actor-birth-place').textContent=person.placeOfBirth;
- }).catch(error=>console.warn('TMDB oyuncu profili alınamadı:',error));
  fetchActorSummary(actorName,false).then(async data=>{
-  if(profileRequest!==actorProfileRequestSequence||document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-banner-name').textContent!==actorName)return;
-  if(data.extract&&data.extract.length>80)document.getElementById('actor-biography-text').textContent=data.extract;
-  if(data.thumbnail?.source&&document.getElementById('actor-profile-image').src===avatar)document.getElementById('actor-profile-image').src=data.thumbnail.source;
+  if(document.getElementById('actor-page-view').classList.contains('hidden')||document.getElementById('actor-banner-name').textContent!==actorName)return;
+  document.getElementById('actor-biography-text').textContent=data.extract||'Oyuncu hakkında biyografi bilgisi bulunamadı.';
+  document.getElementById('actor-profile-image').src=data.thumbnail?.source||avatar;
   document.getElementById('actor-wikipedia-link').href=data.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(actorName.replace(/ /g,'_'));
   try{
    if(data.wikibase_item){
@@ -1652,7 +1634,7 @@ function openActorPage(name,update=true){
    }
   }catch(e){}
  }).catch(()=>{
-  if(document.getElementById('actor-biography-text').textContent==='Oyuncu biyografisi yükleniyor…')document.getElementById('actor-biography-text').textContent='Biyografi şu anda alınamadı. Filmografisi katalogdan listelenmiştir.';
+  document.getElementById('actor-biography-text').textContent='Bu oyuncu için çevrimiçi biyografi bilgisi şu anda alınamadı. Filmografisi sitenin mevcut kataloğundan listelenmiştir.';
   document.getElementById('actor-wikipedia-link').href='https://en.wikipedia.org/w/index.php?search='+encodeURIComponent(actorName);
  });
 }
