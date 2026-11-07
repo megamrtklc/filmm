@@ -504,7 +504,7 @@
 .actor-biography a{display:inline-flex;gap:8px;margin-top:18px;color:#d8b76b;font-size:11px;font-weight:750}
 .actor-filmography{max-width:1400px;margin:0 auto;padding:0 clamp(16px,4vw,58px) 40px}
 .actor-filmography-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
-.actor-work-card{overflow:hidden;border:1px solid #ffffff12;border-radius:10px;background:#11141b;text-align:left;transition:transform .2s,border-color .2s}
+.actor-work-card{display:block;color:inherit;text-decoration:none;overflow:hidden;border:1px solid #ffffff12;border-radius:10px;background:#11141b;text-align:left;transition:transform .2s,border-color .2s}
 .actor-work-card:hover{transform:translateY(-3px);border-color:#d4ad5c}
 .actor-work-card img{width:100%;aspect-ratio:2/3;object-fit:cover}
 .actor-work-card span{display:flex;flex-direction:column;gap:5px;padding:9px}
