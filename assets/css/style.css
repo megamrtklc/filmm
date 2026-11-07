@@ -6771,3 +6771,49 @@ body.detail-synopsis-open{overflow:hidden}
 .page-context-card[data-theme="family"]{--context-a:255,190,120;--context-b:103,65,41}
 .page-context-card[data-theme="sport"]{--context-a:113,226,143;--context-b:30,85,53}
 .page-context-card[data-theme="western"]{--context-a:226,164,104;--context-b:102,57,31}
+
+
+/* Gerçek fotoğraf atmosferleri: karşılama kartı */
+.page-context-card{
+  background-image:
+    linear-gradient(90deg,rgba(8,10,16,.94) 0%,rgba(8,10,16,.76) 48%,rgba(8,10,16,.46) 100%),
+    linear-gradient(0deg,rgba(8,10,16,.35),rgba(8,10,16,.18)),
+    radial-gradient(ellipse at 16% 0%,rgba(var(--context-a),.25),transparent 48%),
+    var(--context-image,none);
+  background-size:cover;
+  background-position:center 44%;
+}
+.page-context-card[data-route="filmler"]{--context-image:url("https://images.unsplash.com/photo-1489599849927-2ee91 Q?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="diziler"]{--context-image:url("https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="kesfet"]{--context-image:url("https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="listem"]{--context-image:url("https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="kategori"]{--context-image:url("https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="ulke"]{--context-image:url("https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="yonetmen"]{--context-image:url("https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="tur"]{--context-image:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-route="oyuncu"]{--context-image:url("https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="animation"]{--context-image:url("https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="action"]{--context-image:url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="comedy"]{--context-image:url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="drama"]{--context-image:url("https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="horror"]{--context-image:url("https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="thriller"]{--context-image:url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="scifi"]{--context-image:url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="fantasy"]{--context-image:url("https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="romance"]{--context-image:url("https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="adventure"]{--context-image:url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="crime"]{--context-image:url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="mystery"]{--context-image:url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="documentary"]{--context-image:url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="history"]{--context-image:url("https://images.unsplash.com/photo-1461360228754-6e81c478b882?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="war"]{--context-image:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="music"]{--context-image:url("https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="family"]{--context-image:url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="sport"]{--context-image:url("https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1600&q=85")}
+.page-context-card[data-theme="western"]{--context-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1600&q=85")}
+
+/* Ana sayfa vitrinini yalnızca açıkça ana sayfa modundayken göster. */
+#dashboard-view[data-home-active="false"] .home-feature-row,
+#dashboard-view[data-home-active="false"] .home-feature-row[hidden],
+.home-feature-row[hidden],
+.home-feature-row.hidden{display:none!important}
