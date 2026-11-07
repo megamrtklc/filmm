@@ -690,7 +690,7 @@
       try { const response=await fetch('data/homepage-config.json?ts='+Date.now(),{cache:'no-store'}); if(response.ok)config=await response.json(); }
       catch(error) { console.warn('Manşet ayar dosyası okunamadı:',error); }
     }
-    if(config&&Array.isArray(config.heroSlides)) {
+    if(config&&Array.isArray(config.heroSlides)&&config.heroSlides.length) {
       const validIds=new Set(catalog.map(item=>String(item.id)));
       heroSlides=config.heroSlides.filter(slide=>slide&&validIds.has(String(slide.id))).map(slide=>({
         id:String(slide.id),active:slide.active!==false,
