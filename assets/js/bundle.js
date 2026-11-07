@@ -1500,7 +1500,7 @@ function normalizeActorName(value){
 }
 function looksLikeTurkishBiography(value){
  const text=String(value||'');
- return /[çğıöşü]/i.test(text)||/\\b(ve|bir|ile|olarak|için|olan|daha|sonra|yılında|doğdu|oyuncu|yönetmen|kariyerine|başladı|tanınır)\\b/i.test(text);
+ return /[çğıöşü]/i.test(text)||/\b(ve|bir|ile|olarak|için|olan|daha|sonra|yılında|doğdu|oyuncu|yönetmen|kariyerine|başladı|tanınır)\b/i.test(text);
 }
 async function translateActorBiographyToTurkish(value){
  const source=String(value||'').trim();
