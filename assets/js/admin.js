@@ -155,7 +155,7 @@
       if(!current.sha||!current.content) throw new Error('Koleksiyon dosyası okunamadı; mevcut kayıt korunuyor.');
       const latest=JSON.parse(decodeGithubContent(current.content));
       if(!Array.isArray(latest)) throw new Error('Koleksiyon dosyasının biçimi geçersiz.');
-      await githubCollectionsRequest('PUT',{message:'Update Perde homepage collections',content:encodeGithubContent(JSON.stringify(normalized,null,2)+'\\n'),sha:current.sha,branch:'main'});
+      await githubCollectionsRequest('PUT',{message:'Update Perde homepage collections',content:encodeGithubContent(JSON.stringify(normalized,null,2)+'\n'),sha:current.sha,branch:'main'});
       toast('Koleksiyonlar GitHub’a kalıcı olarak kaydedildi.');
     });
     collectionsSaveQueue=operation.catch(()=>{});
