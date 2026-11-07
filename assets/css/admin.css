@@ -726,3 +726,10 @@
 .catalog-select-all input,.catalog-row-check{width:15px;height:15px;flex:0 0 auto;accent-color:var(--gold);cursor:pointer}
 .catalog-name .catalog-row-check{margin-right:3px}
 @media(max-width:650px){.catalog-bulk-toolbar{align-items:stretch}.catalog-bulk-toolbar>div{flex-basis:100%}.catalog-bulk-toolbar select{max-width:none;flex:1}.catalog-bulk-toolbar button{flex:1}}
+
+
+/* Tam arşiv geri yükleme kartı */
+#page-backups .backup-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#page-backups .backup-restore-hint{display:block;margin-top:10px;color:var(--muted);font-size:10px;line-height:1.55;overflow-wrap:anywhere}
+#page-backups .backup-restore-card .outline-button:disabled{opacity:.55;cursor:wait}
+@media(max-width:760px){#page-backups .backup-grid{grid-template-columns:1fr}}
