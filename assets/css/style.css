@@ -6612,3 +6612,28 @@ body.detail-synopsis-open{overflow:hidden}
  #detail-page-view .perde-cast-identity small{font-size:10px}
  #detail-page-view .perde-cast-number{top:6px;right:6px;font-size:8px}
 }
+
+
+/* Detail frame: starts exactly at the trailer action and closes at the detail panel end */
+#detail-page-view .detail-main{position:relative!important;isolation:isolate}
+#detail-page-view .detail-main:before{
+ content:"";position:absolute;z-index:0;pointer-events:none;
+ top:var(--detail-frame-top,260px);left:clamp(12px,2.2vw,30px);right:clamp(12px,2.2vw,30px);bottom:0;
+ border:1px solid rgba(220,226,236,.15);
+}
+#detail-page-view .detail-main>.detail-overlap,
+#detail-page-view .detail-main>#detail-personal-info,
+#detail-page-view .detail-main>#detail-credits,
+#detail-page-view .detail-main>#detail-related{position:relative;z-index:1}
+#detail-page-view .perde-cast-roster{max-width:none;margin:28px clamp(12px,2.2vw,30px) 0;padding:18px clamp(14px,2vw,26px) 22px;border-top:1px solid rgba(220,226,236,.10)}
+#detail-page-view .perde-cast-header{padding-bottom:14px}
+#detail-page-view .perde-cast-kicker{display:none!important}
+#detail-page-view .perde-cast-header h2{font-size:clamp(19px,2vw,24px);font-weight:600;letter-spacing:-.025em}
+#detail-page-view .perde-cast-list{gap:12px}
+@media(max-width:700px){
+ #detail-page-view .detail-main:before{left:8px;right:8px}
+ #detail-page-view .perde-cast-roster{margin:20px 8px 0;padding:15px 10px 18px}
+ #detail-page-view .perde-cast-header{padding-bottom:11px}
+ #detail-page-view .perde-cast-header h2{font-size:19px}
+ #detail-page-view .perde-cast-list{gap:10px 8px}
+}
