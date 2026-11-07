@@ -1274,7 +1274,7 @@
   $('#diary-list-search').addEventListener('input',renderDiary);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
   ['#hero-desktop-count','#hero-mobile-count','#hero-interval','#hero-autoplay','#hero-pause-hover'].forEach(selector=>$(selector).addEventListener('change',readHeroSettingsForm));
-  $('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
+  $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
     heroPreviewMode=button.dataset.heroPreview;
     $$('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
     renderHeroPreview();
