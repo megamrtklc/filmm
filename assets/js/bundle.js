@@ -135,7 +135,7 @@ function fitHeroTitleToWidth() {
                 { icon: 'fa-calendar-days', value: item.year },
                 { icon: item.type === 'tv' ? 'fa-tv' : 'fa-film', value: item.type === 'tv' ? 'Dizi' : 'Film' },
                 { icon: 'fa-clock', value: runtime },
-                { icon: 'fa-tags', value: item.category || item.tmdbGenres }
+                { icon: 'fa-tags', value: item.tmdbGenres || item.category }
             ].filter(entry => entry.value !== undefined && entry.value !== null && String(entry.value).trim() !== '');
             metaItems.forEach((entry, index) => {
                 if (index) {
@@ -231,7 +231,7 @@ function fitHeroTitleToWidth() {
             setText('trailer-popup-year',item.year);
             setText('trailer-popup-type',item.type==='tv'?'Dizi':'Film');
             setText('trailer-popup-duration',item.type==='tv'?[(item.seasons||item.tmdbSeasons)?(item.seasons||item.tmdbSeasons)+' sezon':'',(item.episodes||item.tmdbEpisodes)?(item.episodes||item.tmdbEpisodes)+' bölüm':''].filter(Boolean).join(' • '):(item.duration||item.tmdbRuntime));
-            setText('trailer-popup-category',item.category||item.genre||item.tmdbGenres,'Kategori bilgisi yok');
+            setText('trailer-popup-category',item.tmdbGenres||item.category||item.genre,'Kategori bilgisi yok');
             setText('trailer-popup-rating',item.rating,'—');
             setText('trailer-popup-desc',item.desc||item.tmdbOverview,'Bu yapım için konu özeti henüz eklenmemiş.');
             const credits=document.getElementById('trailer-popup-credits');
@@ -554,7 +554,7 @@ function renderMediaGrid(items = mediaDatabase) {
 
                         <div class="absolute bottom-3 left-3 right-3 space-y-1">
                             <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">
-                                ${m.category}
+                                ${m.tmdbGenres || m.category}
                             </span>
                             <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
                             ${originalTitleMarkup(m,'grid-original-title')}
@@ -1274,14 +1274,14 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-poster').src=posterImage;
  document.getElementById('detail-title').innerText=item.title;
  let detailOriginal=document.getElementById('detail-original-title');if(!detailOriginal){detailOriginal=document.createElement('small');detailOriginal.id='detail-original-title';detailOriginal.className='media-original-title detail-original-title';document.getElementById('detail-title').after(detailOriginal);}detailOriginal.dataset.mediaId=String(item.id);detailOriginal.textContent=item.originalTitle||'';detailOriginal.hidden=!item.originalTitle;
- document.getElementById('detail-category').innerText=item.category||item.genre||item.tmdbGenres||'';
+ document.getElementById('detail-category').innerText=item.tmdbGenres||item.category||item.genre||'';
  // IMDb puanı alt değerlendirme satırında tek kez gösterilir.
  document.getElementById('detail-year').innerText=item.year||String(item.tmdbReleaseDate||'').slice(0,4)||'';
  document.getElementById('detail-duration').innerText=item.duration||item.tmdbRuntime||'';
  const detailKind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
  document.getElementById('detail-type-label').innerText=detailKind;
- const countries=countryTokens(item.country||item.tmdbCountries);
- const directors=countryTokens(item.director||item.tmdbDirector);
+ const countries=countryTokens(item.tmdbCountries||item.country);
+ const directors=countryTokens(item.tmdbDirector||item.director);
  const countryMarkup=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'" aria-label="'+escapeCountryHtml(info.name)+' yapımlarını göster">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('');
  document.getElementById('detail-country').innerHTML=countryMarkup||'<span>Ülke bilgisi yok</span>';
  document.getElementById('detail-director-inline').innerHTML=directors.length?'<span class="detail-director-label">Yönetmen:</span> '+directors.map(director=>'<button type="button" class="detail-director-link" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('<span class="detail-director-comma">, </span>'):'';
