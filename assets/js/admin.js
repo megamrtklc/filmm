@@ -144,7 +144,7 @@
   }
   function setCatalogView(view) {
     catalogView = view === 'table' ? 'table' : 'grid';
-    $('[data-catalog-view]').forEach(button => {
+    $$('[data-catalog-view]').forEach(button => {
       const active = button.dataset.catalogView === catalogView;
       button.classList.toggle('active',active);
       button.setAttribute('aria-pressed',String(active));
@@ -282,7 +282,7 @@
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
   $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
   ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',renderCatalog));
-  $('[data-catalog-view]').forEach(button => button.addEventListener('click',() => setCatalogView(button.dataset.catalogView)));
+  $$('[data-catalog-view]').forEach(button => button.addEventListener('click',() => setCatalogView(button.dataset.catalogView)));
   $('#catalog-poster-grid').addEventListener('click',event => {
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
@@ -297,9 +297,9 @@
   });
   $('#hero-add-button').addEventListener('click',addHeroSlide);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
-  $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
+  $$$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
     heroPreviewMode=button.dataset.heroPreview;
-    $('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
+    $$('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
     renderHeroPreview();
   }));
   $('#add-content-button').addEventListener('click',() => toast('Yeni kayıt formu, güvenli kayıt altyapısı kurulduğunda etkinleştirilecek.'));
