@@ -733,3 +733,25 @@
 #page-backups .backup-restore-hint{display:block;margin-top:10px;color:var(--muted);font-size:10px;line-height:1.55;overflow-wrap:anywhere}
 #page-backups .backup-restore-card .outline-button:disabled{opacity:.55;cursor:wait}
 @media(max-width:760px){#page-backups .backup-grid{grid-template-columns:1fr}}
+
+
+/* GitHub change history */
+.history-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.history-summary-card{display:grid;gap:8px;padding:17px}
+.history-summary-card>span{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.05em}
+.history-summary-card>span i{color:var(--gold)}
+.history-summary-card>strong{font:800 27px Manrope,sans-serif;color:var(--text)}
+.history-summary-card>small{color:var(--muted);font-size:10px}
+.history-workspace{padding:20px}
+.history-list{display:grid;gap:8px;margin-top:16px}
+.history-row{display:flex;align-items:center;gap:12px;min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.history-icon{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border-radius:9px;background:var(--gold-soft);color:var(--gold)}
+.history-copy{display:grid;gap:5px;min-width:0;flex:1}
+.history-copy>b{color:var(--text);font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.history-copy>small{color:var(--muted);font-size:10px}
+.history-tags{display:flex;flex-wrap:wrap;gap:5px}
+.history-tags span{padding:3px 7px;border-radius:5px;background:rgba(216,173,85,.1);color:var(--gold-bright);font-size:9px;font-weight:700}
+.history-link{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border:1px solid var(--line);border-radius:8px;color:var(--muted);text-decoration:none}
+.history-link:hover{border-color:var(--gold);color:var(--gold)}
+#history-refresh:disabled{opacity:.6;cursor:wait}
+@media(max-width:600px){.history-summary-grid{gap:8px}.history-summary-card{padding:13px}.history-summary-card>strong{font-size:23px}.history-workspace{padding:13px}.history-row{gap:8px;padding:9px}.history-copy>b{font-size:11px}}
