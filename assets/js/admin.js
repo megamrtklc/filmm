@@ -859,7 +859,7 @@
   $('#add-content-button').addEventListener('click',() => openEditor());
   $('#content-editor-form').addEventListener('submit',saveEditorDraft);
   $('#editor-reset').addEventListener('click',resetEditor);
-  $('[data-editor-type]').forEach(button=>button.addEventListener('click',()=>setEditorType(button.dataset.editorType)));
+  $$('[data-editor-type]').forEach(button=>button.addEventListener('click',()=>setEditorType(button.dataset.editorType)));
   Object.values(editorFields).concat(['editor-cast']).forEach(id=>{const node=document.getElementById(id);if(node)node.addEventListener('input',renderEditorPreview);});
   $('#editor-draft-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-editor-draft]');
