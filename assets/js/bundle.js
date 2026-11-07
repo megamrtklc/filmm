@@ -993,7 +993,18 @@ function renderFilteredCatalog() {
             renderMediaGrid(items);
         }
 const headerSearchInput = document.getElementById('search-input');
+const headerSearchCategory = document.getElementById('search-category');
 const headerSearchResults = document.getElementById('header-search-results');
+const searchCategoryHints={media:'Film veya dizi ara...',actor:'Oyuncu adı ara...',director:'Yönetmen adı ara...'};
+headerSearchCategory?.addEventListener('change',()=>{
+ const category=headerSearchCategory.value;
+ const label=category==='actor'?'Oyuncu':category==='director'?'Yönetmen':'Film veya dizi';
+ headerSearchInput.placeholder=searchCategoryHints[category]||searchCategoryHints.media;
+ headerSearchInput.setAttribute('aria-label',label+' ara');
+ if(headerSearchInput.value.trim())renderHeaderSearchResults(headerSearchInput.value);
+ else {headerSearchResults.hidden=true;headerSearchResults.innerHTML='';}
+ headerSearchInput.focus();
+});
 let headerSearchRequest=0;
 function renderHeaderSearchResults(value) {
  if (!headerSearchResults) return;
@@ -1002,11 +1013,12 @@ function renderHeaderSearchResults(value) {
  if(!query){headerSearchResults.hidden=true;headerSearchResults.innerHTML='';return;}
  const normalizedQuery=normalizeMediaSearchText(query);
  const catalogue=Array.isArray(mediaDatabase)?mediaDatabase:[];
- const mediaMatches=catalogue.filter(item=>mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
+ const searchCategory=document.getElementById('search-category')?.value||'media';
+ const mediaMatches=searchCategory==='media'?catalogue.filter(item=>item.type!=='person'&&mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
   const exactA=normalizeMediaSearchText(a.title)===normalizedQuery||normalizeMediaSearchText(a.originalTitle)===normalizedQuery;
   const exactB=normalizeMediaSearchText(b.title)===normalizedQuery||normalizeMediaSearchText(b.originalTitle)===normalizedQuery;
   return Number(exactB)-Number(exactA);
- }).slice(0,8);
+ }).slice(0,8):[];
  const peopleMap=new Map();
  const addPerson=(name,type,profile='')=>{
   const clean=String(name||'').trim();
@@ -1025,7 +1037,7 @@ function renderHeaderSearchResults(value) {
    String(raw).split(/[,;|]/).map(name=>name.trim()).filter(Boolean).forEach(name=>addPerson(name,'director'));
   });
  });
- const people=[...peopleMap.values()].slice(0,8);
+ const people=[...peopleMap.values()].filter(person=>searchCategory==='actor'?person.type==='actor':searchCategory==='director'?person.type==='director':false).slice(0,8);
  activeSearchResultIndex=-1;
  const mediaMarkup=mediaMatches.map(item=>{
   const title=escapeCountryHtml(item.title||'İsimsiz yapım');
@@ -1046,9 +1058,10 @@ function renderHeaderSearchResults(value) {
    '<span class="header-search-result-copy"><strong>'+name+'</strong><small>'+label+'</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>';
  }).join('');
  const hasResults=mediaMarkup||peopleMarkup;
- headerSearchResults.innerHTML=(peopleMarkup?'<div class="header-search-group-label">Oyuncu ve yönetmenler</div>'+peopleMarkup:'')+
-  (mediaMarkup?'<div class="header-search-group-label">Film ve diziler</div>'+mediaMarkup:'')+
-  (!hasResults?'<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen sonuç bulunamadı</b><small>Yalnızca Perde kataloğundaki yapımlar ve kişiler aranır.</small></div>':'');
+ const resultLabel=searchCategory==='actor'?'Oyuncular':searchCategory==='director'?'Yönetmenler':'Film ve diziler';
+ const emptyHint=searchCategory==='actor'?'Perde kataloğunda eşleşen oyuncu bulunamadı.':searchCategory==='director'?'Perde kataloğunda eşleşen yönetmen bulunamadı.':'Perde kataloğunda eşleşen film veya dizi bulunamadı.';
+ headerSearchResults.innerHTML=(hasResults?'<div class="header-search-group-label">'+resultLabel+'</div>'+(peopleMarkup||mediaMarkup):'')+
+  (!hasResults?'<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen sonuç bulunamadı</b><small>'+emptyHint+'</small></div>':'');
  headerSearchResults.hidden=false;
 }
 headerSearchInput.addEventListener('focus',()=>{
