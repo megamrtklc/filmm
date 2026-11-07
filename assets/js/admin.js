@@ -403,6 +403,7 @@
       const item=diaryItem(entry.id),image=poster(item);
       return '<article class="diary-entry" data-diary-entry="'+escapeHtml(entry.id)+'">'+(image?'<img class="diary-entry-poster" src="'+image+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<span class="diary-entry-poster diary-poster-empty"><i class="fa-solid fa-film"></i></span>')+'<div class="diary-entry-main"><div class="diary-entry-title"><b>'+escapeHtml(item.title)+'</b><span>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</span></div><span class="diary-status-pill status-'+entry.status+'">'+diaryStatusLabel(entry.status)+'</span><div class="diary-entry-fields"><label>Durum<select data-diary-field="status" data-id="'+escapeHtml(entry.id)+'"><option value="watchlist" '+(entry.status==='watchlist'?'selected':'')+'>İzleme listesi</option><option value="watching" '+(entry.status==='watching'?'selected':'')+'>İzlemeye devam</option><option value="watched" '+(entry.status==='watched'?'selected':'')+'>İzlendi</option><option value="favorite" '+(entry.status==='favorite'?'selected':'')+'>Favori</option></select></label><label>İzleme tarihi<input type="date" data-diary-field="date" data-id="'+escapeHtml(entry.id)+'" value="'+escapeHtml(entry.date||'')+'"></label><label>Benim puanım<input type="number" min="1" max="10" step="0.5" placeholder="—" data-diary-field="personalRating" data-id="'+escapeHtml(entry.id)+'" value="'+escapeHtml(entry.personalRating||'')+'"></label></div></div><button class="diary-remove-button" type="button" data-diary-remove="'+escapeHtml(entry.id)+'" aria-label="Günlükten çıkar"><i class="fa-solid fa-trash-can"></i></button></article>';
     }).join(''):'<div class="diary-empty"><i class="fa-solid fa-film"></i><b>'+(diaryEntries.length?'Bu listede henüz yapım yok':'Günlüğün hazır')+'</b><span>'+(diaryEntries.length?'Başka bir sekme seç veya katalogdan yeni yapım ekle.':'Katalogdan ilk yapımını ekleyerek başlayabilirsin.')+'</span></div>';
+    renderPersonalAnalytics();
   }
   function initDiary() {
     loadDiary();
@@ -449,6 +450,54 @@
     }else entry[field]=control.value;
     saveDiary();renderDiary();
     toast('Kişisel günlük güncellendi.');
+  }
+  function renderPersonalAnalytics() {
+    const counts={watching:0,watched:0,favorite:0,watchlist:0};
+    diaryEntries.forEach(entry=>{if(counts[entry.status]!==undefined)counts[entry.status]++;});
+    const rated=diaryEntries.filter(entry=>Number.isFinite(Number(entry.personalRating))&&Number(entry.personalRating)>=1&&Number(entry.personalRating)<=10&&entry.personalRating!=='');
+    const average=rated.length?rated.reduce((sum,entry)=>sum+Number(entry.personalRating),0)/rated.length:0;
+    $('#personal-stat-watched').textContent=counts.watched.toLocaleString('tr-TR');
+    $('#personal-stat-rating').textContent=rated.length?average.toFixed(1).replace('.',',')+'/10':'—';
+    $('#personal-stat-rated-count').textContent=rated.length? rated.length.toLocaleString('tr-TR')+' puanlı yapım':'Puanlanan kayıt yok';
+    $('#personal-stat-watching').textContent=counts.watching.toLocaleString('tr-TR');
+    $('#personal-stat-favorites').textContent=counts.favorite.toLocaleString('tr-TR');
+
+    const movies=diaryEntries.filter(entry=>diaryItem(entry.id)?.type==='movie').length;
+    const series=diaryEntries.filter(entry=>diaryItem(entry.id)?.type==='tv').length;
+    const total=movies+series;
+    const movieShare=total?movies/total*100:0;
+    $('#personal-type-total').textContent=total.toLocaleString('tr-TR');
+    $('#personal-type-movies').textContent=movies.toLocaleString('tr-TR');
+    $('#personal-type-series').textContent=series.toLocaleString('tr-TR');
+    $('#personal-type-donut').style.background=total?'conic-gradient(var(--gold) 0% '+movieShare+'%, #68788e '+movieShare+'% 100%)':'conic-gradient(#343b47 0% 100%)';
+
+    const dated=diaryEntries.filter(entry=>entry.status==='watched'&&/^\\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date||''))&&!Number.isNaN(new Date(entry.date+'T12:00:00').getTime()));
+    const yearCounts={};
+    dated.forEach(entry=>{const year=entry.date.slice(0,4);yearCounts[year]=(yearCounts[year]||0)+1;});
+    const allYears=Object.keys(yearCounts).sort();
+    const currentYear=new Date().getFullYear();
+    const visibleYears=Array.from({length:6},(_,index)=>String(currentYear-5+index));
+    const olderCount=allYears.filter(year=>Number(year)<currentYear-5).reduce((sum,year)=>sum+yearCounts[year],0);
+    const chartRows=visibleYears.map(year=>({year,count:yearCounts[year]||0}));
+    if(olderCount)chartRows.unshift({year:'Önce',count:olderCount});
+    const maxYearCount=Math.max(1,...chartRows.map(row=>row.count));
+    $('#personal-year-chart').innerHTML=dated.length?'<div class="year-chart-bars">'+chartRows.map(row=>'<div class="year-chart-column"><b>'+row.count+'</b><div class="year-chart-track"><i style="height:'+Math.max(row.count?5:0,row.count/maxYearCount*100)+'%"></i></div><span>'+escapeHtml(row.year)+'</span></div>').join('')+'</div><div class="year-chart-foot">'+dated.length.toLocaleString('tr-TR')+' tarihli izleme kaydı</div>':'<div class="analytics-empty"><i class="fa-regular fa-calendar"></i><b>Henüz izleme geçmişi yok</b><span>Günlüğünde bir yapımı “İzlendi” olarak işaretleyip tarih eklediğinde yıllık grafiğin burada oluşacak.</span></div>';
+
+    const genreCounts={};
+    diaryEntries.forEach(entry=>{
+      const item=diaryItem(entry.id);
+      if(!item)return;
+      const values=String(item.category||item.genre||'Diğer').split('/').map(value=>value.trim()).filter(Boolean);
+      [...new Set(values)].forEach(genre=>{genreCounts[genre]=(genreCounts[genre]||0)+1;});
+    });
+    const genres=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const maxGenre=Math.max(1,...genres.map(row=>row[1]));
+    $('#personal-genre-list').innerHTML=genres.length?genres.map(([genre,count])=>'<div class="personal-genre-row"><span>'+escapeHtml(genre)+'</span><div class="personal-genre-track"><i style="width:'+(count/maxGenre*100)+'%"></i></div><b>'+count+'</b></div>').join(''):'<div class="analytics-empty">Günlüğüne yapım eklediğinde tür tercihlerin burada görünecek.</div>';
+
+    const ratingBuckets=[{label:'9–10',min:9,max:10},{label:'7–8,5',min:7,max:8.5},{label:'5–6,5',min:5,max:6.5},{label:'1–4,5',min:1,max:4.5}];
+    const ratingCounts=ratingBuckets.map(bucket=>({...bucket,count:rated.filter(entry=>Number(entry.personalRating)>=bucket.min&&Number(entry.personalRating)<=bucket.max).length}));
+    const maxRating=Math.max(1,...ratingCounts.map(row=>row.count));
+    $('#personal-rating-list').innerHTML=rated.length?ratingCounts.map(row=>'<div class="personal-rating-row"><span>'+row.label+'</span><div class="personal-rating-track"><i style="width:'+(row.count/maxRating*100)+'%"></i></div><b>'+row.count+'</b></div>').join(''):'<div class="analytics-empty"><i class="fa-solid fa-star"></i><b>Henüz puanlama yok</b><span>İzleme Günlüğü bölümünden yapımlara 1–10 arasında kişisel puan verebilirsin.</span></div>';
   }
   function downloadJson(filename, data) {
     const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
