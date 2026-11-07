@@ -391,8 +391,8 @@
           if(!item.director)item.director=director;
           if(!Array.isArray(item.cast)||!item.cast.length)item.cast=cast;
           if(!item.desc)item.desc=details.overview||'';
-          if(!item.image)item.image=posterUrl;
-          if(!item.backdrop)item.backdrop=backdropUrl;
+          if(posterUrl)item.image=posterUrl;
+          if(backdropUrl)item.backdrop=backdropUrl;
           if(!item.trailerUrl)item.trailerUrl=item.tmdbTrailerUrl;
           if(!item.imdbId)item.imdbId=item.tmdbImdbId;
           if(type==='tv') {
