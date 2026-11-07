@@ -37,6 +37,7 @@
     $('#admin-sidebar').classList.remove('open');
     window.scrollTo({top:0,behavior:'smooth'});
     history.replaceState(null, '', '#'+page);
+    if(page==='backups') loadAutomaticBackupStatus();
   }
   const editorFields = {
     title:'editor-title',originalTitle:'editor-original-title',year:'editor-year',category:'editor-category',
@@ -1471,6 +1472,48 @@
     downloadJson('perde-arsiv-yedegi-'+new Date().toISOString().slice(0,10)+'.json',data);
     toast('Katalog, koleksiyonlar ve ana sayfa ayarları yedeklendi.');
   });
+  async function loadAutomaticBackupStatus() {
+    const host=$('#auto-backup-status');
+    const button=$('#auto-backup-refresh');
+    if(!host)return;
+    if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Kontrol ediliyor';}
+    host.innerHTML='<span class="auto-backup-status-icon"><i class="fa-solid fa-spinner fa-spin"></i></span><span><b>Yedek durumu kontrol ediliyor</b><small>GitHub Actions bilgileri alınıyor…</small></span>';
+    try{
+      const endpoint='https://api.github.com/repos/'+githubRepo+'/actions/workflows/perde-daily-backup.yml/runs?per_page=1';
+      const response=await fetch(endpoint,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error('GitHub HTTP '+response.status+': '+(data.message||'Yedek geçmişi okunamadı.'));
+      const run=Array.isArray(data.workflow_runs)?data.workflow_runs[0]:null;
+      if(!run){
+        host.innerHTML='<span class="auto-backup-status-icon pending"><i class="fa-solid fa-clock"></i></span><span><b>İlk otomatik yedek henüz çalışmadı</b><small>İlk çalıştırmayı GitHub Actions sayfasından başlatabilir veya günlük zamanlamayı bekleyebilirsin.</small></span>';
+        return;
+      }
+      const dateValue=run.updated_at||run.created_at;
+      const date=dateValue?new Date(dateValue):null;
+      const dateLabel=date&&!Number.isNaN(date.getTime())?new Intl.DateTimeFormat('tr-TR',{dateStyle:'medium',timeStyle:'short'}).format(date):'Tarih bilinmiyor';
+      const running=run.status!=='completed';
+      const success=run.conclusion==='success';
+      const failed=run.conclusion==='failure'||run.conclusion==='cancelled'||run.conclusion==='timed_out'||run.conclusion==='action_required';
+      let artifactLabel='';
+      if(success&&run.artifacts_url){
+        try{
+          const artifactResponse=await fetch(run.artifacts_url,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+          const artifactData=await artifactResponse.json().catch(()=>({}));
+          const artifact=Array.isArray(artifactData.artifacts)?artifactData.artifacts.find(item=>item.name==='perde-automatic-backup'&&!item.expired):null;
+          artifactLabel=artifact?' · Yedek dosyası hazır':' · Yedek dosyası bulunamadı';
+        }catch(_){artifactLabel='';}
+      }
+      const stateLabel=running?'ÇALIŞIYOR':success?'BAŞARILI':failed?'BAŞARISIZ':String(run.conclusion||run.status||'BİLİNMİYOR').toLocaleUpperCase('tr-TR');
+      const icon=running?'fa-spinner fa-spin':success?'fa-circle-check':failed?'fa-triangle-exclamation':'fa-circle-info';
+      const tone=running?'pending':success?'good':'failed';
+      const detail=running?'Yedekleme işlemi devam ediyor.':success?'Son otomatik arşiv başarıyla oluşturuldu.':('Son çalıştırma tamamlanmadı: '+(run.conclusion||run.status)+'.');
+      host.innerHTML='<span class="auto-backup-status-icon '+tone+'"><i class="fa-solid '+icon+'"></i></span><span class="auto-backup-status-copy"><b>'+escapeHtml(stateLabel)+' · #'+escapeHtml(run.run_number||run.id)+'</b><small>'+escapeHtml(dateLabel)+' · '+escapeHtml(detail+artifactLabel)+'</small></span><a class="auto-backup-run-link" href="'+escapeHtml(run.html_url||'https://github.com/'+githubRepo+'/actions/workflows/perde-daily-backup.yml')+'" target="_blank" rel="noopener noreferrer" aria-label="Son yedekleme çalıştırmasını aç"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>';
+    }catch(error){
+      host.innerHTML='<span class="auto-backup-status-icon pending"><i class="fa-solid fa-circle-exclamation"></i></span><span><b>Yedek durumu alınamadı</b><small>'+escapeHtml(error.message)+' · Ayrıntılar için GitHub Actions sayfasını aç.</small></span>';
+    }finally{
+      if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-rotate"></i> Durumu yenile';}
+    }
+  }
   async function loadChangeHistory() {
     const host=$('#history-list'),status=$('#history-status'),total=$('#history-total'),button=$('#history-refresh');
     if(!host||!status||!total)return;
@@ -1514,6 +1557,7 @@
     }
   }
   $('#history-refresh').addEventListener('click',loadChangeHistory);
+  $('#auto-backup-refresh').addEventListener('click',loadAutomaticBackupStatus);
     $('#import-archive').addEventListener('click',() => $('#archive-backup-file').click());
   $('#archive-backup-file').addEventListener('change',async event => {
     const file=event.target.files&&event.target.files[0];
