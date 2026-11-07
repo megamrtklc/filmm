@@ -6817,3 +6817,17 @@ body.detail-synopsis-open{overflow:hidden}
 #dashboard-view[data-home-active="false"] .home-feature-row[hidden],
 .home-feature-row[hidden],
 .home-feature-row.hidden{display:none!important}
+
+/* Perde arama kategorisi: seçim arama alanının kendi içinde kalır */
+.header-search-shell .glass-search{gap:9px;min-width:0}
+.header-search-shell .search-category{flex:0 0 auto;width:104px;max-width:104px;min-width:0;height:28px;padding:0 18px 0 2px;border:0;outline:0;background-color:transparent;color:#f5f5f7;font-size:11px;font-weight:750;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c5c9d2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 3px center}
+.header-search-shell .search-category option{background:#171a22;color:#fff}
+.header-search-shell .search-category-divider{height:20px;width:1px;flex:0 0 1px;background:rgba(255,255,255,.17)}
+.header-search-shell .glass-search>i{flex:0 0 auto}
+.header-search-shell #search-input{flex:1 1 auto;min-width:0;width:0}
+@media(max-width:760px){
+ .header-search-shell .search-category{width:91px;max-width:91px;font-size:10px}
+ .header-search-shell:focus-within .glass-search{width:100%;max-width:none}
+ .header-search-shell:not(:focus-within) .search-category,
+ .header-search-shell:not(:focus-within) .search-category-divider{display:none}
+}
