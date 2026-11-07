@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-subtitle-manager-v2">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-backup-v2">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -188,7 +188,7 @@
               </div>
               <div class="editor-divider"></div>
               <section class="editor-subtitle-manager">
-                <div class="card-heading"><div><h2><i class="fa-solid fa-closed-captioning"></i> Altyazı yönetimi</h2><p>Altyazıları burada ekle; izleme ekranında otomatik seçilebilir hale gelsin.</p></div><span class="insight-kicker">04 / ALTYAZILAR</span></div>
+                <div class="card-heading"><div><h2><i class="fa-solid fa-closed-captioning"></i> Altyazı yönetimi</h2><p>Altyazıları burada ekle; izleme ekranında otomatik seçilebilir hale gelsin.</p></div><span class="insight-kicker">03 / ALTYAZILAR</span></div>
                 <div class="subtitle-upload-grid">
                   <label class="editor-field">Altyazı dili<select id="editor-subtitle-language"><option value="tr">Türkçe</option><option value="en">İngilizce</option><option value="de">Almanca</option><option value="fr">Fransızca</option><option value="es">İspanyolca</option><option value="it">İtalyanca</option><option value="ar">Arapça</option><option value="ja">Japonca</option><option value="ko">Korece</option><option value="other">Diğer</option></select></label>
                   <label class="editor-field">Altyazı dosyası<input id="editor-subtitle-file" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip"></label>
@@ -201,7 +201,7 @@
                 <small class="editor-subtitle-help">SRT dosyaları otomatik WebVTT biçimine dönüştürülür. Dosyalar GitHub deposunda saklanır; dizi altyazısını belirli bir sezon ve bölüme bağlayabilirsin. Yükleme için GitHub bağlantısı gerekir.</small>
               </section>
               <div class="editor-divider"></div>
-              <div class="card-heading"><div><h2>Otomatik görseller</h2><p>Afiş ve arka plan TMDB'den alınır.</p></div><span class="insight-kicker">03 / GÖRSELLER</span></div>
+              <div class="card-heading"><div><h2>Otomatik görseller</h2><p>Afiş ve arka plan TMDB'den alınır.</p></div><span class="insight-kicker">04 / GÖRSELLER</span></div>
               <div class="editor-fields-grid">
                 <label class="editor-field editor-field-wide">Afiş görseli URL<input id="editor-image" type="url" readonly></label>
                 <label class="editor-field editor-field-wide">Arka plan görseli URL<input id="editor-backdrop" type="url" readonly></label>
@@ -399,7 +399,7 @@
         <section class="page-view" id="page-backups">
           <div class="page-heading"><div><span class="eyebrow">VERİ GÜVENLİĞİ</span><h1>Yedekleme ve Geri Yükleme</h1><p>Katalog ve kişisel verilerin için güvenli yedekleme merkezi.</p></div></div>
           <div class="backup-callout"><i class="fa-solid fa-shield-halved"></i><div><h2>Önce güvenlik, sonra değişiklik.</h2><p>Gerçek kayıt işlemleri açılmadan önce otomatik yedekleme ve geri yükleme akışı kurulacak.</p></div></div>
-          <div class="backup-grid"><article class="surface-card"><i class="fa-solid fa-file-code"></i><h3>Katalog yedeği</h3><p>Film ve dizi kayıtlarının JSON dışa aktarımı. Katalog bu aşamada salt okunurdur.</p><button class="outline-button" id="export-catalog"><i class="fa-solid fa-download"></i> Kataloğu indir</button></article><article class="surface-card"><i class="fa-solid fa-box-archive"></i><h3>Kişisel veriler</h3><p>İzleme günlüğü, favoriler ve izleme listesi tek bir yedek dosyasında saklanır.</p><button class="outline-button" id="export-personal"><i class="fa-solid fa-download"></i> Yedek oluştur</button></article><article class="surface-card backup-restore-card"><i class="fa-solid fa-clock-rotate-left"></i><h3>Kişisel verileri geri yükle</h3><p>Daha önce Perde’den indirdiğin kişisel JSON yedeğini seç. Mevcut kişisel kayıtların yedekteki kayıtlarla değiştirilecek.</p><input type="file" id="personal-backup-file" accept=".json,application/json" hidden><button class="outline-button" id="import-personal"><i class="fa-solid fa-upload"></i> Yedek dosyası seç</button><small class="backup-restore-hint" id="backup-restore-hint">Yalnızca kişisel kayıtlar geri yüklenir; katalog değiştirilmez.</small></article></div>
+          <div class="backup-grid"><article class="surface-card"><i class="fa-solid fa-file-code"></i><h3>Katalog ve koleksiyon yedeği</h3><p>Film ve dizi arşivini, ana sayfa koleksiyonlarınla birlikte tek JSON dosyasında indir.</p><button class="outline-button" id="export-catalog"><i class="fa-solid fa-download"></i> Kataloğu indir</button></article><article class="surface-card"><i class="fa-solid fa-box-archive"></i><h3>Kişisel veriler</h3><p>İzleme günlüğü, favoriler, izleme listesi, dizi ilerlemesi ve oynatıcı kayıtları yedeklenir.</p><button class="outline-button" id="export-personal"><i class="fa-solid fa-download"></i> Yedek oluştur</button></article><article class="surface-card backup-restore-card"><i class="fa-solid fa-clock-rotate-left"></i><h3>Kişisel verileri geri yükle</h3><p>Daha önce Perde’den indirdiğin kişisel JSON yedeğini seç. Mevcut kişisel kayıtların yedekteki kayıtlarla değiştirilecek.</p><input type="file" id="personal-backup-file" accept=".json,application/json" hidden><button class="outline-button" id="import-personal"><i class="fa-solid fa-upload"></i> Yedek dosyası seç</button><small class="backup-restore-hint" id="backup-restore-hint">Kişisel kayıtlar ve yedekte bulunan cihaz ilerlemeleri geri yüklenir; katalog değiştirilmez.</small></article></div>
           <p class="info-note"><i class="fa-solid fa-lock"></i> Bu taslak yalnızca mevcut tarayıcıda erişilebilen verileri dışa aktarabilir. Sunucu yedeği veya geri yükleme henüz etkin değildir.</p>
         </section>
 
