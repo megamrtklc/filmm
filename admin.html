@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-readable-text-v2">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-personal-analytics">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -220,9 +220,34 @@
         </section>
 
         <section class="page-view" id="page-analytics">
-          <div class="page-heading"><div><span class="eyebrow">RAPORLAMA</span><h1>İstatistikler</h1><p>İzleme alışkanlıklarını ve arşiv dağılımını analiz et.</p></div></div>
-          <div class="stats-grid compact-stats"><article class="stat-card"><span class="stat-label">Arşiv büyüklüğü</span><strong id="analytics-total">—</strong><small>Toplam katalog kaydı</small></article><article class="stat-card"><span class="stat-label">Film oranı</span><strong id="analytics-movie-share">—</strong><small>Katalog içindeki pay</small></article><article class="stat-card"><span class="stat-label">Dizi oranı</span><strong id="analytics-tv-share">—</strong><small>Katalog içindeki pay</small></article></div>
-          <div class="surface-card chart-card"><div class="card-heading"><div><h2>İçerik dağılımı</h2><p>Mevcut katalog kayıtlarına göre</p></div></div><div class="distribution-bar"><span id="movie-bar"></span><span id="tv-bar"></span></div><div class="legend-row"><span><i class="legend-dot movie-dot"></i> Filmler <b id="legend-movies">—</b></span><span><i class="legend-dot tv-dot"></i> Diziler <b id="legend-series">—</b></span></div></div>
+          <div class="page-heading"><div><span class="eyebrow">KİŞİSEL SİNEMA RAPORU</span><h1>İstatistikler</h1><p>İzleme günlüğündeki kayıtlarından kişisel sinema alışkanlıklarını keşfet.</p></div><span class="status-chip warning"><i class="fa-solid fa-hard-drive"></i> Bu tarayıcıdaki veriler</span></div>
+          <div class="stats-grid analytics-personal-stats">
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-eye"></i></div><span class="stat-label">İzlenen yapım</span><strong id="personal-stat-watched">0</strong><small>Tamamlandı olarak işaretlenen</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-star"></i></div><span class="stat-label">Kişisel puan ortalaması</span><strong id="personal-stat-rating">—</strong><small id="personal-stat-rated-count">Puanlanan kayıt yok</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-clapperboard"></i></div><span class="stat-label">İzlemeye devam</span><strong id="personal-stat-watching">0</strong><small>Devam eden yapımlar</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-heart"></i></div><span class="stat-label">Favoriler</span><strong id="personal-stat-favorites">0</strong><small>Kişisel favorilerin</small></article>
+          </div>
+          <div class="analytics-main-grid">
+            <section class="surface-card analytics-chart-card">
+              <div class="card-heading"><div><h2>Yıllara göre izleme</h2><p>İzlendi olarak işaretlenen yapımların tarihleri</p></div><span class="insight-kicker">İZLEME GEÇMİŞİ</span></div>
+              <div class="year-chart" id="personal-year-chart"><div class="analytics-empty">İzleme tarihi olan kayıtlar burada görünecek.</div></div>
+            </section>
+            <section class="surface-card analytics-chart-card">
+              <div class="card-heading"><div><h2>Film ve dizi dengesi</h2><p>Kişisel günlüğündeki tüm kayıtlar</p></div></div>
+              <div class="personal-type-layout"><div class="personal-type-donut" id="personal-type-donut"><div><b id="personal-type-total">0</b><span>YAPIM</span></div></div><div class="personal-type-legend"><div><i class="legend-dot movie-dot"></i><span>Filmler</span><b id="personal-type-movies">0</b></div><div><i class="legend-dot tv-dot"></i><span>Diziler</span><b id="personal-type-series">0</b></div></div></div>
+            </section>
+          </div>
+          <div class="analytics-lower-grid">
+            <section class="surface-card analytics-chart-card">
+              <div class="card-heading"><div><h2>En çok tercih ettiğin türler</h2><p>Günlüğüne eklediğin yapımların tür dağılımı</p></div></div>
+              <div class="personal-genre-list" id="personal-genre-list"><div class="analytics-empty">Tür tercihlerin kayıtların geldikçe oluşacak.</div></div>
+            </section>
+            <section class="surface-card analytics-chart-card">
+              <div class="card-heading"><div><h2>Kişisel puan dağılımı</h2><p>Verdiğin puanlara göre yapım sayısı</p></div></div>
+              <div class="personal-rating-list" id="personal-rating-list"><div class="analytics-empty">Henüz kişisel puan eklemedin.</div></div>
+            </section>
+          </div>
+          <p class="info-note analytics-note"><i class="fa-solid fa-shield-halved"></i> Bu rapor yalnızca <b>perde_watch_diary_v1</b> izleme günlüğünü kullanır. Veriler bu tarayıcıda saklanır; katalog kayıtları değiştirilmez ve sunucuya gönderilmez.</p>
         </section>
 
         <section class="page-view" id="page-sources">
@@ -251,6 +276,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-catalog-pagination"></script>
+  <script src="assets/js/admin.js?v=20261107-personal-analytics"></script>
 </body>
 </html>
