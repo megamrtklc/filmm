@@ -17038,5 +17038,130 @@
     "id": "perde-mw6xs3qb",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Gazap Ateşi",
+    "originalTitle": "Man on Fire",
+    "year": 2004,
+    "category": "Aksiyon / Dram / Gerilim",
+    "genre": "Aksiyon",
+    "rating": "7.5",
+    "duration": "146 dk",
+    "country": "United Kingdom, United States of America",
+    "director": "Tony Scott",
+    "tmdbId": 9509,
+    "desc": "Eski bir CIA ajanı, Mexico City'de yaşayan 10 yaşındaki bir kızı koruma işini gönülsüzce kabul eder. Kız kaçırıldığında ise onu kurtarmak için her şeyi yapacaktır.",
+    "image": "https://image.tmdb.org/t/p/w500/yNbajeLdWvbhhcdzCkcHw4h5Coc.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/6c7j7MQCczzNVvcrNEiXbs8Kt2p.jpg",
+    "imdbId": "tt0328107",
+    "watchUrl": "",
+    "platform": [],
+    "personalNote": "",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Denzel Washington",
+      "Dakota Fanning",
+      "Christopher Walken",
+      "Radha Mitchell",
+      "Marc Anthony",
+      "Giancarlo Giannini",
+      "Rachel Ticotin",
+      "Mickey Rourke",
+      "Roberto Sosa",
+      "Jesús Ochoa",
+      "Gero Camilo",
+      "Mario Zaragoza"
+    ],
+    "tmdbCast": [
+      {
+        "id": 5292,
+        "name": "Denzel Washington",
+        "character": "John W. Creasy",
+        "profile": "https://image.tmdb.org/t/p/w185/jj2Gcobpopokal0YstuCQW0ldJ4.jpg",
+        "order": 0
+      },
+      {
+        "id": 501,
+        "name": "Dakota Fanning",
+        "character": "Lupita Ramos",
+        "profile": "https://image.tmdb.org/t/p/w185/hwcO08SVWkelfvgfIa5HsTMxsK8.jpg",
+        "order": 1
+      },
+      {
+        "id": 4690,
+        "name": "Christopher Walken",
+        "character": "Paul Rayburn",
+        "profile": "https://image.tmdb.org/t/p/w185/ApgDL7nudR9T2GpjCG4vESgymO2.jpg",
+        "order": 2
+      },
+      {
+        "id": 8329,
+        "name": "Radha Mitchell",
+        "character": "Lisa Ramos",
+        "profile": "https://image.tmdb.org/t/p/w185/8EVKyEkwPfIA6GxlIo0PJv0A5mm.jpg",
+        "order": 3
+      },
+      {
+        "id": 47775,
+        "name": "Marc Anthony",
+        "character": "Samuel Ramos",
+        "profile": "https://image.tmdb.org/t/p/w185/mOkqbV5iiusOLEOVPmepQcAGF8K.jpg",
+        "order": 4
+      },
+      {
+        "id": 3753,
+        "name": "Giancarlo Giannini",
+        "character": "Miguel Manzano",
+        "profile": "https://image.tmdb.org/t/p/w185/xsnoThKUjFlhmvXKS4ZqAx1x3zb.jpg",
+        "order": 5
+      },
+      {
+        "id": 10768,
+        "name": "Rachel Ticotin",
+        "character": "Mariana Garcia Guerrero",
+        "profile": "https://image.tmdb.org/t/p/w185/ihLzHGkgQcpUX26K5AtfG8VuYGB.jpg",
+        "order": 6
+      },
+      {
+        "id": 2295,
+        "name": "Mickey Rourke",
+        "character": "Jordan Kalfus",
+        "profile": "https://image.tmdb.org/t/p/w185/i6vXukUwRsJa7S9yhZgoKt9xLDv.jpg",
+        "order": 7
+      },
+      {
+        "id": 61059,
+        "name": "Roberto Sosa",
+        "character": "Daniel Sanchez",
+        "profile": "https://image.tmdb.org/t/p/w185/vNUj2YHv0KkQehOnfYn1OYiFFXo.jpg",
+        "order": 8
+      },
+      {
+        "id": 69865,
+        "name": "Jesús Ochoa",
+        "character": "Victor Fuentes",
+        "profile": "https://image.tmdb.org/t/p/w185/7q5cin3hrPIhMqRkPZ2sSyTrqlk.jpg",
+        "order": 9
+      },
+      {
+        "id": 55105,
+        "name": "Gero Camilo",
+        "character": "Aurelio Sanchez",
+        "profile": "https://image.tmdb.org/t/p/w185/1gM6S64Zpat4DJPzLgN15cg2rF3.jpg",
+        "order": 10
+      },
+      {
+        "id": 942967,
+        "name": "Mario Zaragoza",
+        "character": "Jorge Gonzalez",
+        "profile": "https://image.tmdb.org/t/p/w185/3d6BX9epH4Yfk0g4cNY3IgZx24V.jpg",
+        "order": 11
+      }
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw6yns6p",
+    "seasons": null,
+    "episodes": null
   }
 ]
