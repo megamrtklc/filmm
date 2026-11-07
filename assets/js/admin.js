@@ -620,7 +620,7 @@
       latest.splice(index,1);
       await githubCatalogRequest('PUT',{
         message:'Delete Perde catalog item: '+String(deleted.title||id),
-        content:encodeGithubContent(JSON.stringify(latest,null,2)+'\\n'),
+        content:encodeGithubContent(JSON.stringify(latest,null,2)+'\n'),
         sha:current.sha,branch:'main'
       });
       catalog=latest;
