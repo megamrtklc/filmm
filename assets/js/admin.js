@@ -332,6 +332,100 @@
       setTmdbTokenStatus('Tarayıcı depolamasına kaydedilemedi.');
     }
   }
+
+  async function syncCatalogWithTmdb() {
+    const button=$('#tmdb-sync-catalog'),status=$('#tmdb-sync-status'),progress=$('#tmdb-sync-progress');
+    if(!getTmdbToken()) { status.textContent='Önce TMDB anahtarını kaydet.'; return toast('TMDB bağlantısı gerekli.'); }
+    if(!getGithubToken()) { status.textContent='Kalıcı kayıt için GitHub bağlantısı gerekli.'; return toast('Önce GitHub kayıt anahtarını kaydet.'); }
+    if(!window.confirm('TMDB ID bilgisi bulunan tüm film ve diziler yenilensin mi? Elle girilmiş açıklama, başlık ve kişisel alanlar korunur.')) return;
+    button.disabled=true;
+    const original=button.innerHTML;
+    button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Katalog eşitleniyor…';
+    let succeeded=0,failed=0,skipped=0,stopError='';
+    try {
+      const current=await githubCatalogRequest('GET');
+      if(!current.sha||!current.content) throw new Error('GitHub katalog dosyası okunamadı.');
+      const latest=JSON.parse(decodeGithubContent(current.content));
+      if(!Array.isArray(latest)) throw new Error('Katalog biçimi geçersiz.');
+      const targets=latest.filter(item=>item&&item.tmdbId&&['movie','tv'].includes(item.type));
+      skipped=latest.length-targets.length;
+      if(!targets.length) throw new Error('TMDB ID bulunan kayıt yok.');
+      for(let index=0;index<targets.length;index++) {
+        const item=targets[index];
+        progress.textContent=(index+1)+' / '+targets.length+' · '+(item.title||'İsimsiz yapım')+' yükleniyor…';
+        try {
+          const type=item.type==='tv'?'tv':'movie';
+          const details=await tmdbRequest('/'+type+'/'+encodeURIComponent(item.tmdbId)+'?language=tr-TR&append_to_response=credits,videos,external_ids');
+          const releaseDate=details.release_date||details.first_air_date||'';
+          const genres=(details.genres||[]).map(row=>row.name).filter(Boolean);
+          const crew=details.credits?.crew||[];
+          const director=type==='tv'?(details.created_by||[]).map(row=>row.name).filter(Boolean).join(', '):(crew.find(row=>row.job==='Director')?.name||'');
+          const cast=(details.credits?.cast||[]).slice(0,12).map(row=>row.name).filter(Boolean);
+          const trailer=(details.videos?.results||[]).find(row=>row.site==='YouTube'&&row.type==='Trailer')||(details.videos?.results||[]).find(row=>row.site==='YouTube');
+          const countries=type==='tv'?(details.origin_country||[]).join(', '):(details.production_countries||[]).map(row=>row.name).filter(Boolean).join(', ');
+          const runtime=type==='tv'?((details.episode_run_time||[])[0]?(details.episode_run_time[0]+' dk / bölüm'):''):(details.runtime?(details.runtime+' dk'):'');
+          const posterUrl=tmdbImage(details.poster_path,'w500'),backdropUrl=tmdbImage(details.backdrop_path,'w1280');
+          const first=(...values)=>values.find(value=>value!==undefined&&value!==null&&String(value).trim()!=='');
+          item.tmdbRating=Number.isFinite(Number(details.vote_average))?Number(details.vote_average).toFixed(1):'';
+          item.tmdbVoteCount=Number(details.vote_count)||0;
+          item.tmdbTitle=details.title||details.name||'';
+          item.tmdbOriginalTitle=details.original_title||details.original_name||'';
+          item.tmdbReleaseDate=releaseDate;
+          item.tmdbGenres=genres.join(' / ');
+          item.tmdbRuntime=runtime;
+          item.tmdbCountries=countries;
+          item.tmdbDirector=director;
+          item.tmdbCast=cast;
+          item.tmdbOverview=details.overview||'';
+          item.tmdbPoster=posterUrl;
+          item.tmdbBackdrop=backdropUrl;
+          item.tmdbTrailerUrl=trailer?.key?'https://www.youtube.com/watch?v='+trailer.key:'';
+          item.tmdbImdbId=details.external_ids?.imdb_id||details.imdb_id||'';
+          item.tmdbSyncedAt=new Date().toISOString();
+          if(!item.originalTitle)item.originalTitle=first(item.tmdbOriginalTitle);
+          if(!item.year)item.year=releaseDate.slice(0,4);
+          if(!item.category)item.category=genres.join(' / ');
+          if(!item.genre)item.genre=genres[0]||'';
+          if(!item.duration)item.duration=runtime;
+          if(!item.country)item.country=countries;
+          if(!item.director)item.director=director;
+          if(!Array.isArray(item.cast)||!item.cast.length)item.cast=cast;
+          if(!item.desc)item.desc=details.overview||'';
+          if(!item.image)item.image=posterUrl;
+          if(!item.backdrop)item.backdrop=backdropUrl;
+          if(!item.trailerUrl)item.trailerUrl=item.tmdbTrailerUrl;
+          if(!item.imdbId)item.imdbId=item.tmdbImdbId;
+          if(type==='tv') {
+            item.tmdbSeasons=Number(details.number_of_seasons)||0;
+            item.tmdbEpisodes=Number(details.number_of_episodes)||0;
+            if(!item.seasons)item.seasons=item.tmdbSeasons;
+            if(!item.episodes)item.episodes=item.tmdbEpisodes;
+          }
+          succeeded++;
+        } catch(error) {
+          failed++;
+          if(/HTTP 401|HTTP 403|HTTP 429|kimlik doğrulaması/i.test(error.message)) { stopError=error.message; break; }
+          console.warn('TMDB katalog kaydı güncellenemedi:',item.title,error);
+        }
+      }
+      if(!succeeded) throw new Error(stopError||'TMDB’den güncellenebilen kayıt bulunamadı.');
+      progress.textContent='GitHub kataloğuna kaydediliyor…';
+      await githubCatalogRequest('PUT',{message:'Sync Perde catalog metadata from TMDB ('+succeeded+' items)',content:encodeGithubContent(JSON.stringify(latest,null,2)+'\n'),sha:current.sha,branch:'main'});
+      catalog=latest;
+      renderOverview();initCatalogFilters();renderCatalog();initHeroManager();initCollections();initDiary();
+      const summary=succeeded+' kayıt güncellendi · '+failed+' hata · '+skipped+' TMDB kimliği olmayan kayıt atlandı.';
+      status.textContent=summary;
+      progress.textContent=stopError?'Kısmi eşitleme tamamlandı. '+stopError:summary;
+      toast(succeeded+' yapımın TMDB verileri kataloğa kaydedildi.');
+    } catch(error) {
+      status.textContent='Eşitleme başarısız: '+error.message;
+      progress.textContent='Katalog korunarak işlem durduruldu.';
+      toast('TMDB eşitlemesi tamamlanamadı: '+error.message);
+    } finally {
+      button.disabled=false;
+      button.innerHTML=original;
+    }
+  }
   function poster(item) {
     const url = item.poster || item.image || item.backdrop || '';
     return url ? escapeHtml(url) : '';
@@ -928,6 +1022,7 @@
     renderHeroPreview();
   }));
   $('#editor-save-token').addEventListener('click',saveTmdbToken);
+  $('#tmdb-sync-catalog').addEventListener('click',syncCatalogWithTmdb);
   $('#editor-save-github-token').addEventListener('click',saveGithubToken);
   if(getGithubToken())setGithubTokenStatus('GitHub kayıt anahtarı bu tarayıcıda kayıtlı.',true);
   $('#editor-tmdb-search').addEventListener('click',searchTmdb);
