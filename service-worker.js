@@ -1,4 +1,4 @@
-const CACHE_NAME='ny7-shell-v12';
+const CACHE_NAME='ny7-shell-v13';
 const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/ny7-icon.svg','./data/catalog.json'];
 
 self.addEventListener('install',event=>{
