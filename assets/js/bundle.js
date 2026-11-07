@@ -1338,7 +1338,7 @@ function writeDetailCastCache(key,cast){
 }
 async function loadTmdbDetailCast(item){
  const id=String(item.tmdbId||'').trim();
- if(!/^\\d+$/.test(id))return;
+ if(!/^\d+$/.test(id))return;
  const mediaType=item.type==='tv'?'tv':'movie';
  const cacheKey=mediaType+':'+id;
  const cached=readDetailCastCache(cacheKey);
