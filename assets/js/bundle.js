@@ -1636,15 +1636,12 @@ function isDirectPlayablePlayerUrl(value){
 }
 async function loadSavedPlayerSource(id, catalogWatchUrl=''){
  const source=readPlayerSources()[String(id)];
- const urlInput=document.getElementById('player-stream-url');
  const watchUrl=String(catalogWatchUrl||'').trim();
  if(watchUrl){
-  if(urlInput)urlInput.value=watchUrl;
   if(isDirectPlayablePlayerUrl(watchUrl)){attachPlayerSource(watchUrl,'Yapım izleme bağlantısı');return;}
   setPlayerError('Eklediğin bağlantı doğrudan video akışı değil. Perde oynatıcısında oynatmak için .mp4, .webm, .m3u8 veya .mpd gibi doğrudan video bağlantısı kullanmalısın. Netflix, Prime Video gibi platform sayfaları DRM ve erişim korumaları nedeniyle bu oynatıcıya aktarılamaz.');
   return;
  }
- if(urlInput)urlInput.value=source?.type==='url'?source.url:'';
  if(source?.type==='local'){
   try{const file=await getNY7LocalVideo(id);if(file){activePlayerObjectUrl=URL.createObjectURL(file);attachPlayerSource(activePlayerObjectUrl,file.name);return;}}
   catch(error){setPlayerError(error.message||'Kayıtlı video açılamadı.');}
@@ -1705,7 +1702,6 @@ function closePlayer(){
  document.documentElement.classList.remove('ny7-modal-lock');
 }
 document.getElementById('player-save-local')?.addEventListener('click',saveAndPlayLocalVideo);
-document.getElementById('player-save-stream')?.addEventListener('click',saveAndPlayStream);
 document.getElementById('player-subtitle-file')?.addEventListener('change',attachPlayerSubtitle);
 document.getElementById('player-video')?.addEventListener('error',()=>setPlayerError('Bu video kaynağı açılamadı. Bağlantıyı, dosya biçimini veya erişim iznini kontrol et.'));
 
