@@ -7743,5 +7743,47 @@
     "id": "perde-mw5zz3o5",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Oyuncak Hikayesi 3",
+    "originalTitle": "Toy Story 3",
+    "year": 2010,
+    "category": "Animasyon / Aile / Komedi",
+    "genre": "Animasyon",
+    "rating": "7.8",
+    "duration": "103 dk",
+    "country": "United States of America",
+    "director": "Lee Unkrich",
+    "tmdbId": 10193,
+    "desc": "Çok sevilen “Oyuncak Hikayesi” filmlerinin yaratıcıları, yeniden oyuncak kutusunu açıp Oyuncak Hikayesi 3 ile sinemaseverleri Woody, Buzz ve oyuncak karakterlerden oluşan sevimliğ çetenin dünyasına davet ediyor. Serinin üçüncü bölümünde Andy, üniversiteye gitmeye hazırlanmaktadır, sandık oyuncakları ise belirsiz gelecekleri yüzünden endişe içinde kalır.",
+    "image": "https://image.tmdb.org/t/p/w500/qBNNAO9EVqx1vRdCbBtr5TDonA4.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/wE5JGzujfvDPMIfFjJyrhXFjZLc.jpg",
+    "imdbId": "tt0435761",
+    "watchUrl": "",
+    "platform": [
+      "Netflix",
+      "Apple TV+"
+    ],
+    "personalNote": "Mükemmel aksiyon filmi",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Tom Hanks",
+      "Tim Allen",
+      "Joan Cusack",
+      "Don Rickles",
+      "Wallace Shawn",
+      "John Ratzenberger",
+      "Estelle Harris",
+      "Blake Clark",
+      "Jeff Pidgeon",
+      "Ned Beatty",
+      "Michael Keaton",
+      "Jodi Benson"
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw5zzgfl",
+    "seasons": null,
+    "episodes": null
   }
 ]
