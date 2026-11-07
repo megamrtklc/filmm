@@ -5857,3 +5857,48 @@ body.detail-synopsis-open{overflow:hidden}
   }
   #dashboard-view .home-feature-row #hero-section .hero-copy{width:100%!important}
 }
+
+
+/* Manşet afişlerinde metin okunabilirliği: kart oluşturmayan sinematik kontrast katmanı */
+#dashboard-view .home-feature-row #hero-section .hero-vignette{
+  background:
+    radial-gradient(ellipse 68% 82% at 22% 48%,
+      rgba(0,0,0,.42) 0%,
+      rgba(0,0,0,.24) 48%,
+      transparent 100%),
+    linear-gradient(90deg,
+      rgba(0,0,0,.96) 0%,
+      rgba(0,0,0,.86) 30%,
+      rgba(0,0,0,.58) 54%,
+      rgba(0,0,0,.16) 82%,
+      transparent 100%),
+    linear-gradient(0deg,
+      #08090c 0%,
+      rgba(8,9,12,.62) 18%,
+      transparent 58%),
+    linear-gradient(180deg,
+      rgba(0,0,0,.38) 0%,
+      transparent 30%) !important;
+}
+#dashboard-view .home-feature-row #hero-section #hero-title,
+#dashboard-view .home-feature-row #hero-section #hero-meta,
+#dashboard-view .home-feature-row #hero-section #hero-desc{
+  text-shadow:0 2px 5px rgba(0,0,0,.9),0 5px 18px rgba(0,0,0,.72);
+}
+#dashboard-view .home-feature-row #hero-section #hero-meta{
+  color:rgba(255,255,255,.88)!important;
+}
+#dashboard-view .home-feature-row #hero-section #hero-desc{
+  color:rgba(255,255,255,.9)!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-vignette{
+    background:
+      radial-gradient(ellipse 100% 75% at 35% 48%,
+        rgba(0,0,0,.48) 0%,
+        rgba(0,0,0,.26) 58%,
+        transparent 100%),
+      linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.5) 72%,rgba(0,0,0,.2)),
+      linear-gradient(0deg,#08090c 0%,rgba(8,9,12,.58) 20%,transparent 65%) !important;
+  }
+}
