@@ -291,7 +291,22 @@
         </aside>
         <section class="actor-filmography">
             <div class="actor-section-heading"><div><span>PERDE KATALOĞUNDAN</span><h2 id="actor-filmography-title">Yer aldığı yapımlar</h2></div><i class="fa-solid fa-film"></i></div>
+            <div id="actor-filmography-controls" class="actor-filmography-controls" hidden>
+                <div class="actor-filmography-filters" role="group" aria-label="Yapım türü">
+                    <button type="button" class="is-active" data-actor-film-filter="all" onclick="setActorFilmographyFilter('all')">Tümü</button>
+                    <button type="button" data-actor-film-filter="movie" onclick="setActorFilmographyFilter('movie')">Filmler</button>
+                    <button type="button" data-actor-film-filter="tv" onclick="setActorFilmographyFilter('tv')">Diziler</button>
+                </div>
+                <label class="actor-filmography-sort-label">Sırala
+                    <select id="actor-filmography-sort" onchange="setActorFilmographySort(this.value)">
+                        <option value="newest">En yeniden eskiye</option>
+                        <option value="oldest">En eskiden yeniye</option>
+                        <option value="popular">En popüler</option>
+                    </select>
+                </label>
+            </div>
             <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
+            <div class="actor-filmography-footer"><span id="actor-filmography-status"></span><button type="button" id="actor-filmography-more" onclick="showMoreActorFilmography()" hidden>Daha fazla göster <i class="fa-solid fa-chevron-down"></i></button></div>
         </section>
         <section class="actor-gallery-section">
             <div class="actor-section-heading"><div><span>FOTOĞRAF ARŞİVİ</span><h2>Oyuncudan kareler</h2></div><i class="fa-regular fa-images"></i></div>
@@ -409,7 +424,7 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261107-actor-death-info-v10"></script>
+    <script src="assets/js/bundle.js?v=20261107-actor-filmography-v11"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
