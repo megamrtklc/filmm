@@ -905,6 +905,19 @@ function renderFilteredCatalog() {
             });
         }
         function showCatalogView(title) {
+            // Katalog rotasına geçerken detay/oyuncu görünümünü de kapat.
+            const dashboard=document.getElementById('dashboard-view');
+            const detail=document.getElementById('detail-page-view');
+            const actor=document.getElementById('actor-page-view');
+            if(dashboard)dashboard.classList.remove('hidden');
+            if(detail)detail.classList.add('hidden');
+            if(actor)actor.classList.add('hidden');
+            document.body.classList.remove('ny7-detail-open');
+            document.documentElement.classList.remove('ny7-modal-lock');
+            const themeBody=document.getElementById('theme-body');
+            if(themeBody)themeBody.style.backgroundColor='#0b0c10';
+            const related=document.getElementById('detail-related');
+            if(related)related.classList.add('hidden');
             document.getElementById('hero-section').classList.add('hidden');
             document.getElementById('home-collections').classList.add('hidden');
             const live = document.getElementById('live-tv-section'); if (live) live.classList.add('hidden');
@@ -927,67 +940,41 @@ function renderFilteredCatalog() {
 const headerSearchInput = document.getElementById('search-input');
 const headerSearchResults = document.getElementById('header-search-results');
 let headerSearchRequest=0;
-function getTmdbSearchAuth(){
- let token='';try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
- if(!token)return null;
- const headers={Accept:'application/json'};let query='?language=tr-TR';
- if(/^[a-z0-9]{32}$/i.test(token))query+='&api_key='+encodeURIComponent(token);
- else if(token.split('.').length===3&&token.startsWith('eyJ'))headers.Authorization='Bearer '+token;
- else return null;
- return {headers,query};
-}
-async function searchTmdbPeople(query){
- const auth=getTmdbSearchAuth();if(!auth)return [];
- try{
-  const response=await fetch('https://api.themoviedb.org/3/search/person'+auth.query+'&query='+encodeURIComponent(query),{headers:auth.headers});
-  if(!response.ok)throw new Error('TMDB kişi araması HTTP '+response.status);
-  const data=await response.json();
-  return (data.results||[]).filter(person=>person&&person.name&&['Acting','Directing'].includes(person.known_for_department)).slice(0,12).map(person=>({
-   id:person.id,name:person.name,type:person.known_for_department==='Directing'?'director':'actor',
-   profile:person.profile_path?'https://image.tmdb.org/t/p/w185'+person.profile_path:''
-  }));
- }catch(error){console.warn('Kişi araması TMDB üzerinden alınamadı:',error);return [];}
-}
-async function renderHeaderSearchResults(value) {
+function renderHeaderSearchResults(value) {
  if (!headerSearchResults) return;
  const query=String(value||'').trim();
- const request=++headerSearchRequest;
+ ++headerSearchRequest;
  if(!query){headerSearchResults.hidden=true;headerSearchResults.innerHTML='';return;}
  const normalizedQuery=normalizeMediaSearchText(query);
- const mediaMatches=mediaDatabase.filter(item=>mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
+ const catalogue=Array.isArray(mediaDatabase)?mediaDatabase:[];
+ const mediaMatches=catalogue.filter(item=>mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
   const exactA=normalizeMediaSearchText(a.title)===normalizedQuery||normalizeMediaSearchText(a.originalTitle)===normalizedQuery;
   const exactB=normalizeMediaSearchText(b.title)===normalizedQuery||normalizeMediaSearchText(b.originalTitle)===normalizedQuery;
   return Number(exactB)-Number(exactA);
- }).slice(0,6);
- const localPeople=[];
- const seenPeople=new Set();
- mediaDatabase.forEach(item=>{
-  (Array.isArray(item.tmdbCast)?item.tmdbCast:[]).forEach(person=>{
-   if(!person||!person.name||!normalizeMediaSearchText(person.name).includes(normalizedQuery))return;
-   const key='actor:'+normalizeActorName(person.name);if(seenPeople.has(key))return;seenPeople.add(key);
-   localPeople.push({name:person.name,type:'actor',profile:person.profile||''});
-  });
-  [item.director,item.tmdbDirector].filter(Boolean).forEach(raw=>{
-   String(raw).split(/[,;|]/).map(name=>name.trim()).filter(Boolean).forEach(name=>{
-    if(!normalizeMediaSearchText(name).includes(normalizedQuery))return;
-    const key='director:'+normalizeActorName(name);if(seenPeople.has(key))return;seenPeople.add(key);
-    localPeople.push({name,type:'director',profile:''});
-   });
-  });
- });
- const remotePeople=await searchTmdbPeople(query);
- if(request!==headerSearchRequest||headerSearchInput.value.trim()!==query)return;
+ }).slice(0,8);
  const peopleMap=new Map();
- [...remotePeople,...localPeople].forEach(person=>{
-  const key=person.type+':'+normalizeActorName(person.name);
+ const addPerson=(name,type,profile='')=>{
+  const clean=String(name||'').trim();
+  if(!clean||!normalizeMediaSearchText(clean).includes(normalizedQuery))return;
+  const key=type+':'+normalizeActorName(clean);
   const existing=peopleMap.get(key);
-  if(!existing||(!existing.profile&&person.profile))peopleMap.set(key,{...existing,...person});
+  if(!existing||(!existing.profile&&profile))peopleMap.set(key,{name:clean,type,profile:profile||existing?.profile||''});
+ };
+ catalogue.forEach(item=>{
+  const castRows=Array.isArray(item.tmdbCast)?item.tmdbCast:[];
+  castRows.forEach(person=>{
+   if(person&&typeof person==='object')addPerson(person.name,'actor',person.profile||'');
+  });
+  (Array.isArray(item.cast)?item.cast:[]).forEach(name=>addPerson(typeof name==='string'?name:name?.name,'actor',name?.profile||''));
+  [item.director,item.tmdbDirector].filter(Boolean).forEach(raw=>{
+   String(raw).split(/[,;|]/).map(name=>name.trim()).filter(Boolean).forEach(name=>addPerson(name,'director'));
+  });
  });
- const people=[...peopleMap.values()].slice(0,6);
+ const people=[...peopleMap.values()].slice(0,8);
  activeSearchResultIndex=-1;
  const mediaMarkup=mediaMatches.map(item=>{
   const title=escapeCountryHtml(item.title||'İsimsiz yapım');
-  const image=escapeCountryHtml(item.image||'');
+  const image=escapeCountryHtml(item.image||item.tmdbPoster||'');
   const year=escapeCountryHtml(item.year||'Yıl bilgisi yok');
   const type=item.type==='tv'?'Dizi':'Film';
   return `<button type="button" class="header-search-result" role="option" data-search-result-id="${escapeCountryHtml(item.id)}">
@@ -1004,9 +991,9 @@ async function renderHeaderSearchResults(value) {
    '<span class="header-search-result-copy"><strong>'+name+'</strong><small>'+label+'</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>';
  }).join('');
  const hasResults=mediaMarkup||peopleMarkup;
- headerSearchResults.innerHTML=(peopleMarkup?'<div class="header-search-group-label">Kişiler</div>'+peopleMarkup:'')+
+ headerSearchResults.innerHTML=(peopleMarkup?'<div class="header-search-group-label">Oyuncu ve yönetmenler</div>'+peopleMarkup:'')+
   (mediaMarkup?'<div class="header-search-group-label">Film ve diziler</div>'+mediaMarkup:'')+
-  (!hasResults?'<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen sonuç bulunamadı</b><small>Farklı bir kelime deneyebilir veya kataloğu keşfedebilirsin.</small><button type="button" data-search-empty-action>Keşfet</button></div>':'');
+  (!hasResults?'<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen sonuç bulunamadı</b><small>Yalnızca Perde kataloğundaki yapımlar ve kişiler aranır.</small></div>':'');
  headerSearchResults.hidden=false;
 }
 headerSearchInput.addEventListener('focus',()=>{
