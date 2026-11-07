@@ -1,4 +1,4 @@
-const CACHE_NAME='perde-shell-v20';
+const CACHE_NAME='perde-shell-v21';
 const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/perde-icon.svg','./data/catalog.json','./data/homepage-config.json'];
 
 self.addEventListener('install',event=>{
