@@ -7607,7 +7607,18 @@
     "tmdbTrailerUrl": "https://www.youtube.com/watch?v=tIHyWhi61mA",
     "tmdbImdbId": "tt3766354",
     "tmdbSyncedAt": "2026-11-07T04:35:41.848Z",
-    "platform": "Netflix, Disney+, Prime Video, Apple Tv",
+    "platform": [
+      "Netflix",
+      "Prime Video",
+      "Disney+",
+      "Max",
+      "Apple TV+",
+      "MUBI",
+      "BluTV",
+      "TOD",
+      "tabii",
+      "GAİN"
+    ],
     "personalNote": "Mutlaka izlemelisin. Adalet arayışındaki harika bir film.",
     "watchUrl": "https://s6.gelsistirire.top/d/zungbhsosk3rtzj5bpwrvt4kkunnjgv5sd65hgbnnwmfzgigze2qqsqzavpnctebdx7yoioc/The%20Equalizer%202%202018%20Bluray%201080p%20DUAL.mp4"
   }
