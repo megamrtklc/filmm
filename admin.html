@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-backup-v2">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261108-catalog-picker-v1">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -259,7 +259,7 @@
               <div class="collection-editor-empty" id="collection-editor-empty"><i class="fa-solid fa-arrow-left"></i><b>Önce bir koleksiyon seç</b><span>Soldaki listeden bir raf seçtiğinde düzenleme alanı burada açılır.</span></div>
               <div id="collection-editor-content" hidden>
                 <div class="collection-editor-title"><div><span class="eyebrow">DÜZENLENEN RAF</span><h3 id="collection-editor-name"></h3><p id="collection-editor-description"></p></div><button class="outline-button collection-visibility" id="collection-visibility" type="button"><i class="fa-solid fa-eye"></i> Yayında</button></div>
-                <div class="collection-add-row"><label class="hero-field-label" for="collection-item-select">Katalogdan film veya dizi ekle</label><div><select id="collection-item-select"><option value="">Film veya dizi seç…</option></select><button class="gold-button" id="collection-add-item" type="button"><i class="fa-solid fa-plus"></i> Ekle</button></div></div>
+                <div class="collection-add-row"><label class="hero-field-label" for="collection-item-select">Katalogdan film veya dizi ekle</label><div class="collection-picker-row"><div class="catalog-picker" id="collection-catalog-picker" data-picker-select="collection-item-select"><div class="catalog-picker-search"><i class="fa-solid fa-magnifying-glass"></i><input id="collection-item-search" type="search" placeholder="Yapım adıyla ara…" autocomplete="off"></div><div class="catalog-picker-filters" role="group" aria-label="Yapım türü"><button type="button" class="active" data-picker-filter="all">Tümü</button><button type="button" data-picker-filter="movie">Filmler</button><button type="button" data-picker-filter="tv">Diziler</button></div><div class="catalog-picker-results" id="collection-catalog-results" aria-live="polite"><span class="catalog-picker-hint">Yapım aramak için adını yaz.</span></div><div class="catalog-picker-selected" id="collection-catalog-selected">Henüz yapım seçilmedi.</div></div><select id="collection-item-select" class="catalog-picker-native" aria-hidden="true" tabindex="-1"><option value="">Film veya dizi seç…</option></select><button class="gold-button" id="collection-add-item" type="button"><i class="fa-solid fa-plus"></i> Ekle</button></div></div>
                 <div class="collection-items-heading"><b>Bu raftaki yapımlar</b><span id="collection-items-count">0 yapım</span></div>
                 <div class="collection-items-list" id="collection-items-list"><div class="loading-line">İçerik bekleniyor.</div></div>
                 <p class="collection-order-hint"><i class="fa-solid fa-arrow-up-down"></i> Oklarla sıralamayı değiştir. Çarpı ile raftan çıkar.</p>
@@ -290,7 +290,7 @@
             </div>
             <aside class="surface-card hero-add-card">
               <span class="eyebrow">VİTRİNİ OLUŞTUR</span><h2>Manşete yapım ekle</h2><p>Katalogdan bir film veya dizi seçerek ön izleme listene ekle.</p>
-              <label class="hero-field-label" for="hero-content-select">Katalogdan seç</label><select id="hero-content-select"><option value="">Yapım seç…</option></select>
+              <label class="hero-field-label" for="hero-content-search">Katalogda yapım ara</label><div class="catalog-picker" id="hero-catalog-picker" data-picker-select="hero-content-select"><div class="catalog-picker-search"><i class="fa-solid fa-magnifying-glass"></i><input id="hero-content-search" type="search" placeholder="Film veya dizi adı yaz…" autocomplete="off"></div><div class="catalog-picker-filters" role="group" aria-label="Yapım türü"><button type="button" class="active" data-picker-filter="all">Tümü</button><button type="button" data-picker-filter="movie">Filmler</button><button type="button" data-picker-filter="tv">Diziler</button></div><div class="catalog-picker-results" id="hero-catalog-results" aria-live="polite"><span class="catalog-picker-hint">Yapım aramak için adını yaz.</span></div><div class="catalog-picker-selected" id="hero-catalog-selected">Henüz yapım seçilmedi.</div></div><select id="hero-content-select" class="catalog-picker-native" aria-hidden="true" tabindex="-1"><option value="">Yapım seç…</option></select>
               <button class="gold-button hero-add-button" id="hero-add-button"><i class="fa-solid fa-plus"></i> Slider'a ekle</button>
               <div class="hero-manager-divider"></div>
               <div class="hero-copy-editor">
@@ -421,6 +421,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-hero-publish-v2"></script>
+  <script src="assets/js/admin.js?v=20261108-catalog-picker-v120261107-hero-publish-v2"></script>
 </body>
 </html>
