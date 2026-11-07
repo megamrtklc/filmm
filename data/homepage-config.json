@@ -1,7 +1,13 @@
 {
-  "version": 2,
-  "updatedAt": "2026-11-07T21:54:49.785Z",
+  "version": 1,
+  "updatedAt": "2026-11-07T22:15:45.198Z",
   "heroSlides": [
+    {
+      "id": "perde-mw6yns6p",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
     {
       "id": "perde-mw6xs3qb",
       "active": true,
@@ -80,12 +86,5 @@
       "headline": "",
       "description": ""
     }
-  ],
-  "settings": {
-    "desktopCount": 6,
-    "mobileCount": 4,
-    "interval": 6,
-    "autoplay": true,
-    "pauseOnHover": true
-  }
+  ]
 }
