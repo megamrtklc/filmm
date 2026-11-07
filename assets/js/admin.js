@@ -600,7 +600,36 @@
       }
     });
     $('#health-result-count').textContent=rows.length.toLocaleString('tr-TR')+' kayıt';
-    $('#health-issue-list').innerHTML=rows.length?rows.map(({item,labels})=>'<article class="health-issue-row"><div class="health-issue-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-clapperboard"></i>')+'</div><div class="health-issue-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'Yıl yok')+' · '+escapeHtml(item.id)+'</small><div class="health-tags">'+labels.map(label=>'<span>'+escapeHtml(label)+'</span>').join('')+'</div></div><button type="button" class="row-action" data-health-edit="'+escapeHtml(item.id)+'">Düzenle</button></article>').join(''):'<div class="health-empty"><i class="fa-solid fa-circle-check"></i><b>Bu filtrede sorun görünmüyor</b><span>Seçili kontrol başlığı için katalog kayıtları tamam.</span></div>';
+    $('#health-issue-list').innerHTML=rows.length?rows.map(({item,labels})=>'<article class="health-issue-row"><div class="health-issue-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-clapperboard"></i>')+'</div><div class="health-issue-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'Yıl yok')+' · '+escapeHtml(item.id)+'</small><div class="health-tags">'+labels.map(label=>'<span>'+escapeHtml(label)+'</span>').join('')+'</div></div><div class="health-issue-actions"><button type="button" class="row-action" data-health-edit="'+escapeHtml(item.id)+'">Düzenle</button><button type="button" class="row-action row-action-danger" data-health-delete="'+escapeHtml(item.id)+'"><i class="fa-regular fa-trash-can"></i> Sil</button></div></article>').join(''):'<div class="health-empty"><i class="fa-solid fa-circle-check"></i><b>Bu filtrede sorun görünmüyor</b><span>Seçili kontrol başlığı için katalog kayıtları tamam.</span></div>';
+  }
+  async function deleteHealthCatalogItem(id,button){
+    const item=catalog.find(row=>String(row.id)===String(id));
+    if(!item)return toast('Silinecek yapım katalogda bulunamadı.');
+    const title=String(item.title||'İsimsiz yapım');
+    if(!window.confirm('"'+title+'" yapımını Perde kataloğundan kalıcı olarak silmek istiyor musun? Bu işlem geri alınamaz.'))return;
+    if(!getGithubToken()){setGithubTokenStatus('Silme işlemi için GitHub bağlantısı gerekli.');return toast('Önce Veri Kaynakları bölümünden GitHub bağlantısını kur.');}
+    const original=button.innerHTML;button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Siliniyor…';
+    try{
+      const current=await githubCatalogRequest('GET');
+      if(!current.sha||!current.content)throw new Error('GitHub katalog dosyası okunamadı.');
+      const latest=JSON.parse(decodeGithubContent(current.content));
+      if(!Array.isArray(latest))throw new Error('Katalog dosyasının biçimi geçersiz.');
+      const index=latest.findIndex(row=>String(row.id)===String(id));
+      if(index<0)throw new Error('Yapım GitHub kataloğunda bulunamadı; başka bir işlemle silinmiş olabilir.');
+      const deleted=latest[index];
+      latest.splice(index,1);
+      await githubCatalogRequest('PUT',{
+        message:'Delete Perde catalog item: '+String(deleted.title||id),
+        content:encodeGithubContent(JSON.stringify(latest,null,2)+'\\n'),
+        sha:current.sha,branch:'main'
+      });
+      catalog=latest;
+      renderOverview();initCatalogFilters();renderCatalog();renderCatalogHealth();renderWatchLinks();initHeroManager();initCollections();
+      toast('"'+title+'" katalogdan silindi.');
+    }catch(error){
+      button.disabled=false;button.innerHTML=original;
+      toast('Yapım silinemedi: '+error.message);
+    }
   }
   function isYoutubeSource(url){const host=String(url||'').split('://').pop().split('/')[0].toLowerCase();return host==='youtu.be'||host==='youtube.com'||host.endsWith('.youtube.com');}
   function renderWatchLinks(){
@@ -1335,6 +1364,8 @@
   });
   $('#health-refresh').addEventListener('click',()=>{renderCatalogHealth();toast('Katalog yeniden tarandı.');});
   $('#health-issue-list').addEventListener('click',event=>{
+    const deleteButton=event.target.closest('[data-health-delete]');
+    if(deleteButton){deleteHealthCatalogItem(deleteButton.dataset.healthDelete,deleteButton);return;}
     const button=event.target.closest('[data-health-edit]');if(!button)return;
     const item=catalog.find(row=>String(row.id)===button.dataset.healthEdit);if(item)openEditor(item);
   });
