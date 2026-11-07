@@ -6437,3 +6437,6 @@ body.detail-synopsis-open{overflow:hidden}
   width:38%;
  }
 }
+
+/* Oynatma ekranı: yardımcı araçlar kaldırıldı, oynatıcı tek sütun */
+.ny7-player-layout{grid-template-columns:minmax(0,1fr)!important}
