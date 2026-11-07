@@ -6378,3 +6378,37 @@ body.detail-synopsis-open{overflow:hidden}
 .detail-personal-note{flex:1 1 320px}
 .detail-personal-note p{color:#e1e1e6;font-size:13px;line-height:1.7;white-space:normal;overflow-wrap:anywhere}
 @media(max-width:700px){.detail-personal-info{padding-inline:18px;margin-top:18px}.detail-personal-heading{align-items:flex-start;flex-direction:column;gap:3px}.detail-personal-content{display:grid;grid-template-columns:1fr}.detail-personal-platform{max-width:none}.detail-personal-watch{justify-self:start}.detail-personal-note{grid-column:auto}}
+
+
+/* Özel koleksiyon rafları: ilk ekranda kesin olarak 8 poster */
+.saved-collection-rail{
+ display:flex !important;
+ flex-wrap:nowrap;
+ align-items:flex-start;
+ width:100%;
+ max-width:100%;
+ min-width:0;
+ gap:1rem;
+ overflow-x:auto;
+ overflow-y:hidden;
+ scroll-snap-type:x mandatory;
+}
+.saved-collection-rail>.collection-card{
+ flex:0 0 calc((100% - 7rem)/8);
+ width:calc((100% - 7rem)/8);
+ min-width:0;
+ max-width:none;
+}
+@media(min-width:641px) and (max-width:900px){
+ .saved-collection-rail>.collection-card{
+  flex-basis:calc((100% - 3rem)/4);
+  width:calc((100% - 3rem)/4);
+ }
+}
+@media(max-width:640px){
+ .saved-collection-rail{gap:.75rem}
+ .saved-collection-rail>.collection-card{
+  flex-basis:38%;
+  width:38%;
+ }
+}
