@@ -1328,7 +1328,7 @@ function renderDetailPersonalInfo(item){
  panel.innerHTML='<div class="detail-personal-card"><div class="detail-personal-heading"><h2>Senin notların</h2></div><div class="detail-personal-content">'+platformMarkup+noteMarkup+watchMarkup+'</div></div>';
 }
 
-const detailCastCacheKey='perde_tmdb_cast_cache_v1';
+const detailCastCacheKey='perde_tmdb_cast_cache_v2';
 let detailCastRequestSequence=0;
 function readDetailCastCache(key){
  try{const cache=JSON.parse(localStorage.getItem(detailCastCacheKey)||'{}');return Array.isArray(cache[key])?cache[key]:null;}catch(_){return null;}
@@ -1338,27 +1338,26 @@ function writeDetailCastCache(key,cast){
 }
 async function loadTmdbDetailCast(item){
  const id=String(item.tmdbId||'').trim();
- if(!/^\d+$/.test(id))return;
+ if(!/^\\d+$/.test(id))return;
  const mediaType=item.type==='tv'?'tv':'movie';
  const cacheKey=mediaType+':'+id;
+ const isRichCast=value=>Array.isArray(value)&&value.length>0&&value.every(person=>person&&typeof person==='object'&&person.name)&&value.some(person=>person.profile||person.character);
  const cached=readDetailCastCache(cacheKey);
- if(cached&&cached.length){item.tmdbCast=cached;renderDetailCredits(item);return;}
- const hasCompleteCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.length>0&&item.tmdbCast.every(person=>person&&typeof person==='object'&&person.name&&typeof person.character==='string');
- if(hasCompleteCast)return;
+ if(isRichCast(cached)){item.tmdbCast=cached;renderDetailCredits(item);return;}
  let token='';
  try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
  if(!token)return;
- let auth={},query='';
- if(/^[a-z0-9]{32}$/i.test(token))query='?api_key='+encodeURIComponent(token)+'&language=tr-TR&append_to_response=credits';
- else if(token.split('.').length===3&&token.startsWith('eyJ')){auth={Authorization:'Bearer '+token};query='?language=tr-TR&append_to_response=credits';}
- else return;
+ let headers={Accept:'application/json'},query='?language=tr-TR';
+ if(/^[a-z0-9]{32}$/i.test(token))query+='&api_key='+encodeURIComponent(token);
+ else if(token.split('.').length===3&&token.startsWith('eyJ'))headers.Authorization='Bearer '+token;
+ else{console.warn('TMDB oyuncu verisi: kayıtlı anahtar biçimi tanınmadı.');return;}
  const requestId=++detailCastRequestSequence;
  try{
-  const response=await fetch('https://api.themoviedb.org/3/'+mediaType+'/'+encodeURIComponent(id)+query,{headers:{...auth,Accept:'application/json'}});
+  const response=await fetch('https://api.themoviedb.org/3/'+mediaType+'/'+encodeURIComponent(id)+'/credits'+query,{headers});
   if(!response.ok)throw new Error('TMDB HTTP '+response.status);
-  const details=await response.json();
-  const cast=(details.credits?.cast||[]).filter(person=>person&&person.name).slice(0,10).map(person=>({id:person.id||null,name:person.name,character:person.character||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',order:Number.isFinite(Number(person.order))?Number(person.order):999}));
-  if(!cast.length)return;
+  const payload=await response.json();
+  const cast=(payload.cast||[]).filter(person=>person&&person.name).slice(0,10).map(person=>({id:person.id||null,name:person.name,character:person.character||'',profile:person.profile_path?'https://image.tmdb.org/t/p/w500'+person.profile_path:'',order:Number.isFinite(Number(person.order))?Number(person.order):999}));
+  if(!cast.length){console.warn('TMDB oyuncu verisi boş döndü:',mediaType,id);return;}
   writeDetailCastCache(cacheKey,cast);
   item.tmdbCast=cast;
   if(requestId===detailCastRequestSequence&&String(location.hash).includes(encodeURIComponent(String(item.id))))renderDetailCredits(item);
@@ -1383,7 +1382,7 @@ function renderDetailCredits(item){
     '<span class="perde-cast-identity"><strong>'+escapeCountryHtml(person.name)+'</strong><small>'+(person.character?escapeCountryHtml(person.character):'Rol bilgisi bulunmuyor')+'</small></span>'+
     '<span class="perde-cast-number">'+String(page*5+index+1).padStart(2,'0')+'</span></button>';
   }).join('');
-  panel.innerHTML='<div class="perde-cast-roster"><header class="perde-cast-header"><div><span class="perde-cast-kicker">KADRO</span><h2>Oyuncular</h2></div><div class="perde-cast-navigation" '+(cast.length<=5?'hidden':'')+'><span>'+String(page+1)+' / '+String(Math.ceil(cast.length/5))+'</span><button type="button" data-page="-1" '+(page===0?'disabled':'')+' aria-label="Önceki oyuncular">←</button><button type="button" data-page="1" '+((page+1)*5>=cast.length?'disabled':'')+' aria-label="Sonraki oyuncular">→</button></div></header><div class="perde-cast-list">'+rows+'</div></div>';
+  panel.innerHTML='<div class="perde-cast-roster"><header class="perde-cast-header"><div><h2>Oyuncular</h2></div><div class="perde-cast-navigation" '+(cast.length<=5?'hidden':'')+'><span>'+String(page+1)+' / '+String(Math.ceil(cast.length/5))+'</span><button type="button" data-page="-1" '+(page===0?'disabled':'')+' aria-label="Önceki oyuncular">←</button><button type="button" data-page="1" '+((page+1)*5>=cast.length?'disabled':'')+' aria-label="Sonraki oyuncular">→</button></div></header><div class="perde-cast-list">'+rows+'</div></div>';
   panel.querySelectorAll('[data-page]').forEach(button=>button.addEventListener('click',()=>{page=Math.max(0,Math.min(Math.ceil(cast.length/5)-1,page+Number(button.dataset.page)));render();}));
  };
  render();
@@ -1435,6 +1434,7 @@ function openDetailPage(id,update=true){
  document.getElementById('actor-page-view').classList.add('hidden');
  const detailView=document.getElementById('detail-page-view');
  detailView.classList.remove('hidden');
+ requestAnimationFrame(()=>{const main=detailView.querySelector('.detail-main'),trailer=detailView.querySelector('.detail-poster-trailer');if(main&&trailer){const top=trailer.getBoundingClientRect().top-main.getBoundingClientRect().top;main.style.setProperty('--detail-frame-top',Math.max(0,top)+'px');}});
  document.body.classList.remove('ny7-detail-open');
  document.documentElement.classList.remove('ny7-modal-lock');
  document.getElementById('detail-related').classList.remove('hidden');
