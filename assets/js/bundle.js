@@ -920,6 +920,7 @@ function renderFilteredCatalog() {
             };
             const config=configs[route]||['fa-compass',String(title||'KEŞFET').toLocaleUpperCase('tr-TR'),'Perde arşivini keşfet.'];
             card.dataset.route=route;
+            card.hidden=route==='yonetmen';
             const normalizeTheme=value=>String(value||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim();
             const categoryThemes=[
                 {keys:['animasyon','animation'],id:'animation',icon:'fa-wand-magic-sparkles',desc:'Renkli dünyalara, sıra dışı karakterlere ve sınırsız hayal gücüne dal.'},
@@ -1675,7 +1676,7 @@ function openActorPage(name,update=true){
  const normalized=normalizeActorName(actorName);
  const works=mediaDatabase.filter(m=>{const names=[...(Array.isArray(m.cast)?m.cast:[]),...(Array.isArray(m.tmdbCast)?m.tmdbCast.map(p=>typeof p==='string'?p:p?.name):[])];return names.some(v=>normalizeActorName(v)===normalized);});
  if(update){const path='#/oyuncu/'+encodeURIComponent(actorName);if(location.hash!==path)history.pushState(null,'',path);}
- document.getElementById('dashboard-view').classList.add('hidden');document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');document.getElementById('actor-page-view').classList.remove('hidden');const actorContext=document.getElementById('actor-context-description');if(actorContext)actorContext.textContent=actorName+' — yaşamı, kariyeri ve Perde kataloğundaki yapımları.';document.getElementById('theme-body').style.backgroundColor='#07080c';
+ document.getElementById('dashboard-view').classList.add('hidden');document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');document.getElementById('actor-page-view').classList.remove('hidden');document.getElementById('theme-body').style.backgroundColor='#07080c';
 document.getElementById('actor-biography-title').textContent=actorName;document.getElementById('actor-biography-text').textContent='TMDB oyuncu bilgileri yükleniyor…';
  ['actor-birth-date','actor-birth-place','actor-country','actor-education'].forEach(id=>document.getElementById(id).textContent='Bilgi bulunamadı');
  const deathInfoNode=document.getElementById('actor-death-info');if(deathInfoNode){deathInfoNode.hidden=true;deathInfoNode.textContent='';}
