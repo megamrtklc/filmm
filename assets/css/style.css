@@ -6908,3 +6908,9 @@ body.detail-synopsis-open{overflow:hidden}
 #player-stage.is-youtube-playing #player-skip-intro,
 #player-stage.is-youtube-playing #player-skip-credits,
 #player-stage.is-youtube-playing #player-loading{display:none!important}
+
+/* Published hero poster count: cards stay in the rail and remain reachable by scrolling */
+#dashboard-view .home-feature-row #hero-section .hero-thumbnails{--hero-visible-count:6}
+#dashboard-view .home-feature-row #hero-section .hero-thumb{flex:0 0 calc((100% - (var(--hero-visible-count) - 1)*10px)/var(--hero-visible-count))!important;width:calc((100% - (var(--hero-visible-count) - 1)*10px)/var(--hero-visible-count))!important;min-width:0;transition:transform .3s ease,opacity .3s ease,filter .3s ease,border-color .3s ease,box-shadow .3s ease}
+@media(max-width:767px){#dashboard-view .home-feature-row #hero-section .hero-thumbnails{--hero-visible-count:4}}
+@media(prefers-reduced-motion:reduce){#dashboard-view .home-feature-row #hero-section .hero-thumb,#dashboard-view .home-feature-row #hero-section .hero-thumb img{transition:none!important}}
