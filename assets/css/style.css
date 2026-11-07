@@ -5757,3 +5757,22 @@ body.detail-synopsis-open{overflow:hidden}
 #dashboard-view .home-feature-row #hero-section #hero-title{white-space:normal!important;overflow-wrap:anywhere}
 #dashboard-view .home-feature-row #hero-section #hero-desc{display:block!important;overflow:visible!important;white-space:normal!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;-webkit-box-orient:initial!important;max-height:none!important;text-overflow:clip!important}
 @media(max-width:820px){#dashboard-view .home-feature-row #hero-section .hero-copy{width:100%!important;max-width:none!important}}
+
+
+/* Manşet afiş şeridi: ilk afişe nefes alanı ve daha büyük posterler */
+#dashboard-view .home-feature-row #hero-section .hero-thumbnails{
+  padding-left:14px!important;
+  scroll-padding-left:14px;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb{
+  flex-basis:94px!important;
+  width:94px!important;
+  height:132px!important;
+}
+@media(max-width:820px){
+  #dashboard-view .home-feature-row #hero-section .hero-thumbnails{padding-left:12px!important;scroll-padding-left:12px}
+  #dashboard-view .home-feature-row #hero-section .hero-thumb{flex-basis:84px!important;width:84px!important;height:118px!important}
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-thumb{flex-basis:72px!important;width:72px!important;height:102px!important}
+}

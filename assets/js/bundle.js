@@ -239,7 +239,12 @@ function fitHeroTitleToWidth() {
         window.openTrailerPopup=openTrailerPopup;
         window.closeTrailerPopup=closeTrailerPopup;
         function renderHeroThumbnails() {
-            document.getElementById('hero-thumbnails-rail').innerHTML = heroItems.map((m,i) => `
+            const rail = document.getElementById('hero-thumbnails-rail');
+            if (rail) {
+                rail.onmouseenter = () => { heroRailHovered = true; if (heroTimer) clearInterval(heroTimer); heroTimer = null; };
+                rail.onmouseleave = () => { heroRailHovered = false; restartHeroTimer(); };
+            }
+            rail.innerHTML = heroItems.map((m,i) => `
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
                     <img src="${m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>${originalTitleMarkup(m,'hero-thumb-original')}
                 </button>`).join('');
@@ -266,7 +271,9 @@ function fitHeroTitleToWidth() {
         }
         function restartHeroTimer() {
             if(heroTimer) clearInterval(heroTimer);
-            heroTimer=setInterval(()=>{if(!document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},6500);
+            heroTimer = null;
+            if (heroRailHovered) return;
+            heroTimer=setInterval(()=>{if(!heroRailHovered && !document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},6500);
         }
 
 
@@ -1618,6 +1625,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
         let heroItems = [];
         let heroIndex = 0;
         let heroTimer = null;
+        let heroRailHovered = false;
         let catalogInitialized = false;
         function showCatalogSkeletons() {
             const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
