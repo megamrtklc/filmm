@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-tmdb-editor">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-brand-logos">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -339,15 +339,15 @@
 
         <section class="page-view" id="page-sources">
           <div class="page-heading"><div><span class="eyebrow">ENTEGRASYONLAR</span><h1>Veri Kaynakları</h1><p>Harici film ve dizi servislerinin bağlantı ayarları.</p></div></div>
-          <div class="integration-list"><article class="integration-card"><span class="integration-logo imdb">IMDb</span><div><h3>IMDb</h3><p>Film ve dizi puanları, temel yapım bilgileri.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo rt"><i class="fa-solid fa-tomato"></i></span><div><h3>Rotten Tomatoes</h3><p>Eleştirmen ve izleyici puanları.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo popcorn"><i class="fa-solid fa-popcorn"></i></span><div><h3>Popcorn</h3><p>İlgili puan / değerlendirme kaynağı ayarları.</p></div><span class="status-chip">Bağlantı planlandı</span></article></div>
+          <div class="integration-list"><article class="integration-card"><span class="integration-logo imdb">IMDb</span><div><h3>IMDb</h3><p>Film ve dizi puanları, temel yapım bilgileri.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo rt"><img src="https://cdn.simpleicons.org/rottentomatoes/FA320A" alt="Rotten Tomatoes logosu"></span><div><h3>Rotten Tomatoes</h3><p>Eleştirmen ve izleyici puanları.</p></div><span class="status-chip">Bağlantı planlandı</span></article><article class="integration-card"><span class="integration-logo popcorn" aria-label="Popcorn logosu"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M11 19h26l-3.5 25h-19L11 19Z" fill="#e64b43"/><path d="M17 21h5v22h-5zm10 0h5v22h-5z" fill="#fff0d5"/><path d="M9 18c-2-4 2-7 5-6-1-5 5-8 9-4 2-6 10-5 11 1 5-1 8 4 5 8 3 4-1 7-5 6H14c-5 0-8-3-5-5Z" fill="#f5c85b" stroke="#e6ad38" stroke-width="1.5"/><path d="M17 11c-2-3 1-6 4-5m7 1c-1-3 2-5 4-4" fill="none" stroke="#fff0d5" stroke-width="2" stroke-linecap="round"/><path d="M10 19h28" stroke="#fff0d5" stroke-width="2"/></svg></span><div><h3>Popcorn</h3><p>İlgili puan / değerlendirme kaynağı ayarları.</p></div><span class="status-chip">Bağlantı planlandı</span></article></div>
           <div class="section-title-row"><div><h2>Aktif bağlantılar</h2><p>Perde'nin kayıt ve içerik arama servislerini buradan yönet.</p></div></div>
           <section class="surface-card tmdb-setup-card">
-            <div class="tmdb-setup-copy"><span class="tmdb-mark"><i class="fa-brands fa-github"></i></span><div><b>GitHub kalıcı kayıt bağlantısı</b><p>Yeni yapımlar data/catalog.json dosyasına kaydedilir.</p></div></div>
+            <div class="tmdb-setup-copy"><span class="tmdb-mark github-mark"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.svg" alt="GitHub logosu"></span><div><b>GitHub kalıcı kayıt bağlantısı</b><p>Yeni yapımlar data/catalog.json dosyasına kaydedilir.</p></div></div>
             <div class="tmdb-token-controls"><input id="editor-github-token" type="password" autocomplete="off" placeholder="GitHub Fine-grained Personal Access Token"><button class="outline-button" type="button" id="editor-save-github-token">GitHub bağlantısını kaydet</button><span id="editor-github-status" role="status">Kayıt bağlantısı kurulmadı</span></div>
             <small>Yalnızca megamrtklc/filmm deposu için Contents: Read and write izni ver. Anahtar yalnızca bu tarayıcıda saklanır; kaynak koda eklenmez. Kimseyle paylaşma.</small>
           </section>
           <section class="surface-card tmdb-setup-card">
-            <div class="tmdb-setup-copy"><span class="tmdb-mark">TMDB</span><div><b>TMDB bağlantısı</b><p>API Key (v3) veya Read Access Token ekle. Anahtar yalnızca bu tarayıcıda saklanır.</p></div></div>
+            <div class="tmdb-setup-copy"><span class="tmdb-mark tmdb-logo"><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt="TMDB logosu"></span><div><b>TMDB bağlantısı</b><p>API Key (v3) veya Read Access Token ekle. Anahtar yalnızca bu tarayıcıda saklanır.</p></div></div>
             <div class="tmdb-token-controls"><input id="editor-tmdb-token" type="password" autocomplete="off" placeholder="TMDB API Key (v3) veya Read Access Token"><button class="outline-button" type="button" id="editor-save-token">Anahtarı kaydet</button><span id="editor-token-status" role="status">Bağlantı kurulmadı</span></div>
             <small>Anahtarını TMDB hesap ayarlarında API bölümünden alabilirsin. v3 anahtarı veya Read Access Token kullanabilirsin. Bu bilgiyi kimseyle paylaşma.</small>
           </section>

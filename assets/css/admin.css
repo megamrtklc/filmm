@@ -501,3 +501,10 @@
 .tmdb-result-empty{grid-column:1/-1;padding:18px;text-align:center;border:1px dashed var(--line);border-radius:9px;color:var(--muted);font-size:11px}
 .editor-field input[readonly],.editor-field textarea[readonly]{background:#11161e;color:#aeb7c3;border-color:#252d39;cursor:default}
 @media(max-width:760px){.tmdb-search-results{grid-template-columns:1fr}.tmdb-search-row{flex-direction:column}.tmdb-search-row .gold-button{width:100%}}
+
+/* Brand marks on the Data Sources page */
+.integration-logo.rt img{display:block;width:31px;height:31px;object-fit:contain}
+.integration-logo.popcorn svg{display:block;width:36px;height:36px}
+.tmdb-mark.github-mark img{display:block;width:27px;height:27px;filter:invert(1);object-fit:contain}
+.tmdb-mark.tmdb-logo{background:#fff;padding:3px}
+.tmdb-mark.tmdb-logo img{display:block;width:100%;height:100%;object-fit:contain}
