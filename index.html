@@ -7,8 +7,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="assets/icons/ny7-icon.svg">
-    <link rel="apple-touch-icon" href="assets/icons/ny7-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/perde-icon.svg">
+    <link rel="apple-touch-icon" href="assets/icons/perde-icon.svg">
     <title>NY 7 TV - Film ve Dizi Platformu</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -49,13 +49,14 @@
     <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
     <header class="site-header">
         <div class="header-topline">
-        <a class="header-brand" href="#/anasayfa" aria-label="NY7 TV ana sayfa">
-            <span class="brand-mark"><span class="brand-monogram" aria-label="NY7"><b>NY</b><strong>7</strong></span><span class="brand-tv">TELEVISION</span></span>
+        <a class="header-brand perde-brand" href="#/anasayfa" aria-label="Perde ana sayfa">
+            <span class="perde-brand-symbol" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><path d="M7 8.5h26v23H7z" fill="none" stroke="currentColor" stroke-width="1.8" rx="3"/><path d="M13 8.5v23M27 8.5v23M7 14h6M27 14h6M7 26h6M27 26h6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16.5 15.5 24 20l-7.5 4.5z" fill="currentColor"/></svg></span>
+            <span class="perde-brand-word">perde<span>.</span></span>
         </a>
         <div class="header-actions"><div class="header-search-shell">
                 <label class="search-wrap glass-search">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara" autocomplete="off">
+                    <input id="search-input" type="search" placeholder="Film, dizi, oyuncu veya yönetmen ara..." aria-label="Film, dizi, oyuncu veya yönetmen ara" autocomplete="off">
                 </label>
                 <div id="header-search-results" class="header-search-results" role="listbox" aria-label="Arama sonuçları" hidden></div>
             </div>
