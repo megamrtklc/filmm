@@ -125,16 +125,40 @@
     node.textContent = message;
     node.classList.toggle('is-ready',good);
   }
+  function tmdbCredential() {
+    const value = getTmdbToken().trim();
+    if (!value) throw new Error('Önce TMDB API anahtarını kaydetmelisin.');
+    if (/^[a-f0-9]{32}$/i.test(value)) return { type:'v3', value };
+    if (value.split('.').length === 3 && value.startsWith('eyJ')) return { type:'bearer', value };
+    throw new Error('Anahtar biçimi tanınmadı. TMDB API Key (v3) veya API Read Access Token kullan.');
+  }
   async function tmdbRequest(path) {
-    const token = getTmdbToken();
-    if (!token) throw new Error('Önce TMDB Read Access Token kaydetmelisin.');
-    const response = await fetch('https://api.themoviedb.org/3'+path, {
-      headers: { Authorization: 'Bearer '+token, Accept: 'application/json' }
-    });
+    const credential = tmdbCredential();
+    const separator = path.includes('?') ? '&' : '?';
+    const url = 'https://api.themoviedb.org/3'+path+
+      (credential.type === 'v3' ? separator+'api_key='+encodeURIComponent(credential.value) : '');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    let response;
+    try {
+      response = await fetch(url, {
+        headers: { ...(credential.type === 'bearer' ? { Authorization:'Bearer '+credential.value } : {}), Accept:'application/json' },
+        signal: controller.signal
+      });
+    } catch (error) {
+      if (error.name === 'AbortError') throw new Error('TMDB yanıt vermedi (15 saniye zaman aşımı).');
+      throw new Error('TMDB bağlantısı kurulamadı. Ağ veya tarayıcı engelini kontrol et ('+(error.message || 'bağlantı hatası')+').');
+    } finally {
+      clearTimeout(timeout);
+    }
     if (!response.ok) {
-      if (response.status === 401 || response.status === 403) throw new Error('TMDB anahtarı geçersiz veya yetkisiz. Token ayarını kontrol et.');
-      if (response.status === 429) throw new Error('TMDB istek sınırına ulaşıldı. Biraz sonra tekrar dene.');
-      throw new Error('TMDB isteği başarısız oldu ('+response.status+').');
+      let detail = '';
+      try { const body = await response.json(); detail = body.status_message || ''; } catch (_) {}
+      if (response.status === 401 || response.status === 403) {
+        throw new Error('TMDB kimlik doğrulaması reddedildi (HTTP '+response.status+'). '+(detail || 'Anahtar türünü ve TMDB API izinlerini kontrol et.'));
+      }
+      if (response.status === 429) throw new Error('TMDB istek sınırına ulaşıldı (HTTP 429). Biraz sonra tekrar dene.');
+      throw new Error('TMDB isteği başarısız oldu (HTTP '+response.status+'). '+detail);
     }
     return response.json();
   }
@@ -252,11 +276,11 @@
   }
   function saveTmdbToken() {
     const token = $('#editor-tmdb-token').value.trim();
-    if (!token) return toast('TMDB Read Access Token alanını doldur.');
+    if (!token) return toast('TMDB API Key (v3) veya Read Access Token alanını doldur.');
     try {
       localStorage.setItem(tmdbTokenStorageKey,token);
       $('#editor-tmdb-token').value = '';
-      setTmdbTokenStatus('Token bu tarayıcıya kaydedildi.',true);
+      setTmdbTokenStatus(/^[a-f0-9]{32}$/i.test(token) ? 'TMDB API Key (v3) bu tarayıcıya kaydedildi.' : 'Read Access Token bu tarayıcıya kaydedildi.',true);
       toast('TMDB bağlantı anahtarı kaydedildi.');
     } catch (_) {
       setTmdbTokenStatus('Tarayıcı depolamasına kaydedilemedi.');
