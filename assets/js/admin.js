@@ -229,6 +229,107 @@
     else if(button.hasAttribute('data-hero-remove')){heroSlides.splice(index,1);heroActiveIndex=Math.max(0,Math.min(heroActiveIndex,heroSlides.length-1));}
     renderHeroSlides();
   }
+  let collections = [];
+  let activeCollectionId = '';
+  function collectionSeed() {
+    const rated = [...catalog].sort((a,b)=>(Number.parseFloat(b.rating)||0)-(Number.parseFloat(a.rating)||0));
+    const newest = [...catalog].sort((a,b)=>(Number(b.year)||0)-(Number(a.year)||0));
+    const firstGenre = catalogGenres()[0];
+    const genreItems = firstGenre ? catalog.filter(item=>String(item.category||item.genre||'').split('/').map(value=>value.trim()).includes(firstGenre)) : [];
+    return [
+      {id:'trending',title:'Trend Yapımlar',description:'Puanı yüksek, öne çıkan film ve diziler.',active:true,items:rated.slice(0,8).map(item=>String(item.id))},
+      {id:'editors',title:'Editörün Seçimi',description:'Arşivden özenle seçilmiş güçlü yapımlar.',active:true,items:rated.slice(8,16).map(item=>String(item.id))},
+      {id:'newest',title:'Yeni Eklenenler',description:'Yıl bilgisine göre en yeni yapımlar.',active:true,items:newest.slice(0,8).map(item=>String(item.id))},
+      {id:'genre',title:firstGenre ? firstGenre+' Seçkisi' : 'Türe Göre Keşfet',description:'Aynı türde buluşan yapımlar.',active:false,items:genreItems.slice(0,8).map(item=>String(item.id))}
+    ];
+  }
+  function selectedCollection() { return collections.find(item=>item.id===activeCollectionId)||null; }
+  function renderCollections() {
+    $('#collection-total').textContent=collections.length.toLocaleString('tr-TR');
+    $('#collection-item-total').textContent=collections.reduce((sum,item)=>sum+item.items.length,0).toLocaleString('tr-TR');
+    $('#collection-active-total').textContent=collections.filter(item=>item.active).length.toLocaleString('tr-TR');
+    $('#collection-list').innerHTML=collections.map(item=>'<button type="button" class="collection-list-item'+(item.id===activeCollectionId?' selected':'')+'" data-collection-select="'+escapeHtml(item.id)+'"><span class="collection-list-icon"><i class="fa-solid fa-layer-group"></i></span><span class="collection-list-copy"><b>'+escapeHtml(item.title)+'</b><small>'+item.items.length+' yapım · '+(item.active?'Görünür':'Gizli')+'</small></span><i class="fa-solid fa-chevron-right"></i></button>').join('')||'<div class="collection-editor-empty">Henüz koleksiyon yok.</div>';
+    renderCollectionEditor();
+  }
+  function renderCollectionEditor() {
+    const item=selectedCollection();
+    $('#collection-editor-empty').hidden=!!item;
+    $('#collection-editor-content').hidden=!item;
+    if(!item){
+      $('#collection-preview').innerHTML='<div class="collection-preview-empty"><i class="fa-regular fa-images"></i><span>Ön izleme burada görünecek.</span></div>';
+      return;
+    }
+    $('#collection-editor-name').textContent=item.title;
+    $('#collection-editor-description').textContent=item.description||'Özel koleksiyon rafı.';
+    $('#collection-visibility').innerHTML=item.active?'<i class="fa-solid fa-eye"></i> Yayında':'<i class="fa-solid fa-eye-slash"></i> Gizli';
+    $('#collection-visibility').classList.toggle('is-muted',!item.active);
+    $('#collection-items-count').textContent=item.items.length+' yapım';
+    $('#collection-items-list').innerHTML=item.items.map((id,index)=>{
+      const entry=catalog.find(row=>String(row.id)===id);
+      if(!entry)return '';
+      const image=poster(entry);
+      return '<div class="collection-item-row">'+(image?'<img src="'+image+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="collection-item-placeholder"><i class="fa-solid fa-film"></i></span>')+'<span class="collection-item-copy"><b>'+escapeHtml(entry.title)+'</b><small>'+(entry.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(entry.year||'—')+'</small></span><span class="collection-item-actions"><button type="button" data-collection-up="'+index+'" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-collection-down="'+index+'" aria-label="Aşağı taşı" '+(index===item.items.length-1?'disabled':'')+'><i class="fa-solid fa-chevron-down"></i></button><button type="button" data-collection-remove="'+index+'" aria-label="Koleksiyondan çıkar"><i class="fa-solid fa-xmark"></i></button></span></div>';
+    }).join('')||'<div class="collection-editor-empty compact"><i class="fa-solid fa-film"></i><span>Bu koleksiyonda henüz yapım yok. Yukarıdan katalogdan ekleyebilirsin.</span></div>';
+    $('#collection-preview').innerHTML='<div class="collection-preview-heading"><b>'+escapeHtml(item.title)+'</b><span>'+item.items.length+' yapım</span></div><div class="collection-preview-rail">'+item.items.slice(0,6).map(id=>{
+      const entry=catalog.find(row=>String(row.id)===id);
+      if(!entry)return '';
+      const image=poster(entry);
+      return '<div class="collection-preview-card">'+(image?'<img src="'+image+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="collection-item-placeholder"><i class="fa-solid fa-film"></i></span>')+'<b>'+escapeHtml(entry.title)+'</b></div>';
+    }).join('')+'</div>';
+  }
+  function initCollections() {
+    collections=collectionSeed();
+    activeCollectionId=collections[0]?.id||'';
+    const select=$('#collection-item-select');
+    [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    renderCollections();
+  }
+  function handleCollectionClick(event) {
+    const button=event.target.closest('button');
+    if(!button)return;
+    if(button.hasAttribute('data-collection-select')){activeCollectionId=button.dataset.collectionSelect;renderCollections();return;}
+    const item=selectedCollection();
+    if(!item)return;
+    if(button.hasAttribute('data-collection-up')||button.hasAttribute('data-collection-down')){
+      const index=Number(button.dataset.collectionUp??button.dataset.collectionDown);
+      const target=index+(button.hasAttribute('data-collection-up')?-1:1);
+      if(target<0||target>=item.items.length)return;
+      [item.items[index],item.items[target]]=[item.items[target],item.items[index]];
+    }else if(button.hasAttribute('data-collection-remove')){
+      item.items.splice(Number(button.dataset.collectionRemove),1);
+    }
+    renderCollections();
+  }
+  function addCollectionItem() {
+    const item=selectedCollection();
+    const id=$('#collection-item-select').value;
+    if(!item)return toast('Önce bir koleksiyon seç.');
+    if(!id)return toast('Önce katalogdan bir yapım seç.');
+    if(item.items.includes(id))return toast('Bu yapım koleksiyonda zaten var.');
+    item.items.push(id);
+    renderCollections();
+    toast('Yapım koleksiyon taslağına eklendi.');
+  }
+  function createCollection(event) {
+    event.preventDefault();
+    const input=$('#collection-new-title');
+    const title=input.value.trim();
+    if(!title)return;
+    if(collections.some(item=>item.title.toLocaleLowerCase('tr-TR')===title.toLocaleLowerCase('tr-TR')))return toast('Bu isimde bir koleksiyon zaten var.');
+    const id='custom-'+Date.now().toString(36);
+    collections.push({id,title,description:'Yeni oluşturulan özel koleksiyon.',active:true,items:[]});
+    activeCollectionId=id;
+    input.value='';
+    renderCollections();
+    toast('Yeni koleksiyon taslağı oluşturuldu.');
+  }
+  function toggleCollectionVisibility() {
+    const item=selectedCollection();
+    if(!item)return;
+    item.active=!item.active;
+    renderCollections();
+    toast(item.active?'Koleksiyon ön izlemede görünür.':'Koleksiyon ön izlemede gizlendi.');
+  }
   function downloadJson(filename, data) {
     const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
     const url = URL.createObjectURL(blob);
@@ -264,6 +365,7 @@
       initCatalogFilters();
       renderCatalog();
       initHeroManager();
+      initCollections();
     } catch (error) {
       $('#catalog-status').textContent = 'Veri bağlantısı kurulamadı';
       ['#stat-movies','#stat-series','#analytics-total','#overview-movie-count','#overview-series-count','#donut-total'].forEach(selector => {
@@ -296,6 +398,11 @@
     if (item) toast(item.title+' · '+(item.type==='tv'?'Dizi':'Film')+' · '+(item.year||'Yıl bilgisi yok')+' — salt okunur ön izleme');
   });
   $('#hero-add-button').addEventListener('click',addHeroSlide);
+  $('#collection-list').addEventListener('click',handleCollectionClick);
+  $('#collection-items-list').addEventListener('click',handleCollectionClick);
+  $('#collection-add-item').addEventListener('click',addCollectionItem);
+  $('#collection-visibility').addEventListener('click',toggleCollectionVisibility);
+  $('#collection-create-form').addEventListener('submit',createCollection);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
   $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
     heroPreviewMode=button.dataset.heroPreview;
