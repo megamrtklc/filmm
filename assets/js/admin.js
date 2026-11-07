@@ -1,7 +1,9 @@
 (() => {
   'use strict';
   const $ = (selector, root = document) => root.querySelector(selector);
-  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const $ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  // Resolve the catalog from the actual admin.js location, not the current route.
+  const adminScriptUrl = document.currentScript?.src || new URL('assets/js/admin.js', window.location.href).href;
   let catalog = [];
   let toastTimer;
   const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',subtitles:'Altyazı Merkezi',backups:'Yedekleme',settings:'Genel Ayarlar'};
@@ -237,18 +239,38 @@
   async function init() {
     $('#today-label').textContent = new Intl.DateTimeFormat('tr-TR',{dateStyle:'full'}).format(new Date());
     try {
-      const response = await fetch('data/catalog.json',{cache:'no-store'});
-      if (!response.ok) throw new Error('HTTP '+response.status);
-      const data = await response.json();
-      if (!Array.isArray(data)) throw new Error('Katalog biçimi geçersiz');
+      const catalogUrls = [...new Set([
+        new URL('../../data/catalog.json', adminScriptUrl).href,
+        new URL('data/catalog.json', window.location.href).href,
+        new URL('/data/catalog.json', window.location.origin).href
+      ])];
+      let data = null;
+      const loadErrors = [];
+      for (const url of catalogUrls) {
+        try {
+          const response = await fetch(url,{cache:'no-store'});
+          if (!response.ok) throw new Error('HTTP '+response.status);
+          const payload = await response.json();
+          if (!Array.isArray(payload)) throw new Error('Katalog biçimi geçersiz');
+          data = payload;
+          break;
+        } catch (loadError) {
+          loadErrors.push(url+' ('+loadError.message+')');
+        }
+      }
+      if (!data) throw new Error('Katalog dosyasına ulaşılamadı. Denenen yollar: '+loadErrors.join(' · '));
       catalog = data;
       renderOverview();
       initCatalogFilters();
       renderCatalog();
       initHeroManager();
     } catch (error) {
-      $('#catalog-status').textContent = 'Katalog yüklenemedi';
-      $('#recent-list').innerHTML = '<div class="loading-line">Katalog okunamadı. Perde ana sayfasının yayınlandığı dizinde data/catalog.json dosyasını kontrol et.</div>';
+      $('#catalog-status').textContent = 'Veri bağlantısı kurulamadı';
+      ['#stat-movies','#stat-series','#analytics-total','#overview-movie-count','#overview-series-count','#donut-total'].forEach(selector => {
+        const node = $(selector);
+        if (node) node.textContent = '—';
+      });
+      $('#recent-list').innerHTML = '<div class="loading-line">Katalog verisi yüklenemedi. '+escapeHtml(error.message)+'</div>';
       $('#catalog-table-body').innerHTML = '<tr><td colspan="6" class="empty-cell">Katalog yüklenemedi: '+escapeHtml(error.message)+'</td></tr>';
       $('#catalog-count').textContent = 'Bağlantı yok';
       console.warn('Perde yönetim taslağı katalog yükleme hatası:',error);
