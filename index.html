@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261107-platform-buttons-v1">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261107-player-tools-v1">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">\n</head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -397,7 +397,7 @@
                 <div class="ny7-player-underbar"><div><span class="ny7-player-underbar-dot"></span><span>ŞİMDİ İZLİYORSUN</span><strong id="player-underbar-title">Perde Sinema</strong></div><div class="ny7-player-statline"><span><i class="fa-regular fa-clock"></i> Bu filmde <b id="player-stat-minutes">0 dk</b></span><span><i class="fa-solid fa-check-circle"></i> <b id="player-stat-completed">0</b> tamamlandı</span></div><span class="ny7-player-shortcuts">Space oynat · ← / → 10 sn · F tam ekran · M sessiz</span></div>
             </section>
             <aside class="ny7-player-source-panel">
-                <div class="ny7-player-source-heading"><div><span>OYNATMA MERKEZİ</span><h3>Video kaynağı</h3></div><i class="fa-solid fa-sliders"></i></div>
+                <div class="ny7-player-source-heading"><div><span>YARDIMCI ARAÇLAR</span><h3>Yerel video ve altyazı</h3></div><i class="fa-solid fa-sliders"></i></div>
                 <div class="ny7-player-source-grid">
                     <div class="ny7-source-option">
                         <label for="player-local-file"><i class="fa-solid fa-folder-open"></i> Cihazından video seç</label>
@@ -405,12 +405,7 @@
                         <button id="player-save-local" type="button" class="ny7-source-button"><i class="fa-solid fa-play"></i> Dosyayı aç ve oynat</button>
                         <small>Dosya bu tarayıcıda saklanır; site sunucusuna yüklenmez.</small>
                     </div>
-                    <div class="ny7-source-option">
-                        <label for="player-stream-url"><i class="fa-solid fa-link"></i> Yayın bağlantısı</label>
-                        <input id="player-stream-url" type="url" placeholder="https://.../video.mp4" autocomplete="url">
-                        <button id="player-save-stream" type="button" class="ny7-source-button"><i class="fa-solid fa-arrow-up-right-from-square"></i> Bağlantıyı aç</button>
-                        <small>Yalnızca kullanma ve izleme iznine sahip olduğun kaynakları ekle.</small>
-                    </div>
+                    
                 </div>
                 <div class="ny7-player-subtitle"><label for="player-subtitle-file"><i class="fa-regular fa-closed-captioning"></i> Altyazı yükle <span>.VTT</span></label><input id="player-subtitle-file" type="file" accept=".vtt,text/vtt,.srt,application/x-subrip" multiple></div>
                 <p class="ny7-player-note"><i class="fa-solid fa-circle-info"></i> Video biçimi tarayıcı tarafından desteklenmelidir. Kayıtlı kaynaklar bu cihazda kullanılabilir.</p>
