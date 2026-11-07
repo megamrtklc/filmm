@@ -99,3 +99,58 @@
 @media(max-width:980px){.catalog-poster-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-toolbar-rich select{flex:1 1 130px}}
 @media(max-width:760px){.catalog-summary-strip{gap:7px}.catalog-summary-strip>div{padding:10px 9px;gap:7px}.catalog-summary-icon{width:29px;height:29px;font-size:11px}.catalog-summary-strip small{font-size:7px}.catalog-summary-strip b{font-size:15px}.catalog-poster-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.catalog-card-art{height:clamp(190px,62vw,270px)}.catalog-toolbar-rich .admin-search{flex-basis:100%}.catalog-toolbar-rich select{flex:1 1 calc(50% - 6px);min-width:0}.catalog-toolbar-bottom{align-items:flex-start;flex-direction:column}.view-switch{align-self:flex-end}}
 @media(max-width:380px){.catalog-summary-strip>div{flex-direction:column;align-items:flex-start}.catalog-card-copy{padding:9px}.catalog-card-copy>b{font-size:10px}}
+
+/* Hero and slider management */
+.hero-manager-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:15px;align-items:start}
+.hero-manager-main{display:flex;flex-direction:column;gap:15px;min-width:0}
+.hero-stage-card,.hero-slides-card,.hero-add-card{padding:15px}
+.hero-live-preview{position:relative;isolation:isolate;overflow:hidden;min-height:300px;border-radius:10px;background:#0b0d11;transition:max-width .2s;margin-top:13px}
+.hero-live-preview.is-mobile{max-width:310px;min-height:430px;margin-left:auto;margin-right:auto}
+.hero-live-backdrop{position:absolute;inset:0;z-index:-1;background-position:center;background-size:cover;transform:scale(1.02)}
+.hero-live-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;min-height:300px;max-width:550px;padding:28px}
+.hero-live-preview.is-mobile .hero-live-copy{min-height:430px;padding:20px}
+.hero-live-kicker{font-size:9px;font-weight:800;letter-spacing:2px;color:#e5bd69}
+.hero-live-copy h2{max-width:480px;margin:12px 0 8px;font:800 clamp(24px,3vw,38px)/1.08 Manrope,sans-serif;color:#fff;text-shadow:0 3px 18px #0008}
+.hero-live-preview.is-mobile .hero-live-copy h2{font-size:27px}
+.hero-live-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:#e0e2e6;font-size:9px}
+.hero-live-meta i{color:#d5ad5a;font-style:normal}
+.hero-live-meta b{color:#f5c518}
+.hero-live-copy p{max-width:480px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:12px 0 17px;color:#d1d3d7;font-size:10px;line-height:1.65}
+.hero-live-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:5px;background:#d9ae58;color:#17130a;font-size:8px;font-weight:900;letter-spacing:.8px}
+.hero-live-index{position:absolute;right:15px;bottom:15px;color:#ffffffa8;font-size:9px;letter-spacing:1px}
+.hero-slide-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.hero-slide-row{display:flex;align-items:center;gap:10px;min-width:0;padding:9px;border:1px solid var(--line);border-radius:9px;background:#141922;transition:border-color .2s,opacity .2s}
+.hero-slide-row.selected{border-color:#b78b45;background:linear-gradient(100deg,#2a241a,#171b23)}
+.hero-slide-row.muted{opacity:.58}
+.hero-slide-number{width:20px;color:#c7a35e;font:800 10px Manrope,sans-serif}
+.hero-slide-row>img,.hero-slide-placeholder{width:37px;height:51px;flex:0 0 37px;object-fit:cover;border-radius:4px;background:#252b35}
+.hero-slide-placeholder{display:grid;place-items:center;color:#c4a05c}
+.hero-slide-select{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px;border:0;background:transparent;text-align:left;color:#e9ebef;cursor:pointer}
+.hero-slide-select b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+.hero-slide-select small{color:var(--muted);font-size:8px}
+.hero-slide-state{font-size:8px;color:#c6a05a;white-space:nowrap}
+.hero-slide-actions{display:flex;gap:3px}
+.hero-slide-actions button{width:26px;height:27px;border:1px solid #ffffff12;border-radius:5px;background:#ffffff06;color:#b7bdc7;cursor:pointer}
+.hero-slide-actions button:hover:not(:disabled){border-color:#a98243;color:#e9c574}
+.hero-slide-actions button:disabled{opacity:.25;cursor:not-allowed}
+.hero-slide-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:35px 10px;color:var(--muted);text-align:center}
+.hero-slide-empty>i{font-size:25px;color:var(--gold)}
+.hero-slide-empty b{font-size:11px;color:#e4e7eb}
+.hero-slide-empty span{font-size:9px}
+.hero-add-card{position:sticky;top:18px}
+.hero-add-card h2{margin:10px 0 6px;font:800 17px Manrope,sans-serif}
+.hero-add-card>p{margin:0 0 18px;color:var(--muted);font-size:10px;line-height:1.6}
+.hero-field-label{display:block;margin-bottom:7px;color:#dce0e6;font-size:9px;font-weight:700}
+.hero-add-card select{width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:7px;background:#10151d;color:#e5e8ed;font:inherit;font-size:10px}
+.hero-add-button{width:100%;justify-content:center;margin-top:10px}
+.hero-manager-divider{height:1px;background:var(--line);margin:18px 0}
+.hero-manager-tip{display:flex;gap:9px;color:var(--muted);font-size:9px;line-height:1.55}
+.hero-manager-tip>i{color:var(--gold);font-size:14px}
+.hero-manager-tip b{display:block;color:#e0e3e8;margin-bottom:3px}
+.hero-manager-status{display:flex;align-items:center;gap:9px;margin-top:20px;padding:11px;border-radius:8px;background:#0e1715}
+.hero-manager-status b,.hero-manager-status small{display:block}
+.hero-manager-status b{font-size:9px;color:#b9d9c5}
+.hero-manager-status small{font-size:8px;color:#8c9c94;margin-top:3px}
+@media(max-width:1050px){.hero-manager-layout{grid-template-columns:minmax(0,1fr) 240px}}
+@media(max-width:800px){.hero-manager-layout{grid-template-columns:1fr}.hero-add-card{position:static}.hero-live-preview{min-height:270px}.hero-live-copy{min-height:270px;padding:20px}}
+@media(max-width:520px){.hero-slide-row{gap:6px;padding:7px}.hero-slide-number{width:16px}.hero-slide-row>img,.hero-slide-placeholder{width:31px;height:44px;flex-basis:31px}.hero-slide-state{display:none}.hero-slide-actions{gap:2px}.hero-slide-actions button{width:23px;height:25px}.hero-live-preview.is-mobile{max-width:100%}.hero-stage-card .card-heading{align-items:flex-start;gap:8px;flex-direction:column}}
