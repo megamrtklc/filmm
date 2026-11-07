@@ -1440,6 +1440,57 @@
     downloadJson('perde-arsiv-yedegi-'+new Date().toISOString().slice(0,10)+'.json',data);
     toast('Katalog, koleksiyonlar ve ana sayfa ayarları yedeklendi.');
   });
+  $('#import-archive').addEventListener('click',() => $('#archive-backup-file').click());
+  $('#archive-backup-file').addEventListener('change',async event => {
+    const file=event.target.files&&event.target.files[0];
+    if(!file)return;
+    const hint=$('#archive-restore-hint');
+    const button=$('#import-archive');
+    const originalLabel=button.innerHTML;
+    button.disabled=true;
+    hint.textContent='Arşiv yedeği doğrulanıyor…';
+    try {
+      if(file.size>15*1024*1024)throw new Error('Arşiv yedeği 15 MB sınırını aşıyor.');
+      const parsed=JSON.parse(await file.text());
+      if(!parsed||typeof parsed!=='object'||Array.isArray(parsed)||parsed.app!=='Perde'||parsed.backupType!=='archive-data')throw new Error('Bu dosya geçerli bir Perde tam arşiv yedeği değil.');
+      if(!Array.isArray(parsed.catalog)||!parsed.catalog.length)throw new Error('Yedekte katalog bulunamadı.');
+      if(!Array.isArray(parsed.collections))throw new Error('Yedekte koleksiyon listesi bulunamadı.');
+      if(!parsed.homepageConfig||typeof parsed.homepageConfig!=='object'||!Array.isArray(parsed.homepageConfig.heroSlides)||!parsed.homepageConfig.settings)throw new Error('Yedekte ana sayfa ayarları eksik.');
+      const ids=new Set();
+      for(const item of parsed.catalog){
+        if(!item||typeof item!=='object'||!String(item.id||'').trim()||!String(item.title||'').trim())throw new Error('Katalogda kimliği veya adı eksik bir kayıt var.');
+        const id=String(item.id);
+        if(ids.has(id))throw new Error('Yedekte yinelenen yapım kimliği bulundu: '+id);
+        ids.add(id);
+      }
+      const safeCollections=parsed.collections.filter(item=>item&&typeof item==='object'&&String(item.id||'').trim()&&String(item.title||'').trim()).map(item=>({...item,items:Array.isArray(item.items)?item.items.map(String).filter(id=>ids.has(id)):[]}));
+      const safeConfig={version:2,updatedAt:new Date().toISOString(),settings:normalizeHeroSettings(parsed.homepageConfig.settings),heroSlides:parsed.homepageConfig.heroSlides.filter(slide=>slide&&ids.has(String(slide.id))).map(slide=>({id:String(slide.id),active:slide.active!==false,headline:String(slide.headline||''),description:String(slide.description||'')}))};
+      if(!getGithubToken())throw new Error('Tam arşivi geri yüklemek için Veri Kaynakları bölümünden GitHub bağlantısını kurmalısın.');
+      if(!window.confirm(parsed.catalog.length+' yapım, '+safeCollections.length+' koleksiyon ve ana sayfa ayarları GitHub deposundaki mevcut verilerin yerine yüklenecek. İşlem öncesinde mevcut durumun güvenlik yedeği indirilecek. Devam edilsin mi?')){hint.textContent='Geri yükleme iptal edildi.';return;}
+      const before={app:'Perde',backupType:'archive-data',version:2,catalog,collections,homepageConfig:{version:2,settings:heroSettings,heroSlides},exportedAt:new Date().toISOString(),safetySnapshot:true};
+      downloadJson('perde-geri-yukleme-oncesi-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json',before);
+      hint.textContent='Mevcut durum yedeklendi. GitHub dosyaları güncelleniyor…';
+      const catalogCurrent=await githubCatalogRequest('GET');
+      const collectionsCurrent=await githubCollectionsRequest('GET');
+      const heroCurrent=await githubHeroConfigRequest('GET');
+      if(!catalogCurrent.sha||!collectionsCurrent.sha||!heroCurrent.sha)throw new Error('GitHub dosyalarının sürüm bilgisi alınamadı; hiçbir dosya değiştirilmedi.');
+      await githubCatalogRequest('PUT',{message:'Restore Perde catalog from archive backup',content:encodeGithubContent(JSON.stringify(parsed.catalog,null,2)+'\\n'),sha:catalogCurrent.sha,branch:'main'});
+      await githubCollectionsRequest('PUT',{message:'Restore Perde collections from archive backup',content:encodeGithubContent(JSON.stringify(safeCollections,null,2)+'\\n'),sha:collectionsCurrent.sha,branch:'main'});
+      await githubHeroConfigRequest('PUT',{message:'Restore Perde homepage settings from archive backup',content:encodeGithubContent(JSON.stringify(safeConfig,null,2)+'\\n'),sha:heroCurrent.sha,branch:'main'});
+      catalog=parsed.catalog;
+      collections=safeCollections;
+      heroSettings=safeConfig.settings;
+      heroSlides=safeConfig.heroSlides;
+      renderOverview();initCatalogFilters();renderCatalog();renderCatalogHealth();renderWatchLinks();initHeroManager();initCollections();initDiary();
+      hint.textContent='Tam arşiv başarıyla geri yüklendi. '+catalog.length+' yapım ve '+collections.length+' koleksiyon yayın ayarlarıyla birlikte kaydedildi.';
+      toast('Tam arşiv geri yüklendi.');
+    } catch(error) {
+      hint.textContent='Geri yükleme tamamlanamadı: '+error.message+' Bir veya daha fazla dosya güncellendiyse işlem öncesi indirilen güvenlik yedeğini sakla.';
+      toast('Tam arşiv geri yüklenemedi.');
+    } finally {
+      button.disabled=false;button.innerHTML=originalLabel;event.target.value='';
+    }
+  });
   $('#export-personal').addEventListener('click',() => {
     const keys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist','perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1','ny7_player_sources_v1'];
     const deviceData={};
