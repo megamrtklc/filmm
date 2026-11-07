@@ -1472,20 +1472,34 @@
     downloadJson('perde-arsiv-yedegi-'+new Date().toISOString().slice(0,10)+'.json',data);
     toast('Katalog, koleksiyonlar ve ana sayfa ayarları yedeklendi.');
   });
-  async function loadAutomaticBackupStatus() {
+  async function fetchBackupApi(url,timeoutMs=12000){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),timeoutMs);
+    const token=getGithubToken();
+    const headers={Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+    if(token)headers.Authorization='Bearer '+token;
+    try{
+      return await fetch(url,{headers,signal:controller.signal,cache:'no-store'});
+    }catch(error){
+      if(error&&error.name==='AbortError')throw new Error('GitHub yanıtı zaman aşımına uğradı. İnternet bağlantını kontrol edip yeniden dene.');
+      throw error;
+    }finally{clearTimeout(timer);}
+  }
+  async function loadAutomaticBackupStatus(){
     const host=$('#auto-backup-status'),historyHost=$('#auto-backup-history'),button=$('#auto-backup-refresh');
     if(!host)return;
     if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Kontrol ediliyor';}
     host.innerHTML='<span class="auto-backup-status-icon"><i class="fa-solid fa-spinner fa-spin"></i></span><span><b>Yedek durumu kontrol ediliyor</b><small>GitHub Actions bilgileri alınıyor…</small></span>';
     if(historyHost)historyHost.innerHTML='<div class="auto-backup-history-heading">SON YEDEKLER</div><div class="loading-line">Yedek geçmişi yükleniyor…</div>';
     try{
-      const response=await fetch('https://api.github.com/repos/'+githubRepo+'/actions/workflows/perde-daily-backup.yml/runs?per_page=5',{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+      const url='https://api.github.com/repos/'+githubRepo+'/actions/workflows/perde-daily-backup.yml/runs?per_page=5';
+      const response=await fetchBackupApi(url,15000);
       const data=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error('GitHub HTTP '+response.status+': '+(data.message||'Yedek geçmişi okunamadı.'));
       const runs=Array.isArray(data.workflow_runs)?data.workflow_runs:[],run=runs[0];
       const dateLabel=value=>{const date=value?new Date(value):null;return date&&!Number.isNaN(date.getTime())?new Intl.DateTimeFormat('tr-TR',{dateStyle:'medium',timeStyle:'short'}).format(date):'Tarih bilinmiyor';};
       if(!run){
-        host.innerHTML='<span class="auto-backup-status-icon pending"><i class="fa-solid fa-clock"></i></span><span><b>İlk otomatik yedek henüz çalışmadı</b><small>İlk çalıştırmayı GitHub Actions sayfasından başlatabilir veya günlük zamanlamayı bekleyebilirsin.</small></span>';
+        host.innerHTML='<span class="auto-backup-status-icon pending"><i class="fa-solid fa-clock"></i></span><span><b>İlk otomatik yedek henüz çalışmadı</b><small>GitHub Actions sayfasından ilk çalıştırmayı başlatabilirsin.</small></span>';
         if(historyHost)historyHost.innerHTML='<div class="auto-backup-history-heading">SON YEDEKLER</div><div class="auto-backup-history-empty">Henüz bir yedekleme çalıştırması bulunmuyor.</div>';
         return;
       }
@@ -1497,17 +1511,23 @@
       if(historyHost){
         const rows=await Promise.all(runs.map(async item=>{
           const ok=item.status==='completed'&&item.conclusion==='success';let hasArtifact=false;
-          if(ok&&item.artifacts_url){try{const ar=await fetch(item.artifacts_url,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});const ad=await ar.json().catch(()=>({}));hasArtifact=ar.ok&&Array.isArray(ad.artifacts)&&ad.artifacts.some(artifact=>String(artifact.name||'').startsWith('perde-otomatik-yedek-')&&!artifact.expired);}catch(_){}}
+          if(ok&&item.artifacts_url){
+            try{const ar=await fetchBackupApi(item.artifacts_url,8000);const ad=await ar.json().catch(()=>({}));hasArtifact=ar.ok&&Array.isArray(ad.artifacts)&&ad.artifacts.some(artifact=>String(artifact.name||'').startsWith('perde-otomatik-yedek-')&&!artifact.expired);}
+            catch(_){hasArtifact=false;}
+          }
           const state=item.status!=='completed'?'Devam ediyor':item.conclusion==='success'?'Başarılı':'Başarısız',statusClass=item.status!=='completed'?'pending':item.conclusion==='success'?'good':'failed';
-          const artifactText=ok?(hasArtifact?'Arşiv dosyası hazır':'Arşiv dosyası bulunamadı'):'Yedek henüz hazır değil';
+          const artifactText=ok?(hasArtifact?'Arşiv dosyası hazır':'Arşiv dosyası kontrol edilemedi / bulunamadı'):'Yedek henüz hazır değil';
           return '<article class="auto-backup-history-row"><span class="auto-backup-history-dot '+statusClass+'"><i class="fa-solid '+(ok?'fa-check':item.status!=='completed'?'fa-spinner fa-spin':'fa-xmark')+'"></i></span><span class="auto-backup-history-copy"><b>'+escapeHtml('#'+(item.run_number||item.id)+' · '+state)+'</b><small>'+escapeHtml(dateLabel(item.updated_at||item.created_at))+' · '+escapeHtml(artifactText)+'</small></span><a href="'+escapeHtml(item.html_url||'#')+'" target="_blank" rel="noopener noreferrer" class="auto-backup-history-link" aria-label="Yedek çalıştırmasını aç"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></article>';
         }));
         historyHost.innerHTML='<div class="auto-backup-history-heading">SON YEDEKLER</div>'+(rows.length?rows.join(''):'<div class="auto-backup-history-empty">Henüz yedek geçmişi bulunmuyor.</div>');
       }
     }catch(error){
-      host.innerHTML='<span class="auto-backup-status-icon pending"><i class="fa-solid fa-circle-exclamation"></i></span><span><b>Yedek durumu alınamadı</b><small>'+escapeHtml(error.message)+' · Ayrıntılar için GitHub Actions sayfasını aç.</small></span>';
-      if(historyHost)historyHost.innerHTML='<div class="auto-backup-history-heading">SON YEDEKLER</div><div class="auto-backup-history-empty">Yedek geçmişi yüklenemedi. GitHub Actions sayfasından kontrol edebilirsin.</div>';
-    }finally{if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-rotate"></i> Durumu yenile';}}
+      const message=error&&error.message?error.message:'Bilinmeyen bağlantı hatası';
+      host.innerHTML='<span class="auto-backup-status-icon pending"><i class="fa-solid fa-circle-exclamation"></i></span><span><b>Yedek durumu alınamadı</b><small>'+escapeHtml(message)+' · Yenile düğmesiyle tekrar deneyebilirsin.</small></span>';
+      if(historyHost)historyHost.innerHTML='<div class="auto-backup-history-heading">SON YEDEKLER</div><div class="auto-backup-history-empty">GitHub yedek geçmişine ulaşılamadı. GitHub Actions sayfasından da kontrol edebilirsin.</div>';
+    }finally{
+      if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-rotate"></i> Durumu yenile';}
+    }
   }
   async function loadChangeHistory() {
     const host=$('#history-list'),status=$('#history-status'),total=$('#history-total'),button=$('#history-refresh');
