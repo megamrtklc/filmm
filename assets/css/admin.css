@@ -593,3 +593,7 @@
 .hero-save-button{width:100%;justify-content:center;min-height:46px;margin:2px 0 14px;font-size:12px}
 .hero-save-button:disabled{opacity:.65;cursor:wait}
 .hero-manager-status small{max-width:230px;overflow-wrap:anywhere}
+
+
+/* Yardım metni: film izleme bağlantısı */
+.field-help{display:block;margin-top:7px;color:#9ca3af;font-size:11px;font-weight:400;line-height:1.55}
