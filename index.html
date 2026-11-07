@@ -277,8 +277,6 @@
                         <a id="actor-wikipedia-link" href="#" target="_blank" rel="noopener">TMDB üzerinde görüntüle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
-                <span id="actor-banner-name" hidden></span>
-                <div id="actor-featured-photos" hidden></div>
             </section>
         </main>
         <aside class="actor-facts-panel actor-profile-facts-horizontal">
@@ -309,19 +307,9 @@
             <div id="actor-filmography-grid" class="actor-filmography-grid"></div>
             <div class="actor-filmography-footer"><span id="actor-filmography-status"></span><button type="button" id="actor-filmography-more" onclick="showMoreActorFilmography()" hidden>Daha fazla göster <i class="fa-solid fa-chevron-down"></i></button></div>
         </section>
-        <section class="actor-gallery-section">
-            <div class="actor-section-heading"><div><span>FOTOĞRAF ARŞİVİ</span><h2>Oyuncudan kareler</h2></div><i class="fa-regular fa-images"></i></div>
-            <div class="actor-gallery-toolbar"><span id="actor-gallery-count">Fotoğraflar yükleniyor…</span><button type="button" id="actor-gallery-more" class="actor-gallery-more" onclick="changeActorGalleryPage()" hidden>Daha fazla fotoğraf göster <i class="fa-solid fa-arrow-down"></i></button></div>
-            <div id="actor-gallery-grid" class="actor-gallery-grid"></div>
-        </section>
+
     </div>
-    <div id="actor-photo-modal" class="actor-photo-modal hidden" role="dialog" aria-modal="true" aria-label="Oyuncu fotoğrafı">
-        <button type="button" class="actor-photo-close" onclick="closeActorPhoto()" aria-label="Kapat"><i class="fa-solid fa-xmark"></i></button>
-        <button type="button" class="actor-photo-nav actor-photo-prev" onclick="stepActorPhoto(-1)" aria-label="Önceki fotoğraf"><i class="fa-solid fa-chevron-left"></i></button>
-        <img id="actor-photo-modal-image" src="" alt="Büyük oyuncu fotoğrafı">
-        <button type="button" class="actor-photo-nav actor-photo-next" onclick="stepActorPhoto(1)" aria-label="Sonraki fotoğraf"><i class="fa-solid fa-chevron-right"></i></button>
-        <div id="actor-photo-modal-caption" class="actor-photo-modal-caption"></div>
-    </div>
+
 
     <div id="trailer-popup" class="trailer-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="trailer-popup-title">
         <div class="trailer-popup-backdrop" data-trailer-dismiss></div>
