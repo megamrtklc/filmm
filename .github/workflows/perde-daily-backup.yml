@@ -1,0 +1,54 @@
+name: Perde Günlük Otomatik Yedek
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: perde-daily-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Katalog ve site ayarlarını yedekle
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Depoyu al
+        uses: actions/checkout@v4
+
+      - name: Tam arşiv yedeğini oluştur
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -n \
+            --slurpfile catalog data/catalog.json \
+            --slurpfile collections data/collections.json \
+            --slurpfile homepage data/homepage-config.json \
+            '{
+              app: "Perde",
+              backupType: "archive-data",
+              version: 2,
+              catalog: $catalog[0],
+              collections: $collections[0],
+              homepageConfig: {
+                version: ($homepage[0].version // 2),
+                settings: $homepage[0].settings,
+                heroSlides: $homepage[0].heroSlides
+              },
+              exportedAt: (now | todateiso8601),
+              automaticBackup: true
+            }' > "perde-otomatik-yedek-$(date -u +%Y-%m-%dT%H-%M-%SZ).json"
+
+      - name: Yedek dosyasını sakla
+        uses: actions/upload-artifact@v4
+        with:
+          name: perde-otomatik-yedek-${{ github.run_number }}
+          path: perde-otomatik-yedek-*.json
+          if-no-files-found: error
+          retention-days: 90
