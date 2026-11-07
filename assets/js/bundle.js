@@ -1012,6 +1012,50 @@ headerSearchCategory?.addEventListener('change',()=>{
  else {headerSearchResults.hidden=true;headerSearchResults.innerHTML='';}
  headerSearchInput.focus();
 });
+const searchCategoryPicker=document.getElementById('search-category-picker');
+const searchCategoryTrigger=document.getElementById('search-category-trigger');
+const searchCategoryMenu=document.getElementById('search-category-menu');
+const searchCategoryCurrent=document.getElementById('search-category-current');
+function closeSearchCategoryMenu(){
+ if(!searchCategoryMenu||!searchCategoryTrigger)return;
+ searchCategoryMenu.hidden=true;
+ searchCategoryTrigger.setAttribute('aria-expanded','false');
+}
+function syncSearchCategoryMenu(){
+ if(!searchCategoryMenu||!headerSearchCategory)return;
+ const selected=headerSearchCategory.value;
+ const selectedOption=searchCategoryMenu.querySelector('[data-value="'+selected+'"]');
+ if(searchCategoryCurrent)searchCategoryCurrent.textContent=selectedOption?.querySelector('span')?.textContent||'Film / Dizi';
+ searchCategoryMenu.querySelectorAll('.search-category-option').forEach(option=>{
+  const active=option.dataset.value===selected;
+  option.classList.toggle('is-selected',active);
+  option.setAttribute('aria-selected',String(active));
+ });
+}
+searchCategoryTrigger?.addEventListener('click',()=>{
+ const opening=searchCategoryMenu?.hidden;
+ if(!searchCategoryMenu)return;
+ searchCategoryMenu.hidden=!opening;
+ searchCategoryTrigger.setAttribute('aria-expanded',String(Boolean(opening)));
+});
+searchCategoryMenu?.querySelectorAll('.search-category-option').forEach(option=>option.addEventListener('click',()=>{
+ if(!headerSearchCategory)return;
+ headerSearchCategory.value=option.dataset.value||'media';
+ headerSearchCategory.dispatchEvent(new Event('change',{bubbles:true}));
+ syncSearchCategoryMenu();
+ closeSearchCategoryMenu();
+}));
+headerSearchCategory?.addEventListener('change',syncSearchCategoryMenu);
+document.addEventListener('click',event=>{
+ if(searchCategoryPicker&&!searchCategoryPicker.contains(event.target))closeSearchCategoryMenu();
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&searchCategoryMenu&&!searchCategoryMenu.hidden){
+  closeSearchCategoryMenu();
+  searchCategoryTrigger?.focus();
+ }
+});
+syncSearchCategoryMenu();
 let headerSearchRequest=0;
 function renderHeaderSearchResults(value) {
  if (!headerSearchResults) return;
