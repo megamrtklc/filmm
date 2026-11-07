@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-07T07:21:40.357Z",
+  "updatedAt": "2026-11-07T07:56:20.423Z",
   "heroSlides": [
     {
       "id": "archive-66",
@@ -70,6 +70,12 @@
     },
     {
       "id": "archive-82",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "perde-mw63ykt1",
       "active": true,
       "headline": "",
       "description": ""
