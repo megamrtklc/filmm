@@ -6778,3 +6778,17 @@ body.detail-synopsis-open{overflow:hidden}
  .actor-profile-facts-horizontal{padding:12px!important}
  .actor-profile-facts-horizontal .actor-facts>div{min-height:72px!important;padding:10px!important}
 }
+
+/* Perde oyuncu filmografisi: filtreleme, sıralama ve 12'li kademeli yükleme */
+
+.actor-filmography-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
+.actor-filmography-filters{display:flex;flex-wrap:wrap;gap:7px}
+.actor-filmography-filters button,.actor-filmography-sort-label select{border:1px solid #ffffff1c;background:#151922;color:#cbd0da;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700}
+.actor-filmography-filters button.is-active{background:#d1aa5c;color:#17130a;border-color:#d1aa5c}
+.actor-filmography-sort-label{display:flex;align-items:center;gap:8px;color:#9299a7;font-size:10px}
+.actor-filmography-sort-label select{cursor:pointer}
+.actor-filmography-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;color:#9299a7;font-size:11px}
+.actor-filmography-footer button{border:1px solid #ffffff20;background:#171b24;color:#e8c77f;border-radius:9px;padding:10px 16px;font-size:11px;font-weight:800;cursor:pointer;transition:background .2s,border-color .2s}
+.actor-filmography-footer button:hover{background:#242a36;border-color:#d1aa5c}
+.actor-filmography-footer button[hidden],.actor-filmography-controls[hidden]{display:none!important}
+@media(max-width:600px){.actor-filmography-controls{align-items:flex-start;flex-direction:column}.actor-filmography-filters{width:100%}.actor-filmography-filters button{flex:1;padding:8px 9px}.actor-filmography-sort-label{width:100%;justify-content:space-between}.actor-filmography-sort-label select{flex:1;max-width:72%}.actor-filmography-footer{align-items:flex-start;flex-direction:column}.actor-filmography-footer button{width:100%}}
