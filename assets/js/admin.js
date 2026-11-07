@@ -150,6 +150,83 @@
     $('#catalog-poster-grid').hidden = catalogView !== 'grid';
     $('#catalog-table-view').hidden = catalogView !== 'table';
   }
+  let heroSlides = [];
+  let heroActiveIndex = 0;
+  let heroPreviewMode = 'desktop';
+  function heroImage(item) { return item.backdrop || item.image || item.poster || ''; }
+  function heroSeed() {
+    return [...catalog].filter(item => heroImage(item)).sort((a,b) => (Number.parseFloat(b.rating)||0)-(Number.parseFloat(a.rating)||0)).slice(0,5).map(item => ({id:String(item.id),active:true}));
+  }
+  function heroCurrentItem() {
+    const slide = heroSlides[heroActiveIndex];
+    return slide ? catalog.find(item => String(item.id) === slide.id) : null;
+  }
+  function renderHeroPreview() {
+    const item = heroCurrentItem();
+    const preview = $('#hero-live-preview');
+    preview.classList.toggle('is-mobile',heroPreviewMode==='mobile');
+    if (!item) {
+      $('#hero-live-title').textContent='Henüz manşet seçilmedi';
+      $('#hero-live-meta').textContent='';
+      $('#hero-live-desc').textContent='Sağdaki katalog listesinden bir yapım ekleyerek ön izlemeyi oluştur.';
+      $('#hero-live-backdrop').style.backgroundImage='';
+      $('#hero-live-index').textContent='00 / 00';
+      return;
+    }
+    const image=heroImage(item);
+    $('#hero-live-backdrop').style.backgroundImage=image?'linear-gradient(90deg,rgba(7,9,13,.94) 0%,rgba(7,9,13,.62) 52%,rgba(7,9,13,.12) 100%),linear-gradient(0deg,rgba(7,9,13,.55),transparent 65%),url("'+image.replace(/["\\]/g,'')+'")':'linear-gradient(120deg,#202631,#0b0d11)';
+    $('#hero-live-title').textContent=item.title||'Başlıksız yapım';
+    $('#hero-live-meta').innerHTML='<span>'+(item.type==='tv'?'DİZİ':'FİLM')+'</span><i>•</i><span>'+escapeHtml(item.year||'—')+'</span>'+(item.duration?'<i>•</i><span>'+escapeHtml(item.duration)+'</span>':'')+(item.rating?'<i>•</i><b>★ '+escapeHtml(item.rating)+'</b>':'');
+    $('#hero-live-desc').textContent=item.desc||'Bu yapım için katalogda tanıtım metni bulunmuyor.';
+    $('#hero-live-index').textContent=String(heroActiveIndex+1).padStart(2,'0')+' / '+String(heroSlides.length).padStart(2,'0');
+  }
+  function renderHeroSlides() {
+    const list=$('#hero-slide-list');
+    $('#hero-slide-count').textContent=heroSlides.length+' yapım';
+    if(!heroSlides.length){list.innerHTML='<div class="hero-slide-empty"><i class="fa-regular fa-images"></i><b>Slider henüz boş</b><span>Sağdaki alandan katalog yapımı ekleyebilirsin.</span></div>';renderHeroPreview();return;}
+    list.innerHTML=heroSlides.map((slide,index)=>{
+      const item=catalog.find(entry=>String(entry.id)===slide.id);
+      if(!item)return '';
+      const image=poster(item);
+      return '<article class="hero-slide-row'+(index===heroActiveIndex?' selected':'')+(slide.active?'':' muted')+'" data-hero-index="'+index+'"><span class="hero-slide-number">'+String(index+1).padStart(2,'0')+'</span>'+(image?'<img src="'+image+'" alt="" loading="lazy">':'<span class="hero-slide-placeholder"><i class="fa-solid fa-film"></i></span>')+'<button class="hero-slide-select" type="button" data-hero-select="'+index+'"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</small></button><span class="hero-slide-state">'+(slide.active?'Yayında':'Gizli')+'</span><div class="hero-slide-actions"><button type="button" data-hero-up="'+index+'" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-hero-down="'+index+'" aria-label="Aşağı taşı" '+(index===heroSlides.length-1?'disabled':'')+'><i class="fa-solid fa-chevron-down"></i></button><button type="button" data-hero-toggle="'+index+'" aria-label="Yayın durumunu değiştir"><i class="fa-solid '+(slide.active?'fa-eye':'fa-eye-slash')+'"></i></button><button type="button" data-hero-remove="'+index+'" aria-label="Slider listesinden çıkar"><i class="fa-solid fa-xmark"></i></button></div></article>';
+    }).join('');
+    renderHeroPreview();
+  }
+  function initHeroManager() {
+    const select=$('#hero-content-select');
+    [...catalog].sort((a,b)=>String(a.title||'').localeCompare(String(b.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
+    heroSlides=heroSeed();
+    heroActiveIndex=0;
+    renderHeroSlides();
+  }
+  function addHeroSlide() {
+    const id=$('#hero-content-select').value;
+    if(!id)return toast('Önce katalogdan bir yapım seç.');
+    if(heroSlides.some(slide=>slide.id===id))return toast('Bu yapım zaten slider listesinde.');
+    heroSlides.push({id,active:true});
+    heroActiveIndex=heroSlides.length-1;
+    renderHeroSlides();
+    toast('Yapım yerel ön izleme listesine eklendi.');
+  }
+  function moveHeroSlide(index,direction) {
+    const target=index+direction;
+    if(target<0||target>=heroSlides.length)return;
+    [heroSlides[index],heroSlides[target]]=[heroSlides[target],heroSlides[index]];
+    heroActiveIndex=target;
+    renderHeroSlides();
+  }
+  function handleHeroListClick(event) {
+    const button=event.target.closest('button');
+    if(!button)return;
+    const index=Number(button.dataset.heroSelect??button.dataset.heroUp??button.dataset.heroDown??button.dataset.heroToggle??button.dataset.heroRemove);
+    if(!Number.isInteger(index))return;
+    if(button.hasAttribute('data-hero-select'))heroActiveIndex=index;
+    else if(button.hasAttribute('data-hero-up'))return moveHeroSlide(index,-1);
+    else if(button.hasAttribute('data-hero-down'))return moveHeroSlide(index,1);
+    else if(button.hasAttribute('data-hero-toggle'))heroSlides[index].active=!heroSlides[index].active;
+    else if(button.hasAttribute('data-hero-remove')){heroSlides.splice(index,1);heroActiveIndex=Math.max(0,Math.min(heroActiveIndex,heroSlides.length-1));}
+    renderHeroSlides();
+  }
   function downloadJson(filename, data) {
     const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});
     const url = URL.createObjectURL(blob);
@@ -168,6 +245,7 @@
       renderOverview();
       initCatalogFilters();
       renderCatalog();
+      initHeroManager();
     } catch (error) {
       $('#catalog-status').textContent = 'Katalog yüklenemedi';
       $('#recent-list').innerHTML = '<div class="loading-line">Katalog okunamadı. Perde ana sayfasının yayınlandığı dizinde data/catalog.json dosyasını kontrol et.</div>';
@@ -195,6 +273,13 @@
     const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
     if (item) toast(item.title+' · '+(item.type==='tv'?'Dizi':'Film')+' · '+(item.year||'Yıl bilgisi yok')+' — salt okunur ön izleme');
   });
+  $('#hero-add-button').addEventListener('click',addHeroSlide);
+  $('#hero-slide-list').addEventListener('click',handleHeroListClick);
+  $('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
+    heroPreviewMode=button.dataset.heroPreview;
+    $('[data-hero-preview]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active));});
+    renderHeroPreview();
+  }));
   $('#add-content-button').addEventListener('click',() => toast('Yeni kayıt formu, güvenli kayıt altyapısı kurulduğunda etkinleştirilecek.'));
   $$('[data-demo]').forEach(button => button.addEventListener('click',() => toast(button.dataset.demo+' alanı veritabanı aşamasında etkinleştirilecek.')));
   $('#export-catalog').addEventListener('click',() => {
