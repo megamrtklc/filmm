@@ -1581,6 +1581,7 @@ let actorFilmographyVisible=12;
 function setActorFilmographyFilter(filter){
  actorFilmographyFilter=['all','movie','tv'].includes(filter)?filter:'all';
  actorFilmographyVisible=12;
+ document.querySelectorAll('[data-actor-film-filter]').forEach(button=>button.classList.toggle('is-active',button.dataset.actorFilmFilter===actorFilmographyFilter));
  renderActorFilmographyGrid();
 }
 function setActorFilmographySort(sort){
@@ -1658,6 +1659,9 @@ function openActorPage(name,update=true){
  document.getElementById('actor-profile-image').src=avatar;document.getElementById('actor-featured-photos').innerHTML='<div class="actor-banner-placeholder">TMDB oyuncu görselleri yükleniyor…</div><div class="actor-banner-shade"></div><div class="actor-banner-copy"><span>OYUNCU PROFİLİ</span><h1 id="actor-banner-name">'+escapeCastHtml(actorName)+'</h1></div>';
  actorGalleryPhotos=[];actorGalleryVisibleCount=5;activeActorPhotoName=actorName;renderActorGallery();
  document.getElementById('actor-filmography-title').textContent=actorName+' — filmografi yükleniyor';
+ document.getElementById('actor-filmography-controls').hidden=true;
+ document.getElementById('actor-filmography-more').hidden=true;
+ document.getElementById('actor-filmography-status').textContent='';
  document.getElementById('actor-filmography-grid').innerHTML='<p>Perde kataloğundaki yapımlar kontrol ediliyor…</p>';
  closeActorPhoto();window.scrollTo({top:0,behavior:'smooth'});
  fetchTmdbActorProfile(actorName,(personId,headers)=>{loadActorGallery(personId,actorName,headers,profileRequestId).catch(error=>console.warn('Perde oyuncu fotoğraf galerisi yüklenemedi:',error));}).then(async person=>{
