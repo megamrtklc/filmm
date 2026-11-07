@@ -214,7 +214,7 @@
     const button=$('#editor-subtitle-search'),host=$('#editor-subtitle-search-results');button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Aranıyor…';host.innerHTML='';subtitleSearchStatus('OpenSubtitles kataloğu aranıyor…');
     try{
       const params=new URLSearchParams({languages:'tr,en',type:editorType==='tv'?'episode':'movie',order_by:'download_count'});
-      if(title)params.set('query',title);if(imdb)params.set('imdb_id',imdb);if(tmdb)params.set('tmdb_id',tmdb);if(editorValue('editor-year'))params.set('year',editorValue('editor-year'));
+      if(title)params.set('query',title);if(editorType==='tv'){if(imdb)params.set('parent_imdb_id',imdb);if(tmdb)params.set('parent_tmdb_id',tmdb);}else{if(imdb)params.set('imdb_id',imdb);if(tmdb)params.set('tmdb_id',tmdb);}if(editorValue('editor-year'))params.set('year',editorValue('editor-year'));
       const season=Number($('#editor-subtitle-season').value)||0,episode=Number($('#editor-subtitle-episode').value)||0;
       if(editorType==='tv'&&season)params.set('season_number',String(season));if(editorType==='tv'&&episode)params.set('episode_number',String(episode));
       const response=await fetch(subtitleWorkerUrl+'/subtitles?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(20000)}),body=await response.json().catch(()=>({}));
@@ -235,6 +235,7 @@
       const raw=await response.text();if(!raw.trim())throw new Error('İndirilen altyazı boş.');
       const vtt=/^WEBVTT/m.test(raw.trim())?raw:convertSrtToVtt(raw),a=item.attributes||{},language=a.language||'other';
       const season=Number(a.season_number)||Number($('#editor-subtitle-season').value)||null,episode=Number(a.episode_number)||Number($('#editor-subtitle-episode').value)||null;
+      if(editorType==='tv'&&(!season||!episode))throw new Error('Dizi altyazısını doğru bölüme bağlamak için sezon ve bölüm numarasını gir.');
       const key=editorEditingId||('tmdb-'+(editorValue('editor-tmdb')||Date.now())),safe=String(item.file.file_name||'opensubtitles').replace(/.[^.]+$/,'').normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'subtitle';
       const path='assets/subtitles/'+key+'/'+language+(season&&episode?'-s'+season+'e'+episode:'')+'-'+safe+'-'+Date.now()+'.vtt',url=await githubUploadSubtitle(path,vtt),isDefault=$('#editor-subtitle-default').checked;
       if(isDefault)editorSubtitles=editorSubtitles.map(entry=>({...entry,default:(Number(entry.season)||0)!==(season||0)||(Number(entry.episode)||0)!==(episode||0)?entry.default:false}));
