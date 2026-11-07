@@ -1292,25 +1292,25 @@ function renderDetailPersonalInfo(item){
  const panel=document.getElementById('detail-personal-info');
  if(!panel)return;
  const note=String(item.personalNote||'').trim();
- const platform=String(item.platform||'').trim();
+ const platforms=(Array.isArray(item.platform)?item.platform:String(item.platform||'').split(/[,;|]/)).map(value=>String(value||'').trim()).filter(Boolean);
  const watchUrl=String(item.watchUrl||'').trim();
  const validUrl=(()=>{
   if(!watchUrl)return '';
   try{const parsed=new URL(watchUrl);return ['http:','https:'].includes(parsed.protocol)?parsed.href:'';}catch(_){return '';}
  })();
- const platformKey=platform.toLocaleLowerCase('tr-TR').replace(/[+]/g,' plus ').replace(/[^a-z0-9]+/g,' ').trim();
  const platformBrands={
-  'netflix':['netflix','#e50914'],'prime video':['primevideo','#00a8e1'],'amazon prime video':['primevideo','#00a8e1'],
-  'disney plus':['disneyplus','#ffffff'],'disney':['disneyplus','#ffffff'],'max':['max','#ffffff'],'hbo':['hbo','#ffffff'],
-  'apple tv':['appletv','#ffffff'],'apple tv plus':['appletv','#ffffff'],'mubi':['mubi','#ffffff'],
-  'blutv':['blutv','#36a8e0'],'blu tv':['blutv','#36a8e0'],'youtube':['youtube','#ff0033'],
-  'youtube premium':['youtube','#ff0033'],'hulu':['hulu','#1ce783']
+  'netflix':['netflix','#e50914'],'prime video':['primevideo','#00a8e1'],'disney+':['disneyplus','#ffffff'],
+  'max':['max','#ffffff'],'apple tv+':['appletv','#ffffff'],'mubi':['mubi','#ffffff'],
+  'blutv':['blutv','#36a8e0'],'tod':['tod','#ffffff'],'tabii':['tabii','#ffffff'],'gain':['gain','#ffffff'],
+  'blu tv':['blutv','#36a8e0'],'apple tv':['appletv','#ffffff'],'disney plus':['disneyplus','#ffffff']
  };
- const brand=platformBrands[platformKey]||null;
- const hasInfo=!!(note||platform||validUrl);
+ const platformMarkup=platforms.length?'<div class="detail-personal-platform"><span class="detail-personal-label"><i class="fa-solid fa-tv" aria-hidden="true"></i> YAYIN PLATFORMLARI</span><div class="detail-platform-brands">'+platforms.map(platform=>{
+  const brand=platformBrands[platform.toLocaleLowerCase('tr-TR')]||null;
+  return '<span class="detail-platform-brand">'+(brand?'<img src="https://cdn.simpleicons.org/'+brand[0]+'/'+brand[1].replace('#','')+'" alt="'+escapeCountryHtml(platform)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')+'<strong'+(brand?' hidden':'')+'>'+escapeCountryHtml(platform)+'</strong></span>';
+ }).join('')+'</div></div>':'';
+ const hasInfo=!!(note||platforms.length||validUrl);
  panel.hidden=!hasInfo;
  if(!hasInfo){panel.innerHTML='';return;}
- const platformMarkup=platform?'<div class="detail-personal-platform"><span class="detail-personal-label"><i class="fa-solid fa-tv" aria-hidden="true"></i> YAYIN PLATFORMU</span><div class="detail-platform-brand">'+(brand?'<img src="https://cdn.simpleicons.org/'+brand[0]+'/'+brand[1].replace('#','')+'" alt="'+escapeCountryHtml(platform)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')+'<strong'+(brand?' hidden':'')+'>'+escapeCountryHtml(platform)+'</strong></div></div>':'';
  const watchMarkup=validUrl?'<a class="detail-personal-watch" href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısını aç <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>':'';
  const noteMarkup=note?'<div class="detail-personal-note"><span class="detail-personal-label"><i class="fa-regular fa-note-sticky" aria-hidden="true"></i> KİŞİSEL NOTUN</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
  panel.innerHTML='<div class="detail-personal-heading"><span>PERDE’YE ÖZEL</span><h2>Senin notların</h2></div><div class="detail-personal-content">'+platformMarkup+watchMarkup+noteMarkup+'</div>';

@@ -44,6 +44,16 @@
     watchUrl:'editor-watch-url',platform:'editor-platform',personalNote:'editor-personal-note'
   };
   function editorValue(id) { return document.getElementById(id).value.trim(); }
+  function getSelectedPlatforms() { return Array.from(document.querySelectorAll('#editor-platform-picker input[name="editor-platform"]:checked')).map(input=>input.value); }
+  function setSelectedPlatforms(value) {
+    const selected=Array.isArray(value)?value:String(value||'').split(/[,;|]/).map(item=>item.trim()).filter(Boolean);
+    Array.from(document.querySelectorAll('#editor-platform-picker input[name="editor-platform"]')).forEach(input=>{input.checked=selected.some(item=>item.toLocaleLowerCase('tr-TR')===input.value.toLocaleLowerCase('tr-TR'));});
+    updatePlatformPickerLabel();
+  }
+  function updatePlatformPickerLabel() {
+    const selected=getSelectedPlatforms();
+    $('#editor-platform-summary').textContent=selected.length?selected.join(' · '):'Platform seç';
+  }
   function setEditorType(type) {
     editorType = type === 'tv' ? 'tv' : 'movie';
     $$('[data-editor-type]').forEach(button => button.classList.toggle('active',button.dataset.editorType===editorType));
@@ -67,10 +77,11 @@
   function editorPayload() {
     const value = {};
     Object.entries(editorFields).forEach(([key,id]) => {
-      const raw = editorValue(id);
+      const raw = key === 'platform' ? getSelectedPlatforms().join(', ') : editorValue(id);
       // Perde'ye özel alanları boş bırakıldıklarında da açıkça kaydet:
       // düzenleme sırasında eski notun/bağlantının yanlışlıkla geri gelmesini önler.
-      if (['watchUrl','platform','personalNote'].includes(key)) value[key] = raw;
+      if (key === 'platform') value[key] = getSelectedPlatforms();
+      else if (['watchUrl','personalNote'].includes(key)) value[key] = raw;
       else if (raw) value[key] = ['year','tmdbId','seasons','episodes'].includes(key) ? Number(raw) : raw;
     });
     value.type = editorType;
@@ -101,7 +112,7 @@
     if (item) {
       editorEditingId = String(item.id);
       setEditorType(item.type);
-      Object.entries(editorFields).forEach(([key,id]) => { document.getElementById(id).value = item[key] ?? ''; });
+      Object.entries(editorFields).forEach(([key,id]) => { if(key==='platform'){setSelectedPlatforms(item.platform);return;} document.getElementById(id).value = item[key] ?? ''; });
       $('#editor-cast').value = Array.isArray(item.cast) ? item.cast.join(', ') : '';
       $('#editor-record-id').value = editorEditingId;
       $('#editor-page-title').textContent = 'Yapımı Düzenle';
@@ -1089,6 +1100,7 @@
   if(getTmdbToken())setTmdbTokenStatus('TMDB anahtarı bu tarayıcıda kayıtlı.',true);
   $('#add-content-button').addEventListener('click',() => openEditor());
   $('#content-editor-form').addEventListener('submit',saveEditorDraft);
+  $('#editor-platform-picker').addEventListener('change',updatePlatformPickerLabel);
   $('#editor-reset').addEventListener('click',resetEditor);
   $$('[data-editor-type]').forEach(button=>button.addEventListener('click',()=>setEditorType(button.dataset.editorType)));
   Object.values(editorFields).concat(['editor-cast']).forEach(id=>{const node=document.getElementById(id);if(node)node.addEventListener('input',renderEditorPreview);});
