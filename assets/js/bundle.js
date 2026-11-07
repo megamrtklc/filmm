@@ -1552,6 +1552,11 @@ function openActorPage(name,update=true){
   if(!person)throw new Error('TMDB oyuncu eşleşmesi bulunamadı.');
   document.getElementById('actor-banner-name').textContent=person.name||actorName;document.getElementById('actor-biography-title').textContent=person.name||actorName;
   document.getElementById('actor-biography-text').textContent=person.biography||'TMDB bu oyuncu için henüz biyografi bilgisi sağlamıyor.';
+  const biographyNode=document.getElementById('actor-biography-text'),bioToggle=document.getElementById('actor-bio-toggle');
+  biographyNode.classList.remove('is-expanded');
+  bioToggle.hidden=biographyNode.textContent.length<320;
+  bioToggle.innerHTML='Devamını oku <i class="fa-solid fa-chevron-down"></i>';
+  bioToggle.onclick=()=>{const expanded=biographyNode.classList.toggle('is-expanded');bioToggle.innerHTML=expanded?'Daha az göster <i class="fa-solid fa-chevron-up"></i>':'Devamını oku <i class="fa-solid fa-chevron-down"></i>';};
   document.getElementById('actor-birth-date').textContent=person.birthday?new Date(person.birthday+'T00:00:00').toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'Bilgi bulunamadı';
   document.getElementById('actor-birth-place').textContent=person.placeOfBirth||'Bilgi bulunamadı';
   const birthplaceCountry=String(person.placeOfBirth||'').split(',').map(part=>part.trim()).filter(Boolean).pop()||'';
