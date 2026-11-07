@@ -919,6 +919,7 @@ function renderFilteredCatalog() {
                 tur:['fa-tags','TÜR ARŞİVİ','Seçtiğin türe ait yapımları keşfet.']
             };
             const config=configs[route]||['fa-compass',String(title||'KEŞFET').toLocaleUpperCase('tr-TR'),'Perde arşivini keşfet.'];
+            card.dataset.route=route;
             const icon=document.getElementById('page-context-icon');
             const heading=document.getElementById('page-context-title');
             const description=document.getElementById('page-context-description');
@@ -941,7 +942,7 @@ function renderFilteredCatalog() {
             const related=document.getElementById('detail-related');
             if(related)related.classList.add('hidden');
             const homeFeature=document.querySelector('.home-feature-row');
-            if(homeFeature)homeFeature.classList.add('hidden');
+            if(homeFeature){homeFeature.hidden=true;homeFeature.classList.add('hidden');}
             const context=document.getElementById('page-context-card');
             if(context)context.hidden=false;
             updatePageContext(title);
@@ -1099,7 +1100,7 @@ function showDashboard(update=true){
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
- const homeFeature=document.querySelector('.home-feature-row');if(homeFeature)homeFeature.classList.remove('hidden');
+ const homeFeature=document.querySelector('.home-feature-row');if(homeFeature){homeFeature.hidden=false;homeFeature.classList.remove('hidden');}
  const context=document.getElementById('page-context-card');if(context)context.hidden=true;
  document.getElementById('hero-section').classList.remove('hidden');
  document.getElementById('home-collections').classList.remove('hidden');
