@@ -200,6 +200,50 @@
     }catch(error){status.textContent='Yükleme başarısız: '+error.message;toast(error.message);}
     finally{button.disabled=false;button.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Altyazıyı yükle ve ekle';}
   }
+  const subtitleWorkerUrl='https://perde-subtitles.oyunmrtklc.workers.dev';
+  function subtitleSearchStatus(message){const node=$('#editor-subtitle-search-status');if(node)node.textContent=message;}
+  function subtitleResultRows(items){
+    const host=$('#editor-subtitle-search-results');if(!host)return;
+    if(!items.length){host.innerHTML='<div class="subtitle-online-empty">Bu arama için altyazı bulunamadı.</div>';return;}
+    host._subtitleItems=items.slice(0,20);
+    host.innerHTML=host._subtitleItems.map((item,index)=>{const a=item.attributes||{},f=item.file||{},lang=a.language||'other',label=subtitleLanguages[lang]||lang.toUpperCase(),release=a.release||a.feature_details?.movie_name||a.movie_name||'Sürüm bilgisi yok',se=a.season_number&&a.episode_number?' · S'+a.season_number+' B'+a.episode_number:'';return '<article class="subtitle-online-result"><div class="subtitle-online-result-copy"><b>'+escapeHtml(label)+' · '+escapeHtml(release)+'</b><small>'+escapeHtml(f.file_name||'Altyazı dosyası')+se+' · '+(Number(a.download_count)||0).toLocaleString('tr-TR')+' indirme</small></div><button type="button" class="outline-button" data-online-subtitle="'+index+'"><i class="fa-solid fa-download"></i> İndir ve ekle</button></article>';}).join('');
+  }
+  async function searchOnlineSubtitles(){
+    const title=editorValue('editor-title'),imdb=editorValue('editor-imdb').replace(/^tt/i,''),tmdb=editorValue('editor-tmdb');
+    if(!title&&!imdb&&!tmdb){subtitleSearchStatus('Önce yapım adını veya IMDb/TMDB kimliğini gir.');return;}
+    const button=$('#editor-subtitle-search'),host=$('#editor-subtitle-search-results');button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Aranıyor…';host.innerHTML='';subtitleSearchStatus('OpenSubtitles kataloğu aranıyor…');
+    try{
+      const params=new URLSearchParams({languages:'tr,en',type:editorType==='tv'?'episode':'movie',order_by:'download_count'});
+      if(title)params.set('query',title);if(imdb)params.set('imdb_id',imdb);if(tmdb)params.set('tmdb_id',tmdb);if(editorValue('editor-year'))params.set('year',editorValue('editor-year'));
+      const season=Number($('#editor-subtitle-season').value)||0,episode=Number($('#editor-subtitle-episode').value)||0;
+      if(editorType==='tv'&&season)params.set('season_number',String(season));if(editorType==='tv'&&episode)params.set('episode_number',String(episode));
+      const response=await fetch(subtitleWorkerUrl+'/subtitles?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(20000)}),body=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(body.error||('Altyazı servisi HTTP '+response.status));
+      const items=[];(Array.isArray(body.data)?body.data:[]).forEach(entry=>(entry.attributes?.files||[]).forEach(file=>items.push({id:entry.id,attributes:entry.attributes||{},file})));
+      items.sort((a,b)=>(a.attributes.language==='tr'?0:1)-(b.attributes.language==='tr'?0:1)||(Number(b.attributes.download_count)||0)-(Number(a.attributes.download_count)||0));
+      subtitleResultRows(items);subtitleSearchStatus(items.length+' altyazı dosyası bulundu. Türkçe sonuçlar önceliklendirildi.');
+    }catch(error){subtitleSearchStatus('Arama başarısız: '+error.message);host.innerHTML='<div class="subtitle-online-empty">Servis yanıt vermedi. Biraz sonra tekrar deneyebilirsin.</div>';}
+    finally{button.disabled=false;button.innerHTML='<i class="fa-solid fa-cloud-arrow-down"></i> Altyazı ara';}
+  }
+  async function downloadOnlineSubtitle(index){
+    const host=$('#editor-subtitle-search-results'),item=(host?host._subtitleItems||[]:[])[Number(index)];if(!item)return;
+    if(!getGithubToken())return toast('Altyazıyı eklemek için GitHub bağlantısı gerekli.');
+    const button=host.querySelector('[data-online-subtitle="'+index+'"]');if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Ekleniyor…';}
+    try{
+      const response=await fetch(subtitleWorkerUrl+'/download',{method:'POST',headers:{'Content-Type':'application/json',Accept:'text/plain'},body:JSON.stringify({file_id:item.file.file_id}),signal:AbortSignal.timeout(30000)});
+      if(!response.ok){const body=await response.json().catch(()=>({}));throw new Error(body.error||('İndirme HTTP '+response.status));}
+      const raw=await response.text();if(!raw.trim())throw new Error('İndirilen altyazı boş.');
+      const vtt=/^WEBVTT/m.test(raw.trim())?raw:convertSrtToVtt(raw),a=item.attributes||{},language=a.language||'other';
+      const season=Number(a.season_number)||Number($('#editor-subtitle-season').value)||null,episode=Number(a.episode_number)||Number($('#editor-subtitle-episode').value)||null;
+      const key=editorEditingId||('tmdb-'+(editorValue('editor-tmdb')||Date.now())),safe=String(item.file.file_name||'opensubtitles').replace(/.[^.]+$/,'').normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'subtitle';
+      const path='assets/subtitles/'+key+'/'+language+(season&&episode?'-s'+season+'e'+episode:'')+'-'+safe+'-'+Date.now()+'.vtt',url=await githubUploadSubtitle(path,vtt),isDefault=$('#editor-subtitle-default').checked;
+      if(isDefault)editorSubtitles=editorSubtitles.map(entry=>({...entry,default:(Number(entry.season)||0)!==(season||0)||(Number(entry.episode)||0)!==(episode||0)?entry.default:false}));
+      editorSubtitles.push({language,languageLabel:subtitleLanguages[language]||language,fileName:item.file.file_name||'OpenSubtitles altyazısı',url,default:isDefault,season,episode});
+      renderEditorSubtitles();$('#editor-subtitle-status').textContent='Çevrim içi altyazı GitHub’a yüklendi. Kalıcı olması için yapım kaydını kaydet.';
+      subtitleSearchStatus('Altyazı indirildi ve depoya eklendi. Yapım kaydını kaydetmeyi unutma.');toast('Altyazı indirildi; yapımı kaydet.');
+      if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-check"></i> Eklendi';}
+    }catch(error){subtitleSearchStatus('İşlem başarısız: '+error.message);toast(error.message);if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-download"></i> Tekrar dene';}}
+  }
   async function githubCollectionsRequest(method, body) {
     const token=getGithubToken(); if(!token) throw new Error('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     const response=await fetch('https://api.github.com/repos/'+githubRepo+'/contents/data/collections.json',{
@@ -1454,6 +1498,8 @@
   $('#add-content-button').addEventListener('click',() => openEditor());
   $('#content-editor-form').addEventListener('submit',saveEditorDraft);
   $('#editor-subtitle-add').addEventListener('click',addEditorSubtitle);
+  $('#editor-subtitle-search').addEventListener('click',searchOnlineSubtitles);
+  $('#editor-subtitle-search-results').addEventListener('click',event=>{const button=event.target.closest('[data-online-subtitle]');if(button)downloadOnlineSubtitle(button.dataset.onlineSubtitle);});
   $('#editor-subtitle-list').addEventListener('click',event=>{const button=event.target.closest('[data-remove-subtitle]');if(!button)return;editorSubtitles.splice(Number(button.dataset.removeSubtitle),1);renderEditorSubtitles();$('#editor-subtitle-status').textContent='Altyazı katalog kaydından çıkarıldı. Depodaki dosya güvenlik için silinmedi.';});
   $('#editor-platform-picker').addEventListener('change',updatePlatformPickerLabel);
   $('#editor-reset').addEventListener('click',resetEditor);
