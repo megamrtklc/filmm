@@ -188,6 +188,20 @@
                 <label class="editor-field editor-field-wide">Fragman bağlantısı <small>TMDB'den otomatik gelir; istersen değiştirebilirsin.</small><input id="editor-trailer" type="url" placeholder="https://www.youtube.com/watch?v=…"></label>
               </div>
               <div class="editor-divider"></div>
+              <section class="editor-subtitle-manager">
+                <div class="card-heading"><div><h2><i class="fa-solid fa-closed-captioning"></i> Altyazı yönetimi</h2><p>Altyazıları burada ekle; izleme ekranında otomatik seçilebilir hale gelsin.</p></div><span class="insight-kicker">04 / ALTYAZILAR</span></div>
+                <div class="subtitle-upload-grid">
+                  <label class="editor-field">Altyazı dili<select id="editor-subtitle-language"><option value="tr">Türkçe</option><option value="en">İngilizce</option><option value="de">Almanca</option><option value="fr">Fransızca</option><option value="es">İspanyolca</option><option value="it">İtalyanca</option><option value="ar">Arapça</option><option value="ja">Japonca</option><option value="ko">Korece</option><option value="other">Diğer</option></select></label>
+                  <label class="editor-field">Altyazı dosyası<input id="editor-subtitle-file" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip"></label>
+                  <label class="editor-field">Sezon (isteğe bağlı)<input id="editor-subtitle-season" type="number" min="1" max="300" placeholder="Dizi bölümü için"></label>
+                  <label class="editor-field">Bölüm (isteğe bağlı)<input id="editor-subtitle-episode" type="number" min="1" max="10000" placeholder="Dizi bölümü için"></label>
+                </div>
+                <div class="subtitle-upload-actions"><label class="subtitle-default-choice"><input id="editor-subtitle-default" type="checkbox" checked> Varsayılan altyazı olarak ayarla</label><button class="outline-button" type="button" id="editor-subtitle-add"><i class="fa-solid fa-cloud-arrow-up"></i> Altyazıyı yükle ve ekle</button></div>
+                <div id="editor-subtitle-status" class="editor-subtitle-status" role="status">Henüz altyazı eklenmedi.</div>
+                <div id="editor-subtitle-list" class="editor-subtitle-list"></div>
+                <small class="editor-subtitle-help">SRT dosyaları otomatik WebVTT biçimine dönüştürülür. Dosyalar GitHub deposunda saklanır; dizi altyazısını belirli bir sezon ve bölüme bağlayabilirsin. Yükleme için GitHub bağlantısı gerekir.</small>
+              </section>
+              <div class="editor-divider"></div>
               <div class="card-heading"><div><h2>Otomatik görseller</h2><p>Afiş ve arka plan TMDB'den alınır.</p></div><span class="insight-kicker">03 / GÖRSELLER</span></div>
               <div class="editor-fields-grid">
                 <label class="editor-field editor-field-wide">Afiş görseli URL<input id="editor-image" type="url" readonly></label>
