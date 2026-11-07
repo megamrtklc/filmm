@@ -169,17 +169,25 @@
           ...(found.tv_results || []).map(item=>({...item,media_type:'tv'}))
         ];
       } else {
-        const endpoint = editorType === 'tv' ? '/search/tv' : '/search/movie';
-        const found = await tmdbRequest(endpoint+'?query='+encodeURIComponent(query)+'&language=tr-TR&include_adult=false');
-        results = (found.results || []).map(item=>({...item,media_type:editorType}));
+        // Search both media types so results do not depend on the selected editor tab.
+        const encodedQuery = encodeURIComponent(query);
+        const [movies, series] = await Promise.all([
+          tmdbRequest('/search/movie?query='+encodedQuery+'&language=tr-TR&include_adult=false'),
+          tmdbRequest('/search/tv?query='+encodedQuery+'&language=tr-TR&include_adult=false')
+        ]);
+        results = [
+          ...(movies.results || []).map(item=>({...item,media_type:'movie'})),
+          ...(series.results || []).map(item=>({...item,media_type:'tv'}))
+        ].sort((a,b)=>(b.popularity || 0)-(a.popularity || 0));
       }
       if (sequence !== tmdbRequestSequence) return;
       status.textContent = results.length+' eşleşme bulundu. Doğru yapımı seç.';
       renderTmdbResults(results);
     } catch (error) {
       if (sequence !== tmdbRequestSequence) return;
-      status.textContent = error.message;
-      renderTmdbResults([]);
+      status.textContent = 'TMDB araması tamamlanamadı: '+error.message;
+      tmdbSearchResults = [];
+      $('#editor-tmdb-results').innerHTML = '<div class="tmdb-result-empty">'+escapeHtml(error.message)+'</div>';
     }
   }
   async function selectTmdbResult(index) {
