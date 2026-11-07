@@ -1299,17 +1299,20 @@ function renderDetailPersonalInfo(item){
   try{const parsed=new URL(watchUrl);return ['http:','https:'].includes(parsed.protocol)?parsed.href:'';}catch(_){return '';}
  })();
  const platformBrands={
-  'netflix':['netflix','#e50914'],'prime video':['primevideo','#00a8e1'],'disney+':['disneyplus','#ffffff'],
-  'max':['max','#ffffff'],'apple tv+':['appletv','#ffffff'],'mubi':['mubi','#ffffff'],
-  'blutv':['blutv','#36a8e0'],'tod':['tod','#ffffff'],'tabii':['tabii','#ffffff'],'gain':['gain','#ffffff'],
-  'blu tv':['blutv','#36a8e0'],'apple tv':['appletv','#ffffff'],'disney plus':['disneyplus','#ffffff']
+  'netflix':['NETFLIX','netflix'],'prime video':['prime video','prime'],'primevideo':['prime video','prime'],
+  'disney+':['Disney+','disney'],'disney plus':['Disney+','disney'],
+  'max':['max','max'],'apple tv+':['Apple TV+','apple'],'apple tv':['Apple TV+','apple'],
+  'mubi':['MUBI','mubi'],'blutv':['BluTV','blutv'],'blu tv':['BluTV','blutv'],
+  'tod':['TOD','tod'],'tabii':['tabii','tabii'],'gain':['GAİN','gain']
  };
- const platformMarkup=platforms.length?'<div class="detail-personal-row detail-personal-platform"><span class="detail-personal-label">Yayın platformları</span><div class="detail-platform-brands">'+platforms.map(platform=>{
-  const brand=platformBrands[platform.toLocaleLowerCase('tr-TR')]||null;
-  return '<span class="detail-platform-brand">'+(brand?'<img src="https://cdn.simpleicons.org/'+brand[0]+'/'+brand[1].replace('#','')+'" alt="'+escapeCountryHtml(platform)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')+'<strong'+(brand?' hidden':'')+'>'+escapeCountryHtml(platform)+'</strong></span>';
+ const platformMarkup=platforms.length?'<div class="detail-personal-platform"><span class="detail-personal-label">Yayın platformları</span><div class="detail-platform-brands">'+platforms.map(platform=>{
+  const brand=platformBrands[platform.toLocaleLowerCase('tr-TR')];
+  if(!brand)return '<span class="detail-platform-brand detail-platform-brand-text">'+escapeCountryHtml(platform)+'</span>';
+  const label=brand[0],kind=brand[1];
+  return '<span class="detail-platform-brand detail-platform-brand-'+kind+'" role="img" aria-label="'+escapeCountryHtml(platform)+'"><svg viewBox="0 0 150 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><text x="2" y="25" class="detail-platform-wordmark detail-platform-wordmark-'+kind+'">'+label+'</text></svg></span>';
  }).join('')+'</div></div>':'';
  const watchMarkup=validUrl?'<a class="detail-personal-watch" href="'+escapeCountryHtml(validUrl)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-play" aria-hidden="true"></i> İzleme bağlantısını aç</a>':'';
- const noteMarkup=note?'<div class="detail-personal-row detail-personal-note"><span class="detail-personal-label">Kişisel notun</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
+ const noteMarkup=note?'<div class="detail-personal-note"><span class="detail-personal-label">Kişisel notun</span><p>'+escapeCountryHtml(note).replace(/\n/g,'<br>')+'</p></div>':'';
  const hasInfo=!!(note||platforms.length||validUrl);
  panel.hidden=!hasInfo;
  if(!hasInfo){panel.innerHTML='';return;}
