@@ -602,7 +602,7 @@
     $('#health-result-count').textContent=rows.length.toLocaleString('tr-TR')+' kayıt';
     $('#health-issue-list').innerHTML=rows.length?rows.map(({item,labels})=>'<article class="health-issue-row"><div class="health-issue-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-clapperboard"></i>')+'</div><div class="health-issue-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'Yıl yok')+' · '+escapeHtml(item.id)+'</small><div class="health-tags">'+labels.map(label=>'<span>'+escapeHtml(label)+'</span>').join('')+'</div></div><button type="button" class="row-action" data-health-edit="'+escapeHtml(item.id)+'">Düzenle</button></article>').join(''):'<div class="health-empty"><i class="fa-solid fa-circle-check"></i><b>Bu filtrede sorun görünmüyor</b><span>Seçili kontrol başlığı için katalog kayıtları tamam.</span></div>';
   }
-  function isYoutubeSource(url){return /(^|\\.)((www|m)\\.)?(youtube\\.com|youtu\\.be)(\\/|$)/i.test(String(url||'').replace(/^https?:\\/\\//i,''));}
+  function isYoutubeSource(url){const host=String(url||'').split('://').pop().split('/')[0].toLowerCase();return host==='youtu.be'||host==='youtube.com'||host.endsWith('.youtube.com');}
   function renderWatchLinks(){
     const search=($('#watchlink-search').value||'').trim().toLocaleLowerCase('tr-TR');
     const filter=$('#watchlink-filter').value,type=$('#watchlink-type').value;
@@ -618,7 +618,7 @@
       return (type==='all'||item.type===type)&&(filter==='all'||(filter==='has'&&has)||(filter==='missing'&&!has)||(filter==='youtube'&&yt)||(filter==='direct'&&has&&!yt))&&String(item.title||'').toLocaleLowerCase('tr-TR').includes(search);
     });
     $('#watchlink-list').innerHTML=rows.length?rows.map(item=>{
-      const url=String(item.watchUrl||'');const valid=/^https?:\\/\\//i.test(url);const yt=valid&&isYoutubeSource(url);
+      const url=String(item.watchUrl||'');const valid=url.startsWith('https://')||url.startsWith('http://');const yt=valid&&isYoutubeSource(url);
       const kind=!url?'Bağlantı eklenmemiş':yt?'YouTube bağlantısı':'Doğrudan / harici video';
       return '<article class="watchlink-row"><div class="watchlink-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-film"></i>')+'</div><div class="watchlink-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+'</small><span class="'+(url?'watchlink-present':'watchlink-missing')+'"><i class="fa-solid '+(yt?'fa-brands fa-youtube':url?'fa-link':'fa-circle-minus')+'"></i> '+kind+'</span>'+(valid?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" class="watchlink-url">'+escapeHtml(url)+'</a>':'')+'</div><button type="button" class="row-action" data-watch-edit="'+escapeHtml(item.id)+'">'+(url?'Düzenle':'Bağlantı ekle')+'</button></article>';
     }).join(''):'<div class="health-empty"><i class="fa-solid fa-circle-info"></i><b>Sonuç bulunamadı</b><span>Arama veya filtre ölçütlerini değiştirebilirsin.</span></div>';
