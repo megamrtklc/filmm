@@ -1163,7 +1163,7 @@
     toast('Katalog ve koleksiyonların yedeği indirildi.');
   });
   $('#export-personal').addEventListener('click',() => {
-    const keys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist','perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1'];
+    const keys=['perde_watch_diary_v1','ny7_favorites','ny7_watchlist','perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1','ny7_player_sources_v1'];
     const deviceData={};
     keys.forEach(key=>{try{const raw=localStorage.getItem(key);if(raw!==null)deviceData[key]=JSON.parse(raw);}catch(error){console.warn('Yedeklenemeyen yerel kayıt:',key,error);}});
     const data = {
@@ -1195,7 +1195,7 @@
         ...entry,id:String(entry.id),
         ...(Number.isFinite(Number(entry.personalRating))?{personalRating:Math.min(10,Math.max(1,Number(entry.personalRating)))}:{})
       }));
-      const allowedKeys=['perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1'];
+      const allowedKeys=['perde_series_diary_v1','perde_player_progress_v3','perde_player_stats_v3','perde_player_markers_v2','perde_series_video_sources_v1','ny7_player_sources_v1'];
       const deviceData=parsed.deviceData&&typeof parsed.deviceData==='object'&&!Array.isArray(parsed.deviceData)?parsed.deviceData:{};
       const restoredValues={
         'perde_watch_diary_v1':restoredDiary,
