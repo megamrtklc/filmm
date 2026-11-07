@@ -16408,5 +16408,133 @@
     "id": "perde-mw63ykt1",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Sakar Şakir",
+    "originalTitle": "Sakar Şakir",
+    "year": 1977,
+    "category": "Komedi",
+    "genre": "Komedi",
+    "rating": "7.4",
+    "duration": "81 dk",
+    "country": "Turkey",
+    "director": "Natuk Baytan",
+    "tmdbId": 111799,
+    "desc": "Sakarlığıyla çevresindekileri bıktıran Şakir'e İstanbul'da ölen amcasından büyük bir miras kalır. Fakat mirası paylaşmak istemeyen bir akrabası onu ortadan kaldırmak için planlar yapmaya başlar.Fakat Şakir yine sakarlıklarıyla olaylardan kurtulmayı başarır. Bu olaylar sırasında yolda ve İstanbulda karşılaştığı Gardolap Fuat ile kovalamacaları sürmektedir. Filmin sonunda akrabası malları alamayacağını anlar ve delirir. Şakir ise yine sakarlık yaparak dükkânını havaya uçurur ve köyüne geri döner.",
+    "image": "https://image.tmdb.org/t/p/w500/fVkyquX9vCxTuBzlFsOEz5EWk5r.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/wYItcG6am6ANrkyoJbAILZDWbga.jpg",
+    "trailerUrl": "https://www.youtube.com/watch?v=TgafR1fzii0",
+    "imdbId": "tt0253621",
+    "watchUrl": "",
+    "platform": [
+      "TOD"
+    ],
+    "personalNote": "",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Kemal Sunal",
+      "Adile Naşit",
+      "Ali Şen",
+      "Ünal Gürel",
+      "Macit Flordun",
+      "Ayfer Feray",
+      "Necdet Yakın",
+      "Atilla Ergün",
+      "Celal Yonat",
+      "Kamer Sadık",
+      "İhsan Yüce",
+      "Yavuz Şeker"
+    ],
+    "tmdbCast": [
+      {
+        "id": 97272,
+        "name": "Kemal Sunal",
+        "character": "Sakar Şakir/Hasan Titiz",
+        "profile": "https://image.tmdb.org/t/p/w185/nT6zfupn0Q3oyCWHXCvyKS7CcLE.jpg",
+        "order": 0
+      },
+      {
+        "id": 97274,
+        "name": "Adile Naşit",
+        "character": "Fatma Şen",
+        "profile": "https://image.tmdb.org/t/p/w185/jJLjfIPCScGkdUhPVzPeFwCBRlt.jpg",
+        "order": 1
+      },
+      {
+        "id": 590773,
+        "name": "Ali Şen",
+        "character": "Hacı Şen",
+        "profile": "https://image.tmdb.org/t/p/w185/fE9PSwA5G1m35GR2l7MMQAbAjpC.jpg",
+        "order": 2
+      },
+      {
+        "id": 1052885,
+        "name": "Ünal Gürel",
+        "character": "Gardrop Fuat",
+        "profile": "https://image.tmdb.org/t/p/w185/ojgWsy7CxBI1hO4Yn0S766TYR3L.jpg",
+        "order": 3
+      },
+      {
+        "id": 1052886,
+        "name": "Macit Flordun",
+        "character": "Marmara Kazım",
+        "profile": "https://image.tmdb.org/t/p/w185/4yF2oYe2ZDU5nlNCQGNlH6zTlRT.jpg",
+        "order": 4
+      },
+      {
+        "id": 1052874,
+        "name": "Ayfer Feray",
+        "character": "Sevda",
+        "profile": "https://image.tmdb.org/t/p/w185/c4nfOzANVJ77Pvkuk0tNLz5iHfT.jpg",
+        "order": 5
+      },
+      {
+        "id": 1127939,
+        "name": "Necdet Yakın",
+        "character": "Lüfer",
+        "profile": "https://image.tmdb.org/t/p/w185/cT1ouR5wSvWYOgBwNxSgZst7VH9.jpg",
+        "order": 6
+      },
+      {
+        "id": 1127942,
+        "name": "Atilla Ergün",
+        "character": "Limoncu Şükrü",
+        "profile": "https://image.tmdb.org/t/p/w185/l0ScbwATTl2CVZw6NX4FlC2CLYv.jpg",
+        "order": 7
+      },
+      {
+        "id": 1452512,
+        "name": "Celal Yonat",
+        "character": "Arap Cafer",
+        "profile": "https://image.tmdb.org/t/p/w185/jW0twLUAKvGtG7zqqjsf1sdgIJu.jpg",
+        "order": 8
+      },
+      {
+        "id": 1467888,
+        "name": "Kamer Sadık",
+        "character": "Sabri",
+        "profile": "https://image.tmdb.org/t/p/w185/uMm29eN5C9n5MKK9PoRQBPXa5H3.jpg",
+        "order": 9
+      },
+      {
+        "id": 590781,
+        "name": "İhsan Yüce",
+        "character": "Televizyoncu Kenan",
+        "profile": "https://image.tmdb.org/t/p/w185/aQhGLD107hSd7CQbN6DL0KgST43.jpg",
+        "order": 10
+      },
+      {
+        "id": 1296130,
+        "name": "Yavuz Şeker",
+        "character": "Zühtü",
+        "profile": "https://image.tmdb.org/t/p/w185/znTzMWhmbiVSeAZd517plUzB9cF.jpg",
+        "order": 11
+      }
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw67it9i",
+    "seasons": null,
+    "episodes": null
   }
 ]
