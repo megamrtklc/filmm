@@ -1876,7 +1876,7 @@ function clearYouTubePlayer(){
 function getYouTubeVideoId(value){
  try{
   const parsed=new URL(String(value||'').trim());
-  const host=parsed.hostname.toLowerCase().replace(/^www\\./,'');
+  const host=parsed.hostname.toLowerCase().replace(/^www\./,'');
   if(!['youtube.com','m.youtube.com','music.youtube.com','youtu.be','youtube-nocookie.com'].includes(host))return '';
   let id='';
   if(host==='youtu.be')id=parsed.pathname.split('/').filter(Boolean)[0]||'';
