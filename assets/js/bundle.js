@@ -926,82 +926,137 @@ function renderFilteredCatalog() {
         }
 const headerSearchInput = document.getElementById('search-input');
 const headerSearchResults = document.getElementById('header-search-results');
-function renderHeaderSearchResults(value) {
-    if (!headerSearchResults) return;
-    const query = String(value || '').trim().toLocaleLowerCase('tr-TR');
-    if (!query) {
-        headerSearchResults.hidden = true;
-        headerSearchResults.innerHTML = '';
-        return;
-    }
-    const normalizedQuery = normalizeMediaSearchText(query);
-    const matches = mediaDatabase.filter(item => mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
-        const exactA=normalizeMediaSearchText(a.title)===normalizedQuery||normalizeMediaSearchText(a.originalTitle)===normalizedQuery;
-        const exactB=normalizeMediaSearchText(b.title)===normalizedQuery||normalizeMediaSearchText(b.originalTitle)===normalizedQuery;
-        return Number(exactB)-Number(exactA);
-    }).slice(0, 8);
-    activeSearchResultIndex=-1;
-    headerSearchResults.innerHTML = matches.length ? matches.map(item => {
-        const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
-        const image = escapeCountryHtml(item.image || '');
-        const year = escapeCountryHtml(item.year || 'Yıl bilgisi yok');
-        const type = item.type === 'tv' ? 'Dizi' : 'Film';
-        return `<button type="button" class="header-search-result" role="option" data-search-result-id="${escapeCountryHtml(item.id)}">
-            <img src="${image}" alt="" loading="lazy">
-            <span class="header-search-result-copy"><strong>${title}</strong>${originalTitleMarkup(item,'search-original-title')}<small>${year} · ${type}</small></span>
-            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-        </button>`;
-    }).join('') : '<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen yapım bulunamadı</b><small>Farklı bir kelime deneyebilir veya kataloğu keşfedebilirsin.</small><button type="button" data-search-empty-action>Keşfet</button></div>';
-    headerSearchResults.hidden = false;
+let headerSearchRequest=0;
+function getTmdbSearchAuth(){
+ let token='';try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
+ if(!token)return null;
+ const headers={Accept:'application/json'};let query='?language=tr-TR';
+ if(/^[a-z0-9]{32}$/i.test(token))query+='&api_key='+encodeURIComponent(token);
+ else if(token.split('.').length===3&&token.startsWith('eyJ'))headers.Authorization='Bearer '+token;
+ else return null;
+ return {headers,query};
 }
-headerSearchInput.addEventListener('focus', () => {
-    headerSearchInput.closest('.glass-search')?.classList.add('is-expanded');
-    renderHeaderSearchResults(headerSearchInput.value);
+async function searchTmdbPeople(query){
+ const auth=getTmdbSearchAuth();if(!auth)return [];
+ try{
+  const response=await fetch('https://api.themoviedb.org/3/search/person'+auth.query+'&query='+encodeURIComponent(query),{headers:auth.headers});
+  if(!response.ok)throw new Error('TMDB kişi araması HTTP '+response.status);
+  const data=await response.json();
+  return (data.results||[]).filter(person=>person&&person.name&&['Acting','Directing'].includes(person.known_for_department)).slice(0,12).map(person=>({
+   id:person.id,name:person.name,type:person.known_for_department==='Directing'?'director':'actor',
+   profile:person.profile_path?'https://image.tmdb.org/t/p/w185'+person.profile_path:''
+  }));
+ }catch(error){console.warn('Kişi araması TMDB üzerinden alınamadı:',error);return [];}
+}
+async function renderHeaderSearchResults(value) {
+ if (!headerSearchResults) return;
+ const query=String(value||'').trim();
+ const request=++headerSearchRequest;
+ if(!query){headerSearchResults.hidden=true;headerSearchResults.innerHTML='';return;}
+ const normalizedQuery=normalizeMediaSearchText(query);
+ const mediaMatches=mediaDatabase.filter(item=>mediaSearchText(item).includes(normalizedQuery)).sort((a,b)=>{
+  const exactA=normalizeMediaSearchText(a.title)===normalizedQuery||normalizeMediaSearchText(a.originalTitle)===normalizedQuery;
+  const exactB=normalizeMediaSearchText(b.title)===normalizedQuery||normalizeMediaSearchText(b.originalTitle)===normalizedQuery;
+  return Number(exactB)-Number(exactA);
+ }).slice(0,6);
+ const localPeople=[];
+ const seenPeople=new Set();
+ mediaDatabase.forEach(item=>{
+  (Array.isArray(item.tmdbCast)?item.tmdbCast:[]).forEach(person=>{
+   if(!person||!person.name||!normalizeMediaSearchText(person.name).includes(normalizedQuery))return;
+   const key='actor:'+normalizeActorName(person.name);if(seenPeople.has(key))return;seenPeople.add(key);
+   localPeople.push({name:person.name,type:'actor',profile:person.profile||''});
+  });
+  [item.director,item.tmdbDirector].filter(Boolean).forEach(raw=>{
+   String(raw).split(/[,;|]/).map(name=>name.trim()).filter(Boolean).forEach(name=>{
+    if(!normalizeMediaSearchText(name).includes(normalizedQuery))return;
+    const key='director:'+normalizeActorName(name);if(seenPeople.has(key))return;seenPeople.add(key);
+    localPeople.push({name,type:'director',profile:''});
+   });
+  });
+ });
+ const remotePeople=await searchTmdbPeople(query);
+ if(request!==headerSearchRequest||headerSearchInput.value.trim()!==query)return;
+ const peopleMap=new Map();
+ [...remotePeople,...localPeople].forEach(person=>{
+  const key=person.type+':'+normalizeActorName(person.name);
+  const existing=peopleMap.get(key);
+  if(!existing||(!existing.profile&&person.profile))peopleMap.set(key,{...existing,...person});
+ });
+ const people=[...peopleMap.values()].slice(0,6);
+ activeSearchResultIndex=-1;
+ const mediaMarkup=mediaMatches.map(item=>{
+  const title=escapeCountryHtml(item.title||'İsimsiz yapım');
+  const image=escapeCountryHtml(item.image||'');
+  const year=escapeCountryHtml(item.year||'Yıl bilgisi yok');
+  const type=item.type==='tv'?'Dizi':'Film';
+  return `<button type="button" class="header-search-result" role="option" data-search-result-id="${escapeCountryHtml(item.id)}">
+   <img src="${image}" alt="" loading="lazy">
+   <span class="header-search-result-copy"><strong>${title}</strong>${originalTitleMarkup(item,'search-original-title')}<small>${year} · ${type}</small></span>
+   <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+  </button>`;
+ }).join('');
+ const peopleMarkup=people.map(person=>{
+  const name=escapeCountryHtml(person.name);
+  const image=person.profile?'<img src="'+escapeCountryHtml(person.profile)+'" alt="" loading="lazy">':'<span class="header-search-person-placeholder"><i class="fa-regular fa-user"></i></span>';
+  const label=person.type==='director'?'Yönetmen':'Oyuncu';
+  return '<button type="button" class="header-search-result header-search-person" role="option" data-search-person-name="'+name+'" data-search-person-type="'+person.type+'">'+image+
+   '<span class="header-search-result-copy"><strong>'+name+'</strong><small>'+label+'</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>';
+ }).join('');
+ const hasResults=mediaMarkup||peopleMarkup;
+ headerSearchResults.innerHTML=(peopleMarkup?'<div class="header-search-group-label">Kişiler</div>'+peopleMarkup:'')+
+  (mediaMarkup?'<div class="header-search-group-label">Film ve diziler</div>'+mediaMarkup:'')+
+  (!hasResults?'<div class="header-search-empty"><span><i class="fa-solid fa-magnifying-glass"></i></span><b>Eşleşen sonuç bulunamadı</b><small>Farklı bir kelime deneyebilir veya kataloğu keşfedebilirsin.</small><button type="button" data-search-empty-action>Keşfet</button></div>':'');
+ headerSearchResults.hidden=false;
+}
+headerSearchInput.addEventListener('focus',()=>{
+ headerSearchInput.closest('.glass-search')?.classList.add('is-expanded');
+ renderHeaderSearchResults(headerSearchInput.value);
 });
-let headerSearchDebounce = null;
-headerSearchInput.addEventListener('input', function(e) {
-    clearTimeout(headerSearchDebounce);
-    const value = e.target.value || '';
-    headerSearchDebounce = setTimeout(() => renderHeaderSearchResults(value), 140);
+let headerSearchDebounce=null;
+headerSearchInput.addEventListener('input',event=>{
+ clearTimeout(headerSearchDebounce);
+ const value=event.target.value||'';
+ headerSearchDebounce=setTimeout(()=>renderHeaderSearchResults(value),180);
 });
-headerSearchResults.addEventListener('click', event => {
-    if (event.target.closest('[data-search-empty-action]')) {
-        headerSearchResults.hidden = true;
-        headerSearchInput.value = '';
-        switchTab('all');
-        return;
-    }
-    const result = event.target.closest('[data-search-result-id]');
-    if (!result) return;
-    const id = result.dataset.searchResultId;
-    headerSearchResults.hidden = true;
-    headerSearchInput.blur();
-    openDetailPage(id);
+headerSearchResults.addEventListener('click',event=>{
+ if(event.target.closest('[data-search-empty-action]')){
+  headerSearchResults.hidden=true;headerSearchInput.value='';switchTab('all');return;
+ }
+ const person=event.target.closest('[data-search-person-name]');
+ if(person){
+  const name=person.dataset.searchPersonName,type=person.dataset.searchPersonType;
+  headerSearchResults.hidden=true;headerSearchInput.blur();
+  if(type==='director')filterByDirector(name);else openActorPage(name);
+  return;
+ }
+ const result=event.target.closest('[data-search-result-id]');
+ if(!result)return;
+ const id=result.dataset.searchResultId;headerSearchResults.hidden=true;headerSearchInput.blur();openDetailPage(id);
 });
-document.addEventListener('click', event => {
-    if (!event.target.closest('.header-search-shell') && headerSearchResults) headerSearchResults.hidden = true;
+document.addEventListener('click',event=>{
+ if(!event.target.closest('.header-search-shell')&&headerSearchResults)headerSearchResults.hidden=true;
 });
 let activeSearchResultIndex=-1;
 function setActiveSearchResult(index){
-    const rows=[...headerSearchResults.querySelectorAll('[data-search-result-id]')];
-    if(!rows.length){activeSearchResultIndex=-1;return;}
-    activeSearchResultIndex=Math.max(0,Math.min(index,rows.length-1));
-    rows.forEach((row,i)=>{row.classList.toggle('is-keyboard-active',i===activeSearchResultIndex);row.setAttribute('aria-selected',String(i===activeSearchResultIndex));});
-    rows[activeSearchResultIndex].scrollIntoView({block:'nearest'});
+ const rows=[...headerSearchResults.querySelectorAll('[data-search-result-id],[data-search-person-name]')];
+ if(!rows.length){activeSearchResultIndex=-1;return;}
+ activeSearchResultIndex=Math.max(0,Math.min(index,rows.length-1));
+ rows.forEach((row,i)=>{row.classList.toggle('is-keyboard-active',i===activeSearchResultIndex);row.setAttribute('aria-selected',String(i===activeSearchResultIndex));});
+ rows[activeSearchResultIndex].scrollIntoView({block:'nearest'});
 }
-headerSearchInput.addEventListener('keydown', event => {
-    if(!headerSearchResults||headerSearchResults.hidden)return;
-    const rows=headerSearchResults.querySelectorAll('[data-search-result-id]');
-    if(event.key==='ArrowDown'&&rows.length){event.preventDefault();setActiveSearchResult(activeSearchResultIndex+1);}
-    else if(event.key==='ArrowUp'&&rows.length){event.preventDefault();setActiveSearchResult(activeSearchResultIndex<=0?0:activeSearchResultIndex-1);}
-    else if(event.key==='Enter'&&activeSearchResultIndex>=0&&rows[activeSearchResultIndex]){event.preventDefault();rows[activeSearchResultIndex].click();}
-    else if(event.key==='Escape'){headerSearchResults.hidden=true;activeSearchResultIndex=-1;}
+headerSearchInput.addEventListener('keydown',event=>{
+ if(!headerSearchResults||headerSearchResults.hidden)return;
+ const rows=headerSearchResults.querySelectorAll('[data-search-result-id],[data-search-person-name]');
+ if(event.key==='ArrowDown'&&rows.length){event.preventDefault();setActiveSearchResult(activeSearchResultIndex+1);}
+ else if(event.key==='ArrowUp'&&rows.length){event.preventDefault();setActiveSearchResult(activeSearchResultIndex<=0?0:activeSearchResultIndex-1);}
+ else if(event.key==='Enter'&&activeSearchResultIndex>=0&&rows[activeSearchResultIndex]){event.preventDefault();rows[activeSearchResultIndex].click();}
+ else if(event.key==='Escape'){headerSearchResults.hidden=true;activeSearchResultIndex=-1;}
 });
 headerSearchResults.addEventListener('mousemove',event=>{
-    const row=event.target.closest('[data-search-result-id]');
-    if(row){const rows=[...headerSearchResults.querySelectorAll('[data-search-result-id]')];setActiveSearchResult(rows.indexOf(row));}
+ const row=event.target.closest('[data-search-result-id],[data-search-person-name]');
+ if(row){const rows=[...headerSearchResults.querySelectorAll('[data-search-result-id],[data-search-person-name]')];setActiveSearchResult(rows.indexOf(row));}
 });
-
 
 // İçerik detay görünümü
 function goRoute(path){ if(location.hash!==path) location.hash=path; else routeFromHash(); }
@@ -2065,3 +2120,23 @@ if (typeof ResizeObserver !== 'undefined') {
         observeHeroRail();
     }
 }
+
+
+// Sayfa değişimlerini ağır animasyonlar yerine kısa ve GPU-dostu bir geçişle sun.
+(function(){
+ const targets=['dashboard-view','detail-page-view','actor-page-view','catalog-page']
+  .map(id=>document.getElementById(id)).filter(Boolean);
+ const animate=element=>{
+  if(element.classList.contains('hidden'))return;
+  element.classList.remove('perde-view-enter');
+  void element.offsetWidth;
+  element.classList.add('perde-view-enter');
+ };
+ if(typeof MutationObserver!=='undefined'){
+  const observer=new MutationObserver(records=>{
+   const changed=new Set(records.map(record=>record.target));
+   changed.forEach(animate);
+  });
+  targets.forEach(element=>observer.observe(element,{attributes:true,attributeFilter:['class']}));
+ }
+})();
