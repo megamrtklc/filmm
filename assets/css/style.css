@@ -6896,3 +6896,15 @@ body.detail-synopsis-open{overflow:hidden}
 @keyframes searchMenuIn{from{opacity:0;transform:translateY(-5px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:760px){.search-category-trigger{min-width:94px;height:28px;font-size:9px}.search-category-menu{top:calc(100% + 9px);width:176px}}
 @media(prefers-reduced-motion:reduce){.search-category-menu{animation:none!important}.search-category-trigger,.search-category-option{transition:none!important}}
+
+
+/* YouTube iframe playback inside Perde cinema player */
+#player-stage.is-youtube-playing{overflow:hidden;background:#000}
+#player-stage .ny7-youtube-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;z-index:4}
+#player-stage.is-youtube-playing #player-video{display:none!important}
+#player-stage.is-youtube-playing .ny7-player-controls,
+#player-stage.is-youtube-playing #player-big-play,
+#player-stage.is-youtube-playing #player-settings-panel,
+#player-stage.is-youtube-playing #player-skip-intro,
+#player-stage.is-youtube-playing #player-skip-credits,
+#player-stage.is-youtube-playing #player-loading{display:none!important}
