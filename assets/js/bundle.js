@@ -127,15 +127,15 @@ function fitHeroTitleToWidth() {
                 <span class="hero-rating-badge tomato"><b class="tomato-mark">🍅 RT</b><strong>${ratingValue(item.rottenTomatoes)}</strong></span>
                 <span class="hero-rating-badge popcorn"><b class="popcorn-mark">🍿</b><strong>${ratingValue(item.popcornmeter)}</strong></span>`;
             const runtime = item.type === 'tv'
-                ? [item.seasons ? `${item.seasons} sezon` : '', item.episodes ? `${item.episodes} bölüm` : '', item.duration || ''].filter(Boolean).join(' • ')
-                : (item.duration || '');
+                ? [item.seasons || item.tmdbSeasons ? `${item.seasons || item.tmdbSeasons} sezon` : '', item.episodes || item.tmdbEpisodes ? `${item.episodes || item.tmdbEpisodes} bölüm` : '', item.duration || item.tmdbRuntime || ''].filter(Boolean).join(' • ')
+                : (item.duration || item.tmdbRuntime || '');
             const meta = document.getElementById('hero-meta');
             meta.replaceChildren();
             const metaItems = [
                 { icon: 'fa-calendar-days', value: item.year },
                 { icon: item.type === 'tv' ? 'fa-tv' : 'fa-film', value: item.type === 'tv' ? 'Dizi' : 'Film' },
                 { icon: 'fa-clock', value: runtime },
-                { icon: 'fa-tags', value: item.category }
+                { icon: 'fa-tags', value: item.category || item.tmdbGenres }
             ].filter(entry => entry.value !== undefined && entry.value !== null && String(entry.value).trim() !== '');
             metaItems.forEach((entry, index) => {
                 if (index) {
@@ -155,7 +155,7 @@ function fitHeroTitleToWidth() {
                 part.append(icon, label);
                 meta.appendChild(part);
             });
-            document.getElementById('hero-desc').innerText = item.desc;
+            document.getElementById('hero-desc').innerText = item.desc || item.tmdbOverview || '';
             document.querySelectorAll('.hero-thumb').forEach((el,i) => {
                 const active = heroItems[i]?.id === item.id;
                 el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
@@ -230,10 +230,10 @@ function fitHeroTitleToWidth() {
             applyTrailerAmbilight(item);
             setText('trailer-popup-year',item.year);
             setText('trailer-popup-type',item.type==='tv'?'Dizi':'Film');
-            setText('trailer-popup-duration',item.type==='tv'?[item.seasons?item.seasons+' sezon':'',item.episodes?item.episodes+' bölüm':''].filter(Boolean).join(' • '):item.duration);
-            setText('trailer-popup-category',item.category||item.genre,'Kategori bilgisi yok');
+            setText('trailer-popup-duration',item.type==='tv'?[(item.seasons||item.tmdbSeasons)?(item.seasons||item.tmdbSeasons)+' sezon':'',(item.episodes||item.tmdbEpisodes)?(item.episodes||item.tmdbEpisodes)+' bölüm':''].filter(Boolean).join(' • '):(item.duration||item.tmdbRuntime));
+            setText('trailer-popup-category',item.category||item.genre||item.tmdbGenres,'Kategori bilgisi yok');
             setText('trailer-popup-rating',item.rating,'—');
-            setText('trailer-popup-desc',item.desc,'Bu yapım için konu özeti henüz eklenmemiş.');
+            setText('trailer-popup-desc',item.desc||item.tmdbOverview,'Bu yapım için konu özeti henüz eklenmemiş.');
             const credits=document.getElementById('trailer-popup-credits');
             if(credits){
                 credits.innerHTML='';
@@ -245,11 +245,11 @@ function fitHeroTitleToWidth() {
                     const value=document.createElement('p');value.textContent=values.join(' · ');row.appendChild(value);
                     credits.appendChild(row);
                 };
-                addCredit('YÖNETMEN',item.director);
-                addCredit('OYUNCULAR',item.cast);
+                addCredit('YÖNETMEN',item.director||item.tmdbDirector);
+                addCredit('OYUNCULAR',item.cast||item.tmdbCast);
                 credits.hidden=!credits.children.length;
             }
-            const videoId=getHeroTrailerId(item.trailerUrl);
+            const videoId=getHeroTrailerId(item.trailerUrl||item.tmdbTrailerUrl);
             player.innerHTML=videoId?'<iframe title="'+escapeCountryHtml(item.title)+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>':'<div class="trailer-popup-empty"><i class="fa-solid fa-circle-exclamation"></i><span>Bu yapım için kullanılabilir bir fragman bağlantısı bulunamadı.</span></div>';
             applyTrailerAmbilight(item);
             popup.classList.add('is-open');popup.setAttribute('aria-hidden','false');document.body.classList.add('trailer-popup-open');
@@ -845,6 +845,7 @@ function renderFilteredCatalog() {
                 const searchMatch = !query || mediaSearchText(m).includes(normalizeMediaSearchText(query)) || category.includes(query) || genre.includes(query);
                 return genreMatch && typeMatch && searchMatch && countryMatch && directorMatch && genreTagMatch;
             });
+            if (activeCatalogType === 'movie' || activeCatalogType === 'tv') filtered.reverse();
             renderMediaGrid(filtered);
         }
 
@@ -893,6 +894,7 @@ function renderFilteredCatalog() {
             const title = tab==='movie'?'Filmler':tab==='tv'?'Diziler':tab==='watchlist'?'İzleme Listem':'Keşfet';
             showCatalogView(title);
             const items = tab==='watchlist' ? mediaDatabase.filter(m=>watchlist.includes(m.id)||watchlist.includes(String(m.id))) : mediaDatabase.filter(m=>activeCatalogType==='all'||m.type===activeCatalogType);
+            if (tab==='movie' || tab==='tv') items.reverse();
             renderMediaGrid(items);
         }
 const headerSearchInput = document.getElementById('search-input');
@@ -1265,23 +1267,25 @@ function openDetailPage(id,update=true){
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
  document.getElementById('theme-body').style.backgroundColor='#050505';
  applyPosterAtmosphere(item);
- document.getElementById('detail-backdrop').src=item.backdrop||item.image;
- const detailScene=item.backdrop||item.image||'';document.getElementById('detail-page-view').style.setProperty('--detail-scene-image',detailScene?'url("'+String(detailScene).replace(/"/g,'%22')+'")':'none');
- document.getElementById('detail-poster').src=item.image;
+ const posterImage=item.image||item.tmdbPoster||item.backdrop||item.tmdbBackdrop||'';
+ const backdropImage=item.backdrop||item.tmdbBackdrop||posterImage;
+ document.getElementById('detail-backdrop').src=backdropImage;
+ const detailScene=backdropImage||posterImage;document.getElementById('detail-page-view').style.setProperty('--detail-scene-image',detailScene?'url("'+String(detailScene).replace(/"/g,'%22')+'")':'none');
+ document.getElementById('detail-poster').src=posterImage;
  document.getElementById('detail-title').innerText=item.title;
  let detailOriginal=document.getElementById('detail-original-title');if(!detailOriginal){detailOriginal=document.createElement('small');detailOriginal.id='detail-original-title';detailOriginal.className='media-original-title detail-original-title';document.getElementById('detail-title').after(detailOriginal);}detailOriginal.dataset.mediaId=String(item.id);detailOriginal.textContent=item.originalTitle||'';detailOriginal.hidden=!item.originalTitle;
- document.getElementById('detail-category').innerText=item.category||item.genre||'';
+ document.getElementById('detail-category').innerText=item.category||item.genre||item.tmdbGenres||'';
  // IMDb puanı alt değerlendirme satırında tek kez gösterilir.
- document.getElementById('detail-year').innerText=item.year||'';
- document.getElementById('detail-duration').innerText=item.duration||'';
+ document.getElementById('detail-year').innerText=item.year||String(item.tmdbReleaseDate||'').slice(0,4)||'';
+ document.getElementById('detail-duration').innerText=item.duration||item.tmdbRuntime||'';
  const detailKind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
  document.getElementById('detail-type-label').innerText=detailKind;
- const countries=countryTokens(item.country);
- const directors=countryTokens(item.director);
+ const countries=countryTokens(item.country||item.tmdbCountries);
+ const directors=countryTokens(item.director||item.tmdbDirector);
  const countryMarkup=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'" aria-label="'+escapeCountryHtml(info.name)+' yapımlarını göster">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('');
  document.getElementById('detail-country').innerHTML=countryMarkup||'<span>Ülke bilgisi yok</span>';
  document.getElementById('detail-director-inline').innerHTML=directors.length?'<span class="detail-director-label">Yönetmen:</span> '+directors.map(director=>'<button type="button" class="detail-director-link" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('<span class="detail-director-comma">, </span>'):'';
- document.getElementById('detail-desc').innerText=item.desc||'Açıklama henüz eklenmemiş.';
+ document.getElementById('detail-desc').innerText=item.desc||item.tmdbOverview||'Açıklama henüz eklenmemiş.';
  updateDetailSynopsis(item);
  const readScore=(...values)=>{for(const value of values){const candidate=value&&typeof value==='object'?(value.value??value.score??value.rating):value;if(candidate!==undefined&&candidate!==null&&String(candidate).trim()!==''&&String(candidate).trim().toLowerCase()!=='n/a')return String(candidate).trim();}return '';};
  const scoreItems=[
