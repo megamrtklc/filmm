@@ -508,3 +508,46 @@
 .tmdb-mark.github-mark{color:#fff}.tmdb-mark.github-mark svg{display:block;width:29px;height:29px;fill:currentColor}
 .tmdb-mark.tmdb-logo{background:#fff;padding:3px}
 .tmdb-mark.tmdb-logo img{display:block;width:100%;height:100%;object-fit:contain}
+
+
+/* Koleksiyonlar — sade, adım adım yönetim düzeni */
+.collection-workflow-note{display:flex;align-items:flex-start;gap:12px;margin:0 0 16px;padding:14px 16px;border:1px solid rgba(199,157,83,.28);border-radius:12px;background:rgba(199,157,83,.07);color:var(--gold)}
+.collection-workflow-note>i{font-size:17px;margin-top:2px;flex:0 0 auto}
+.collection-workflow-note>div{display:grid;gap:4px}
+.collection-workflow-note b{font-size:13px;color:var(--text)}
+.collection-workflow-note span{font-size:12px;line-height:1.55;color:var(--muted)}
+.collection-summary-strip{margin-bottom:16px}
+.collection-manager-layout{grid-template-columns:minmax(260px,.78fr) minmax(0,1.55fr);gap:16px}
+.collection-library,.collection-editor,.collection-preview-panel{padding:20px}
+.collection-step-heading{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.collection-step-heading>span{width:30px;height:30px;display:grid;place-items:center;flex:0 0 auto;border-radius:9px;background:rgba(199,157,83,.14);color:var(--gold);font:800 13px Manrope,sans-serif}
+.collection-step-heading h2{font:800 15px Manrope,sans-serif;margin:0 0 3px;color:var(--text)}
+.collection-step-heading p{font-size:12px;color:var(--muted);margin:0;line-height:1.45}
+.collection-list{margin-top:4px;max-height:430px;overflow:auto;padding-right:3px}
+.collection-list-item{padding:12px;gap:11px}
+.collection-list-copy b{font-size:12px}
+.collection-list-copy small{font-size:11px}
+.collection-create-form{margin-top:14px;padding-top:15px}
+.collection-create-form>label{font-size:12px}
+.collection-create-fields input,.collection-add-row select{height:42px;font-size:12px}
+.collection-create-fields .gold-button,.collection-add-row .gold-button{font-size:12px}
+.collection-editor-title{padding:8px 0 16px}
+.collection-editor-title h3{font-size:21px}
+.collection-editor-title p{font-size:12px}
+.collection-add-row{padding:17px 0 14px}
+.collection-items-heading{font-size:13px}
+.collection-items-heading span{font-size:11px}
+.collection-items-list{max-height:420px}
+.collection-item-row{padding:9px}
+.collection-item-copy b{font-size:12px}
+.collection-item-copy small{font-size:11px}
+.collection-item-actions button{width:30px;height:30px}
+.collection-order-hint{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.5}
+.collection-order-hint i{color:var(--gold);margin-right:5px}
+.collection-preview-panel{margin-top:16px}
+.collection-preview-panel .collection-step-heading{margin-bottom:16px}
+.collection-preview-rail{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.collection-preview-card b{font-size:11px}
+.collection-preview-note{font-size:11px}
+@media(max-width:900px){.collection-manager-layout{grid-template-columns:minmax(0,1fr)}.collection-list{max-height:260px}.collection-preview-rail{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:600px){.collection-summary-strip{grid-template-columns:1fr}.collection-preview-rail{grid-template-columns:repeat(3,minmax(0,1fr))}.collection-editor-title{flex-direction:column}.collection-add-row>div{flex-direction:column}.collection-add-row .gold-button{min-height:40px}.collection-create-fields{flex-direction:column}.collection-create-fields .gold-button{min-height:40px}.collection-workflow-note{padding:12px}}
