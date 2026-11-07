@@ -345,9 +345,9 @@
     $('#stat-series').textContent = series.length.toLocaleString('tr-TR');
     $('#stat-favorites').textContent = favorites.length.toLocaleString('tr-TR');
     $('#stat-watchlist').textContent = watchlist.length.toLocaleString('tr-TR');
-    const recent = [...catalog].sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,5);
+    const recent = [...catalog].reverse().slice(0,5);
     $('#recent-list').innerHTML = recent.length ? recent.map(item => '<article class="recent-poster-card">'+(poster(item)?'<img class="recent-poster-image" src="'+poster(item)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="recent-poster-placeholder"><i class="fa-solid fa-film"></i></div>')+'<div class="recent-poster-overlay"><span>'+(item.type==='tv'?'DİZİ':'FİLM')+' · '+escapeHtml(item.year||'—')+'</span><b>'+escapeHtml(item.title)+'</b><small>'+(item.rating?'★ '+escapeHtml(item.rating):'Puan bilgisi yok')+'</small></div></article>').join('') : '<div class="loading-line">Katalogda kayıt bulunamadı.</div>';
-    const stackItems = [...catalog].filter(item => poster(item)).sort((a,b) => Number(b.year||0)-Number(a.year||0)).slice(0,4);
+    const stackItems = [...catalog].reverse().filter(item => poster(item)).slice(0,4);
     $('#welcome-poster-stack').innerHTML = stackItems.length ? stackItems.map(item => '<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">').join('') : '<span class="poster-stack-fallback"><i class="fa-solid fa-clapperboard"></i></span>';
     const movieShare = catalog.length ? movies.length / catalog.length * 100 : 0;
     $('#overview-donut').style.background = 'conic-gradient(var(--gold) 0% '+movieShare+'%, #68788e '+movieShare+'% 100%)';
@@ -397,6 +397,7 @@
       return matchesType && matchesGenre && matchesYear && matchesRating && haystack.includes(query);
     });
     rows.sort((a,b) => {
+      if (sort === 'added-desc') return catalog.indexOf(b) - catalog.indexOf(a);
       if (sort === 'title-asc') return String(a.title || '').localeCompare(String(b.title || ''),'tr');
       if (sort === 'rating-desc') return (Number.parseFloat(b.rating)||-1) - (Number.parseFloat(a.rating)||-1);
       if (sort === 'year-asc') return (Number(a.year)||0) - (Number(b.year)||0);
