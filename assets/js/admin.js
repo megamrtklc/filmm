@@ -624,6 +624,7 @@
     }).join(''):'<div class="health-empty"><i class="fa-solid fa-circle-info"></i><b>Sonuç bulunamadı</b><span>Arama veya filtre ölçütlerini değiştirebilirsin.</span></div>';
   }
 
+  const selectedCatalogIds = new Set();
   let catalogView = 'grid';
   let catalogPage = 1;
   const catalogPageSize = 15;
@@ -720,11 +721,41 @@
     }).join('');
     tableBody.innerHTML = pageRows.map(item => {
       const missing = catalogQuality(item);
-      return '<tr><td><div class="catalog-name">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td>'+(missing.length?'<span class="catalog-quality-warning">'+escapeHtml(missing.join(' · '))+'</span>':'<span class="catalog-quality-good"><i class="fa-solid fa-check"></i> Tam</span>')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>';
+      return '<tr><td><div class="catalog-name"><input class="catalog-row-check" type="checkbox" data-catalog-select="'+escapeHtml(item.id)+'" aria-label="'+escapeHtml(item.title)+' seç" '+(selectedCatalogIds.has(String(item.id))?'checked':'')+'>'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td>'+(missing.length?'<span class="catalog-quality-warning">'+escapeHtml(missing.join(' · '))+'</span>':'<span class="catalog-quality-good"><i class="fa-solid fa-check"></i> Tam</span>')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>';
     }).join('');
     grid.hidden = catalogView !== 'grid';
     $('#catalog-table-view').hidden = catalogView !== 'table';
     renderCatalogPagination(rows.length);
+    const pageIds=pageRows.map(item=>String(item.id));
+    const selectedOnPage=pageIds.filter(id=>selectedCatalogIds.has(id)).length;
+    const selectPage=$('#catalog-select-page');
+    if(selectPage){selectPage.checked=pageIds.length>0&&selectedOnPage===pageIds.length;selectPage.indeterminate=selectedOnPage>0&&selectedOnPage<pageIds.length;}
+    renderBulkToolbar();
+  }
+  function renderBulkToolbar(){
+    const toolbar=$('#catalog-bulk-toolbar');
+    const count=selectedCatalogIds.size;
+    toolbar.hidden=count===0;
+    $('#catalog-bulk-count').textContent=count.toLocaleString('tr-TR')+' yapım seçildi';
+    const select=$('#bulk-collection-select');
+    const previous=select.value;
+    select.innerHTML='<option value="">Koleksiyon seç…</option>'+collections.map(item=>'<option value="'+escapeHtml(item.id)+'">'+escapeHtml(item.title)+'</option>').join('');
+    if(collections.some(item=>String(item.id)===previous))select.value=previous;
+    $('#bulk-add-to-collection').disabled=!count||!select.value||!collections.length;
+  }
+  async function addBulkSelectionToCollection(){
+    if(!selectedCatalogIds.size)return toast('Önce katalog listesinden yapım seç.');
+    if(!getGithubToken())return toast('Toplu işlem için GitHub bağlantısını kurmalısın.');
+    const target=collections.find(item=>String(item.id)===$('#bulk-collection-select').value);
+    if(!target)return toast('Önce hedef koleksiyonu seç.');
+    const validIds=[...selectedCatalogIds].filter(id=>catalog.some(item=>String(item.id)===id));
+    const before=target.items.length;
+    target.items=[...target.items,...validIds.filter(id=>!target.items.includes(id))];
+    if(target.items.length===before){toast('Seçtiğin yapımlar zaten bu rafta.');return;}
+    const button=$('#bulk-add-to-collection');button.disabled=true;button.textContent='Kaydediliyor…';
+    try{await persistCollections();selectedCatalogIds.clear();renderCollections();renderCatalog();toast('Seçilen yapımlar koleksiyona eklendi.');}
+    catch(error){toast('Toplu işlem kaydedilemedi: '+error.message);}
+    finally{button.innerHTML='<i class="fa-solid fa-layer-group"></i> Rafa ekle';renderBulkToolbar();}
   }
   function setCatalogView(view) {
     catalogView = view === 'table' ? 'table' : 'grid';
@@ -1003,6 +1034,7 @@
     }
     activeCollectionId=collections[0]?.id||'';
     renderCollections();
+    renderBulkToolbar();
   }
   async function handleCollectionClick(event) {
     const button=event.target.closest('button');
@@ -1315,6 +1347,22 @@
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
   $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
   ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',() => {catalogPage=1;renderCatalog();}));
+  $('#catalog-table-body').addEventListener('change',event=>{
+    const checkbox=event.target.closest('[data-catalog-select]');if(!checkbox)return;
+    const id=String(checkbox.dataset.catalogSelect);if(checkbox.checked)selectedCatalogIds.add(id);else selectedCatalogIds.delete(id);
+    renderBulkToolbar();
+    const pageRows=catalogMatches().slice((catalogPage-1)*catalogPageSize,catalogPage*catalogPageSize);
+    const selectedOnPage=pageRows.filter(item=>selectedCatalogIds.has(String(item.id))).length;
+    const selectPage=$('#catalog-select-page');selectPage.checked=pageRows.length>0&&selectedOnPage===pageRows.length;selectPage.indeterminate=selectedOnPage>0&&selectedOnPage<pageRows.length;
+  });
+  $('#catalog-select-page').addEventListener('change',event=>{
+    const pageRows=catalogMatches().slice((catalogPage-1)*catalogPageSize,catalogPage*catalogPageSize);
+    pageRows.forEach(item=>{const id=String(item.id);if(event.target.checked)selectedCatalogIds.add(id);else selectedCatalogIds.delete(id);});
+    renderCatalog();
+  });
+  $('#bulk-collection-select').addEventListener('change',renderBulkToolbar);
+  $('#bulk-add-to-collection').addEventListener('click',addBulkSelectionToCollection);
+  $('#bulk-clear-selection').addEventListener('click',()=>{selectedCatalogIds.clear();renderCatalog();});
   $('#catalog-pagination').addEventListener('click',event => {
     const pageButton = event.target.closest('[data-catalog-page]');
     const stepButton = event.target.closest('[data-catalog-step]');
