@@ -717,7 +717,8 @@
     if (!item) {
       $('#hero-live-title').textContent='Henüz manşet seçilmedi';
       $('#hero-live-meta').textContent='';
-      $('#hero-live-desc').textContent='Sağdaki katalog listesinden bir yapım ekleyerek ön izlemeyi oluştur.';\n      $('#hero-headline-input').value=''; $('#hero-description-input').value='';
+      $('#hero-live-desc').textContent='Sağdaki katalog listesinden bir yapım ekleyerek ön izlemeyi oluştur.';
+      $('#hero-headline-input').value=''; $('#hero-description-input').value='';
       $('#hero-live-backdrop').style.backgroundImage='';
       $('#hero-live-index').textContent='00 / 00';
       return;
@@ -785,7 +786,7 @@
       const payload={version:1,updatedAt:new Date().toISOString(),heroSlides:validSlides};
       await githubHeroConfigRequest('PUT',{
         message:'Update Perde homepage hero and slider settings',
-        content:encodeGithubContent(JSON.stringify(payload,null,2)+'\\n'),
+        content:encodeGithubContent(JSON.stringify(payload,null,2)+'\n'),
         sha:current.sha,branch:'main'
       });
       heroSlides=validSlides;renderHeroSlides();
