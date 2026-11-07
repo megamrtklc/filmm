@@ -7701,5 +7701,47 @@
     "id": "perde-mw5zyt37",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Oyuncak Hikayesi 2",
+    "originalTitle": "Toy Story 2",
+    "year": 1999,
+    "category": "Animasyon / Komedi / Aile",
+    "genre": "Animasyon",
+    "rating": "7.6",
+    "duration": "92 dk",
+    "country": "United States of America",
+    "director": "John Lasseter",
+    "tmdbId": 863,
+    "desc": "Andy'nin tatil için bir kovboy kampına gitmesi sonucu oyuncakları kendi başına kalırlar. Bu sırada paradan başka bir şey düşünmeyen Al McWhiggin adlı kolleksiyoncu, Woody'yi kaçırır. Kaçırılan Woody geçmişine ilişkin bazı gerçeklerle yüzyüze gelerek eski ve yeni arkadaşları arasında bir seçim yapmak zorunda kalır.",
+    "image": "https://image.tmdb.org/t/p/w500/df437IDV5xku4mYmvOCBMIqLXzj.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/nsfVr4QbbunUrHINN9N7JdVAMTf.jpg",
+    "imdbId": "tt0120363",
+    "watchUrl": "",
+    "platform": [
+      "Netflix",
+      "Apple TV+"
+    ],
+    "personalNote": "Mükemmel aksiyon filmi",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Tom Hanks",
+      "Tim Allen",
+      "Joan Cusack",
+      "Kelsey Grammer",
+      "Don Rickles",
+      "Jim Varney",
+      "Wallace Shawn",
+      "John Ratzenberger",
+      "Annie Potts",
+      "Wayne Knight",
+      "John Morris",
+      "Laurie Metcalf"
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw5zz3o5",
+    "seasons": null,
+    "episodes": null
   }
 ]
