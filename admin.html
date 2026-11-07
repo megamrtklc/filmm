@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-watch-diary">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-catalog-pagination">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -124,6 +124,7 @@
           </div>
           <div class="catalog-poster-grid" id="catalog-poster-grid" aria-live="polite"><div class="loading-line">Katalog yükleniyor…</div></div>
           <div class="surface-card table-card catalog-table-view" id="catalog-table-view" hidden><div class="table-scroll"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB ID</th><th>VERİ DURUMU</th><th></th></tr></thead><tbody id="catalog-table-body"><tr><td colspan="7" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div></div>
+          <nav class="catalog-pagination" id="catalog-pagination" aria-label="Katalog sayfaları" hidden></nav>
           <p class="info-note"><i class="fa-solid fa-lock"></i> Katalog şu anda salt okunur. Ekleme, düzenleme ve silme işlemleri gerçek veritabanı ve güvenli kayıt katmanı kurulduktan sonra açılacak. Mevcut JSON verilerine dokunulmaz.</p>
         </section>
 
@@ -250,6 +251,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-watch-diary"></script>
+  <script src="assets/js/admin.js?v=20261107-catalog-pagination"></script>
 </body>
 </html>
