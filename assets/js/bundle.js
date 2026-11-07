@@ -1371,22 +1371,23 @@ function renderDetailCredits(item){
  const rawCast=Array.isArray(item.tmdbCast)&&item.tmdbCast.length?item.tmdbCast:item.cast;
  const cast=(Array.isArray(rawCast)?rawCast.map(person=>typeof person==='string'?{name:person,character:'',profile:''}:({name:person?.name||'',character:person?.character||'',profile:person?.profile||''})):String(rawCast||'').split(/[,;|]/).map(x=>x.trim()).map(name=>({name,character:'',profile:''}))).filter(person=>person.name).slice(0,10);
  panel.hidden=!cast.length;
- if(panel.hidden){panel.innerHTML='';return;}
- const cards=cast.map((person,index)=>{
-  const photo=String(person.profile||'').replace('/w185/','/w500/').replace('/w342/','/w500/');
-  const initials=person.name.split(/\\s+/).map(part=>part[0]||'').slice(0,2).join('').toLocaleUpperCase('tr-TR');
-  return '<button type="button" class="detail-cast-person" data-actor-name="'+escapeCountryHtml(person.name)+'" aria-label="'+escapeCountryHtml(person.name)+(person.character?' - '+escapeCountryHtml(person.character):'')+' oyuncu profilini aç">'+
-   '<span class="detail-cast-photo">'+(photo?'<img src="'+escapeCountryHtml(photo)+'" alt="'+escapeCountryHtml(person.name)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')+'<span class="detail-cast-avatar" '+(photo?'hidden':'')+'>'+escapeCountryHtml(initials)+'</span><span class="detail-cast-index">'+String(index+1).padStart(2,'0')+'</span></span>'+
-   '<span class="detail-cast-person-copy"><strong>'+escapeCountryHtml(person.name)+'</strong><small>'+(person.character?escapeCountryHtml(person.character):'Rol bilgisi bulunmuyor')+'</small></span></button>';
- }).join('');
- panel.innerHTML='<div class="detail-credits-card"><div class="detail-cast-heading"><div class="detail-cast-title-group"><span class="detail-cast-eyebrow">EKİP DOSYASI</span><h2>Oyuncu kadrosu</h2><p>Hikâyeye hayat veren isimler</p></div><div class="detail-cast-controls" '+(cast.length<=5?'hidden':'')+'><button type="button" data-cast-direction="-1" aria-label="Önceki 5 oyuncu" disabled><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button><button type="button" data-cast-direction="1" aria-label="Sonraki 5 oyuncu"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div></div><div class="detail-cast-viewport"><div class="detail-cast-grid">'+cards+'</div></div></div>';
- const viewport=panel.querySelector('.detail-cast-viewport'),track=panel.querySelector('.detail-cast-grid'),buttons=[...panel.querySelectorAll('[data-cast-direction]')];
- const sync=()=>{buttons.forEach(button=>{const direction=Number(button.dataset.castDirection);button.disabled=direction<0?viewport.scrollLeft<=2:viewport.scrollLeft+viewport.clientWidth>=track.scrollWidth-2;});};
- buttons.forEach(button=>button.addEventListener('click',()=>{const card=track.querySelector('.detail-cast-person');const gap=parseFloat(getComputedStyle(track).columnGap)||0;const step=card?card.getBoundingClientRect().width+gap:viewport.clientWidth/5;viewport.scrollBy({left:Number(button.dataset.castDirection)*step*5,behavior:'smooth'});}));
- viewport.addEventListener('scroll',sync,{passive:true});
- window.requestAnimationFrame(sync);
+ if(!cast.length){panel.innerHTML='';return;}
+ let page=0;
+ const render=()=>{
+  const visible=cast.slice(page*5,page*5+5);
+  const rows=visible.map((person,index)=>{
+   const photo=String(person.profile||'').replace('/w185/','/w500/').replace('/w342/','/w500/');
+   const initials=person.name.split(/\\s+/).map(part=>part[0]||'').slice(0,2).join('').toLocaleUpperCase('tr-TR');
+   return '<button type="button" class="perde-cast-entry" data-actor-name="'+escapeCountryHtml(person.name)+'" aria-label="'+escapeCountryHtml(person.name)+(person.character?' - '+escapeCountryHtml(person.character):'')+' oyuncu profilini aç">'+
+    '<span class="perde-cast-portrait">'+(photo?'<img src="'+escapeCountryHtml(photo)+'" alt="'+escapeCountryHtml(person.name)+'" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">':'')+'<span class="perde-cast-initials" '+(photo?'hidden':'')+'>'+escapeCountryHtml(initials)+'</span></span>'+
+    '<span class="perde-cast-identity"><strong>'+escapeCountryHtml(person.name)+'</strong><small>'+(person.character?escapeCountryHtml(person.character):'Rol bilgisi bulunmuyor')+'</small></span>'+
+    '<span class="perde-cast-number">'+String(page*5+index+1).padStart(2,'0')+'</span></button>';
+  }).join('');
+  panel.innerHTML='<div class="perde-cast-roster"><header class="perde-cast-header"><div><span class="perde-cast-kicker">KADRO</span><h2>Oyuncular</h2></div><div class="perde-cast-navigation" '+(cast.length<=5?'hidden':'')+'><span>'+String(page+1)+' / '+String(Math.ceil(cast.length/5))+'</span><button type="button" data-page="-1" '+(page===0?'disabled':'')+' aria-label="Önceki oyuncular">←</button><button type="button" data-page="1" '+((page+1)*5>=cast.length?'disabled':'')+' aria-label="Sonraki oyuncular">→</button></div></header><div class="perde-cast-list">'+rows+'</div></div>';
+  panel.querySelectorAll('[data-page]').forEach(button=>button.addEventListener('click',()=>{page=Math.max(0,Math.min(Math.ceil(cast.length/5)-1,page+Number(button.dataset.page)));render();}));
+ };
+ render();
 }
-
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
