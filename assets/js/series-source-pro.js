@@ -39,7 +39,7 @@
     panel.id = 'series-source-manager';
     panel.className = 'series-source-manager';
     panel.hidden = true;
-    panel.innerHTML = '<div class="series-source-manager-heading"><span class="series-source-kicker">VİDEO KAYNAKLARI</span><strong>Video kaynaklarını yönet</strong><small class="series-source-description">Eklediğin bağlantılar seçtiğin içerik için kaydedilir.</small></div><form class="series-source-form"><label>Kaynak adı<input name="label" type="text" maxlength="60" placeholder="Örn. YouTube – 1080p"></label><label>Video bağlantısı<input name="url" type="url" required placeholder="https://..." autocomplete="url"></label><label>Kaynak türü<select name="kind"><option value="auto">Otomatik algıla</option><option value="direct">Doğrudan video (MP4 / HLS / DASH)</option><option value="embed">Gömülü oynatıcı / diğer site</option></select></label><button type="submit" class="series-source-add"><i class="fa-solid fa-plus"></i> Kaynağı ekle ve oynat</button></form><p class="series-source-status" role="status">Bu bölüm için henüz kaynak eklenmedi.</p><div class="series-source-list"></div><p class="series-source-help">YouTube, Vimeo ve Dailymotion bağlantıları gömülü oynatıcıda açılır. Diğer sitelerde sitenin sağladığı gömme bağlantısını kullan. MP4, M3U8 ve MPD bağlantıları Perde oynatıcısında açılır. Kaynağın paylaşım ve izleme iznine sahip olduğundan emin ol.</p>';
+    panel.innerHTML = '<div class="series-source-manager-heading"><span class="series-source-kicker">VİDEO KAYNAKLARI</span><strong>Video kaynaklarını yönet</strong><small class="series-source-description">Eklediğin bağlantılar seçtiğin içerik için kaydedilir.</small></div><form class="series-source-form"><label>Kaynak adı<input name="label" type="text" maxlength="60" placeholder="Örn. YouTube – 1080p"></label><label>Video bağlantısı<input name="url" type="url" required placeholder="https://..." autocomplete="url"></label><label>Kaynak türü<select name="kind"><option value="auto">Otomatik algıla</option><option value="direct">Doğrudan video (MP4 / HLS / DASH)</option><option value="embed">Gömülü oynatıcı / diğer site</option></select></label><button type="submit" class="series-source-add"><i class="fa-solid fa-plus"></i> Kaynağı ekle ve oynat</button></form><p class="series-source-status" role="status">Bu bölüm için henüz kaynak eklenmedi.</p><div class="series-source-list"></div><p class="series-source-help">YouTube, Vimeo, Dailymotion ve OK.ru bağlantıları gömülü oynatıcıda açılır. Diğer sitelerde sitenin sağladığı gömme bağlantısını kullan. MP4, M3U8 ve MPD bağlantıları Perde oynatıcısında açılır. Kaynağın paylaşım ve izleme iznine sahip olduğundan emin ol.</p>';
     const grid = host.querySelector('.ny7-player-source-grid');
     if (grid) grid.insertAdjacentElement('beforebegin', panel);
     else host.appendChild(panel);
@@ -95,6 +95,12 @@
       id = (url.pathname.match(/\/(?:video\/)?(\d+)/) || [])[1];
       if (!id) throw new Error('Vimeo video numarası bulunamadı.');
       return 'https://player.vimeo.com/video/' + id + '?autoplay=1';
+    }
+    if (host === 'ok.ru' || host.endsWith('.ok.ru') || host === 'odnoklassniki.ru' || host.endsWith('.odnoklassniki.ru')) {
+      const match = url.pathname.match(/\\/(?:video|videoembed)\\/(\\d+)/i);
+      id = match && match[1];
+      if (!id) throw new Error('OK.ru video bağlantısı tanınamadı. Video sayfası bağlantısını kullan (ok.ru/video/...).');
+      return 'https://ok.ru/videoembed/' + encodeURIComponent(id);
     }
     if (host === 'dai.ly' || (host === 'dailymotion.com' || host.endsWith('.dailymotion.com'))) {
       id = host === 'dai.ly' ? url.pathname.split('/').filter(Boolean)[0] : (url.pathname.match(/\/video\/([^_/?]+)/) || [])[1];
