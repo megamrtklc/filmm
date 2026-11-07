@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-catalog-analytics">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-diary-date-entry">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -200,7 +200,7 @@
           </div>
           <div class="surface-card diary-add-panel">
             <div class="card-heading"><div><h2>Günlüğüne yapım ekle</h2><p>Katalogdan bir film veya dizi seçerek kişisel listene al.</p></div><span class="insight-kicker">KİŞİSEL ARŞİV</span></div>
-            <div class="diary-add-controls"><div class="diary-search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="diary-catalog-search" type="search" placeholder="Film veya dizi ara…"></div><select id="diary-catalog-select"><option value="">Katalogdan yapım seç…</option></select><select id="diary-new-status" aria-label="Eklenecek listenin durumu"><option value="watchlist">İzleme listesi</option><option value="watching">İzlemeye devam</option><option value="watched">İzlendi</option><option value="favorite">Favoriler</option></select><button class="gold-button" id="diary-add-button" type="button"><i class="fa-solid fa-plus"></i> Günlüğe ekle</button></div>
+            <div class="diary-add-controls"><div class="diary-search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="diary-catalog-search" type="search" placeholder="Film veya dizi ara…"></div><select id="diary-catalog-select"><option value="">Katalogdan yapım seç…</option></select><select id="diary-new-status" aria-label="Eklenecek listenin durumu"><option value="watchlist">İzleme listesi</option><option value="watching">İzlemeye devam</option><option value="watched">İzlendi</option><option value="favorite">Favoriler</option></select><label class="diary-add-date">İzleme tarihi<input id="diary-new-date" type="date" aria-label="İzleme tarihi"></label><button class="gold-button" id="diary-add-button" type="button"><i class="fa-solid fa-plus"></i> Günlüğe ekle</button></div>
           </div>
           <div class="diary-workspace">
             <section class="surface-card diary-list-panel">
@@ -241,7 +241,7 @@
           </div>
           <div class="analytics-main-grid">
             <section class="surface-card analytics-chart-card">
-              <div class="card-heading"><div><h2>Yıllara göre izleme</h2><p>İzlendi olarak işaretlenen yapımların tarihleri</p></div><span class="insight-kicker">İZLEME GEÇMİŞİ</span></div>
+              <div class="card-heading"><div><h2>İzleme Yıllarına Göre Dağılım</h2><p>İzlendi olarak işaretlediğin yapımların izleme tarihlerine göre dağılımı</p></div><span class="insight-kicker">İZLEME GEÇMİŞİ</span></div>
               <div class="year-chart" id="personal-year-chart"><div class="analytics-empty">İzleme tarihi olan kayıtlar burada görünecek.</div></div>
             </section>
             <section class="surface-card analytics-chart-card">
@@ -288,6 +288,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-catalog-analytics"></script>
+  <script src="assets/js/admin.js?v=20261107-diary-date-entry"></script>
 </body>
 </html>

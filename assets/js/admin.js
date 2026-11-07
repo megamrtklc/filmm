@@ -419,10 +419,19 @@
     const id=$('#diary-catalog-select').value;
     const status=$('#diary-new-status').value;
     if(!id)return toast('Önce katalogdan bir yapım seç.');
+    const selectedDate=$('#diary-new-date').value;
+    const today=new Date().toISOString().slice(0,10);
     const existing=diaryEntries.find(entry=>String(entry.id)===id);
-    if(existing){existing.status=status;toast('Yapımın günlük durumu güncellendi.');}
-    else{diaryEntries.unshift({id,status,date:status==='watched'?new Date().toISOString().slice(0,10):'',personalRating:'',addedAt:new Date().toISOString()});toast('Yapım kişisel günlüğüne eklendi.');}
-    saveDiary();renderDiary();$('#diary-catalog-select').value='';
+    if(existing){
+      existing.status=status;
+      if(selectedDate)existing.date=selectedDate;
+      else if(status==='watched'&&!existing.date)existing.date=today;
+      toast('Yapımın günlük durumu güncellendi.');
+    }else{
+      diaryEntries.unshift({id,status,date:selectedDate||(status==='watched'?today:''),personalRating:'',addedAt:new Date().toISOString()});
+      toast('Yapım kişisel günlüğüne eklendi.');
+    }
+    saveDiary();renderDiary();$('#diary-catalog-select').value='';$('#diary-new-date').value='';
   }
   function handleDiaryClick(event) {
     const tab=event.target.closest('[data-diary-tab]');
@@ -440,7 +449,7 @@
       const value=control.value===''?'':Number(control.value);
       if(value!==''&&(value<1||value>10||!Number.isFinite(value))){control.value=entry.personalRating||'';return toast('Kişisel puan 1 ile 10 arasında olmalı.');}
       entry.personalRating=value;
-    }else entry[field]=control.value;
+    }else{entry[field]=control.value;if(field==='status'&&control.value==='watched'&&!entry.date)entry.date=new Date().toISOString().slice(0,10);}
     saveDiary();renderDiary();
     toast('Kişisel günlük güncellendi.');
   }
@@ -607,6 +616,7 @@
   $('#diary-entry-list').addEventListener('change',handleDiaryChange);
   $('#diary-catalog-search').addEventListener('input',filterDiaryCatalog);
   $('#diary-add-button').addEventListener('click',addDiaryEntry);
+  $('#diary-new-status').addEventListener('change',event=>{if(event.target.value==='watched'&&!$('#diary-new-date').value)$('#diary-new-date').value=new Date().toISOString().slice(0,10);});
   $('#diary-list-search').addEventListener('input',renderDiary);
   $('#hero-slide-list').addEventListener('click',handleHeroListClick);
   $$('[data-hero-preview]').forEach(button=>button.addEventListener('click',()=>{
