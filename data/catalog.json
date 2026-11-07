@@ -7828,5 +7828,48 @@
     "id": "perde-mw5zzoru",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Oyuncak Hikayesi 5",
+    "originalTitle": "Toy Story 5",
+    "year": 2026,
+    "category": "Animasyon / Aile / Komedi / Macera",
+    "genre": "Animasyon",
+    "rating": "8.3",
+    "duration": "102 dk",
+    "country": "United States of America",
+    "director": "Andrew Stanton",
+    "tmdbId": 1084244,
+    "desc": "Bonnie'nin hediye olarak aldığı bir Lilypad tablete takıntılı hale gelmesiyle birlikte, Buzz, Woody, Jessie ve diğer oyuncaklar için işler iyice karmaşıklaşır; zira artık oyun saatini tehdit eden yepyeni bir tehlikeyle mücadele etmek zorundadırlar.",
+    "image": "https://image.tmdb.org/t/p/w500/4LHyUPK4obqICeCt4rjhpQDOhJt.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/qjTqY5coNiz6sVtPng40IzltsoN.jpg",
+    "trailerUrl": "https://www.youtube.com/watch?v=lzIUot-pFwc",
+    "imdbId": "tt29355505",
+    "watchUrl": "",
+    "platform": [
+      "Netflix",
+      "Apple TV+"
+    ],
+    "personalNote": "Mükemmel aksiyon filmi",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Joan Cusack",
+      "Tom Hanks",
+      "Tim Allen",
+      "Conan O'Brien",
+      "Scarlett Spears",
+      "Greta Lee",
+      "Shelby Rabara",
+      "Mykal-Michelle Harris",
+      "Craig Robinson",
+      "Jay Hernandez",
+      "Lori Alan",
+      "Bonnie Hunt"
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw5zzv1n",
+    "seasons": null,
+    "episodes": null
   }
 ]
