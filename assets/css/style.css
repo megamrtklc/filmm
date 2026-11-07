@@ -6373,6 +6373,16 @@ body.detail-synopsis-open{overflow:hidden}
 .detail-platform-brand:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.105);transform:translateY(-1px)}
 .detail-platform-logo{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:28px;padding-right:9px;border-right:1px solid rgba(255,255,255,.13)}
 .detail-platform-logo svg{display:block;width:25px;height:25px;max-width:none;overflow:visible;fill:currentColor;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.detail-platform-brand-netflix .detail-platform-logo{color:#e50914}
+.detail-platform-brand-prime .detail-platform-logo{color:#20a8e0}
+.detail-platform-brand-disney .detail-platform-logo{color:#4b9cff}
+.detail-platform-brand-max .detail-platform-logo{color:#a78bfa}
+.detail-platform-brand-apple .detail-platform-logo{color:#f5f5f7}
+.detail-platform-brand-mubi .detail-platform-logo{color:#f5f5f5}
+.detail-platform-brand-blutv .detail-platform-logo{color:#1598e8}
+.detail-platform-brand-tod .detail-platform-logo{color:#a78bfa}
+.detail-platform-brand-tabii .detail-platform-logo{color:#55c8ff}
+.detail-platform-brand-gain .detail-platform-logo{color:#f5f5f5}
 .detail-platform-name{font-size:12px;font-weight:750;letter-spacing:.1px;color:#f1f2f4}
 .detail-platform-wordmark{font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:800;letter-spacing:-.7px;fill:#f5f5f5}
 .detail-platform-wordmark-netflix{fill:#e50914;font-weight:900;letter-spacing:1.1px}
