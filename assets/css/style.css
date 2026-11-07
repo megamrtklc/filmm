@@ -6332,3 +6332,22 @@ body.detail-synopsis-open{overflow:hidden}
     padding-bottom:14px;
   }
 }
+
+
+/* Moduna Göre Keşfet: arka plan afişini yumuşat, metin kontrastını artır */
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-backdrop{
+  opacity:.62!important;
+  filter:saturate(.72) brightness(.72)!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-overlay{
+  background:
+    linear-gradient(180deg,rgba(5,6,10,.48),rgba(5,6,10,.70)),
+    linear-gradient(90deg,rgba(5,6,10,.34),rgba(5,6,10,.58))!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-heading h2,
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-heading p,
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-copy h3,
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-meta,
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-description{
+  text-shadow:0 1px 5px rgba(0,0,0,.82),0 3px 12px rgba(0,0,0,.62);
+}
