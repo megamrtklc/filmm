@@ -144,7 +144,7 @@
   }
   function setCatalogView(view) {
     catalogView = view === 'table' ? 'table' : 'grid';
-    $$$('[data-catalog-view]').forEach(button => {
+    $('[data-catalog-view]').forEach(button => {
       const active = button.dataset.catalogView === catalogView;
       button.classList.toggle('active',active);
       button.setAttribute('aria-pressed',String(active));
