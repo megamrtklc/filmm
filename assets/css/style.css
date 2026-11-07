@@ -6440,3 +6440,18 @@ body.detail-synopsis-open{overflow:hidden}
 
 /* Oynatma ekranı: yardımcı araçlar kaldırıldı, oynatıcı tek sütun */
 .ny7-player-layout{grid-template-columns:minmax(0,1fr)!important}
+
+
+/* Film künyesi — sade, okunabilir yapım bilgileri */
+.detail-credits{max-width:1240px;margin:18px auto 0;padding:0}
+.detail-credits[hidden]{display:none!important}
+.detail-credits-card{padding:20px 22px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:#111318}
+.detail-credits-heading{display:flex;align-items:flex-end;gap:10px;margin:0 0 15px;padding:0 0 11px;border-bottom:1px solid rgba(255,255,255,.1)}
+.detail-credits-heading>span{color:#c5a66a;font-size:9px;font-weight:800;letter-spacing:.16em}
+.detail-credits-heading h2{margin:0;color:#f4f4f5;font-size:16px;font-weight:800}
+.detail-credits-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 22px}
+.detail-credit-item,.detail-credit-cast{display:flex;min-width:0;flex-direction:column;gap:5px}
+.detail-credit-item>span,.detail-credit-cast>span{color:#9298a4;font-size:10px;font-weight:650}
+.detail-credit-item>strong,.detail-credit-cast>strong{color:#e6e8ed;font-size:12px;font-weight:650;line-height:1.55;overflow-wrap:anywhere}
+.detail-credit-cast{grid-column:1/-1;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+@media(max-width:700px){.detail-credits{margin-top:14px;padding-inline:0}.detail-credits-card{padding:16px}.detail-credits-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}.detail-credit-item>strong,.detail-credit-cast>strong{font-size:11px}}
