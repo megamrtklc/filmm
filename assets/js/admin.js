@@ -595,9 +595,55 @@
     toast('Katalog JSON yedeği indirildi.');
   });
   $('#export-personal').addEventListener('click',() => {
-    const data = {diary:localArray('perde_watch_diary_v1'),favorites:localArray('ny7_favorites'),watchlist:localArray('ny7_watchlist'),exportedAt:new Date().toISOString()};
-    downloadJson('perde-kisisel-veriler.json',data);
-    toast('Tarayıcıda bulunan kişisel kayıtlar indirildi.');
+    const data = {
+      app:'Perde',
+      backupType:'personal-data',
+      version:1,
+      diary:localArray('perde_watch_diary_v1'),
+      favorites:localArray('ny7_favorites'),
+      watchlist:localArray('ny7_watchlist'),
+      exportedAt:new Date().toISOString()
+    };
+    downloadJson('perde-kisisel-yedek-'+new Date().toISOString().slice(0,10)+'.json',data);
+    toast('Kişisel verilerin yedeği indirildi.');
+  });
+  $('#import-personal').addEventListener('click',() => $('#personal-backup-file').click());
+  $('#personal-backup-file').addEventListener('change',async event => {
+    const file=event.target.files&&event.target.files[0];
+    if(!file)return;
+    const hint=$('#backup-restore-hint');
+    hint.textContent='Yedek dosyası kontrol ediliyor…';
+    try {
+      if(file.size>5*1024*1024)throw new Error('Yedek dosyası 5 MB sınırını aşıyor.');
+      const parsed=JSON.parse(await file.text());
+      if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw new Error('JSON yedek biçimi geçersiz.');
+      if(parsed.backupType&&parsed.backupType!=='personal-data')throw new Error('Bu dosya kişisel Perde yedeği değil.');
+      if(!Array.isArray(parsed.diary)||!Array.isArray(parsed.favorites)||!Array.isArray(parsed.watchlist))throw new Error('Yedekte günlük, favoriler veya izleme listesi eksik.');
+      const allowedStatuses=['watching','watched','favorite','watchlist'];
+      const restoredDiary=parsed.diary.filter(entry=>entry&&typeof entry==='object'&&catalog.some(item=>String(item.id)===String(entry.id))&&allowedStatuses.includes(entry.status)).map(entry=>({
+        ...entry,
+        id:String(entry.id),
+        ...(Number.isFinite(Number(entry.personalRating))?{personalRating:Math.min(10,Math.max(1,Number(entry.personalRating)))}:{})
+      }));
+      if(!window.confirm('Mevcut izleme günlüğü, favoriler ve izleme listesi bu yedekteki verilerle değiştirilsin mi? Bu işlem geri alınamaz.')) {
+        hint.textContent='Geri yükleme iptal edildi.';
+        return;
+      }
+      localStorage.setItem('perde_watch_diary_v1',JSON.stringify(restoredDiary));
+      localStorage.setItem('ny7_favorites',JSON.stringify(parsed.favorites));
+      localStorage.setItem('ny7_watchlist',JSON.stringify(parsed.watchlist));
+      diaryEntries=restoredDiary;
+      renderDiary();
+      renderOverview();
+      if(typeof renderPersonalAnalytics==='function')renderPersonalAnalytics();
+      hint.textContent=restoredDiary.length+' günlük kaydı geri yüklendi.';
+      toast('Kişisel yedek başarıyla geri yüklendi.');
+    } catch(error) {
+      hint.textContent='Geri yükleme yapılamadı: '+error.message;
+      toast('Yedek dosyası geçersiz veya okunamadı.');
+    } finally {
+      event.target.value='';
+    }
   });
   init();
 })();
