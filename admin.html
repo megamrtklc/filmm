@@ -221,6 +221,18 @@
 
         <section class="page-view" id="page-analytics">
           <div class="page-heading"><div><span class="eyebrow">KİŞİSEL SİNEMA RAPORU</span><h1>İstatistikler</h1><p>İzleme günlüğündeki kayıtlarından kişisel sinema alışkanlıklarını keşfet.</p></div><span class="status-chip warning"><i class="fa-solid fa-hard-drive"></i> Bu tarayıcıdaki veriler</span></div>
+          <div class="section-heading analytics-section-heading"><span class="eyebrow">KATALOG ANALİZİ</span><h2>Arşiv İstatistikleri</h2><p>Perde kataloğundaki tüm film ve dizilerden otomatik hesaplanır.</p></div>
+          <div class="stats-grid analytics-personal-stats catalog-analytics-stats">
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div><span class="stat-label">Toplam yapım</span><strong id="archive-stat-total">—</strong><small>Arşivdeki tüm kayıtlar</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-film"></i></div><span class="stat-label">Film</span><strong id="archive-stat-movies">—</strong><small>Uzun metraj yapımlar</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-tv"></i></div><span class="stat-label">Dizi</span><strong id="archive-stat-series">—</strong><small>Televizyon ve dijital diziler</small></article>
+            <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-star"></i></div><span class="stat-label">Ortalama IMDb</span><strong id="archive-stat-rating">—</strong><small id="archive-stat-rated">Puan bilgisi</small></article>
+          </div>
+          <div class="analytics-main-grid catalog-analytics-grid">
+            <section class="surface-card analytics-chart-card"><div class="card-heading"><div><h2>Yapım yılları</h2><p>Arşivdeki yapımların çıkış yılına göre dağılımı</p></div><span class="insight-kicker">YIL DAĞILIMI</span></div><div class="year-chart" id="archive-year-chart"><div class="analytics-empty">Katalog verisi bekleniyor.</div></div></section>
+            <section class="surface-card analytics-chart-card"><div class="card-heading"><div><h2>Arşivde öne çıkan türler</h2><p>Katalogdaki tür etiketlerinin dağılımı</p></div></div><div class="personal-genre-list" id="archive-genre-list"><div class="analytics-empty">Katalog verisi bekleniyor.</div></div></section>
+          </div>
+          <div class="section-heading analytics-section-heading personal-section-heading"><span class="eyebrow">KİŞİSEL RAPOR</span><h2>İzleme Alışkanlıkların</h2><p>İzleme günlüğüne kayıt ekledikçe bu bölüm otomatik dolacak.</p></div>
           <div class="stats-grid analytics-personal-stats">
             <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-eye"></i></div><span class="stat-label">İzlenen yapım</span><strong id="personal-stat-watched">0</strong><small>Tamamlandı olarak işaretlenen</small></article>
             <article class="stat-card"><div class="stat-icon"><i class="fa-solid fa-star"></i></div><span class="stat-label">Kişisel puan ortalaması</span><strong id="personal-stat-rating">—</strong><small id="personal-stat-rated-count">Puanlanan kayıt yok</small></article>
@@ -276,6 +288,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-overview-fix"></script>
+  <script src="assets/js/admin.js?v=20261107-catalog-analytics"></script>
 </body>
 </html>
