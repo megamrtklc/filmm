@@ -968,7 +968,6 @@ function renderFilteredCatalog() {
             const related=document.getElementById('detail-related');
             if(related)related.classList.add('hidden');
             const homeFeature=document.querySelector('.home-feature-row');
-            const dashboard=document.getElementById('dashboard-view');
             if(dashboard)dashboard.dataset.homeActive='false';
             if(homeFeature){homeFeature.hidden=true;homeFeature.classList.add('hidden');}
             const context=document.getElementById('page-context-card');
