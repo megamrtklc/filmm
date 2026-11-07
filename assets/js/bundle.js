@@ -161,6 +161,7 @@ function fitHeroTitleToWidth() {
                 const active = heroItems[i]?.id === item.id;
                 el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
             });
+            updateHeroIndicators(userAction);
             if (userAction) restartHeroTimer();
         }
         function getHeroTrailerId(url){
@@ -274,6 +275,46 @@ function fitHeroTitleToWidth() {
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
                     <img src="${m.tmdbPoster || m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>${originalTitleMarkup(m,'hero-thumb-original')}
                 </button>`).join('');
+            renderHeroIndicators();
+        }
+        function renderHeroIndicators() {
+            const rail = document.getElementById('hero-slide-progress');
+            if (!rail) return;
+            rail.innerHTML = heroItems.map((item,index) =>
+                `<button type="button" class="hero-slide-tick" data-hero-index="${index}" aria-label="${index+1}. afiş: ${String(item.title||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" title="${index+1}. afiş"></button>`
+            ).join('');
+            updateHeroIndicators(false);
+        }
+        function updateHeroIndicators(keepThumbVisible = false) {
+            const current = document.getElementById('hero-slide-current');
+            const total = document.getElementById('hero-slide-total');
+            const progress = document.getElementById('hero-slide-progress');
+            if (!current || !total || !progress) return;
+            const count = heroItems.length;
+            current.textContent = String(count ? heroIndex + 1 : 0).padStart(2,'0');
+            total.textContent = String(count).padStart(2,'0');
+            progress.querySelectorAll('.hero-slide-tick').forEach((tick,index) => {
+                const active = index === heroIndex;
+                tick.classList.toggle('is-active',active);
+                tick.setAttribute('aria-current',active ? 'true' : 'false');
+            });
+            if (keepThumbVisible) {
+                const activeThumb = document.querySelector('#hero-thumbnails-rail .hero-thumb.active');
+                const rail = document.getElementById('hero-thumbnails-rail');
+                if (activeThumb && rail) {
+                    const left = activeThumb.offsetLeft - (rail.clientWidth - activeThumb.clientWidth) / 2;
+                    rail.scrollTo({left:Math.max(0,left),behavior:'smooth'});
+                }
+            }
+        }
+        if (!window.__heroProgressDelegationBound) {
+            document.addEventListener('click',event => {
+                const tick = event.target.closest('#hero-slide-progress [data-hero-index]');
+                if (!tick) return;
+                const index = Number(tick.getAttribute('data-hero-index'));
+                if (Number.isInteger(index) && heroItems[index]) setHeroMedia(heroItems[index].id,true);
+            });
+            window.__heroProgressDelegationBound = true;
         }
         function stepHero(direction) {
             if (!Array.isArray(heroItems) || heroItems.length < 2) return;
