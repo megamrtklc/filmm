@@ -161,6 +161,12 @@ function fitHeroTitleToWidth() {
                 const active = heroItems[i]?.id === item.id;
                 el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
             });
+            const activeThumb = document.querySelector('#hero-thumbnails-rail .hero-thumb.active');
+            const thumbnailRail = document.getElementById('hero-thumbnails-rail');
+            if (activeThumb && thumbnailRail) {
+                const targetLeft = activeThumb.offsetLeft - (thumbnailRail.clientWidth - activeThumb.clientWidth) / 2;
+                thumbnailRail.scrollTo({left:Math.max(0,targetLeft),behavior:'smooth'});
+            }
             if (userAction) restartHeroTimer();
         }
         function getHeroTrailerId(url){
