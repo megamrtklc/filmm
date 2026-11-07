@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-content-editor">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261107-tmdb-editor">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -131,39 +131,61 @@
 
         <section class="page-view" id="page-editor">
           <div class="page-heading">
-            <div><span class="eyebrow">İÇERİK STÜDYOSU</span><h1 id="editor-page-title">Film / Dizi Ekle</h1><p>Yapım bilgilerini düzenle, görselleri kontrol et ve taslak ön izlemeni oluştur.</p></div>
+            <div><span class="eyebrow">İÇERİK STÜDYOSU</span><h1 id="editor-page-title">Film / Dizi Ekle</h1><p>Yapımı ara, otomatik bilgileri getir; yalnızca Perde'ye özel alanları doldur.</p></div>
             <span class="status-chip warning"><i class="fa-solid fa-flask"></i> Geçici taslak</span>
           </div>
           <div class="editor-mode-switch">
             <button type="button" class="active" data-editor-type="movie"><i class="fa-solid fa-film"></i> Film</button>
             <button type="button" data-editor-type="tv"><i class="fa-solid fa-tv"></i> Dizi</button>
           </div>
+
+          <section class="surface-card tmdb-setup-card">
+            <div class="tmdb-setup-copy"><span class="tmdb-mark">TMDB</span><div><b>TMDB bağlantısı</b><p>Bir defa Read Access Token ekle. Anahtar yalnızca bu tarayıcıda saklanır.</p></div></div>
+            <div class="tmdb-token-controls"><input id="editor-tmdb-token" type="password" autocomplete="off" placeholder="TMDB API Read Access Token"><button class="outline-button" type="button" id="editor-save-token">Anahtarı kaydet</button><span id="editor-token-status" role="status">Bağlantı kurulmadı</span></div>
+            <small>Token'ı TMDB hesap ayarlarında API bölümünden alabilirsin. Güvenlik için yalnızca kendi kullanımına açık, alan adı kısıtlamalı bir anahtar tercih et.</small>
+          </section>
+
+          <section class="surface-card tmdb-search-card">
+            <div class="card-heading"><div><h2>Film veya dizi ara</h2><p>Yapım adını yaz veya IMDb kimliğiyle ara. Genel bilgiler otomatik doldurulur.</p></div><span class="insight-kicker">TMDB ARAMA</span></div>
+            <div class="tmdb-search-row"><label class="tmdb-search-input"><i class="fa-solid fa-magnifying-glass"></i><input id="editor-tmdb-query" type="search" placeholder="Örn. Interstellar veya tt0816692" autocomplete="off"></label><button class="gold-button" type="button" id="editor-tmdb-search"><i class="fa-solid fa-magnifying-glass"></i> Yapım ara</button></div>
+            <div class="tmdb-search-status" id="editor-tmdb-search-status" role="status">Aramaya başlamak için bir yapım adı yaz.</div>
+            <div class="tmdb-search-results" id="editor-tmdb-results" aria-live="polite"></div>
+          </section>
+
           <div class="content-editor-layout">
             <form class="surface-card content-editor-form" id="content-editor-form">
               <input type="hidden" id="editor-record-id">
-              <div class="card-heading"><div><h2>Yapım bilgileri</h2><p>Temel bilgileri eksiksiz ve tutarlı şekilde gir.</p></div><span class="insight-kicker">01 / İÇERİK</span></div>
+              <div class="card-heading"><div><h2>Otomatik yapım bilgileri</h2><p>TMDB'den gelen bilgiler seçtiğin yapımla doldurulur.</p></div><span class="insight-kicker">01 / OTOMATİK</span></div>
               <div class="editor-fields-grid">
-                <label class="editor-field editor-field-wide">Yapım adı *<input id="editor-title" maxlength="180" required placeholder="Örn. The Shawshank Redemption"></label>
-                <label class="editor-field">Orijinal adı<input id="editor-original-title" maxlength="180" placeholder="Orijinal yapım adı"></label>
-                <label class="editor-field">Yayın yılı<input id="editor-year" type="number" min="1888" max="2100" placeholder="2026"></label>
-                <label class="editor-field">Tür / kategoriler<input id="editor-category" maxlength="120" placeholder="Dram / Suç"></label>
-                <label class="editor-field">Ana tür<input id="editor-genre" maxlength="60" placeholder="Dram"></label>
-                <label class="editor-field">IMDb puanı<input id="editor-rating" type="number" min="0" max="10" step="0.1" placeholder="8.5"></label>
-                <label class="editor-field" id="editor-duration-field">Süre<input id="editor-duration" maxlength="40" placeholder="142 dk"></label>
-                <label class="editor-field">Ülke<input id="editor-country" maxlength="120" placeholder="United States"></label>
-                <label class="editor-field">Yönetmen<input id="editor-director" maxlength="180" placeholder="Yönetmen adı"></label>
-                <label class="editor-field">TMDB ID<input id="editor-tmdb" inputmode="numeric" placeholder="12345"></label>
-                <label class="editor-field editor-series-field" hidden>Sezon sayısı<input id="editor-seasons" type="number" min="0" max="300" placeholder="3"></label>
-                <label class="editor-field editor-series-field" hidden>Bölüm sayısı<input id="editor-episodes" type="number" min="0" max="10000" placeholder="24"></label>
-                <label class="editor-field editor-field-wide">Oyuncular <small>İsimleri virgülle ayır.</small><input id="editor-cast" placeholder="Oyuncu 1, Oyuncu 2"></label>
-                <label class="editor-field editor-field-wide">Konu / açıklama<textarea id="editor-desc" rows="5" maxlength="5000" placeholder="Yapımın konusunu yaz…"></textarea></label>
+                <label class="editor-field editor-field-wide">Yapım adı<input id="editor-title" maxlength="180" readonly placeholder="Önce yukarıdan bir yapım seç"></label>
+                <label class="editor-field">Orijinal adı<input id="editor-original-title" maxlength="180" readonly></label>
+                <label class="editor-field">Yayın yılı<input id="editor-year" type="number" readonly></label>
+                <label class="editor-field">Tür / kategoriler<input id="editor-category" maxlength="180" readonly></label>
+                <label class="editor-field">Ana tür<input id="editor-genre" maxlength="60" readonly></label>
+                <label class="editor-field">TMDB puanı<input id="editor-rating" type="number" min="0" max="10" step="0.1" readonly></label>
+                <label class="editor-field" id="editor-duration-field">Süre<input id="editor-duration" maxlength="40" readonly></label>
+                <label class="editor-field">Ülke<input id="editor-country" maxlength="180" readonly></label>
+                <label class="editor-field">Yönetmen / yaratıcı<input id="editor-director" maxlength="240" readonly></label>
+                <label class="editor-field">TMDB ID<input id="editor-tmdb" inputmode="numeric" readonly></label>
+                <label class="editor-field">IMDb ID<input id="editor-imdb" readonly placeholder="TMDB eşleşmesi varsa gelir"></label>
+                <label class="editor-field editor-series-field" hidden>Sezon sayısı<input id="editor-seasons" type="number" min="0" max="300" readonly></label>
+                <label class="editor-field editor-series-field" hidden>Bölüm sayısı<input id="editor-episodes" type="number" min="0" max="10000" readonly></label>
+                <label class="editor-field editor-field-wide">Oyuncular<input id="editor-cast" readonly></label>
+                <label class="editor-field editor-field-wide">Konu / açıklama<textarea id="editor-desc" rows="5" maxlength="5000" readonly></textarea></label>
               </div>
               <div class="editor-divider"></div>
-              <div class="card-heading"><div><h2>Görsel ve medya</h2><p>Afiş, arka plan ve fragman bağlantılarını ekle.</p></div><span class="insight-kicker">02 / MEDYA</span></div>
+              <div class="card-heading"><div><h2>Perde'ye özel bilgiler</h2><p>Yalnızca senin eklemek istediğin bağlantı ve notlar.</p></div><span class="insight-kicker">02 / SENİN EKLEDİKLERİN</span></div>
               <div class="editor-fields-grid">
-                <label class="editor-field editor-field-wide">Afiş görseli URL<input id="editor-image" type="url" placeholder="https://…"></label>
-                <label class="editor-field editor-field-wide">Arka plan görseli URL<input id="editor-backdrop" type="url" placeholder="https://…"></label>
-                <label class="editor-field editor-field-wide">Fragman bağlantısı<input id="editor-trailer" type="url" placeholder="https://www.youtube.com/watch?v=…"></label>
+                <label class="editor-field editor-field-wide">Film / dizi izleme URL'si<input id="editor-watch-url" type="url" placeholder="https://…"></label>
+                <label class="editor-field">İzleme platformu<input id="editor-platform" maxlength="100" placeholder="Netflix, BluTV, arşiv vb."></label>
+                <label class="editor-field editor-field-wide">Kişisel not<textarea id="editor-personal-note" rows="3" maxlength="2000" placeholder="Bu yapımla ilgili kendi notun…"></textarea></label>
+                <label class="editor-field editor-field-wide">Fragman bağlantısı <small>TMDB'den otomatik gelir; istersen değiştirebilirsin.</small><input id="editor-trailer" type="url" placeholder="https://www.youtube.com/watch?v=…"></label>
+              </div>
+              <div class="editor-divider"></div>
+              <div class="card-heading"><div><h2>Otomatik görseller</h2><p>Afiş ve arka plan TMDB'den alınır.</p></div><span class="insight-kicker">03 / GÖRSELLER</span></div>
+              <div class="editor-fields-grid">
+                <label class="editor-field editor-field-wide">Afiş görseli URL<input id="editor-image" type="url" readonly></label>
+                <label class="editor-field editor-field-wide">Arka plan görseli URL<input id="editor-backdrop" type="url" readonly></label>
               </div>
               <div class="editor-form-actions">
                 <button class="outline-button" type="button" id="editor-reset"><i class="fa-solid fa-rotate-left"></i> Formu temizle</button>
@@ -172,10 +194,10 @@
             </form>
             <aside class="content-editor-aside">
               <section class="surface-card editor-preview-card">
-                <div class="card-heading"><div><h2>Canlı ön izleme</h2><p>Girdiğin bilgiler burada görünür.</p></div><span class="status-chip">Ön izleme</span></div>
+                <div class="card-heading"><div><h2>Canlı ön izleme</h2><p>Seçtiğin yapım burada görünür.</p></div><span class="status-chip">Ön izleme</span></div>
                 <div class="editor-poster-preview" id="editor-poster-preview"><div><i class="fa-solid fa-clapperboard"></i><span>AFİŞ ÖN İZLEMESİ</span></div></div>
                 <div class="editor-preview-copy"><span id="editor-preview-type">FİLM · YIL</span><h3 id="editor-preview-title">Yapım adı</h3><p id="editor-preview-meta">Tür · Süre · Puan</p><p id="editor-preview-desc">Konu metni burada görünecek.</p></div>
-                <p class="editor-preview-status" id="editor-preview-status"><i class="fa-solid fa-circle-info"></i> Henüz taslak oluşturulmadı.</p>
+                <p class="editor-preview-status" id="editor-preview-status"><i class="fa-solid fa-circle-info"></i> Henüz yapım seçilmedi.</p>
               </section>
               <section class="surface-card editor-drafts-card">
                 <div class="card-heading"><div><h2>Oturum taslakları</h2><p>Bu sayfada oluşturduğun geçici kayıtlar.</p></div><b id="editor-draft-count">0</b></div>
@@ -183,7 +205,7 @@
               </section>
             </aside>
           </div>
-          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Bu ekran şu anda yalnızca oturum içi taslak oluşturur. Taslaklar JSON kataloğa, tarayıcı depolamasına veya sunucuya kaydedilmez. Mevcut yapımların üzerinde yapılan düzenlemeler de özgün katalog kaydını değiştirmez.</p>
+          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Bu ekran hâlâ oturum içi taslak oluşturur. TMDB token'ı bu tarayıcının yerel depolamasında saklanır; yapım taslakları kataloğa veya sunucuya yazılmaz.</p>
         </section>
 
         <section class="page-view" id="page-collections">
@@ -346,6 +368,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261107-content-editor"></script>
+  <script src="assets/js/admin.js?v=20261107-tmdb-editor"></script>
 </body>
 </html>
