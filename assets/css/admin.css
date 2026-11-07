@@ -369,3 +369,46 @@
 .admin-main .admin-content input,
 .admin-main .admin-content select,
 .admin-main .admin-content textarea{font-size:13px}
+
+
+/* Personal cinema analytics */
+.analytics-personal-stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:15px}
+.analytics-personal-stats .stat-card{min-height:145px}
+.analytics-personal-stats .stat-card strong{font-size:29px}
+.analytics-main-grid,.analytics-lower-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.85fr);gap:15px;margin-top:15px;align-items:stretch}
+.analytics-lower-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.analytics-chart-card{padding:20px;min-width:0}
+.analytics-chart-card .card-heading{margin-bottom:18px}
+.analytics-chart-card .card-heading h2{font:800 15px Manrope,sans-serif;margin:0 0 5px}
+.analytics-chart-card .card-heading p{font-size:11px;color:var(--muted);margin:0;line-height:1.5}
+.year-chart{min-height:190px;display:flex;flex-direction:column;justify-content:flex-end}
+.year-chart-bars{height:170px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:end}
+.year-chart-column{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px;min-width:0}
+.year-chart-column>b{font-size:11px;color:#e9edf2}
+.year-chart-track{height:125px;width:min(100%,34px);display:flex;align-items:flex-end;overflow:hidden;border-radius:7px 7px 3px 3px;background:#222936}
+.year-chart-track i{display:block;width:100%;min-height:0;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#f0ca78,#9c7136);transition:height .3s}
+.year-chart-column>span{font-size:10px;color:var(--muted);white-space:nowrap}
+.year-chart-foot{font-size:10px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.analytics-empty{min-height:145px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px;color:var(--muted);font-size:11px;line-height:1.6;padding:20px}
+.analytics-empty i{font-size:22px;color:var(--gold)}
+.analytics-empty b{font-size:13px;color:#e5e8ed}
+.analytics-empty span{max-width:330px}
+.personal-type-layout{display:flex;align-items:center;justify-content:center;gap:25px;min-height:175px}
+.personal-type-donut{width:142px;height:142px;flex:0 0 142px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#343b47 0% 100%);position:relative}
+.personal-type-donut:before{content:"";position:absolute;inset:13px;border-radius:50%;background:var(--surface)}
+.personal-type-donut>div{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px}
+.personal-type-donut b{font:800 25px Manrope,sans-serif}
+.personal-type-donut span{font-size:9px;letter-spacing:1.3px;color:var(--muted)}
+.personal-type-legend{display:grid;gap:13px;min-width:105px}
+.personal-type-legend>div{display:grid;grid-template-columns:9px 1fr auto;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.personal-type-legend b{color:#eef0f3;font-size:13px}
+.personal-genre-list,.personal-rating-list{display:grid;gap:15px}
+.personal-genre-row,.personal-rating-row{display:grid;grid-template-columns:100px minmax(40px,1fr) 24px;align-items:center;gap:10px;font-size:11px}
+.personal-genre-row>span,.personal-rating-row>span{color:#cbd1da;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.personal-genre-row>b,.personal-rating-row>b{text-align:right;color:#eef0f3}
+.personal-genre-track,.personal-rating-track{height:8px;background:#252d39;border-radius:8px;overflow:hidden}
+.personal-genre-track i,.personal-rating-track i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#9c7136,#efca79)}
+.analytics-note{margin-top:15px}
+@media(max-width:1050px){.analytics-personal-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-main-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.analytics-main-grid,.analytics-lower-grid{grid-template-columns:1fr}.analytics-chart-card{padding:16px}.year-chart-bars{gap:6px}.personal-type-layout{gap:18px}}
+@media(max-width:420px){.analytics-personal-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-personal-stats .stat-card{min-height:125px;padding:13px}.analytics-personal-stats .stat-card strong{font-size:24px}.personal-type-donut{width:118px;height:118px;flex-basis:118px}.personal-genre-row,.personal-rating-row{grid-template-columns:82px minmax(35px,1fr) 20px}}
