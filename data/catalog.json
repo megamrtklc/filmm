@@ -7785,5 +7785,48 @@
     "id": "perde-mw5zzgfl",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Oyuncak Hikayesi 4",
+    "originalTitle": "Toy Story 4",
+    "year": 2019,
+    "category": "Aile / Komedi / Animasyon / Macera",
+    "genre": "Aile",
+    "rating": "7.5",
+    "duration": "100 dk",
+    "country": "United States of America",
+    "director": "Josh Cooley",
+    "tmdbId": 301528,
+    "desc": "Bir geri dönüşüm projesi ile yaratılan Forky, oyuncak olduğunu asla kabul etmez. Tek kullanımlık bir kaşıktan yapılma bir oyuncak olsa da o oyuncak olmadığı konusunda ısrarcıdır. Kendisini Bonnie’nin odasına ait hissetmeyen Forky, dünyadaki amacının ne olduğunu düşünmeye başlar. Kendisini oyuncaklardan biri olarak görmediği için Bonnie’nin yanında kalmak zorunda hissetmeyen Forky, dünyadaki amacını kaşık olarak yerine getirmeye karar verir. Ancak onun oyuncak olarak üstesinden gelmesi gereken bambaşka bir görevi vardır.",
+    "image": "https://image.tmdb.org/t/p/w500/zNjnFuKoltaqo1FYxkcVvEFHbME.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/q62bpQ67qaXY0u6b2wFEnQYIbPd.jpg",
+    "trailerUrl": "https://www.youtube.com/watch?v=xuG0vskaWqQ",
+    "imdbId": "tt1979376",
+    "watchUrl": "",
+    "platform": [
+      "Netflix",
+      "Apple TV+"
+    ],
+    "personalNote": "Mükemmel aksiyon filmi",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Tom Hanks",
+      "Tim Allen",
+      "Annie Potts",
+      "Tony Hale",
+      "Keegan-Michael Key",
+      "Madeleine McGraw",
+      "Christina Hendricks",
+      "Jordan Peele",
+      "Keanu Reeves",
+      "Ally Maki",
+      "Jay Hernandez",
+      "Lori Alan"
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mw5zzoru",
+    "seasons": null,
+    "episodes": null
   }
 ]
