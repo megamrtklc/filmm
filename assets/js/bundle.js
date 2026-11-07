@@ -1798,7 +1798,7 @@ document.addEventListener('click',event=>{
  const control=event.target.closest('[data-rail-target][data-rail-direction]');
  if(control){
   const rail=document.getElementById(control.dataset.railTarget);
-  if(rail)rail.scrollBy({left:Number(control.dataset.railDirection)*Math.max(260,rail.clientWidth*.82),behavior:'smooth'});
+  if(rail){const page=rail.classList.contains('saved-collection-rail')?rail.clientWidth*.98:Math.max(260,rail.clientWidth*.82);rail.scrollBy({left:Number(control.dataset.railDirection)*page,behavior:'smooth'});}
   return;
  }
  if(event.target.matches('[data-detail-dismiss]')&&document.body.classList.contains('ny7-detail-open'))showDashboard();
