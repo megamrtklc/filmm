@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const $ = (selector, root = document) => root.querySelector(selector);
-  const $ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   // Resolve the catalog from the actual admin.js location, not the current route.
   const adminScriptUrl = document.currentScript?.src || new URL('assets/js/admin.js', window.location.href).href;
   let catalog = [];
