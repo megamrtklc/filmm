@@ -500,7 +500,7 @@
     $('#personal-type-series').textContent=series.toLocaleString('tr-TR');
     $('#personal-type-donut').style.background=total?'conic-gradient(var(--gold) 0% '+movieShare+'%, #68788e '+movieShare+'% 100%)':'conic-gradient(#343b47 0% 100%)';
 
-    const dated=diaryEntries.filter(entry=>entry.status==='watched'&&/^\\d{4}-\\d{2}-\\d{2}$/.test(String(entry.date||''))&&!Number.isNaN(new Date(entry.date+'T12:00:00').getTime()));
+    const dated=diaryEntries.filter(entry=>entry.status==='watched'&&/^\d{4}-\d{2}-\d{2}$/.test(String(entry.date||''))&&!Number.isNaN(new Date(entry.date+'T12:00:00').getTime()));
     const yearCounts={};
     dated.forEach(entry=>{const year=entry.date.slice(0,4);yearCounts[year]=(yearCounts[year]||0)+1;});
     const allYears=Object.keys(yearCounts).sort();
