@@ -147,19 +147,19 @@
     if(!response.ok) throw new Error('GitHub HTTP '+response.status+': '+(data.message||'Koleksiyon isteği başarısız.'));
     return data;
   }
-  let collectionsSaving=false;
-  async function persistCollections() {
-    if(collectionsSaving) throw new Error('Önceki koleksiyon kaydı tamamlanıyor; birkaç saniye sonra tekrar dene.');
-    collectionsSaving=true;
-    try {
+  let collectionsSaveQueue=Promise.resolve();
+  function persistCollections() {
+    const normalized=collections.map(item=>({...item,items:item.items.map(String)}));
+    const operation=collectionsSaveQueue.then(async()=>{
       const current=await githubCollectionsRequest('GET');
       if(!current.sha||!current.content) throw new Error('Koleksiyon dosyası okunamadı; mevcut kayıt korunuyor.');
       const latest=JSON.parse(decodeGithubContent(current.content));
       if(!Array.isArray(latest)) throw new Error('Koleksiyon dosyasının biçimi geçersiz.');
-      const normalized=collections.map(item=>({...item,items:item.items.map(String)}));
       await githubCollectionsRequest('PUT',{message:'Update Perde homepage collections',content:encodeGithubContent(JSON.stringify(normalized,null,2)+'\\n'),sha:current.sha,branch:'main'});
       toast('Koleksiyonlar GitHub’a kalıcı olarak kaydedildi.');
-    } finally { collectionsSaving=false; }
+    });
+    collectionsSaveQueue=operation.catch(()=>{});
+    return operation;
   }
   async function saveEditorDraft(event) {
     event.preventDefault(); const payload=editorPayload();
