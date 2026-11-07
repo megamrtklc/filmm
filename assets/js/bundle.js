@@ -111,7 +111,7 @@ function fitHeroTitleToWidth() {
             const bg = document.getElementById('hero-bg');
             if (heroImageSwapTimer) window.clearTimeout(heroImageSwapTimer);
             section.classList.add('is-changing');
-            heroImageSwapTimer = window.setTimeout(() => { bg.src = item.backdrop || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
+            heroImageSwapTimer = window.setTimeout(() => { bg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
             const typeBadge = document.getElementById('hero-type-badge');
             if (typeBadge) typeBadge.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i><span>DİZİ</span>' : '<i class="fa-solid fa-film" aria-hidden="true"></i><span>FİLM</span>';
             document.getElementById('hero-title').innerText = item.title;
@@ -127,12 +127,12 @@ function fitHeroTitleToWidth() {
                 <span class="hero-rating-badge tomato"><b class="tomato-mark">🍅 RT</b><strong>${ratingValue(item.rottenTomatoes)}</strong></span>
                 <span class="hero-rating-badge popcorn"><b class="popcorn-mark">🍿</b><strong>${ratingValue(item.popcornmeter)}</strong></span>`;
             const runtime = item.type === 'tv'
-                ? [item.seasons || item.tmdbSeasons ? `${item.seasons || item.tmdbSeasons} sezon` : '', item.episodes || item.tmdbEpisodes ? `${item.episodes || item.tmdbEpisodes} bölüm` : '', item.duration || item.tmdbRuntime || ''].filter(Boolean).join(' • ')
-                : (item.duration || item.tmdbRuntime || '');
+                ? [item.tmdbSeasons || item.seasons ? `${item.tmdbSeasons || item.seasons} sezon` : '', item.tmdbEpisodes || item.episodes ? `${item.tmdbEpisodes || item.episodes} bölüm` : '', item.tmdbRuntime || item.duration || ''].filter(Boolean).join(' • ')
+                : (item.tmdbRuntime || item.duration || '');
             const meta = document.getElementById('hero-meta');
             meta.replaceChildren();
             const metaItems = [
-                { icon: 'fa-calendar-days', value: item.year },
+                { icon: 'fa-calendar-days', value: String(item.tmdbReleaseDate || '').slice(0,4) || item.year },
                 { icon: item.type === 'tv' ? 'fa-tv' : 'fa-film', value: item.type === 'tv' ? 'Dizi' : 'Film' },
                 { icon: 'fa-clock', value: runtime },
                 { icon: 'fa-tags', value: item.tmdbGenres || item.category }
@@ -155,7 +155,7 @@ function fitHeroTitleToWidth() {
                 part.append(icon, label);
                 meta.appendChild(part);
             });
-            document.getElementById('hero-desc').innerText = item.desc || item.tmdbOverview || '';
+            document.getElementById('hero-desc').innerText = item.tmdbOverview || item.desc || '';
             document.querySelectorAll('.hero-thumb').forEach((el,i) => {
                 const active = heroItems[i]?.id === item.id;
                 el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
@@ -271,7 +271,7 @@ function fitHeroTitleToWidth() {
             }
             rail.innerHTML = heroItems.map((m,i) => `
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
-                    <img src="${m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>${originalTitleMarkup(m,'hero-thumb-original')}
+                    <img src="${m.tmdbPoster || m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>${originalTitleMarkup(m,'hero-thumb-original')}
                 </button>`).join('');
         }
         function stepHero(direction) {
@@ -1127,7 +1127,7 @@ function applyPosterAtmosphere(item){
  const mediaId=String(item.id);
  posterColumn.dataset.atmosphereMediaId=mediaId;
  resetPosterAtmosphere();
- const imageUrl=item.image;
+ const imageUrl=item.tmdbPoster||item.image;
  if(!imageUrl)return;
  // Afişin tamamını, en-boy oranını koruyarak örnekle; kare kırpma baskın renkleri yanıltmasın.
  const source=imageUrl.replace(/^https?:\/\//,'');
@@ -1267,8 +1267,8 @@ function openDetailPage(id,update=true){
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
  document.getElementById('theme-body').style.backgroundColor='#050505';
  applyPosterAtmosphere(item);
- const posterImage=item.image||item.tmdbPoster||item.backdrop||item.tmdbBackdrop||'';
- const backdropImage=item.backdrop||item.tmdbBackdrop||posterImage;
+ const posterImage=item.tmdbPoster||item.image||item.tmdbBackdrop||item.backdrop||'';
+ const backdropImage=item.tmdbBackdrop||item.backdrop||posterImage;
  document.getElementById('detail-backdrop').src=backdropImage;
  const detailScene=backdropImage||posterImage;document.getElementById('detail-page-view').style.setProperty('--detail-scene-image',detailScene?'url("'+String(detailScene).replace(/"/g,'%22')+'")':'none');
  document.getElementById('detail-poster').src=posterImage;
@@ -1276,8 +1276,8 @@ function openDetailPage(id,update=true){
  let detailOriginal=document.getElementById('detail-original-title');if(!detailOriginal){detailOriginal=document.createElement('small');detailOriginal.id='detail-original-title';detailOriginal.className='media-original-title detail-original-title';document.getElementById('detail-title').after(detailOriginal);}detailOriginal.dataset.mediaId=String(item.id);detailOriginal.textContent=item.originalTitle||'';detailOriginal.hidden=!item.originalTitle;
  document.getElementById('detail-category').innerText=item.tmdbGenres||item.category||item.genre||'';
  // IMDb puanı alt değerlendirme satırında tek kez gösterilir.
- document.getElementById('detail-year').innerText=item.year||String(item.tmdbReleaseDate||'').slice(0,4)||'';
- document.getElementById('detail-duration').innerText=item.duration||item.tmdbRuntime||'';
+ document.getElementById('detail-year').innerText=String(item.tmdbReleaseDate||'').slice(0,4)||item.year||'';
+ document.getElementById('detail-duration').innerText=item.tmdbRuntime||item.duration||'';
  const detailKind=item.type==='tv'?'Dizi':(['documentary','doc','belgesel'].includes(String(item.type||'').toLocaleLowerCase('tr-TR'))?'Belgesel':'Film');
  document.getElementById('detail-type-label').innerText=detailKind;
  const countries=countryTokens(item.tmdbCountries||item.country);
@@ -1285,7 +1285,7 @@ function openDetailPage(id,update=true){
  const countryMarkup=countries.map(country=>{const info=countryDisplay(country);return '<button type="button" class="detail-country-chip" data-country="'+escapeCountryHtml(country)+'" aria-label="'+escapeCountryHtml(info.name)+' yapımlarını göster">'+countryFlagImage(info.iso,'flag-image')+'<span>'+escapeCountryHtml(info.name)+'</span></button>';}).join('');
  document.getElementById('detail-country').innerHTML=countryMarkup||'<span>Ülke bilgisi yok</span>';
  document.getElementById('detail-director-inline').innerHTML=directors.length?'<span class="detail-director-label">Yönetmen:</span> '+directors.map(director=>'<button type="button" class="detail-director-link" data-director="'+escapeCountryHtml(director)+'">'+escapeCountryHtml(director)+'</button>').join('<span class="detail-director-comma">, </span>'):'';
- document.getElementById('detail-desc').innerText=item.desc||item.tmdbOverview||'Açıklama henüz eklenmemiş.';
+ document.getElementById('detail-desc').innerText=item.tmdbOverview||item.desc||'Açıklama henüz eklenmemiş.';
  updateDetailSynopsis(item);
  const readScore=(...values)=>{for(const value of values){const candidate=value&&typeof value==='object'?(value.value??value.score??value.rating):value;if(candidate!==undefined&&candidate!==null&&String(candidate).trim()!==''&&String(candidate).trim().toLowerCase()!=='n/a')return String(candidate).trim();}return '';};
  const scoreItems=[
@@ -1688,9 +1688,9 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 } finally { clearTimeout(timeout); }
             };
             try {
-                const localUrl = new URL('./data/catalog.json?v=20261106-catalog-recovery-v4', document.baseURI).href;
-                const rootUrl = new URL('/data/catalog.json?v=20261106-catalog-recovery-v4', location.origin).href;
-                const rawUrl = 'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261106-catalog-recovery-v4';
+                const localUrl = new URL('./data/catalog.json?v=20261107-tmdb-display-v2', document.baseURI).href;
+                const rootUrl = new URL('/data/catalog.json?v=20261107-tmdb-display-v2', location.origin).href;
+                const rawUrl = 'https://raw.githubusercontent.com/megamrtklc/filmm/main/data/catalog.json?v=20261107-tmdb-display-v2';
                 const apiUrl = 'https://api.github.com/repos/megamrtklc/filmm/contents/data/catalog.json?ref=main';
                 const sources = [[localUrl,'Yayınlanan katalog'],[rootUrl,'Kök katalog yolu'],[rawUrl,'GitHub ham katalog'],[apiUrl,'GitHub API kataloğu']];
                 let loadedCatalog = null;
