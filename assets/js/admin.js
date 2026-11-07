@@ -13,7 +13,7 @@
   let tmdbRequestSequence = 0;
   let editorSubtitles = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
-  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',subtitles:'Altyazı Merkezi',backups:'Yedekleme',settings:'Genel Ayarlar'};
+  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Film / Dizi Ekle-Düzenle',collections:'Koleksiyonlar',hero:'Manşet ve Slider',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
     node.innerHTML = '<i class="fa-solid fa-circle-info"></i>' + escapeHtml(message);
