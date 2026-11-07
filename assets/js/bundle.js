@@ -273,9 +273,10 @@ function fitHeroTitleToWidth() {
         function renderHeroThumbnails() {
             const rail = document.getElementById('hero-thumbnails-rail');
             if (rail) {
-                rail.onmouseenter = () => { heroRailHovered = true; if (heroTimer) clearInterval(heroTimer); heroTimer = null; };
-                rail.onmouseleave = () => { heroRailHovered = false; restartHeroTimer(); };
+                rail.onmouseenter = () => { if(!heroSettings.pauseOnHover)return; heroRailHovered = true; if (heroTimer) clearInterval(heroTimer); heroTimer = null; };
+                rail.onmouseleave = () => { if(!heroSettings.pauseOnHover)return; heroRailHovered = false; restartHeroTimer(); };
             }
+            applyHeroDisplaySettings();
             rail.innerHTML = heroItems.map((m,i) => `
                 <button type="button" onclick="setHeroMedia('${m.id}',true)" onmouseenter="setHeroMedia('${m.id}',true)" class="hero-thumb ${i===heroIndex?'active':''}" aria-label="${m.title}" aria-pressed="${i===heroIndex}">
                     <img src="${m.tmdbPoster || m.image}" alt="${m.title}" loading="lazy"><span>${m.title}</span>${originalTitleMarkup(m,'hero-thumb-original')}
@@ -304,8 +305,8 @@ function fitHeroTitleToWidth() {
         function restartHeroTimer() {
             if(heroTimer) clearInterval(heroTimer);
             heroTimer = null;
-            if (heroRailHovered) return;
-            heroTimer=setInterval(()=>{if(!heroRailHovered && !document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},6500);
+            if (!heroSettings.autoplay || (heroSettings.pauseOnHover && heroRailHovered)) return;
+            heroTimer=setInterval(()=>{if((!heroSettings.pauseOnHover || !heroRailHovered) && !document.hidden && document.getElementById('detail-page-view').classList.contains('hidden')) stepHero(1);},heroSettings.interval*1000);
         }
 
 
@@ -2012,7 +2013,10 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
         let heroIndex = 0;
         let heroTimer = null;
         let heroRailHovered = false;
+        let heroSettings = {desktopCount:6,mobileCount:4,interval:6,autoplay:true,pauseOnHover:true};
         let catalogInitialized = false;
+        function applyHeroDisplaySettings(){const rail=document.getElementById('hero-thumbnails-rail');if(!rail)return;const mobile=window.matchMedia('(max-width:767px)').matches;rail.style.setProperty('--hero-visible-count',String(mobile?heroSettings.mobileCount:heroSettings.desktopCount));}
+        window.addEventListener('resize',applyHeroDisplaySettings,{passive:true});
         function showCatalogSkeletons() {
             const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
             ['media-grid','featured-rail','personalized-rail','top-movies-rail','top-series-rail'].forEach(id => {
@@ -2070,6 +2074,9 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                     const configResponse = await fetch(new URL('./data/homepage-config.json?v=20261107-home-hero-v1', document.baseURI).href,{cache:'no-store',credentials:'omit'});
                     if (configResponse.ok) savedHeroConfig = await configResponse.json();
                 } catch (configError) { console.warn('Manşet ayarları yüklenemedi; varsayılan vitrin kullanılacak.',configError); }
+                const rawHeroSettings=savedHeroConfig?.settings||{};
+                const desktop=[4,5,6,8,10],mobile=[3,4,5,6],intervals=[4,6,8,10];
+                heroSettings={desktopCount:desktop.includes(Number(rawHeroSettings.desktopCount))?Number(rawHeroSettings.desktopCount):6,mobileCount:mobile.includes(Number(rawHeroSettings.mobileCount))?Number(rawHeroSettings.mobileCount):4,interval:intervals.includes(Number(rawHeroSettings.interval))?Number(rawHeroSettings.interval):6,autoplay:rawHeroSettings.autoplay!==false,pauseOnHover:rawHeroSettings.pauseOnHover!==false};
                 const heroCandidates = mediaDatabase.filter(item => item && item.id != null && item.title && (item.tmdbBackdrop || item.backdrop || item.image || item.tmdbPoster || item.poster));
                 const savedSlides = Array.isArray(savedHeroConfig?.heroSlides) ? savedHeroConfig.heroSlides : [];
                 const configuredSlides = savedSlides.filter(slide => slide && slide.active !== false && mediaDatabase.some(item => String(item.id) === String(slide.id)));
@@ -2085,6 +2092,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 }
                 setHeroMedia(heroItems[0]?.id ?? mediaDatabase[0].id);
                 renderHeroThumbnails();
+                restartHeroTimer();
                 renderHomeCollections();
                 initializeMoodDiscovery();
                 renderMediaGrid();
