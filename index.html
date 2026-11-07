@@ -55,11 +55,21 @@
         </a>
         <div class="header-actions"><div class="header-search-shell">
                 <label class="search-wrap glass-search">
-                    <select id="search-category" class="search-category" aria-label="Arama kategorisi">
+                    <select id="search-category" class="search-category search-category-native" aria-label="Arama kategorisi" tabindex="-1">
                         <option value="media">Film / Dizi</option>
                         <option value="actor">Oyuncu</option>
                         <option value="director">Yönetmen</option>
                     </select>
+                    <div class="search-category-picker" id="search-category-picker">
+                        <button type="button" class="search-category-trigger" id="search-category-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="search-category-menu">
+                            <span id="search-category-current">Film / Dizi</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        <div class="search-category-menu" id="search-category-menu" role="listbox" aria-label="Arama türü" hidden>
+                            <button type="button" class="search-category-option is-selected" role="option" aria-selected="true" data-value="media"><i class="fa-solid fa-film"></i><span>Film / Dizi</span><i class="fa-solid fa-check option-check"></i></button>
+                            <button type="button" class="search-category-option" role="option" aria-selected="false" data-value="actor"><i class="fa-solid fa-user"></i><span>Oyuncu</span><i class="fa-solid fa-check option-check"></i></button>
+                            <button type="button" class="search-category-option" role="option" aria-selected="false" data-value="director"><i class="fa-solid fa-clapperboard"></i><span>Yönetmen</span><i class="fa-solid fa-check option-check"></i></button>
+                        </div>
+                    </div>
                     <span class="search-category-divider" aria-hidden="true"></span>
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input id="search-input" type="search" placeholder="Film veya dizi ara..." aria-label="Film veya dizi ara" autocomplete="off">
