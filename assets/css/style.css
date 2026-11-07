@@ -6767,3 +6767,13 @@ body.detail-synopsis-open{overflow:hidden}
 .actor-photo-modal-caption a{color:#e9c778;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:700px){.actor-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.actor-gallery-photo{aspect-ratio:4/3}.actor-gallery-toolbar{align-items:flex-start;flex-direction:column}.actor-gallery-more{min-height:36px}}
 @media(prefers-reduced-motion:reduce){.actor-gallery-photo,.actor-gallery-photo img,.actor-gallery-more{transition:none!important}}
+
+
+/* Oyuncu temel bilgileri: başlıksız, dengeli ve boşluksuz görünüm */
+.actor-profile-facts-horizontal{padding:14px 20px!important}
+.actor-profile-facts-horizontal .actor-facts{margin:0!important;gap:12px!important}
+.actor-profile-facts-horizontal .actor-facts>div{min-height:82px!important;padding:13px 14px!important;justify-content:center!important}
+@media(max-width:600px){
+ .actor-profile-facts-horizontal{padding:12px!important}
+ .actor-profile-facts-horizontal .actor-facts>div{min-height:72px!important;padding:10px!important}
+}
