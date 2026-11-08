@@ -8165,3 +8165,30 @@ body.detail-synopsis-open{overflow:hidden}
 #detail-page-view:not(.is-series-redesign) .detail-description-panel .detail-score-row{
   margin-top:auto!important;
 }
+
+
+/* PERDE AŞAMA 1 — Manşet tek başına tam genişlikte */
+#dashboard-view .home-feature-row{
+  display:block!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:none!important;
+  gap:0!important;
+}
+#dashboard-view .home-feature-row #hero-section.hero-section{
+  display:flex!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  border-radius:0!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section[hidden]{
+  display:none!important;
+}
+@media(max-width:760px){
+  #dashboard-view .home-feature-row{padding-left:0!important;padding-right:0!important}
+  #dashboard-view .home-feature-row #hero-section.hero-section{
+    width:100%!important;max-width:none!important;margin:0!important;
+  }
+}
