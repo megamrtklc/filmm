@@ -7488,3 +7488,40 @@ body.detail-synopsis-open{overflow:hidden}
     transform:translateY(14px)!important;
   }
 }
+
+
+/* Manşet afişleri: daha geniş kartlar ve aktif yapımda belirgin odak */
+#dashboard-view .home-feature-row #hero-section .hero-thumbnails{
+  perspective:900px;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb{
+  position:relative!important;
+  z-index:1!important;
+  opacity:.82!important;
+  filter:saturate(.82) brightness(.88)!important;
+  transition:transform .28s ease,opacity .28s ease,filter .28s ease,
+    border-color .28s ease,box-shadow .28s ease!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb.active{
+  z-index:5!important;
+  opacity:1!important;
+  filter:saturate(1.08) brightness(1.06)!important;
+  transform:translateY(-9px) scale(1.13)!important;
+  border:2px solid #e5bd62!important;
+  box-shadow:0 0 0 2px rgba(229,189,98,.18),0 10px 24px rgba(0,0,0,.55)!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb:hover{
+  z-index:4!important;
+  opacity:1!important;
+  filter:saturate(1.05) brightness(1.04)!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-thumb.active{
+    transform:translateY(-6px) scale(1.10)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #dashboard-view .home-feature-row #hero-section .hero-thumb{
+    transition:none!important;
+  }
+}
