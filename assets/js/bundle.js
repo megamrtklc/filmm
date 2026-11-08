@@ -1371,7 +1371,7 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
   const still=ep.still_path?'https://image.tmdb.org/t/p/w780'+ep.still_path:(item.tmdbPoster||item.image||'');
   const meta=[Number(ep.runtime)>0?ep.runtime+' dk':'',ep.air_date?new Date(ep.air_date+'T12:00:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}):''].filter(Boolean).join(' · ');
   return '<article class="detail-episode-card'+(watched?' is-watched':'')+'">'+
-   '<div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="'+escapeCountryHtml(ep.name||('Bölüm '+no))+'" loading="lazy"><span class="detail-episode-number">'+String(no).padStart(2,'0')+'</span><span class="detail-episode-watched-badge"><i class="fa-solid fa-check"></i> İzlendi</span></div>'+
+   '<div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="'+escapeCountryHtml(ep.name||('Bölüm '+no))+'" loading="lazy"><span class="detail-episode-number">'+String(no).padStart(2,'0')+'</span><span class="detail-episode-watched-badge"'+(watched?'':' hidden')+'><i class="fa-solid fa-check"></i> İzlendi</span></div>'+
    '<div class="detail-episode-copy"><div class="detail-episode-title-row"><h3>'+escapeCountryHtml(ep.name||('Bölüm '+no))+'</h3></div>'+
    (meta?'<small class="detail-episode-meta">'+escapeCountryHtml(meta)+'</small>':'')+
    '<p>'+escapeCountryHtml(ep.overview||'Bu bölüm için henüz açıklama eklenmemiş.')+'</p>'+
