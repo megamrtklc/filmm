@@ -7477,3 +7477,14 @@ body.detail-synopsis-open{overflow:hidden}
     max-width:100%!important;
   }
 }
+
+
+/* Manşet metin grubunu hafifçe aşağı konumlandır */
+#dashboard-view .home-feature-row #hero-section .hero-copy{
+  transform:translateY(12px)!important;
+}
+@media(max-width:820px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    transform:translateY(8px)!important;
+  }
+}
