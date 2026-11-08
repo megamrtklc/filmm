@@ -8816,7 +8816,7 @@ body.detail-synopsis-open{overflow:hidden}
 /* Ana sayfa: Moduna Göre Keşfet + kişisel seçki yan yana */
 #dashboard-view>.home-mood-continue-row{
  display:grid!important;
- grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ grid-template-columns:minmax(0,1.45fr) minmax(0,.95fr)!important;
  align-items:stretch!important;
  gap:18px!important;
  width:100%!important;
@@ -8857,7 +8857,7 @@ body.detail-synopsis-open{overflow:hidden}
 #collection-personalized .collection-card-copy{padding:7px 1px 0!important}
 #collection-personalized .collection-card-copy h3{font-size:11px!important;line-height:1.3!important}
 #collection-personalized .collection-card-copy p{font-size:9px!important}
-@media(max-width:900px){
+@media(max-width:1100px){
  #dashboard-view>.home-mood-continue-row{grid-template-columns:minmax(0,1fr)!important;gap:14px!important;padding:16px 18px 0!important}
  #dashboard-view>.home-mood-continue-row>#collection-personalized{height:auto!important;min-height:360px!important}
  #collection-personalized .collection-rail{grid-auto-columns:calc((100% - 36px)/4)!important}
