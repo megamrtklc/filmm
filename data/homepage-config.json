@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-08T12:23:02.479Z",
+  "updatedAt": "2026-11-08T12:27:03.742Z",
   "settings": {
     "desktopCount": 8,
     "mobileCount": 3,
@@ -16,19 +16,31 @@
       "description": ""
     },
     {
+      "id": "archive-34",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
       "id": "archive-26",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "archive-103",
+      "id": "archive-124",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "archive-124",
+      "id": "archive-2",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-103",
       "active": true,
       "headline": "",
       "description": ""
@@ -41,12 +53,6 @@
     },
     {
       "id": "archive-125",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-2",
       "active": true,
       "headline": "",
       "description": ""
@@ -71,12 +77,6 @@
     },
     {
       "id": "archive-105",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-34",
       "active": true,
       "headline": "",
       "description": ""
