@@ -4,7 +4,7 @@
  const $=id=>document.getElementById(id);
  const root=()=> $('perde-discovery');
  const catalog=()=>typeof mediaDatabase!=='undefined'&&Array.isArray(mediaDatabase)?mediaDatabase:[];
- const norm=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[ıİ]/g,'i').toLocaleLowerCase('tr-TR').trim();
+ const norm=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[ıİ]/g,'i').toLocaleLowerCase('en-US').replace(/[ıİ]/g,'i').trim();
  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const titleOf=item=>item.title||item.tmdbTitle||'İsimsiz yapım';
  const posterOf=item=>item.tmdbPoster||item.image||item.poster||item.tmdbBackdrop||item.backdrop||'';
@@ -35,10 +35,12 @@
   else rows.sort((a,b)=>score(b)-score(a));
   if(count)count.textContent=rows.length+' yapım bulundu';
   const visible=rows.slice(0,limit);
+  const emptyTitle=active==='actor'&&!q?'Oyuncu adını yaz veya listeden seç.':active==='director'&&!q?'Yönetmen adını yaz veya listeden seç.':'Bu kriterlere uygun yapım bulunamadı.';
+  const emptyHint=active==='actor'&&!q?'Oyuncunun adını girdiğinde yer aldığı yapımlar listelenecek.':active==='director'&&!q?'Yönetmenin adını girdiğinde filmografisi listelenecek.':'Filtreleri değiştirerek yeniden deneyebilirsin.';
   host.innerHTML=visible.length?visible.map(item=>{
    const poster=posterOf(item),year=yearOf(item),kind=item.type==='tv'?'Dizi':'Film',rating=item.tmdbRating||item.rating||'—';
    return '<button type="button" class="pd-result-card" data-pd-open="'+esc(item.id)+'"><span class="pd-result-poster">'+(poster?'<img src="'+esc(poster)+'" alt="'+esc(titleOf(item))+'" loading="lazy" decoding="async">':'<i class="fa-solid fa-film"></i>')+'<span class="pd-result-rating"><i class="fa-solid fa-star"></i> '+esc(rating)+'</span></span><span class="pd-result-copy"><strong>'+esc(titleOf(item))+'</strong><small>'+esc([year||'',kind].filter(Boolean).join(' · '))+'</small></span></button>';
-  }).join(''):'<div class="pd-empty"><i class="fa-solid fa-magnifying-glass"></i><strong>Bu kriterlere uygun yapım bulunamadı.</strong><span>Filtreleri değiştirerek yeniden deneyebilirsin.</span></div>';
+  }).join(''):'<div class="pd-empty"><i class="fa-solid fa-magnifying-glass"></i><strong>'+esc(emptyTitle)+'</strong><span>'+esc(emptyHint)+'</span></div>';
   const more=$('pd-load-more');if(more)more.hidden=rows.length<=limit;
  }
  function setMode(mode){
