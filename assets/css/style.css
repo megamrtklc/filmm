@@ -7630,3 +7630,55 @@ body.detail-synopsis-open{overflow:hidden}
     padding:0 0 12px!important;
   }
 }
+
+/* Manşet okları: sabit ölçü, sade zemin ve hafif köşeler */
+#dashboard-view .home-feature-row #hero-section .hero-arrows{
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  padding:0 0 40px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-arrow{
+  box-sizing:border-box!important;
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 34px!important;
+  width:34px!important;
+  min-width:34px!important;
+  height:34px!important;
+  min-height:34px!important;
+  margin:0!important;
+  padding:0!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+  border-radius:7px!important;
+  background:rgba(12,14,18,.78)!important;
+  color:rgba(255,255,255,.9)!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  transform:none!important;
+  line-height:1!important;
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-arrow:hover{
+  background:rgba(244,198,79,.95)!important;
+  border-color:rgba(244,198,79,.95)!important;
+  color:#111!important;
+  transform:none!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-arrows{
+    gap:6px!important;
+    padding:0 0 12px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-arrow{
+    flex-basis:29px!important;
+    width:29px!important;
+    min-width:29px!important;
+    height:29px!important;
+    min-height:29px!important;
+  }
+}
