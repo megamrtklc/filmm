@@ -357,7 +357,7 @@ function renderMoodRecommendation(item, category) {
     const description = escapeCountryHtml(item.desc || 'Bu yapımı keşfetmek için detaylarına göz at.');
     const id = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     const options = moodCategoryOptions.map(option =>
-        '<button type="button" class="mood-category-option' + (category === option.value ? ' is-active' : '') + '" onclick="chooseMoodPick(\\'' + option.value.replace(/'/g, "\\\\'") + '\\')">' +
+        '<button type="button" class="mood-category-option' + (category === option.value ? ' is-active' : '') + '" onclick="chooseMoodPick(\'' + option.value.replace(/'/g, "\\\\'") + '\')">' +
         '<i class="fa-solid ' + option.icon + '" aria-hidden="true"></i><span>' + option.label + '</span></button>'
     ).join('');
     result.innerHTML = \`
