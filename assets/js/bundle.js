@@ -507,28 +507,38 @@ function renderHomeCollections() {
         for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
         return copy;
     };
-    const moviePool=shuffleItems(valid.filter(item=>item.type==='movie'));
-    const seriesPool=shuffleItems(valid.filter(item=>item.type==='tv'));
-    const personalized=[];
-    // Mümkün olduğunda iki film + iki dizi; katalogda eksik tür varsa kalan yerleri diğer tür doldurur.
-    personalized.push(...moviePool.slice(0,2),...seriesPool.slice(0,2));
-    const selectedIds=new Set(personalized.map(item=>String(item.id)));
-    personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,4-personalized.length));
-    const personalizedSelection=shuffleItems(personalized).slice(0,4);
     const personalizedRail=document.getElementById('personalized-rail');
-    if(personalizedRail){
+    const renderPersonalizedSelection=()=>{
+        const moviePool=shuffleItems(valid.filter(item=>item.type==='movie'));
+        const seriesPool=shuffleItems(valid.filter(item=>item.type==='tv'));
+        const personalized=[];
+        // Mümkün olduğunda iki film + iki dizi; eksik tür varsa diğer türle tamamla.
+        personalized.push(...moviePool.slice(0,2),...seriesPool.slice(0,2));
+        const selectedIds=new Set(personalized.map(item=>String(item.id)));
+        personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,4-personalized.length));
+        const selection=shuffleItems(personalized).slice(0,4);
+        if(!personalizedRail)return;
         personalizedRail.classList.add('personalized-row-rail');
-        personalizedRail.innerHTML=personalizedSelection.length?personalizedSelection.map(item=>`
-            <article class="personalized-row-card" data-detail-id="${item.id}" tabindex="0" role="button" aria-label="${item.title} detayını aç">
-                <div class="personalized-row-poster"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async"></div>
+        personalizedRail.innerHTML=selection.length?selection.map(item=>{
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
+            const shortOverview=overview.length>105?overview.slice(0,102).trimEnd()+'…':overview;
+            const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
+            return `
+            <article class="personalized-row-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
+                <div class="personalized-row-poster"><img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="lazy" decoding="async"></div>
                 <div class="personalized-row-copy">
-                    <div class="personalized-row-topline"><span>${item.type==='tv'?'DİZİ':'FİLM'}</span><b>★ ${item.rating||'—'}</b></div>
-                    <h3>${item.title}</h3>
-                    <p>${item.year||''}${item.genre?' · '+String(item.genre).split('/')[0].trim():''}</p>
+                    <div class="personalized-row-topline"><span>${item.type==='tv'?'DİZİ':'FİLM'}</span><b><i class="fa-solid fa-star" aria-hidden="true"></i> IMDb ${escapeCountryHtml(item.rating||'—')}</b></div>
+                    <h3>${escapeCountryHtml(item.title)}</h3>
+                    <p>${escapeCountryHtml([item.year||'',genre].filter(Boolean).join(' · '))}</p>
+                    ${shortOverview?'<small class="personalized-row-summary">'+escapeCountryHtml(shortOverview)+'</small>':''}
                 </div>
                 <i class="fa-solid fa-chevron-right personalized-row-arrow" aria-hidden="true"></i>
-            </article>`).join(''):'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
-    }
+            </article>`;
+        }).join(''):'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
+    };
+    renderPersonalizedSelection();
+    const refreshPicksButton=document.getElementById('personalized-refresh');
+    if(refreshPicksButton)refreshPicksButton.onclick=renderPersonalizedSelection;
     fill('top-movies-rail', movies);
     fill('top-series-rail', series);
     [['featured-rail','öne çıkan yapımlarda'],['personalized-rail','sana özel seçkilerde'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
