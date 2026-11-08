@@ -7446,38 +7446,34 @@ body.detail-synopsis-open{overflow:hidden}
   }
 }
 
-/* Manşet konu metni: 4 satır sınırı ve gerçekten genişletilmiş metin alanı */
+/* Manşet konu metni: kesin 4 satır ve geniş içerik alanı */
 #dashboard-view .home-feature-row #hero-section .hero-copy{
-  width:min(82%,780px)!important;
-  max-width:780px!important;
+  width:min(94%,900px)!important;
+  max-width:900px!important;
 }
-#dashboard-view .home-feature-row #hero-section #hero-desc{
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
   display:-webkit-box!important;
   -webkit-box-orient:vertical!important;
   -webkit-line-clamp:4!important;
   line-clamp:4!important;
   width:100%!important;
   max-width:100%!important;
-  height:auto!important;
   min-height:0!important;
-  max-height:6.4em!important;
+  height:auto!important;
+  max-height:6.72em!important;
   overflow:hidden!important;
-  line-height:1.6!important;
+  white-space:normal!important;
+  text-overflow:clip!important;
+  overflow-wrap:break-word!important;
+  line-height:1.68!important;
 }
 @media(max-width:820px){
   #dashboard-view .home-feature-row #hero-section .hero-copy{
     width:100%!important;
     max-width:100%!important;
   }
-  #dashboard-view .home-feature-row #hero-section #hero-desc{
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    width:100%!important;
     max-width:100%!important;
-  }
-}
-@media(max-width:560px){
-  #dashboard-view .home-feature-row #hero-section #hero-desc{
-    -webkit-line-clamp:4!important;
-    line-clamp:4!important;
-    max-height:6.4em!important;
-    font-size:11px!important;
   }
 }
