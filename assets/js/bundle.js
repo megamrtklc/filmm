@@ -1436,7 +1436,7 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
   const fresh=getDetailEpisodeProgress(item.id),count=episodes.filter(ep=>fresh[seasonNo+'_'+ep.episode_number]?.watched).length;
   const label=root.querySelector('.detail-episode-progress'),bar=root.querySelector('.detail-episode-progress-track span');
   if(label)label.textContent=count+' / '+episodes.length+' izlendi';
-  if(bar)bar.style.width+(episodes.length?Math.round(count/episodes.length*100):0)+'%';
+  if(bar)bar.style.width=(episodes.length?Math.round(count/episodes.length*100):0)+'%';
   const seasonChip=root.querySelector('[data-season-choice="'+seasonNo+'"] small');if(seasonChip)seasonChip.textContent=count+'/'+episodes.length+' bölüm';
   applyFilters();updateDetailSeriesDashboard(item);
  }));
