@@ -14423,7 +14423,7 @@
     "genre": "Dram",
     "rating": "8.2",
     "ratingCount": "IMDb 8.2",
-    "year": "2024",
+    "year": 2024,
     "duration": "Bilinmiyor",
     "themeColor": "#101014",
     "image": "https://image.tmdb.org/t/p/w500/kSArpvMefJhwwZVATCRst4bgsw5.jpg",
@@ -14512,7 +14512,21 @@
     "originalTitle": "The Day of the Jackal",
     "imdbId": "tt24053860",
     "tmdbSeasons": 1,
-    "tmdbEpisodes": 10
+    "tmdbEpisodes": 10,
+    "watchUrl": "https://s7.gelsistirire.top/d/zqnggc2osk3rtzj5apwrlh4tjw5hjfl7iyre5lcywlrz2ctdac7zdelkzgp4n7zjsaopdzwy/The%20Day%20of%20the%20Jackal%20S01E01%20WEB%20DL%201080p%20DUAL.mp4",
+    "platform": [],
+    "personalNote": "",
+    "subtitles": [
+      {
+        "language": "tr",
+        "languageLabel": "Türkçe",
+        "fileName": "The.Day.Of.The.Jackal.S01E01.WEB.x264-TORRENTGALAXY",
+        "url": "https://megamrtklc.github.io/filmm/assets/subtitles/archive-120/tr-s1e1-The-Day-Of-The-Jackal-S01E01-WEB-1794096753302.vtt",
+        "default": true,
+        "season": 1,
+        "episode": 1
+      }
+    ]
   },
   {
     "id": "archive-122",
