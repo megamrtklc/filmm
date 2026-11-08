@@ -2188,7 +2188,15 @@ function openPlayerForMedia(id){
  if(item.type==='tv'&&!window.perdeEpisodeContext&&!item.watchUrl){return;}
  activePlayerMediaId=String(window.perdeEpisodeContext?.playerId||item.id);
  const modal=document.getElementById('player-modal'),video=document.getElementById('player-video');
- document.getElementById('player-media-title').textContent=window.perdeEpisodeContext ? item.title+' · S'+window.perdeEpisodeContext.season+' B'+window.perdeEpisodeContext.episode+' — '+(window.perdeEpisodeContext.episodeTitle||'Bölüm') : item.title+' · '+(item.year||'');
+ const playerTitle=window.perdeEpisodeContext ? item.title+' · S'+window.perdeEpisodeContext.season+' B'+window.perdeEpisodeContext.episode+' — '+(window.perdeEpisodeContext.episodeTitle||'Bölüm') : item.title+' · '+(item.year||'');
+ document.getElementById('player-media-title').textContent=playerTitle;
+ const infoPoster=document.getElementById('player-info-poster'),infoTitle=document.getElementById('player-info-title'),infoType=document.getElementById('player-info-type'),infoMeta=document.getElementById('player-info-meta'),infoOverview=document.getElementById('player-info-overview');
+ if(infoPoster){infoPoster.src=item.image||item.tmdbPoster||'';infoPoster.alt=item.title||'Yapım afişi';}
+ if(infoTitle)infoTitle.textContent=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeTitle||'Bölüm')+' — '+item.title:item.title;
+ if(infoType)infoType.textContent=window.perdeEpisodeContext?'DİZİ · SEZON '+window.perdeEpisodeContext.season+' · BÖLÜM '+window.perdeEpisodeContext.episode:(item.type==='tv'?'DİZİ':'FİLM');
+ if(infoMeta)infoMeta.textContent=[item.year,item.tmdbGenres||item.category,item.tmdbRuntime||item.duration].filter(Boolean).join(' · ')||'Perde arşivi';
+ if(infoOverview)infoOverview.textContent=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeOverview||item.tmdbOverview||item.desc||'Bu bölüm için özet bilgisi bulunmuyor.'):item.tmdbOverview||item.desc||'Bu yapım için açıklama bilgisi bulunmuyor.';
+ const sessionStatus=document.getElementById('player-session-status');if(sessionStatus)sessionStatus.textContent='Bağlantı kontrol ediliyor';
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
  document.documentElement.classList.add('ny7-modal-lock');
  clearYouTubePlayer();
@@ -2218,6 +2226,7 @@ function openPlayerForMedia(id){
   if(message)message.textContent='Bu yapım için izleme bağlantısı henüz tanımlanmamış. Bağlantıyı yönetim panelindeki yapım kaydından ekleyebilirsin.';
  }
  loadSavedPlayerSource(activePlayerMediaId,episodeContext?episodeWatchUrl:item.watchUrl);
+ const playerStatus=document.getElementById('player-session-status');if(playerStatus)playerStatus.textContent=episodeContext?(episodeWatchUrl?'Bölüm kaynağı bulundu':'Kaynak bekleniyor'):(item.watchUrl?'Kaynak bulundu':'Kaynak bekleniyor');
 }
 function saveAndPlayStream(){
  if(!activePlayerMediaId)return;
