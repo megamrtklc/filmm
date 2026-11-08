@@ -10,6 +10,8 @@
   const diary = () => read('perde_series_diary_v1', {});
   const progress = () => read('perde_player_progress_v3', {});
   const stats = () => read('perde_player_stats_v3', {});
+  const manualDiary = () => list('perde_watch_diary_v1');
+  function manualEntry(item) { return manualDiary().find(entry => String(entry.id) === String(item.id)) || null; }
   let activeTab = 'overview';
   let query = '';
 
@@ -21,10 +23,10 @@
   function watchedEpisodeCount(item) { const value = seriesEntry(item).watched; return Array.isArray(value) ? value.length : 0; }
   function completedCount(item) { return Number(stats()[String(item.id)]?.completed) || 0; }
   function savedProgress(item) { const row = progress()[String(item.id)]; return row && Number(row.time) > 0 ? row : null; }
-  function isWatched(item) { return item.type === 'tv' ? (seriesEntry(item).status === 'completed' || watchedEpisodeCount(item) > 0) : completedCount(item) > 0; }
+  function isWatched(item) { const manual = manualEntry(item); return manual?.status === 'watched' || (item.type === 'tv' ? (seriesEntry(item).status === 'completed' || watchedEpisodeCount(item) > 0) : completedCount(item) > 0); }
   function isUnfinished(item) {
     const entry = seriesEntry(item);
-    return !!savedProgress(item) || (item.type === 'tv' && ['paused','dropped'].includes(entry.status)) ||
+    return !!savedProgress(item) || manualEntry(item)?.status === 'watching' || (item.type === 'tv' && ['paused','dropped'].includes(entry.status)) ||
       (item.type === 'tv' && entry.status === 'watching' && watchedEpisodeCount(item) > 0);
   }
   function formatTime(seconds) {
@@ -53,6 +55,8 @@
       '<p class="wc-card-meta">' + esc(meta) + (rating ? ' <span>★ ' + esc(rating) + '</span>' : '') + '</p>' +
       (status ? '<p class="wc-card-status">' + esc(status) + '</p>' : '') +
       '<div class="wc-card-actions"><button type="button" class="wc-card-open" data-wc-open="' + esc(item.id) + '">Detayları gör</button>' +
+      (mode === 'watchlist' || mode === 'unfinished' ? '<button type="button" class="wc-card-mark" data-wc-status="' + esc(item.id) + '" data-wc-next-status="watched">İzlendi</button>' : '') +
+      (mode === 'watched' && manualEntry(item)?.status === 'watched' && completedCount(item) === 0 && !(item.type === 'tv' && seriesEntry(item).status === 'completed') ? '<button type="button" class="wc-card-mark" data-wc-status="' + esc(item.id) + '" data-wc-next-status="watching">İzlemeye devam</button>' : '') +
       (mode === 'watchlist' ? '<button type="button" class="wc-card-remove" data-wc-remove="' + esc(item.id) + '" aria-label="Listemden çıkar"><i class="fa-solid fa-bookmark"></i></button>' : '') +
       '</div></div></article>';
   }
@@ -77,7 +81,8 @@
   }
   function getCollections() {
     const all = catalog();
-    const watchIds = new Set(list('ny7_watchlist').map(String));
+    const diaryEntries = manualDiary();
+    const watchIds = new Set([...list('ny7_watchlist'), ...diaryEntries.filter(entry => entry.status === 'watchlist').map(entry => entry.id)].map(String));
     const watched = all.filter(isWatched);
     const unfinished = all.filter(isUnfinished);
     const watchlistItems = all.filter(item => watchIds.has(String(item.id)));
@@ -169,6 +174,17 @@
       closeCenter();
       if (typeof window.openDetailPage === 'function') window.openDetailPage(id);
       return;
+    }
+    const status = event.target.closest('[data-wc-status]');
+    if (status) {
+      const id = String(status.dataset.wcStatus), nextStatus = status.dataset.wcNextStatus;
+      const entries = manualDiary();
+      const index = entries.findIndex(entry => String(entry.id) === id);
+      const previous = index >= 0 ? entries[index] : {id};
+      const updated = {...previous, id, status: nextStatus, updatedAt: Date.now()};
+      if (index >= 0) entries[index] = updated; else entries.push(updated);
+      try { localStorage.setItem('perde_watch_diary_v1', JSON.stringify(entries)); } catch (_) {}
+      render(); return;
     }
     const remove = event.target.closest('[data-wc-remove]');
     if (remove) {
