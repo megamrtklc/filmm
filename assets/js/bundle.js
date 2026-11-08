@@ -348,7 +348,8 @@ function getMoodCandidates(category) {
 function renderMoodDiscovery(recommendation = null) {
     const result = document.getElementById('mood-discovery-result');
     if (!result) return;
-    const options = moodCategoryOptions.map(option => '<option value="'+escapeCountryHtml(option.value)+'"'+(activeMoodCategory===option.value?' selected':'')+'>'+escapeCountryHtml(option.label)+'</option>').join('');
+    const selectedOption = moodCategoryOptions.find(option => option.value === activeMoodCategory);
+    const options = moodCategoryOptions.map((option,index) => '<button type="button" class="mood-gallery-option'+(activeMoodCategory===option.value?' is-selected':'')+'" role="option" aria-selected="'+(activeMoodCategory===option.value)+'" data-mood-option="'+escapeCountryHtml(option.value)+'"><span class="mood-gallery-option-index">'+String(index+1).padStart(2,'0')+'</span><span>'+escapeCountryHtml(option.label)+'</span><i class="fa-solid fa-check" aria-hidden="true"></i></button>').join('');
     let recommendationMarkup = '';
     if (recommendation) {
         const title = escapeCountryHtml(recommendation.title || 'İsimsiz yapım');
@@ -359,17 +360,33 @@ function renderMoodDiscovery(recommendation = null) {
         const rating = escapeCountryHtml(recommendation.rating || '—');
         recommendationMarkup = '<article class="mood-gallery-recommendation"><div class="mood-gallery-recommendation-backdrop" aria-hidden="true"><img src="'+backdrop+'" alt="" loading="lazy"><span></span></div><img class="mood-gallery-poster" src="'+poster+'" alt="'+title+'" loading="lazy"><div class="mood-gallery-recommendation-copy"><span class="mood-gallery-result-label">SANA ÖZEL ÖNERİ · '+typeLabel.toLocaleUpperCase('tr-TR')+'</span><h3>'+title+'</h3><p class="mood-gallery-meta">'+escapeCountryHtml(recommendation.year||'—')+' <span>•</span> <i class="fa-solid fa-star"></i> '+rating+'</p><p class="mood-gallery-description">'+escapeCountryHtml(recommendation.desc||'Bu yapımı keşfetmek için detaylarına göz at.')+'</p><div class="mood-gallery-result-actions"><button type="button" class="mood-gallery-open" data-mood-open="'+id+'"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="mood-gallery-again" data-mood-again><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div></article>';
     }
-    result.innerHTML = '<div class="mood-gallery-shell mood-gallery-dropdown-layout"><header class="mood-gallery-heading"><div class="mood-gallery-heading-copy"><span class="mood-gallery-eyebrow">PERDE’DE KEŞFET</span><h2>Bugün hangi dünyaya girmek istersin?</h2><p>Bir ruh hali seç, sıradaki hikâyeni birlikte bulalım.</p></div><div class="mood-gallery-controls"><label class="mood-gallery-select-wrap"><span>Ruh halin</span><select id="mood-gallery-select" aria-label="Ruh hali seç"><option value="">Ruh hali seç...</option>'+options+'</select><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></label><button type="button" class="mood-gallery-submit" data-mood-generate '+(activeMoodCategory?'':'disabled')+'><span>Öneri bul</span><i class="fa-solid fa-arrow-right"></i></button></div></header><div class="mood-gallery-wide-result">'+(recommendationMarkup||'<div class="mood-gallery-side-empty"><i class="fa-solid fa-film"></i><strong>Keşif yolculuğun burada başlasın</strong><span>Yukarıdan bir ruh hali seçerek sana özel film ve dizi önerileri alabilirsin.</span></div>')+'</div></div>';
-    const moodSelect = result.querySelector('#mood-gallery-select');
-    moodSelect?.addEventListener('change', event => {
-        activeMoodCategory = event.currentTarget.value || '';
-        lastMoodRecommendationId = null;
-        const generate = result.querySelector('[data-mood-generate]');
-        if (generate) generate.disabled = !activeMoodCategory;
+    result.innerHTML = '<div class="mood-gallery-shell mood-gallery-dropdown-layout"><header class="mood-gallery-heading"><div class="mood-gallery-heading-copy"><span class="mood-gallery-eyebrow">PERDE’DE KEŞFET</span><h2>Bugün hangi dünyaya girmek istersin?</h2><p>Bir ruh hali seç, sıradaki hikâyeni birlikte bulalım.</p></div><div class="mood-gallery-controls"><div class="mood-gallery-select-wrap"><span>RUH HALİNİ SEÇ</span><div class="mood-gallery-picker"><button type="button" class="mood-gallery-picker-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="mood-gallery-options"><span class="mood-gallery-picker-symbol"><i class="fa-solid fa-wand-magic-sparkles"></i></span><span class="mood-gallery-picker-value">'+(selectedOption?escapeCountryHtml(selectedOption.label):'Bir ruh hali seç')+'</span><i class="fa-solid fa-chevron-down mood-gallery-picker-chevron"></i></button><div class="mood-gallery-options" id="mood-gallery-options" role="listbox" aria-label="Ruh hali seçenekleri" hidden>'+options+'</div></div></div><button type="button" class="mood-gallery-submit" data-mood-generate '+(activeMoodCategory?'':'disabled')+'><span>Öneri bul</span><i class="fa-solid fa-arrow-right"></i></button></div></header><div class="mood-gallery-wide-result">'+(recommendationMarkup||'<div class="mood-gallery-side-empty"><i class="fa-solid fa-film"></i><strong>Keşif yolculuğun burada başlasın</strong><span>Yukarıdan bir ruh hali seçerek sana özel film ve dizi önerileri alabilirsin.</span></div>')+'</div></div>';
+    const trigger = result.querySelector('.mood-gallery-picker-trigger');
+    const menu = result.querySelector('.mood-gallery-options');
+    trigger?.addEventListener('click', () => {
+        const opening = menu.hidden;
+        menu.hidden = !opening;
+        trigger.setAttribute('aria-expanded', String(opening));
+        trigger.classList.toggle('is-open', opening);
     });
+    result.querySelectorAll('[data-mood-option]').forEach(optionButton => optionButton.addEventListener('click', () => {
+        activeMoodCategory = optionButton.dataset.moodOption || '';
+        lastMoodRecommendationId = null;
+        renderMoodDiscovery();
+        const newTrigger = result.querySelector('.mood-gallery-picker-trigger');
+        newTrigger?.focus();
+    }));
     result.querySelector('[data-mood-generate]')?.addEventListener('click', generateMoodPick);
     result.querySelector('[data-mood-open]')?.addEventListener('click', event => openDetailPage(event.currentTarget.dataset.moodOpen));
     result.querySelector('[data-mood-again]')?.addEventListener('click', generateMoodPick);
+    result.addEventListener('click', event => {
+        if (!event.target.closest('.mood-gallery-picker')) {
+            const openMenu = result.querySelector('.mood-gallery-options');
+            const openTrigger = result.querySelector('.mood-gallery-picker-trigger');
+            if (openMenu) openMenu.hidden = true;
+            if (openTrigger) { openTrigger.setAttribute('aria-expanded','false'); openTrigger.classList.remove('is-open'); }
+        }
+    });
 }
 function chooseMoodPick(category) {
     activeMoodCategory = category || '';
