@@ -885,3 +885,9 @@
 @media(max-width:900px){
   .admin-topbar .mobile-menu{display:grid}
 }
+
+/* Mobilde menü açıkken hamburger kontrolünü menünün üzerinde tut */
+@media(max-width:900px){
+  body.admin-sidebar-open .admin-topbar{z-index:70}
+  body.admin-sidebar-open .admin-topbar .mobile-menu{position:relative;z-index:71}
+}
