@@ -220,7 +220,7 @@
     if (location.hash === '#/izleme-merkezi') openCenter();
     else closeCenter();
   });
-  window.addEventListener('perde:homepage-refresh', () => { if (location.hash === '#/izleme-merkezi') openCenter(); });
+  window.addEventListener('perde:homepage-refresh', () => { if (location.hash === '#/izleme-merkezi') openCenter(); else closeCenter(); });
   window.addEventListener('perde:catalog-ready', () => { if (location.hash === '#/izleme-merkezi') openCenter(); });
   window.addEventListener('load', () => { if (location.hash === '#/izleme-merkezi') openCenter(); });
   window.showWatchCenter = () => { if (location.hash !== '#/izleme-merkezi') location.hash = '#/izleme-merkezi'; else openCenter(); };
