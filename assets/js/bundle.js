@@ -1387,12 +1387,12 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
   const meta=[Number(ep.runtime)>0?ep.runtime+' dk':'',ep.air_date?new Date(ep.air_date+'T12:00:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}):''].filter(Boolean).join(' · ');
   const overview=String(ep.overview||'').trim();
   return '<article class="detail-episode-card'+(watched?' is-watched':'')+'" data-episode-card data-episode-name="'+escapeCountryHtml((ep.name||'').toLocaleLowerCase('tr-TR'))+'" data-episode-number="'+no+'">'+
-   '<div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="'+escapeCountryHtml(ep.name||('Bölüm '+no))+'" loading="lazy"><span class="detail-episode-number">'+String(no).padStart(2,'0')+'</span><span class="detail-episode-watched-badge"'+(watched?'':' hidden')+'><i class="fa-solid fa-check"></i> İzlendi</span></div>'+
+   '<div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="'+escapeCountryHtml(ep.name||('Bölüm '+no))+'" loading="lazy"><span class="detail-episode-number">'+String(no).padStart(2,'0')+'</span><span class="detail-episode-watched-badge"'+(watched?'':' hidden')+'><i class="fa-solid fa-check"></i> İzlendi</span><button type="button" class="detail-episode-play-overlay" data-episode-play data-season="'+seasonNumber+'" data-episode="'+no+'" aria-label="'+escapeCountryHtml(ep.name||('Bölüm '+no))+' bölümünü izle"><i class="fa-solid fa-play"></i></button></div>'+
    '<div class="detail-episode-copy"><div class="detail-episode-title-row"><h3>'+escapeCountryHtml(ep.name||('Bölüm '+no))+'</h3></div>'+
    (meta?'<small class="detail-episode-meta">'+escapeCountryHtml(meta)+'</small>':'')+
    (overview?'<p class="detail-episode-overview">'+escapeCountryHtml(overview)+'</p>':'<p class="detail-episode-overview is-empty">Bu bölüm için açıklama bulunmuyor.</p>')+
    (overview?'<button type="button" class="detail-episode-overview-toggle" aria-expanded="false">Devamını oku</button>':'')+
-   '<button type="button" class="detail-episode-toggle" data-episode-toggle data-season="'+seasonNumber+'" data-episode="'+no+'" aria-pressed="'+watched+'"><i class="fa-solid '+(watched?'fa-check':'fa-circle')+'"></i> '+(watched?'İzlendi':'İzledim olarak işaretle')+'</button></div></article>';
+   '<div class="detail-episode-actions"><button type="button" class="detail-episode-play" data-episode-play data-season="'+seasonNumber+'" data-episode="'+no+'"><i class="fa-solid fa-play"></i><span>Bölümü izle</span></button><button type="button" class="detail-episode-toggle" data-episode-toggle data-season="'+seasonNumber+'" data-episode="'+no+'" aria-pressed="'+watched+'"><i class="fa-solid '+(watched?'fa-check':'fa-circle')+'"></i> '+(watched?'İzlendi':'İzledim olarak işaretle')+'</button></div></div></article>';
  }).join('');
  const percent=episodes.length?Math.round(watchedCount/episodes.length*100):0;
  const seasonProgress=detailEpisodeState.seasons.map(entry=>{const count=Number(entry.episode_count)||0;let seen=0;for(let n=1;n<=count;n++)if(progress[entry.season_number+'_'+n]?.watched)seen++;return {...entry,watched:seen,percent:count?Math.round(seen/count*100):0};});
@@ -1435,6 +1435,19 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
   episodes.forEach(ep=>setDetailEpisodeWatched(item.id,seasonNumber,Number(ep.episode_number),true));
   renderDetailEpisodeCards(item,data,seasonNumber);updateDetailSeriesDashboard(item);
  });
+ root.querySelectorAll('[data-episode-play]').forEach(button=>button.addEventListener('click',()=>{
+  const seasonNo=Number(button.dataset.season),episodeNo=Number(button.dataset.episode);
+  const episode=episodes.find(entry=>Number(entry.episode_number)===episodeNo);
+  if(!episode){setPlayerError('Bölüm bilgisi bulunamadı.');return;}
+  window.perdeEpisodeContext={
+   seriesId:String(item.id),
+   playerId:String(item.id)+'::s'+seasonNo+'e'+episodeNo,
+   season:seasonNo,
+   episode:episodeNo,
+   episodeTitle:String(episode.name||('Bölüm '+episodeNo))
+  };
+  openPlayerForMedia(item.id);
+ }));
  root.querySelectorAll('[data-episode-toggle]').forEach(button=>button.addEventListener('click',()=>{
   const seasonNo=Number(button.dataset.season),episode=Number(button.dataset.episode),next=! (button.getAttribute('aria-pressed')==='true');
   setDetailEpisodeWatched(item.id,seasonNo,episode,next);
@@ -2194,6 +2207,16 @@ function openPlayerForMedia(id){
    if(episodePattern.test(sourceName))episodeWatchUrl=String(item.watchUrl).trim();
   }
  }
+ const emptyState=document.getElementById('player-empty-state');
+ if(episodeContext&&emptyState){
+  const heading=emptyState.querySelector('strong'),message=emptyState.querySelector('span:last-child');
+  if(heading)heading.textContent='Bölüm izlemeye hazır';
+  if(message)message.textContent=episodeWatchUrl?'Bağlantı yükleniyor…':'Bu bölüm için henüz izleme bağlantısı eklenmemiş. Oynatıcıya bağlantı ekleyebilir veya yönetim panelinden bu bölümün kaynağını tanımlayabilirsin.';
+ }else if(emptyState){
+  const heading=emptyState.querySelector('strong'),message=emptyState.querySelector('span:last-child');
+  if(heading)heading.textContent='Film keyfin başlasın.';
+  if(message)message.textContent='Bu yapım için izleme bağlantısı henüz tanımlanmamış. Bağlantıyı yönetim panelindeki yapım kaydından ekleyebilirsin.';
+ }
  loadSavedPlayerSource(activePlayerMediaId,episodeContext?episodeWatchUrl:item.watchUrl);
 }
 function saveAndPlayStream(){
@@ -2212,7 +2235,7 @@ function closePlayer(){
  clearYouTubePlayer();
  if(video){video.style.display='';video.pause();video.removeAttribute('src');video.innerHTML='';video.load();}
  ['player-big-play','player-controls'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=false;});
- releasePlayerUrls();activePlayerMediaId=null;
+ releasePlayerUrls();activePlayerMediaId=null;window.perdeEpisodeContext=null;
  if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}
  document.documentElement.classList.remove('ny7-modal-lock');
 }
