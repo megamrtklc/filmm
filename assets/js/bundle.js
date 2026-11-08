@@ -1427,6 +1427,48 @@ async function renderDetailEpisodes(item){
  }catch(error){if(request!==detailEpisodeRequest)return;root.innerHTML=heading+'<p class="detail-episodes-empty">Sezon bilgileri şu anda alınamadı. TMDB bağlantısını kontrol edip tekrar deneyebilirsin.</p>';console.warn('Dizi sezon bilgileri alınamadı:',error);}
 }
 
+
+const detailSeriesLayoutOrigins = new Map();
+function moveDetailSeriesNode(node,target){
+ if(!node||!target)return;
+ if(!detailSeriesLayoutOrigins.has(node)){
+  const placeholder=document.createComment('detail-series-origin');
+  node.parentNode.insertBefore(placeholder,node);
+  detailSeriesLayoutOrigins.set(node,placeholder);
+ }
+ target.appendChild(node);
+}
+function restoreDetailSeriesLayout(){
+ detailSeriesLayoutOrigins.forEach((placeholder,node)=>{
+  if(placeholder.parentNode)placeholder.parentNode.insertBefore(node,placeholder.nextSibling);
+  placeholder.remove();
+ });
+ detailSeriesLayoutOrigins.clear();
+ const root=document.getElementById('detail-page-view');
+ const layout=document.getElementById('detail-series-layout');
+ root?.classList.remove('is-series-redesign');
+ if(layout)layout.hidden=true;
+ const visual=root?.querySelector('.detail-visual'),main=root?.querySelector('.detail-main');
+ if(visual)visual.hidden=false;
+ if(main)main.hidden=false;
+}
+function mountDetailSeriesLayout(){
+ const root=document.getElementById('detail-page-view');
+ const layout=document.getElementById('detail-series-layout');
+ if(!root||!layout)return;
+ const visual=root.querySelector('.detail-visual'),main=root.querySelector('.detail-main');
+ moveDetailSeriesNode(document.getElementById('detail-backdrop'),document.getElementById('series-backdrop-slot'));
+ moveDetailSeriesNode(main?.querySelector('.detail-poster-column'),document.getElementById('series-poster-slot'));
+ moveDetailSeriesNode(main?.querySelector('.detail-copy'),document.getElementById('series-copy-slot'));
+ moveDetailSeriesNode(document.getElementById('detail-episodes'),document.getElementById('series-episodes-slot'));
+ moveDetailSeriesNode(document.getElementById('detail-personal-info'),document.getElementById('series-personal-slot'));
+ moveDetailSeriesNode(document.getElementById('detail-credits'),document.getElementById('series-credits-slot'));
+ moveDetailSeriesNode(document.getElementById('detail-related'),document.getElementById('series-related-slot'));
+ if(visual)visual.hidden=true;
+ if(main)main.hidden=true;
+ layout.hidden=false;
+ root.classList.add('is-series-redesign');
+}
 function updateDetailSeriesDashboard(item){
  const dashboard=document.getElementById('detail-series-dashboard');
  if(dashboard){dashboard.hidden=true;dashboard.innerHTML='';}
@@ -1442,6 +1484,7 @@ function renderDetailSeries(item){
  if(duration)duration.hidden=isSeries||!item.duration;
  if(durationSeparator)durationSeparator.hidden=isSeries||!item.duration;
  stats.innerHTML='';
+ if(isSeries)mountDetailSeriesLayout();else restoreDetailSeriesLayout();
  updateDetailSeriesDashboard(item);
 }
 function ensureDetailSynopsisPopup(){
