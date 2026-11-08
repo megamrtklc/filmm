@@ -1430,6 +1430,7 @@
   const syncSidebarToggle = () => {
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
     const expanded = isMobile ? adminSidebar.classList.contains('open') : !document.body.classList.contains('sidebar-collapsed');
+    document.body.classList.toggle('admin-sidebar-open', isMobile && expanded);
     sidebarToggle.setAttribute('aria-expanded', String(expanded));
     sidebarToggle.setAttribute('aria-label', expanded ? 'Sol menüyü daralt' : 'Sol menüyü genişlet');
     sidebarToggle.title = expanded ? 'Sol menüyü daralt' : 'Sol menüyü genişlet';
