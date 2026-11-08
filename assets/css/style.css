@@ -7614,3 +7614,19 @@ body.detail-synopsis-open{overflow:hidden}
     flex-direction:column!important;gap:6px!important;padding:0 0 12px!important;
   }
 }
+
+/* Manşet gezinme okları: sağ/sol yerine dikey sıralama */
+#dashboard-view .home-feature-row #hero-section .hero-arrows{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  padding:0 0 40px!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-arrows{
+    gap:6px!important;
+    padding:0 0 12px!important;
+  }
+}
