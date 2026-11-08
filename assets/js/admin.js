@@ -211,15 +211,17 @@
   async function searchOnlineSubtitles(){
     const title=editorValue('editor-title'),imdb=editorValue('editor-imdb').replace(/^tt/i,''),tmdb=editorValue('editor-tmdb');
     if(!title&&!imdb&&!tmdb){subtitleSearchStatus('Önce yapım adını veya IMDb/TMDB kimliğini gir.');return;}
+    const season=Number($('#editor-subtitle-season').value)||0,episode=Number($('#editor-subtitle-episode').value)||0;
+    if(editorType==='tv'&&(!season||!episode)){subtitleSearchStatus('Dizi altyazısı aramak için sezon ve bölüm numarasını birlikte gir.');$('#editor-subtitle-season').focus();return;}
     const button=$('#editor-subtitle-search'),host=$('#editor-subtitle-search-results');button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Aranıyor…';host.innerHTML='';subtitleSearchStatus('OpenSubtitles kataloğu aranıyor…');
     try{
       const params=new URLSearchParams({languages:'tr,en',type:editorType==='tv'?'episode':'movie',order_by:'download_count'});
       if(title)params.set('query',title);if(editorType==='tv'){if(imdb)params.set('parent_imdb_id',imdb);if(tmdb)params.set('parent_tmdb_id',tmdb);}else{if(imdb)params.set('imdb_id',imdb);if(tmdb)params.set('tmdb_id',tmdb);}if(editorValue('editor-year'))params.set('year',editorValue('editor-year'));
-      const season=Number($('#editor-subtitle-season').value)||0,episode=Number($('#editor-subtitle-episode').value)||0;
-      if(editorType==='tv'&&season)params.set('season_number',String(season));if(editorType==='tv'&&episode)params.set('episode_number',String(episode));
+      if(editorType==='tv'){params.set('season_number',String(season));params.set('episode_number',String(episode));}
       const response=await fetch(subtitleWorkerUrl+'/subtitles?'+params.toString(),{headers:{Accept:'application/json'},signal:AbortSignal.timeout(20000)}),body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.error||('Altyazı servisi HTTP '+response.status));
-      const items=[];(Array.isArray(body.data)?body.data:[]).forEach(entry=>(entry.attributes?.files||[]).forEach(file=>items.push({id:entry.id,attributes:entry.attributes||{},file})));
+      let items=[];(Array.isArray(body.data)?body.data:[]).forEach(entry=>(entry.attributes?.files||[]).forEach(file=>items.push({id:entry.id,attributes:entry.attributes||{},file})));
+      if(editorType==='tv')items=items.filter(item=>{const s=Number(item.attributes.season_number)||0,e=Number(item.attributes.episode_number)||0;return(!s&&!e)||(s===season&&e===episode);});
       items.sort((a,b)=>(a.attributes.language==='tr'?0:1)-(b.attributes.language==='tr'?0:1)||(Number(b.attributes.download_count)||0)-(Number(a.attributes.download_count)||0));
       subtitleResultRows(items);subtitleSearchStatus(items.length+' altyazı dosyası bulundu. Türkçe sonuçlar önceliklendirildi.');
     }catch(error){subtitleSearchStatus('Arama başarısız: '+error.message);host.innerHTML='<div class="subtitle-online-empty">Servis yanıt vermedi. Biraz sonra tekrar deneyebilirsin.</div>';}
