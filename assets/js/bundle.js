@@ -351,7 +351,6 @@ function renderMoodRecommendation(item, category) {
     if (!result || !item) return;
     const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
     const poster = escapeCountryHtml(item.image || item.backdrop || '');
-    const backdrop = escapeCountryHtml(item.backdrop || item.tmdbBackdrop || item.image || '');
     const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
     const categoryLabel = category || (item.genre || (item.type === 'tv' ? 'Dizi' : 'Film'));
     const rating = escapeCountryHtml(item.rating || '—');
@@ -362,8 +361,6 @@ function renderMoodRecommendation(item, category) {
         '<i class="fa-solid ' + option.icon + '" aria-hidden="true"></i><span>' + option.label + '</span></button>'
     ).join('');
     result.innerHTML = `
-        <div class="mood-simple-backdrop" aria-hidden="true" style="background-image:url(&quot;${backdrop}&quot;)"></div>
-        <div class="mood-simple-scrim" aria-hidden="true"></div>
         <div class="mood-simple-heading">
             <span class="mood-discovery-eyebrow"><i class="fa-solid fa-clapperboard"></i> MODUNA GÖRE KEŞFET</span>
             <h2>Bugün nasıl bir şey izlemek istersin?</h2>
