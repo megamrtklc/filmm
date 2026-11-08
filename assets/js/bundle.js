@@ -310,9 +310,8 @@ function fitHeroTitleToWidth() {
 
 
 
-// Moduna göre keşfet: ilk açılışta tüm katalogdan, kategori seçilince ilgili türden rastgele öneri.
+// MODUNA GÖRE KEŞFET — sıfırdan minimal arayüz, tek ruh hali seçimi.
 const moodCategoryOptions = [
-    { value:'', label:'Tüm kategoriler', icon:'fa-layer-group', terms:[] },
     { value:'Aksiyon', label:'Aksiyon', icon:'fa-bolt', terms:['aksiyon'] },
     { value:'Komedi', label:'Komedi', icon:'fa-face-laugh', terms:['komedi','comedy'] },
     { value:'Romantik', label:'Romantik', icon:'fa-heart', terms:['romantik','romance'] },
@@ -334,10 +333,10 @@ const moodCategoryOptions = [
 ];
 let activeMoodCategory = '';
 let lastMoodRecommendationId = null;
+let moodShowAll = false;
 
 function getMoodCandidates(category) {
     const valid = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-    if (!category) return valid;
     const config = moodCategoryOptions.find(option => option.value === category);
     if (!config) return [];
     return valid.filter(item => {
@@ -346,100 +345,66 @@ function getMoodCandidates(category) {
     });
 }
 
-function renderMoodRecommendation(item, category) {
+function renderMoodDiscovery(recommendation = null) {
     const result = document.getElementById('mood-discovery-result');
-    if (!result || !item) return;
-    const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
-    const poster = escapeCountryHtml(item.image || item.backdrop || '');
-    const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
-    const categoryLabel = category || (item.genre || (item.type === 'tv' ? 'Dizi' : 'Film'));
-    const rating = escapeCountryHtml(item.rating || '—');
-    const description = escapeCountryHtml(item.desc || 'Bu yapımı keşfetmek için detaylarına göz at.');
-    const id = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    const options = moodCategoryOptions.map(option =>
-        '<button type="button" class="mood-category-option' + (category === option.value ? ' is-active' : '') + '" onclick="chooseMoodPick(\'' + option.value.replace(/'/g, "\\\\'") + '\')">' +
-        '<i class="fa-solid ' + option.icon + '" aria-hidden="true"></i><span>' + option.label + '</span></button>'
-    ).join('');
-    result.innerHTML = `
-        <div class="mood-simple-heading">
-            <span class="mood-discovery-eyebrow"><i class="fa-solid fa-clapperboard"></i> MODUNA GÖRE KEŞFET</span>
-            <h2>Bugün nasıl bir şey izlemek istersin?</h2>
-            <p>Ruh haline uygun bir yapım seçelim.</p>
-        </div>
-        <div class="mood-simple-feature">
-            <div class="mood-simple-poster-column">
-                <div class="mood-discovery-poster"><img src="${poster}" alt="${title}" loading="eager"></div>
-                <div class="mood-discovery-poster-meta">
-                    <span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>
-                    ${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}
-                    <span class="mood-discovery-imdb mood-discovery-imdb-inline"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb</span></span>
-                </div>
-            </div>
-            <div class="mood-discovery-copy">
-                <span class="mood-discovery-tag">${escapeCountryHtml(categoryLabel)} <b>•</b> ${typeLabel}</span>
-                <h3 title="${title}">${title}</h3>
-                ${originalTitleMarkup(item,'mood-original-title')}
-                <p class="mood-discovery-description">${description}</p>
-                <div class="mood-discovery-actions">
-                    <button type="button" class="mood-discovery-primary" onclick="openDetailPage('${id}')"><i class="fa-solid fa-circle-info"></i><span>Detayları Gör</span></button>
-                    <button type="button" class="mood-discovery-again" onclick="chooseMoodPick(activeMoodCategory)" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i><span>Başka Öner</span></button>
-                </div>
-            </div>
-        </div>
-        <div class="mood-simple-filter">
-            <span>Ruh halini değiştir</span>
-            <div class="mood-category-select">
-                <button type="button" class="mood-category-trigger" aria-expanded="false" aria-controls="mood-category-menu" onclick="toggleMoodCategoryMenu()">
-                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-                    <span>${category || 'Tüm kategoriler'}</span>
-                    <i class="fa-solid fa-chevron-down mood-select-chevron" aria-hidden="true"></i>
-                </button>
-                <div id="mood-category-menu" class="mood-category-menu" hidden>${options}</div>
-            </div>
-        </div>`;
-}
-
-function toggleMoodCategoryMenu() {
-    const menu = document.getElementById('mood-category-menu');
-    const trigger = document.querySelector('.mood-category-trigger');
-    if (!menu || !trigger) return;
-    const opening = menu.hidden;
-    menu.hidden = !opening;
-    trigger.setAttribute('aria-expanded', String(opening));
-    const chevron = trigger.querySelector('.mood-select-chevron');
-    if (chevron) chevron.style.transform = opening ? 'rotate(180deg)' : 'rotate(0deg)';
+    if (!result) return;
+    const visibleOptions = moodShowAll ? moodCategoryOptions : moodCategoryOptions.slice(0,6);
+    const choices = visibleOptions.map(option => {
+        const selected = activeMoodCategory === option.value;
+        return '<button type="button" class="mood-v2-choice'+(selected?' is-selected':'')+'" onclick="chooseMoodPick(\''+option.value.replace(/'/g,"\\'")+'\')" aria-pressed="'+selected+'"><i class="fa-solid '+option.icon+'" aria-hidden="true"></i><span>'+option.label+'</span><i class="fa-solid fa-check mood-v2-check" aria-hidden="true"></i></button>';
+    }).join('');
+    const selectedLabel = moodCategoryOptions.find(option => option.value === activeMoodCategory)?.label || '';
+    let recommendationMarkup = '';
+    if (recommendation) {
+        const title = escapeCountryHtml(recommendation.title || 'İsimsiz yapım');
+        const poster = escapeCountryHtml(recommendation.image || '');
+        const id = String(recommendation.id).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const typeLabel = recommendation.type === 'tv' ? 'Dizi' : 'Film';
+        const rating = escapeCountryHtml(recommendation.rating || '—');
+        recommendationMarkup = '<article class="mood-v2-recommendation"><img class="mood-v2-poster" src="'+poster+'" alt="'+title+'" loading="lazy"><div class="mood-v2-recommendation-copy"><span class="mood-v2-result-label">SANA UYGUN ÖNERİ · '+typeLabel.toLocaleUpperCase('tr-TR')+'</span><h3>'+title+'</h3><p class="mood-v2-meta">'+escapeCountryHtml(recommendation.year||'—')+' <span>•</span> <i class="fa-solid fa-star"></i> '+rating+'</p><p class="mood-v2-description">'+escapeCountryHtml(recommendation.desc||'Bu yapımı keşfetmek için detaylarına göz at.')+'</p><div class="mood-v2-result-actions"><button type="button" class="mood-v2-open" onclick="openDetailPage(\''+id+'\')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="mood-v2-again" onclick="generateMoodPick()"><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div></article>';
+    }
+    result.innerHTML = '<div class="mood-v2-shell"><div class="mood-v2-heading"><div><span class="mood-v2-eyebrow">PERDE’DE KEŞFET</span><h2>Bugün nasıl bir şey izlemek istersin?</h2><p>Ruh halini seç, sana uygun film ve dizileri bulalım.</p></div><span class="mood-v2-mark" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span></div><div class="mood-v2-selector"><div class="mood-v2-label-row"><span>Bir ruh hali seç</span><span class="mood-v2-single-note">Tek seçim</span></div><div class="mood-v2-choices">'+choices+'</div>'+(moodCategoryOptions.length>6?'<button type="button" class="mood-v2-more" onclick="moodShowAll=!moodShowAll;renderMoodDiscovery()">'+(moodShowAll?'Daha az göster':'Tüm ruh hallerini gör')+' <i class="fa-solid fa-chevron-'+(moodShowAll?'up':'down')+'"></i></button>':'')+'<button type="button" class="mood-v2-submit" '+(activeMoodCategory?'':'disabled')+' onclick="generateMoodPick()"><span>Bana Yapım Öner</span><i class="fa-solid fa-arrow-right"></i></button></div>'+(recommendationMarkup|| (activeMoodCategory?'<p class="mood-v2-hint"><i class="fa-regular fa-circle-check"></i> '+selectedLabel+' seçildi. Sana uygun öneriyi görmek için butona dokun.</p>':''))+'</div>';
 }
 
 function chooseMoodPick(category) {
     activeMoodCategory = category || '';
-    const result = document.getElementById('mood-discovery-result');
-    if (!result) return;
-    const categoryMenu = document.getElementById('mood-category-menu');
-    const categoryTrigger = document.querySelector('.mood-category-trigger');
-    if (categoryMenu) categoryMenu.hidden = true;
-    if (categoryTrigger) categoryTrigger.setAttribute('aria-expanded', 'false');
+    lastMoodRecommendationId = null;
+    renderMoodDiscovery();
+}
+
+function generateMoodPick() {
+    if (!activeMoodCategory) return;
     const candidates = getMoodCandidates(activeMoodCategory);
     if (!candidates.length) {
-        result.innerHTML = '<div class="mood-discovery-empty">Bu kategoride henüz önerilebilecek bir yapım bulunamadı. Başka bir kategori deneyebilirsin.</div>';
+        const result = document.getElementById('mood-discovery-result');
+        if (result) {
+            renderMoodDiscovery();
+            const notice = document.createElement('p');
+            notice.className = 'mood-v2-empty';
+            notice.textContent = 'Bu ruh halinde henüz önerilebilecek bir yapım bulunamadı. Başka bir ruh hali deneyebilirsin.';
+            result.querySelector('.mood-v2-shell')?.appendChild(notice);
+        }
         return;
     }
     let pool = candidates.filter(item => String(item.id) !== String(lastMoodRecommendationId));
     if (!pool.length) pool = candidates;
-    const weights=pool.map(item=>{
-        const rating=Math.max(0,Math.min(10,Number.parseFloat(item.rating)||0));
-        const year=Math.max(0,Math.min(2026,Number.parseInt(item.year,10)||0));
-        return 1+(rating*0.18)+(year>=2020?0.7:0);
+    const weights = pool.map(item => {
+        const rating = Math.max(0,Math.min(10,Number.parseFloat(item.rating)||0));
+        const year = Math.max(0,Math.min(2026,Number.parseInt(item.year,10)||0));
+        return 1 + rating*0.18 + (year>=2020?0.7:0);
     });
-    const total=weights.reduce((sum,value)=>sum+value,0);
-    let ticket=Math.random()*total,chosen=pool[0];
+    const total = weights.reduce((sum,value)=>sum+value,0);
+    let ticket = Math.random()*total, chosen = pool[0];
     for(let i=0;i<pool.length;i++){ticket-=weights[i];if(ticket<=0){chosen=pool[i];break;}}
     lastMoodRecommendationId = chosen.id;
-    renderMoodRecommendation(chosen, activeMoodCategory);
+    renderMoodDiscovery(chosen);
 }
 
 function initializeMoodDiscovery() {
     activeMoodCategory = '';
-    chooseMoodPick('');
+    lastMoodRecommendationId = null;
+    moodShowAll = false;
+    renderMoodDiscovery();
 }
 
 async function renderSavedHomeCollections() {
