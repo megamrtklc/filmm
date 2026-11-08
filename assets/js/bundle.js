@@ -2056,6 +2056,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
         ];
 
         let heroItems = [];
+        let heroAllItems = [];
         let heroPresentationById = {};
         let heroIndex = 0;
         let heroTimer = null;
@@ -2063,7 +2064,22 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
         let heroSettings = {desktopCount:6,mobileCount:4,interval:6,autoplay:true,pauseOnHover:true};
         let catalogInitialized = false;
         function applyHeroDisplaySettings(){const rail=document.getElementById('hero-thumbnails-rail');if(!rail)return;const mobile=window.matchMedia('(max-width:767px)').matches;const count=mobile?heroSettings.mobileCount:heroSettings.desktopCount;const gap=parseFloat(getComputedStyle(rail).columnGap)||10;const width=Math.max(42,(rail.clientWidth-gap*(count-1))/count);rail.style.setProperty('--hero-visible-count',String(count));rail.style.setProperty('--hero-card-width',width+'px');}
-        window.addEventListener('resize',applyHeroDisplaySettings,{passive:true});
+        function syncHeroItemLimit(){
+            if(!Array.isArray(heroAllItems)||!heroAllItems.length)return;
+            const mobile=window.matchMedia('(max-width:767px)').matches;
+            const limit=mobile?heroSettings.mobileCount:heroSettings.desktopCount;
+            const currentId=heroItems[heroIndex]?.id;
+            heroItems=heroAllItems.slice(0,limit);
+            const currentIndex=heroItems.findIndex(item=>String(item.id)===String(currentId));
+            heroIndex=currentIndex>=0?currentIndex:0;
+            applyHeroDisplaySettings();
+            if(heroItems.length){
+                setHeroMedia(heroItems[heroIndex].id);
+                renderHeroThumbnails();
+                restartHeroTimer();
+            }
+        }
+        window.addEventListener('resize',()=>{syncHeroItemLimit();applyHeroDisplaySettings();},{passive:true});
         function showCatalogSkeletons() {
             const skeleton = '<div class="ny7-skeleton-card"><span></span><i></i><b></b></div>';
             ['media-grid','featured-rail','personalized-rail','top-movies-rail','top-series-rail'].forEach(id => {
@@ -2128,15 +2144,17 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 const savedSlides = Array.isArray(savedHeroConfig?.heroSlides) ? savedHeroConfig.heroSlides : [];
                 const configuredSlides = savedSlides.filter(slide => slide && slide.active !== false && mediaDatabase.some(item => String(item.id) === String(slide.id)));
                 if (configuredSlides.length) {
-                    heroItems = configuredSlides.map(slide => mediaDatabase.find(item => String(item.id) === String(slide.id))).filter(Boolean);
+                    heroAllItems = configuredSlides.map(slide => mediaDatabase.find(item => String(item.id) === String(slide.id))).filter(Boolean);
                     heroPresentationById = Object.fromEntries(configuredSlides.map(slide => [String(slide.id),{
                         headline: typeof slide.headline === 'string' ? slide.headline.trim() : '',
                         description: typeof slide.description === 'string' ? slide.description.trim() : ''
                     }]));
                 } else {
                     // Henüz yayın ayarı yoksa mevcut varsayılan vitrin düzeni korunur.
-                    heroItems = heroCandidates.slice(-10).reverse();
+                    heroAllItems = heroCandidates.slice(-10).reverse();
                 }
+                const initialHeroLimit=window.matchMedia('(max-width:767px)').matches?heroSettings.mobileCount:heroSettings.desktopCount;
+                heroItems=heroAllItems.slice(0,initialHeroLimit);
                 setHeroMedia(heroItems[0]?.id ?? mediaDatabase[0].id);
                 renderHeroThumbnails();
                 restartHeroTimer();
