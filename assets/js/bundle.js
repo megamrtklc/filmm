@@ -2456,17 +2456,7 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
 
 
 
-/* Örnek ilerleme görünümü; gerçek izleme geçmişine yazılmaz. */
-function renderContinuePreview(){
- const root=document.getElementById('continue-preview-list');if(!root||!Array.isArray(mediaDatabase)||!mediaDatabase.length)return;
- const demos=[{name:'Breaking Bad',progress:68,detail:'3. Sezon · 5. Bölüm'},{name:'Dark',progress:42,detail:'2. Sezon · 3. Bölüm'},{name:'The Last of Us',progress:81,detail:'1. Sezon · 7. Bölüm'}],used=new Set(),norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
- const selected=demos.map(d=>{const item=mediaDatabase.find(m=>norm(m.title)===norm(d.name)&&!used.has(String(m.id)));if(item)used.add(String(item.id));return item?{item,progress:d.progress,detail:d.detail}:null}).filter(Boolean);
- if(selected.length<3){mediaDatabase.filter(m=>m&&m.id!=null&&m.title&&(m.tmdbPoster||m.image)&&!used.has(String(m.id))).sort((a,b)=>(a.type==='tv'?0:1)-(b.type==='tv'?0:1)).slice(0,3-selected.length).forEach((item,i)=>selected.push({item,progress:[58,36,74][i]||50,detail:item.type==='tv'?'Sezon ve bölüm takibi örneği':'Filmin devamı örneği'}));}
- root.innerHTML=selected.slice(0,3).map(({item,progress,detail})=>{const id=escapeCountryHtml(item.id),title=escapeCountryHtml(item.title),poster=escapeCountryHtml(item.tmdbPoster||item.image||''),pct=Math.max(1,Math.min(99,progress));return '<article class="continue-preview-item"><button type="button" class="continue-preview-open" data-detail-id="'+id+'" aria-label="'+title+' detayını aç"><img src="'+poster+'" alt="'+title+' afişi" loading="lazy"><span class="continue-preview-copy"><strong>'+title+'</strong><small>'+escapeCountryHtml(detail)+'</small></span></button><div class="continue-preview-progress"><div class="continue-preview-progress-label"><span>İzleme ilerlemesi</span><b>%'+pct+'</b></div><div class="continue-preview-track" role="progressbar" aria-valuenow="'+pct+'" aria-valuemin="0" aria-valuemax="100" aria-label="'+title+' izleme ilerlemesi"><span style="--progress:'+pct+'%"></span></div></div></article>'}).join('')||'<div class="continue-preview-loading">Örnek yapımlar bulunamadı.</div>';
- const count=document.querySelector('.continue-preview-count');if(count)count.textContent=selected.length+' YAPIM';
-}
-
-        let mediaDatabase = [];
+let mediaDatabase = [];
 ;
 
         const liveTvChannels = [
@@ -2552,8 +2542,7 @@ function renderContinuePreview(){
                 }
                 if (!loadedCatalog) throw new Error(errors.join(' | ')||'Hiçbir katalog kaynağı yanıt vermedi.');
                 mediaDatabase = loadedCatalog;
-                renderContinuePreview();
-                heroPresentationById = {};
+heroPresentationById = {};
                 let savedHeroConfig = null;
                 try {
                     const configResponse = await fetch(new URL('./data/homepage-config.json?v=20261107-home-hero-v1', document.baseURI).href,{cache:'no-store',credentials:'omit'});
