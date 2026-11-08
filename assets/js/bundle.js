@@ -1711,6 +1711,46 @@ function renderDetailCredits(item){
  };
  render();
 }
+
+function renderFilmDetailExtras(item){
+ const detailView=document.getElementById('detail-page-view');
+ if(!detailView)return;
+ let root=document.getElementById('detail-film-extras');
+ if(!root){
+  root=document.createElement('section');
+  root.id='detail-film-extras';
+  root.className='detail-film-extras';
+  const related=document.getElementById('detail-related');
+  if(related)related.insertAdjacentElement('afterend',root);
+  else detailView.querySelector('.detail-main')?.appendChild(root);
+ }
+ if(item.type==='tv'){root.hidden=true;root.innerHTML='';return;}
+ root.hidden=false;
+ const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
+ const directors=countryTokens(item.tmdbDirector||item.director).map(normalize).filter(Boolean);
+ const sameDirector=directors.length?mediaDatabase.filter(candidate=>{
+  if(!candidate||String(candidate.id)===String(item.id)||candidate.type==='tv'||!candidate.title||!candidate.image)return false;
+  const names=countryTokens(candidate.tmdbDirector||candidate.director).map(normalize);
+  return names.some(name=>directors.includes(name));
+ }).slice(0,8):[];
+ const rawAwards=item.awards||item.tmdbAwards||item.awardSummary||item.nominations||item.oscars||[];
+ const awardRows=(Array.isArray(rawAwards)?rawAwards:[rawAwards]).map(value=>{
+  if(typeof value==='string')return value.trim();
+  if(!value||typeof value!=='object')return '';
+  const name=value.name||value.title||value.award||value.organization||'';
+  const detail=[value.category,value.result||value.status,value.year].filter(Boolean).join(' · ');
+  return [name,detail].filter(Boolean).join(' — ');
+ }).filter(Boolean).slice(0,8);
+ const awardMarkup=awardRows.length
+  ?'<ul class="detail-award-list">'+awardRows.map(row=>'<li><i class="fa-solid fa-award" aria-hidden="true"></i><span>'+escapeCountryHtml(row)+'</span></li>').join('')+'</ul>'
+  :'<div class="detail-award-empty"><i class="fa-solid fa-trophy" aria-hidden="true"></i><p>Bu yapım için doğrulanmış ödül veya adaylık bilgisi henüz kataloğa eklenmemiş.</p></div>';
+ const directorMarkup=sameDirector.length
+  ?'<div class="detail-director-film-grid">'+sameDirector.map(media=>'<button type="button" class="detail-director-film" data-detail-extra-id="'+escapeCountryHtml(media.id)+'"><img src="'+escapeCountryHtml(media.tmdbPoster||media.image)+'" alt="'+escapeCountryHtml(media.title)+'" loading="lazy"><span><strong>'+escapeCountryHtml(media.title)+'</strong><small>'+escapeCountryHtml(media.year||'')+'</small></span></button>').join('')+'</div>'
+  :'<p class="detail-extra-empty">Katalogda aynı yönetmene ait başka film bulunamadı.</p>';
+ root.innerHTML='<div class="detail-film-extra-grid"><article class="detail-film-extra-card detail-awards-card"><div class="detail-film-extra-heading"><span>ÖDÜLLER & ADAYLIKLAR</span><i class="fa-solid fa-trophy" aria-hidden="true"></i></div><h2>Başarıları</h2>'+awardMarkup+'</article><article class="detail-film-extra-card detail-same-director-card"><div class="detail-film-extra-heading"><span>YÖNETMENİN DİĞER FİLMLERİ</span><i class="fa-solid fa-clapperboard" aria-hidden="true"></i></div><h2>Aynı yönetmenden</h2>'+directorMarkup+'</article></div>';
+ root.querySelectorAll('[data-detail-extra-id]').forEach(button=>button.addEventListener('click',()=>openDetailPage(button.dataset.detailExtraId)));
+}
+
 function openDetailPage(id,update=true){
  const item=mediaDatabase.find(m=>String(m.id)===String(id))||mediaDatabase[0];if(!item)return;
  if(update){const prefix=item.type==='tv'?'dizi':'film';const path='#/'+prefix+'/'+encodeURIComponent(item.id);if(location.hash!==path)history.pushState(null,'',path);}
@@ -1754,6 +1794,7 @@ function openDetailPage(id,update=true){
  renderDetailEpisodes(item);
  renderDetailPersonalInfo(item);
  renderDetailCredits(item);
+ renderFilmDetailExtras(item);
  loadTmdbDetailCast(item);
  document.getElementById('dashboard-view').classList.add('hidden');
  document.getElementById('actor-page-view').classList.add('hidden');
