@@ -2529,7 +2529,8 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
             } catch (error) {
                 catalogInitialized = false;
                 console.error('Katalog yükleme hatası:',error);
-                const message = '<div class="col-span-full ny7-error-state"><i class="fa-solid fa-triangle-exclamation"></i><b>İçerikler şu anda yüklenemedi</b><p>Katalog kaynaklarına erişilemedi. Bağlantını kontrol edip yeniden deneyebilirsin.</p><button type="button" onclick="initializeCatalog()"><i class="fa-solid fa-rotate-right"></i> Yeniden dene</button></div>';
+                const detail = escapeCountryHtml(error?.message || 'Bilinmeyen yükleme hatası');
+                const message = '<div class="col-span-full ny7-error-state"><i class="fa-solid fa-triangle-exclamation"></i><b>İçerikler şu anda yüklenemedi</b><p>Katalog yükleme ayrıntısı: '+detail+'</p><button type="button" onclick="initializeCatalog()"><i class="fa-solid fa-rotate-right"></i> Yeniden dene</button></div>';
                 ['media-grid','featured-rail','top-movies-rail','top-series-rail'].forEach(id=>{const target=document.getElementById(id);if(target)target.innerHTML=message;});
             }
         }
