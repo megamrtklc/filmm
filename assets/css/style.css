@@ -8363,3 +8363,33 @@ body.detail-synopsis-open{overflow:hidden}
  #dashboard-view .home-feature-row #daily-pick-section .mood-category-select{width:100%!important;max-width:none!important}
  #dashboard-view .home-feature-row #daily-pick-section .mood-category-trigger{width:100%!important}
 }
+
+
+/* Perde — Moduna Göre Keşfet kartı ince düzenlemeleri */
+#daily-pick-section #mood-discovery-result{position:relative!important;isolation:isolate!important;overflow:hidden!important}
+#daily-pick-section .mood-simple-backdrop{position:absolute!important;inset:0!important;z-index:0!important;background-size:cover!important;background-position:center 38%!important;opacity:.34!important;filter:saturate(.82)!important;transform:scale(1.025)!important;pointer-events:none!important}
+#daily-pick-section .mood-simple-scrim{position:absolute!important;inset:0!important;z-index:1!important;background:linear-gradient(90deg,rgba(8,9,13,.78) 0%,rgba(8,9,13,.88) 45%,rgba(8,9,13,.96) 100%)!important;pointer-events:none!important}
+#daily-pick-section .mood-simple-heading,
+#daily-pick-section .mood-simple-feature,
+#daily-pick-section .mood-simple-filter{position:relative!important;z-index:2!important}
+#daily-pick-section .mood-simple-feature{align-items:start!important}
+#daily-pick-section .mood-simple-poster-column{width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px}
+#daily-pick-section .mood-simple-poster-column .mood-discovery-poster{width:100%!important}
+#daily-pick-section .mood-discovery-poster-meta{width:100%;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 8px;color:#e1e4eb;font-size:10px;line-height:1.35;text-align:center}
+#daily-pick-section .mood-discovery-poster-meta>span{white-space:nowrap}
+#daily-pick-section .mood-discovery-poster-meta i{color:#d7b14b;margin-right:2px}
+#daily-pick-section .mood-discovery-poster-meta .mood-discovery-imdb{display:inline-flex;align-items:center;gap:3px;padding:3px 6px;border:1px solid rgba(245,200,75,.28);border-radius:6px;background:rgba(0,0,0,.42);color:#f5c84b}
+#daily-pick-section .mood-discovery-copy{min-width:0}
+#daily-pick-section .mood-discovery-copy h3{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important}
+#daily-pick-section .mood-discovery-actions{display:flex!important;flex-wrap:nowrap!important;align-items:stretch!important;gap:9px!important}
+#daily-pick-section .mood-discovery-actions button{display:inline-flex!important;flex:1 1 0!important;min-width:0!important;justify-content:center!important;align-items:center!important;gap:7px!important;white-space:nowrap!important;min-height:40px!important;padding:0 12px!important;border-radius:10px!important;font-size:11px!important;font-weight:750!important;transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important}
+#daily-pick-section .mood-discovery-primary{border:1px solid #e5bd52!important;background:linear-gradient(135deg,#f4cf68,#d9a936)!important;color:#17130a!important;box-shadow:0 5px 16px rgba(213,168,61,.16)!important}
+#daily-pick-section .mood-discovery-again{border:1px solid rgba(255,255,255,.24)!important;background:rgba(19,22,29,.78)!important;color:#f4f5f7!important;backdrop-filter:blur(8px)!important}
+#daily-pick-section .mood-discovery-actions button:hover{transform:translateY(-1px)!important}
+#daily-pick-section .mood-discovery-primary:hover{background:linear-gradient(135deg,#ffdc7c,#e5b644)!important;box-shadow:0 7px 20px rgba(213,168,61,.24)!important}
+#daily-pick-section .mood-discovery-again:hover{background:rgba(45,49,59,.92)!important;border-color:rgba(255,255,255,.42)!important}
+@media(max-width:560px){
+ #daily-pick-section .mood-discovery-poster-meta{font-size:9px;gap:4px 6px}
+ #daily-pick-section .mood-discovery-actions{gap:6px!important}
+ #daily-pick-section .mood-discovery-actions button{min-height:36px!important;padding:0 7px!important;font-size:9px!important;gap:5px!important}
+}
