@@ -7383,3 +7383,24 @@ body.detail-synopsis-open{overflow:hidden}
 #detail-film-extras .detail-extra-empty{padding:10px 0}
 @media(max-width:760px){#detail-film-extras{width:calc(100% - 32px);margin:20px auto 36px}#detail-film-extras .detail-film-extra-grid{grid-template-columns:minmax(0,1fr);gap:11px}#detail-film-extras .detail-film-extra-card{padding:15px}#detail-film-extras .detail-film-extra-card h2{font-size:17px}#detail-film-extras .detail-director-film-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}}
 @media(max-width:390px){#detail-film-extras .detail-director-film-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* Awards card: content is contained and expanded on demand */
+#detail-film-extras .detail-film-extra-card{box-sizing:border-box;overflow:hidden;min-width:0;max-width:100%}
+#detail-film-extras .detail-awards-content{min-width:0;max-width:100%;overflow:hidden}
+#detail-film-extras .detail-award-list{display:grid;gap:7px;min-width:0;max-width:100%;margin:0;padding:0;list-style:none}
+#detail-film-extras .detail-award-list li{display:flex;align-items:flex-start;gap:9px;min-width:0;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere;word-break:break-word}
+#detail-film-extras .detail-award-copy{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:3px}
+#detail-film-extras .detail-award-copy strong{display:block;max-width:100%;color:#e5e7eb;font-size:11px;line-height:1.45;overflow-wrap:anywhere;word-break:break-word}
+#detail-film-extras .detail-award-copy small{display:block;color:#a5aab4;font-size:9px;line-height:1.4}
+#detail-film-extras .detail-award-list li>a{flex:0 0 auto;color:#c8a45d;font-size:10px}
+#detail-film-extras .detail-award-list:not(.is-expanded) li:nth-child(n+5){display:none}
+#detail-film-extras .detail-award-more{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:34px;margin-top:9px;padding:7px 10px;border:1px solid #c8a45d35;border-radius:8px;background:#c8a45d0b;color:#d9bd82;font-size:10px;font-weight:700}
+#detail-film-extras .detail-award-more:hover{background:#c8a45d18}
+#detail-film-extras .detail-award-source{margin-top:9px;color:#818895;font-size:9px}
+#detail-film-extras .detail-award-source a{color:#c8a45d;text-decoration:none}
+#detail-film-extras .detail-award-loading{display:flex;align-items:center;gap:9px;min-height:64px;color:#aab0ba;font-size:11px}
+#detail-film-extras .detail-award-loading i{color:#c8a45d}
+#detail-film-extras .detail-award-empty{box-sizing:border-box;max-width:100%;overflow-wrap:anywhere}
+#detail-film-extras .detail-film-extra-grid{align-items:stretch}
+@media(max-width:760px){#detail-film-extras .detail-film-extra-card{width:100%;min-width:0}#detail-film-extras .detail-award-list li{padding:9px}}
