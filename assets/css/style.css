@@ -8817,7 +8817,7 @@ body.detail-synopsis-open{overflow:hidden}
 #dashboard-view>.home-mood-continue-row{
  display:grid!important;
  grid-template-columns:minmax(0,1.45fr) minmax(340px,.95fr)!important;
- align-items:stretch!important;
+ align-items:start!important;
  gap:20px!important;
  width:100%!important;
  max-width:1440px!important;
@@ -8831,7 +8831,7 @@ body.detail-synopsis-open{overflow:hidden}
  min-width:0!important;
  max-width:none!important;
  margin:0!important;
- align-self:stretch!important;
+ align-self:start!important;
  box-sizing:border-box!important;
 }
 #dashboard-view>.home-mood-continue-row>#collection-personalized{
