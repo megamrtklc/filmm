@@ -7481,10 +7481,10 @@ body.detail-synopsis-open{overflow:hidden}
 
 /* Manşet metin grubunu hafifçe aşağı konumlandır */
 #dashboard-view .home-feature-row #hero-section .hero-copy{
-  transform:translateY(12px)!important;
+  transform:translateY(20px)!important;
 }
 @media(max-width:820px){
   #dashboard-view .home-feature-row #hero-section .hero-copy{
-    transform:translateY(8px)!important;
+    transform:translateY(14px)!important;
   }
 }
