@@ -7192,3 +7192,22 @@ body.detail-synopsis-open{overflow:hidden}
 #detail-page-view .detail-season-option-track i{display:block;height:100%;border-radius:inherit;background:#d5a94d}
 #detail-page-view .detail-season-option-status{color:#a9aeba;font-size:9px}
 @media(max-width:600px){#detail-page-view .detail-season-picker{gap:6px}#detail-page-view .detail-season-trigger{padding:9px}#detail-page-view .detail-season-trigger strong{font-size:12px}#detail-page-view .detail-season-count{font-size:8px}}
+
+
+/* TV episode playback actions */
+#detail-page-view.is-series-redesign .detail-episode-art{isolation:isolate}
+#detail-page-view.is-series-redesign .detail-episode-play-overlay{position:absolute;z-index:4;left:50%;top:50%;display:grid;place-items:center;width:54px;height:54px;transform:translate(-50%,-42%) scale(.92);border:1px solid #ffffff75;border-radius:50%;background:rgba(8,10,14,.78);color:#f4c96e;font-size:18px;opacity:0;backdrop-filter:blur(8px);transition:opacity .22s ease,transform .22s ease;cursor:pointer}
+#detail-page-view.is-series-redesign .detail-episode-card:hover .detail-episode-play-overlay,
+#detail-page-view.is-series-redesign .detail-episode-play-overlay:focus-visible{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#detail-page-view.is-series-redesign .detail-episode-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:auto;padding-top:12px;border-top:1px solid #ffffff12}
+#detail-page-view.is-series-redesign .detail-episode-play{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 15px;border:1px solid #e1b85d;border-radius:7px;background:linear-gradient(135deg,#e4bd68,#b88937);color:#17130c;font-size:11px;font-weight:850;letter-spacing:.01em;box-shadow:0 5px 18px #c3913926;transition:transform .2s ease,filter .2s ease}
+#detail-page-view.is-series-redesign .detail-episode-play:hover{transform:translateY(-2px);filter:brightness(1.08)}
+#detail-page-view.is-series-redesign .detail-episode-play i{font-size:10px}
+#detail-page-view.is-series-redesign .detail-episode-toggle{margin:0;padding:8px 0;font-size:10px;white-space:nowrap}
+#detail-page-view.is-series-redesign .detail-episode-card.is-watched .detail-episode-actions{border-color:#9be0b42a}
+@media(max-width:600px){
+ #detail-page-view.is-series-redesign .detail-episode-play-overlay{width:42px;height:42px;font-size:14px;opacity:1;transform:translate(-50%,-50%)}
+ #detail-page-view.is-series-redesign .detail-episode-actions{align-items:stretch;flex-direction:column;gap:6px;padding-top:9px}
+ #detail-page-view.is-series-redesign .detail-episode-play{width:100%;min-height:36px}
+ #detail-page-view.is-series-redesign .detail-episode-toggle{align-self:flex-start;padding:5px 0;font-size:9px}
+}
