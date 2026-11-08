@@ -1757,7 +1757,7 @@ function renderFilmAwardResults(item,rows,state='loaded'){
  if(more)more.addEventListener('click',()=>{
   const expanded=content.classList.toggle('is-expanded');
   more.setAttribute('aria-expanded',String(expanded));
-  more.innerHTML=expanded?'Daha az göster <i class="fa-solid fa-chevron-up" aria-hidden="true">':'Tüm ödül ve adaylıkları göster <i class="fa-solid fa-chevron-down" aria-hidden="true">';
+  more.innerHTML=expanded?'Daha az göster <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>':'Tüm ödül ve adaylıkları göster <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>';
  });
 }
 async function loadFilmAwards(item){
