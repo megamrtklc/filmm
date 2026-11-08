@@ -18,7 +18,8 @@
   let choicePending = false, choiceOverlay = null;
   const nativeVideoPlay = video.play.bind(video);
   video.play = function () {
-    if (choicePending) return Promise.resolve();
+    // Kaynak yüklenirken oynatmaya izin ver; yalnızca devam/baştan seçimi ekranda açıkken engelle.
+    if (choicePending && choiceOverlay && !choiceOverlay.hidden) return Promise.resolve();
     return nativeVideoPlay();
   };
 
