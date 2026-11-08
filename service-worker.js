@@ -1,4 +1,4 @@
-const CACHE_NAME='perde-shell-v32';
+const CACHE_NAME='perde-shell-v33';
 const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/js/watch-center.js','./assets/css/watch-center.css','./assets/icons/perde-icon.svg','./data/catalog.json','./data/homepage-config.json'];
 
 self.addEventListener('install',event=>{
