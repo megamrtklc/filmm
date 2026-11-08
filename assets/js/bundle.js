@@ -1712,6 +1712,91 @@ function renderDetailCredits(item){
  render();
 }
 
+const filmAwardsCacheKey='perde_film_awards_wikidata_v1';
+let filmAwardsRequestSequence=0;
+function readFilmAwardsCache(key){
+ try{const cache=JSON.parse(localStorage.getItem(filmAwardsCacheKey)||'{}');const entry=cache[key];if(!entry||!Number.isFinite(entry.at)||Date.now()-entry.at>30*24*60*60*1000)return null;return Array.isArray(entry.rows)?entry.rows:null;}catch(_){return null;}
+}
+function writeFilmAwardsCache(key,rows){
+ try{const cache=JSON.parse(localStorage.getItem(filmAwardsCacheKey)||'{}');cache[key]={at:Date.now(),rows};localStorage.setItem(filmAwardsCacheKey,JSON.stringify(cache));}catch(_){}
+}
+function normalizeFilmAwardRows(rows){
+ const seen=new Set();
+ return (rows||[]).map(row=>{
+  const award=String(row.award||row.label||'').trim();
+  if(!award)return null;
+  const result=String(row.result||'Ödül bilgisi').trim();
+  const year=String(row.year||'').trim();
+  const key=[award.toLocaleLowerCase('tr-TR'),result,year].join('|');
+  if(seen.has(key))return null;seen.add(key);
+  return {award,result,year,url:String(row.url||'')};
+ }).filter(Boolean).slice(0,30);
+}
+function renderFilmAwardResults(item,rows,state='loaded'){
+ const root=document.getElementById('detail-film-extras');
+ if(!root||root.dataset.mediaId!==String(item.id))return;
+ const content=root.querySelector('#detail-awards-content');
+ if(!content)return;
+ const normalized=normalizeFilmAwardRows(rows);
+ if(state==='loading'){
+  content.innerHTML='<div class="detail-award-loading"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i><span>Ödül ve adaylık bilgileri aranıyor…</span></div>';
+  return;
+ }
+ if(!normalized.length){
+  const manual=String(item.awards||item.tmdbAwards||item.awardSummary||item.nominations||item.oscars||'').split(/\r?\n/).map(value=>value.trim()).filter(Boolean).slice(0,12);
+  if(manual.length){
+   content.innerHTML='<ul class="detail-award-list">'+manual.map(row=>'<li><i class="fa-solid fa-award" aria-hidden="true"></i><span>'+escapeCountryHtml(row)+'</span></li>').join('')+'</ul><div class="detail-award-source">Elle doğrulanmış katalog bilgisi</div>';
+  }else{
+   content.innerHTML='<div class="detail-award-empty"><i class="fa-solid fa-trophy" aria-hidden="true"></i><p>Bu film için Wikidata üzerinde doğrulanmış ödül veya adaylık kaydı bulunamadı.</p></div>';
+  }
+  return;
+ }
+ const list=normalized.map(row=>'<li><i class="fa-solid fa-award" aria-hidden="true"></i><span class="detail-award-copy"><strong>'+escapeCountryHtml(row.award)+'</strong><small>'+escapeCountryHtml([row.result,row.year].filter(Boolean).join(' · '))+'</small></span>'+(row.url?'<a href="'+escapeCountryHtml(row.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Ödül kaynağını aç"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>':'')+'</li>').join('');
+ content.innerHTML='<ul class="detail-award-list">'+list+'</ul>'+(normalized.length>4?'<button type="button" class="detail-award-more" aria-expanded="false">Tüm ödül ve adaylıkları göster <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>':'')+'<div class="detail-award-source">Kaynak: <a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a> · Otomatik güncellenir</div>';
+ const more=content.querySelector('.detail-award-more');
+ if(more)more.addEventListener('click',()=>{
+  const expanded=content.classList.toggle('is-expanded');
+  more.setAttribute('aria-expanded',String(expanded));
+  more.innerHTML=expanded?'Daha az göster <i class="fa-solid fa-chevron-up" aria-hidden="true">':'Tüm ödül ve adaylıkları göster <i class="fa-solid fa-chevron-down" aria-hidden="true">';
+ });
+}
+async function loadFilmAwards(item){
+ const tmdbId=String(item.tmdbId||'').replace(/\D/g,'');
+ const imdbId=String(item.imdbId||item.imdb_id||'').trim();
+ if(!tmdbId&&!/^tt\d{7,10}$/i.test(imdbId)){
+  renderFilmAwardResults(item,[],'loaded');return;
+ }
+ const cacheId=tmdbId?'tmdb:'+tmdbId:'imdb:'+imdbId;
+ const cached=readFilmAwardsCache(cacheId);
+ if(cached){renderFilmAwardResults(item,cached,'loaded');return;}
+ renderFilmAwardResults(item,[],'loading');
+ const clauses=[];
+ if(tmdbId){
+  clauses.push('{ ?film wdt:P4947 "'+tmdbId+'" . }');
+  clauses.push('{ ?film wdt:P4983 "'+tmdbId+'" . }');
+ }
+ if(/^tt\d{7,10}$/i.test(imdbId))clauses.push('{ ?film wdt:P345 "'+imdbId+'" . }');
+ const query='SELECT DISTINCT ?award ?awardLabel ?date ?result WHERE { { '+clauses.join(' UNION ')+' } { { ?film p:P166 ?statement . ?statement ps:P166 ?award . BIND("Kazandı" AS ?result) } UNION { ?film p:P1411 ?statement . ?statement ps:P1411 ?award . BIND("Aday gösterildi" AS ?result) } } OPTIONAL { ?statement pq:P585 ?date . } SERVICE wikibase:label { bd:serviceParam wikibase:language "tr,en" . } } ORDER BY DESC(?date) LIMIT 30';
+ const requestId=++filmAwardsRequestSequence;
+ try{
+  const response=await fetch('https://query.wikidata.org/sparql?query='+encodeURIComponent(query)+'&format=json',{headers:{Accept:'application/sparql-results+json'}});
+  if(!response.ok)throw new Error('Wikidata HTTP '+response.status);
+  const payload=await response.json();
+  const rows=(payload.results?.bindings||[]).map(row=>{
+   const award=row.awardLabel?.value||'';
+   const rawDate=row.date?.value||'';
+   const year=(rawDate.match(/\d{4}/)||[])[0]||'';
+   const uri=row.award?.value||'';
+   return {award,result:row.result?.value||'',year,url:uri};
+  });
+  const normalized=normalizeFilmAwardRows(rows);
+  writeFilmAwardsCache(cacheId,normalized);
+  if(requestId===filmAwardsRequestSequence)renderFilmAwardResults(item,normalized,'loaded');
+ }catch(error){
+  console.warn('Film ödül bilgileri alınamadı:',error);
+  if(requestId===filmAwardsRequestSequence)renderFilmAwardResults(item,[],'loaded');
+ }
+}
 function renderFilmDetailExtras(item){
  const detailView=document.getElementById('detail-page-view');
  if(!detailView)return;
@@ -1725,7 +1810,7 @@ function renderFilmDetailExtras(item){
   else detailView.querySelector('.detail-main')?.appendChild(root);
  }
  if(item.type==='tv'){root.hidden=true;root.innerHTML='';return;}
- root.hidden=false;
+ root.hidden=false;root.dataset.mediaId=String(item.id);
  const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
  const directors=countryTokens(item.tmdbDirector||item.director).map(normalize).filter(Boolean);
  const sameDirector=directors.length?mediaDatabase.filter(candidate=>{
@@ -1733,23 +1818,12 @@ function renderFilmDetailExtras(item){
   const names=countryTokens(candidate.tmdbDirector||candidate.director).map(normalize);
   return names.some(name=>directors.includes(name));
  }).slice(0,8):[];
- const rawAwards=item.awards||item.tmdbAwards||item.awardSummary||item.nominations||item.oscars||[];
- const awardValues=Array.isArray(rawAwards)?rawAwards:(typeof rawAwards==='string'?rawAwards.split(/\r?\n/):[rawAwards]);
- const awardRows=awardValues.map(value=>{
-  if(typeof value==='string')return value.trim();
-  if(!value||typeof value!=='object')return '';
-  const name=value.name||value.title||value.award||value.organization||'';
-  const detail=[value.category,value.result||value.status,value.year].filter(Boolean).join(' · ');
-  return [name,detail].filter(Boolean).join(' — ');
- }).filter(Boolean).slice(0,8);
- const awardMarkup=awardRows.length
-  ?'<ul class="detail-award-list">'+awardRows.map(row=>'<li><i class="fa-solid fa-award" aria-hidden="true"></i><span>'+escapeCountryHtml(row)+'</span></li>').join('')+'</ul>'
-  :'<div class="detail-award-empty"><i class="fa-solid fa-trophy" aria-hidden="true"></i><p>Bu yapım için doğrulanmış ödül veya adaylık bilgisi henüz kataloğa eklenmemiş.</p></div>';
  const directorMarkup=sameDirector.length
   ?'<div class="detail-director-film-grid">'+sameDirector.map(media=>'<button type="button" class="detail-director-film" data-detail-extra-id="'+escapeCountryHtml(media.id)+'"><img src="'+escapeCountryHtml(media.tmdbPoster||media.image)+'" alt="'+escapeCountryHtml(media.title)+'" loading="lazy"><span><strong>'+escapeCountryHtml(media.title)+'</strong><small>'+escapeCountryHtml(media.year||'')+'</small></span></button>').join('')+'</div>'
   :'<p class="detail-extra-empty">Katalogda aynı yönetmene ait başka film bulunamadı.</p>';
- root.innerHTML='<div class="detail-film-extra-grid"><article class="detail-film-extra-card detail-awards-card"><div class="detail-film-extra-heading"><span>ÖDÜLLER & ADAYLIKLAR</span><i class="fa-solid fa-trophy" aria-hidden="true"></i></div><h2>Başarıları</h2>'+awardMarkup+'</article><article class="detail-film-extra-card detail-same-director-card"><div class="detail-film-extra-heading"><span>YÖNETMENİN DİĞER FİLMLERİ</span><i class="fa-solid fa-clapperboard" aria-hidden="true"></i></div><h2>Aynı yönetmenden</h2>'+directorMarkup+'</article></div>';
+ root.innerHTML='<div class="detail-film-extra-grid"><article class="detail-film-extra-card detail-awards-card"><div class="detail-film-extra-heading"><span>ÖDÜLLER & ADAYLIKLAR</span><i class="fa-solid fa-trophy" aria-hidden="true"></i></div><h2>Başarıları</h2><div id="detail-awards-content" class="detail-awards-content"></div></article><article class="detail-film-extra-card detail-same-director-card"><div class="detail-film-extra-heading"><span>YÖNETMENİN DİĞER FİLMLERİ</span><i class="fa-solid fa-clapperboard" aria-hidden="true"></i></div><h2>Aynı yönetmenden</h2>'+directorMarkup+'</article></div>';
  root.querySelectorAll('[data-detail-extra-id]').forEach(button=>button.addEventListener('click',()=>openDetailPage(button.dataset.detailExtraId)));
+ loadFilmAwards(item);
 }
 
 function openDetailPage(id,update=true){
