@@ -1368,20 +1368,33 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
  const watchedCount=episodes.filter(ep=>progress[seasonNumber+'_'+ep.episode_number]?.watched).length;
  const cards=episodes.map(ep=>{
   const no=Number(ep.episode_number)||0,watched=!!progress[seasonNumber+'_'+no]?.watched;
-  const still=ep.still_path?'https://image.tmdb.org/t/p/w342'+ep.still_path:(item.tmdbPoster||item.image||'');
+  const still=ep.still_path?'https://image.tmdb.org/t/p/w780'+ep.still_path:(item.tmdbPoster||item.image||'');
   const meta=[Number(ep.runtime)>0?ep.runtime+' dk':'',ep.air_date?new Date(ep.air_date+'T12:00:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}):''].filter(Boolean).join(' · ');
-  return '<article class="detail-episode-card'+(watched?' is-watched':'')+'"><div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="" loading="lazy"><span>'+String(no).padStart(2,'0')+'</span></div><div class="detail-episode-copy"><div class="detail-episode-title-row"><h3>'+escapeCountryHtml(ep.name||('Bölüm '+no))+'</h3><i class="detail-episode-watched-mark fa-solid fa-check" aria-hidden="true"></i></div>'+(meta?'<small class="detail-episode-meta">'+escapeCountryHtml(meta)+'</small>':'')+'<p>'+escapeCountryHtml(ep.overview||'Bölüm açıklaması henüz eklenmemiş.')+'</p><button type="button" class="detail-episode-toggle" data-episode-toggle data-season="'+seasonNumber+'" data-episode="'+no+'" aria-pressed="'+watched+'"><i class="fa-solid '+(watched?'fa-check':'fa-circle')+'"></i> '+(watched?'İzlendi':'İzlendi olarak işaretle')+'</button></div></article>';
+  return '<article class="detail-episode-card'+(watched?' is-watched':'')+'">'+
+   '<div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="'+escapeCountryHtml(ep.name||('Bölüm '+no))+'" loading="lazy"><span class="detail-episode-number">'+String(no).padStart(2,'0')+'</span><span class="detail-episode-watched-badge"><i class="fa-solid fa-check"></i> İzlendi</span></div>'+
+   '<div class="detail-episode-copy"><div class="detail-episode-title-row"><h3>'+escapeCountryHtml(ep.name||('Bölüm '+no))+'</h3></div>'+
+   (meta?'<small class="detail-episode-meta">'+escapeCountryHtml(meta)+'</small>':'')+
+   '<p>'+escapeCountryHtml(ep.overview||'Bu bölüm için henüz açıklama eklenmemiş.')+'</p>'+
+   '<button type="button" class="detail-episode-toggle" data-episode-toggle data-season="'+seasonNumber+'" data-episode="'+no+'" aria-pressed="'+watched+'"><i class="fa-solid '+(watched?'fa-check':'fa-circle')+'"></i> '+(watched?'İzlendi':'İzledim olarak işaretle')+'</button></div></article>';
  }).join('');
- root.innerHTML='<div class="detail-episode-toolbar"><label for="detail-season-select">Sezon</label><select id="detail-season-select" aria-label="Sezon seç">'+detailEpisodeState.seasons.map(season=>'<option value="'+season.season_number+'" '+(Number(season.season_number)===seasonNumber?'selected':'')+'>Sezon '+season.season_number+'</option>').join('')+'</select><span class="detail-episode-progress">'+watchedCount+' / '+episodes.length+' bölüm izlendi</span></div><div class="detail-episode-progress-track"><span style="width:'+(episodes.length?Math.round(watchedCount/episodes.length*100):0)+'%"></span></div>'+(cards?'<div class="detail-episode-list">'+cards+'</div>':'<p class="detail-episodes-empty">Bu sezon için bölüm bilgisi bulunamadı.</p>');
+ const percent=episodes.length?Math.round(watchedCount/episodes.length*100):0;
+ root.innerHTML=
+  '<div class="detail-episodes-heading"><div><span>DİZİ REHBERİ</span><h2>Bölümler</h2><p>İzlemek istediğin bölümü seç, ilerlemeni burada takip et.</p></div></div>'+
+  '<div class="detail-episode-toolbar"><label for="detail-season-select">Sezon</label><select id="detail-season-select" aria-label="Sezon seç">'+detailEpisodeState.seasons.map(season=>'<option value="'+season.season_number+'" '+(Number(season.season_number)===seasonNumber?'selected':'')+'>Sezon '+season.season_number+'</option>').join('')+'</select><span class="detail-episode-progress">'+watchedCount+' / '+episodes.length+' izlendi</span></div>'+
+  '<div class="detail-episode-progress-track"><span style="width:'+percent+'%"></span></div>'+
+  (cards?'<div class="detail-episode-list">'+cards+'</div>':'<p class="detail-episodes-empty">Bu sezonda bölüm bilgisi bulunamadı.</p>');
  root.querySelector('#detail-season-select')?.addEventListener('change',event=>loadDetailEpisodeSeason(item,Number(event.target.value)));
  root.querySelectorAll('[data-episode-toggle]').forEach(button=>button.addEventListener('click',()=>{
   const season=Number(button.dataset.season),episode=Number(button.dataset.episode),current=button.getAttribute('aria-pressed')==='true',next=!current;
   setDetailEpisodeWatched(item.id,season,episode,next);
-  button.setAttribute('aria-pressed',String(next));button.innerHTML='<i class="fa-solid '+(next?'fa-check':'fa-circle')+'"></i> '+(next?'İzlendi':'İzlendi olarak işaretle');
+  button.setAttribute('aria-pressed',String(next));
+  button.innerHTML='<i class="fa-solid '+(next?'fa-check':'fa-circle')+'"></i> '+(next?'İzlendi':'İzledim olarak işaretle');
   const card=button.closest('.detail-episode-card');card?.classList.toggle('is-watched',next);
+  const badge=card?.querySelector('.detail-episode-watched-badge');if(badge)badge.hidden=!next;
   const fresh=getDetailEpisodeProgress(item.id),count=episodes.filter(ep=>fresh[season+'_'+ep.episode_number]?.watched).length;
   const label=root.querySelector('.detail-episode-progress'),bar=root.querySelector('.detail-episode-progress-track span');
-  if(label)label.textContent=count+' / '+episodes.length+' bölüm izlendi';if(bar)bar.style.width=(episodes.length?Math.round(count/episodes.length*100):0)+'%';
+  if(label)label.textContent=count+' / '+episodes.length+' izlendi';
+  if(bar)bar.style.width=(episodes.length?Math.round(count/episodes.length*100):0)+'%';
  }));
 }
 async function loadDetailEpisodeSeason(item,seasonNumber){
@@ -1415,22 +1428,8 @@ async function renderDetailEpisodes(item){
 }
 
 function updateDetailSeriesDashboard(item){
- const dashboard=document.getElementById('detail-series-dashboard');if(!dashboard)return;
- if(!item||item.type!=='tv'){dashboard.hidden=true;dashboard.innerHTML='';return;}
- dashboard.hidden=false;
- const seasons=Number(item.seasons)||0,total=Number(String(item.episodes||'').replace(/[^0-9]/g,''))||0;
- const progress=getDetailEpisodeProgress(item.id);
- const watched=Object.values(progress).filter(entry=>entry&&entry.watched).length;
- const percent=total?Math.min(100,Math.round(watched/total*100)):0;
- dashboard.innerHTML=
-  '<div class="series-dashboard-heading"><div><span class="series-kicker"><i class="fa-solid fa-tv"></i> PERDE DİZİ MERKEZİ</span><h2>İzleme yolculuğun</h2><p>Sezonlarını keşfet, bölümlerini takip et ve kaldığın yeri kaybetme.</p></div><button type="button" class="series-jump-button" data-series-jump><i class="fa-solid fa-list-ol"></i> Bölümlere göz at <i class="fa-solid fa-arrow-down"></i></button></div>'+
-  '<div class="series-dashboard-grid">'+
-   '<div class="series-stat-card"><span>SEZON</span><strong>'+ (seasons||'—') +'</strong><small>Toplam sezon</small></div>'+
-   '<div class="series-stat-card"><span>BÖLÜM</span><strong>'+ (total||'—') +'</strong><small>Toplam bölüm</small></div>'+
-   '<div class="series-stat-card"><span>İZLEDİĞİN</span><strong>'+watched+'</strong><small>İşaretlediğin bölüm</small></div>'+
-   '<div class="series-progress-card"><div class="series-progress-copy"><span>GENEL İLERLEME</span><strong>%'+percent+'</strong></div><div class="series-progress-track"><span style="width:'+percent+'%"></span></div><small>'+(total?watched+' / '+total+' bölüm tamamlandı':'Bölüm sayısı henüz belirtilmemiş')+'</small></div>'+
-  '</div>';
- dashboard.querySelector('[data-series-jump]')?.addEventListener('click',()=>document.getElementById('detail-episodes')?.scrollIntoView({behavior:'smooth',block:'start'}));
+ const dashboard=document.getElementById('detail-series-dashboard');
+ if(dashboard){dashboard.hidden=true;dashboard.innerHTML='';}
 }
 function renderDetailSeries(item){
  const panel=document.getElementById('detail-series-panel');
