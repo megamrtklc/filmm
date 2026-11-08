@@ -7004,3 +7004,40 @@ body.detail-synopsis-open{overflow:hidden}
 @media(max-width:850px){.series-dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.series-progress-card{grid-column:1/-1;min-height:90px}.detail-episode-list{grid-template-columns:1fr}}
 @media(max-width:600px){.detail-series-dashboard,.detail-episodes{width:calc(100% - 28px);margin-top:22px;padding:18px;border-radius:17px}.series-dashboard-heading{align-items:flex-start;flex-direction:column;gap:14px}.series-jump-button{width:100%;justify-content:center}.series-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.series-stat-card{min-height:94px;padding:13px}.series-stat-card strong{font-size:25px}.series-progress-card{grid-column:1/-1}.detail-episode-card{grid-template-columns:112px minmax(0,1fr);gap:11px;padding:9px}.detail-episode-art{min-height:100px}.detail-episode-copy p{-webkit-line-clamp:2}.detail-episode-toolbar{flex-wrap:wrap}.detail-episode-toolbar select{min-width:115px}.detail-episode-progress{width:100%;margin:0}.detail-episodes-heading{margin-bottom:17px}}
 @media(max-width:390px){.detail-episode-card{grid-template-columns:96px minmax(0,1fr)}.detail-episode-title-row h3{font-size:12px}.detail-episode-copy p{font-size:10px}}
+
+
+/* Perde — Dizi bölüm galerisi: görsel kart düzeni */
+#detail-page-view .detail-series-dashboard{display:none!important}
+#detail-page-view .detail-episodes{width:min(1240px,calc(100% - 48px));margin:30px auto 46px;padding:0;border:0;border-radius:0;background:transparent}
+#detail-page-view .detail-episodes-heading{display:flex;align-items:end;justify-content:space-between;margin:0 0 22px;padding:0;border:0}
+#detail-page-view .detail-episodes-heading span{display:block;margin-bottom:7px;color:#9ca3af;font-size:10px;font-weight:800;letter-spacing:.15em}
+#detail-page-view .detail-episodes-heading h2{margin:0;color:#fff;font-size:clamp(23px,3vw,30px);font-weight:800;letter-spacing:-.04em}
+#detail-page-view .detail-episodes-heading p{margin:7px 0 0;color:#9299a5;font-size:13px}
+#detail-page-view .detail-episode-toolbar{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:0;background:transparent;border:0}
+#detail-page-view .detail-episode-toolbar label{color:#b7bdc8;font-size:12px;font-weight:700}
+#detail-page-view #detail-season-select{min-width:145px;padding:10px 34px 10px 13px;border:1px solid #ffffff20;border-radius:9px;background:#171a21;color:#f5f5f5;font-size:12px}
+#detail-page-view .detail-episode-progress{margin-left:auto;color:#aeb4c0;font-size:12px;font-weight:650}
+#detail-page-view .detail-episode-progress-track{height:3px;margin:0 0 22px;background:#ffffff12;border-radius:10px;overflow:hidden}
+#detail-page-view .detail-episode-progress-track span{display:block;height:100%;background:#d6ad59;border-radius:inherit;transition:width .25s ease}
+#detail-page-view .detail-episode-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 18px}
+#detail-page-view .detail-episode-card{display:flex;flex-direction:column;min-width:0;padding:0;overflow:hidden;border:0;border-radius:12px;background:transparent;transition:transform .22s ease}
+#detail-page-view .detail-episode-card:hover{transform:translateY(-3px);background:transparent}
+#detail-page-view .detail-episode-art{position:relative;aspect-ratio:16/9;min-height:0;overflow:hidden;border-radius:10px;background:#1b2029}
+#detail-page-view .detail-episode-art img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+#detail-page-view .detail-episode-card:hover .detail-episode-art img{transform:scale(1.045)}
+#detail-page-view .detail-episode-art:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.55));pointer-events:none}
+#detail-page-view .detail-episode-number{position:absolute;z-index:1;left:10px;bottom:9px;padding:4px 7px;border-radius:5px;background:rgba(0,0,0,.72);color:#fff;font-size:11px;font-weight:800}
+#detail-page-view .detail-episode-watched-badge{position:absolute;z-index:2;top:9px;right:9px;display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:20px;background:rgba(15,20,17,.88);color:#9be0b4;font-size:10px;font-weight:750}
+#detail-page-view .detail-episode-watched-badge[hidden]{display:none}
+#detail-page-view .detail-episode-copy{display:flex;flex:1;flex-direction:column;align-items:flex-start;min-width:0;padding:12px 1px 0}
+#detail-page-view .detail-episode-title-row{width:100%;margin:0}
+#detail-page-view .detail-episode-title-row h3{margin:0;color:#f5f5f6;font-size:15px;font-weight:750;line-height:1.4}
+#detail-page-view .detail-episode-meta{margin-top:5px;color:#9299a5;font-size:11px}
+#detail-page-view .detail-episode-copy p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:34px;margin:8px 0 12px;color:#aeb4c0;font-size:12px;line-height:1.55}
+#detail-page-view .detail-episode-toggle{margin-top:auto;padding:7px 0;border:0;border-radius:0;background:transparent;color:#aeb4c0;font-size:11px;font-weight:700;text-align:left}
+#detail-page-view .detail-episode-toggle:hover{color:#f0c66e}
+#detail-page-view .detail-episode-card.is-watched .detail-episode-toggle{color:#9be0b4}
+#detail-page-view .detail-episodes-loading,#detail-page-view .detail-episodes-empty{padding:22px 0;border:0;background:transparent;color:#aeb4c0;font-size:13px}
+@media(max-width:900px){#detail-page-view .detail-episode-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}}
+@media(max-width:600px){#detail-page-view .detail-episodes{width:calc(100% - 30px);margin:24px auto 34px}#detail-page-view .detail-episodes-heading{margin-bottom:18px}#detail-page-view .detail-episodes-heading h2{font-size:23px}#detail-page-view .detail-episodes-heading p{font-size:11px}#detail-page-view .detail-episode-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 11px}#detail-page-view .detail-episode-copy{padding-top:9px}#detail-page-view .detail-episode-title-row h3{font-size:12px}#detail-page-view .detail-episode-copy p{font-size:10px;min-height:30px;margin:6px 0 8px}#detail-page-view .detail-episode-meta{font-size:9px}#detail-page-view .detail-episode-toggle{font-size:10px}#detail-page-view .detail-episode-toolbar{gap:8px}#detail-page-view #detail-season-select{min-width:120px;padding:9px 28px 9px 10px}#detail-page-view .detail-episode-progress{font-size:10px}}
+@media(max-width:360px){#detail-page-view .detail-episode-list{grid-template-columns:1fr}#detail-page-view .detail-episode-title-row h3{font-size:14px}}
