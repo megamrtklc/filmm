@@ -8836,6 +8836,7 @@ body.detail-synopsis-open{overflow:hidden}
  background:radial-gradient(ellipse at 90% 0%,rgba(215,182,110,.13),transparent 48%),linear-gradient(145deg,#191b22,#101116 78%)!important;
  box-shadow:0 16px 38px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.035)!important;
 }
+#collection-personalized > * + *{margin-top:0!important}
 #collection-personalized .collection-heading{
  flex:0 0 auto!important;align-items:center!important;gap:10px!important;
  margin:0 0 12px!important;padding:0 0 12px!important;border-bottom:1px solid rgba(255,255,255,.09)!important;
@@ -8846,7 +8847,7 @@ body.detail-synopsis-open{overflow:hidden}
 #collection-personalized .rail-controls button{width:30px!important;height:30px!important;border-color:rgba(215,182,110,.25)!important;color:#d9bd83!important}
 #collection-personalized .collection-rail{
  flex:1 1 auto!important;min-height:0!important;align-content:start!important;align-items:start!important;
- grid-auto-columns:calc((100% - 24px)/3)!important;gap:12px!important;
+ grid-auto-columns:calc((100% - 36px)/4)!important;gap:12px!important;
  overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 10px!important;
  scrollbar-width:thin!important;scrollbar-color:rgba(215,182,110,.42) transparent!important;
 }
