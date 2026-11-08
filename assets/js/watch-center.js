@@ -190,7 +190,8 @@
     if (remove) {
       const id = String(remove.dataset.wcRemove);
       const saved = list('ny7_watchlist').filter(value => String(value) !== id);
-      try { localStorage.setItem('ny7_watchlist', JSON.stringify(saved)); } catch (_) {}
+      const diaryRows = manualDiary().filter(entry => !(String(entry.id) === id && entry.status === 'watchlist'));
+      try { localStorage.setItem('ny7_watchlist', JSON.stringify(saved)); localStorage.setItem('perde_watch_diary_v1', JSON.stringify(diaryRows)); } catch (_) {}
       if (typeof watchlist !== 'undefined') { watchlist = saved; }
       render(); return;
     }
@@ -210,6 +211,7 @@
     else closeCenter();
   });
   window.addEventListener('perde:homepage-refresh', () => { if (location.hash === '#/izleme-merkezi') render(); });
+  window.addEventListener('perde:catalog-ready', () => { if (location.hash === '#/izleme-merkezi') openCenter(); });
   window.addEventListener('load', () => { if (location.hash === '#/izleme-merkezi') openCenter(); });
   window.showWatchCenter = () => { if (location.hash !== '#/izleme-merkezi') location.hash = '#/izleme-merkezi'; else openCenter(); };
   if (location.hash === '#/izleme-merkezi') openCenter();
