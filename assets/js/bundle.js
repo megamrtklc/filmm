@@ -358,25 +358,17 @@ function renderMoodRecommendation(item, category) {
     const description = escapeCountryHtml(item.desc || 'Bu yapımı keşfetmek için detaylarına göz at.');
     const id = String(item.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     const options = moodCategoryOptions.map(option =>
-        '<button type="button" class="mood-category-option' + (category === option.value ? ' is-active' : '') + '" onclick="chooseMoodPick(\'' + option.value.replace(/'/g, "\\\\'") + '\')">' +
+        '<button type="button" class="mood-category-option' + (category === option.value ? ' is-active' : '') + '" onclick="chooseMoodPick(\\'' + option.value.replace(/'/g, "\\\\'") + '\\')">' +
         '<i class="fa-solid ' + option.icon + '" aria-hidden="true"></i><span>' + option.label + '</span></button>'
     ).join('');
     result.innerHTML = `
         <div class="mood-discovery-backdrop" style="background-image:url('${backdrop}')"></div>
         <div class="mood-discovery-overlay"></div>
-        <div class="mood-discovery-head">
+        <div class="mood-card-top">
             <div class="mood-discovery-heading">
                 <span class="mood-discovery-eyebrow"><i class="fa-solid fa-clapperboard"></i> MODUNA GÖRE KEŞFET</span>
                 <h2>Bir ruh hali seç</h2>
                 <p>Sana uygun yapımı bulalım</p>
-            </div>
-            <div class="mood-category-select">
-                <button type="button" class="mood-category-trigger" aria-expanded="false" aria-controls="mood-category-menu" onclick="toggleMoodCategoryMenu()">
-                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-                    <span>${category || 'Tüm kategoriler'}</span>
-                    <i class="fa-solid fa-chevron-down mood-select-chevron" aria-hidden="true"></i>
-                </button>
-                <div id="mood-category-menu" class="mood-category-menu" hidden>${options}</div>
             </div>
         </div>
         <div class="mood-discovery-feature">
@@ -392,6 +384,15 @@ function renderMoodRecommendation(item, category) {
                     <button type="button" class="mood-discovery-again" onclick="chooseMoodPick(activeMoodCategory)" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i> Başka Öner</button>
                 </div>
             </div>
+        </div>
+        <div class="mood-category-select">
+            <div class="mood-category-label">RUH HALİNE GÖRE FİLTRELE</div>
+            <button type="button" class="mood-category-trigger" aria-expanded="false" aria-controls="mood-category-menu" onclick="toggleMoodCategoryMenu()">
+                <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                <span>${category || 'Tüm kategoriler'}</span>
+                <i class="fa-solid fa-chevron-down mood-select-chevron" aria-hidden="true"></i>
+            </button>
+            <div id="mood-category-menu" class="mood-category-menu" hidden>${options}</div>
         </div>`;
 }
 
