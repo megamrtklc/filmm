@@ -1,5 +1,5 @@
-const CACHE_NAME='perde-shell-v22';
-const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/icons/perde-icon.svg','./data/catalog.json','./data/homepage-config.json'];
+const CACHE_NAME='perde-shell-v23';
+const CORE=['./','./index.html','./manifest.json','./assets/css/style.css','./assets/js/bundle.js','./assets/js/watch-center.js','./assets/css/watch-center.css','./assets/icons/perde-icon.svg','./data/catalog.json','./data/homepage-config.json'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
