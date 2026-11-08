@@ -44,7 +44,7 @@
     genre:'editor-genre',rating:'editor-rating',duration:'editor-duration',country:'editor-country',
     director:'editor-director',tmdbId:'editor-tmdb',seasons:'editor-seasons',episodes:'editor-episodes',
     desc:'editor-desc',image:'editor-image',backdrop:'editor-backdrop',trailerUrl:'editor-trailer',imdbId:'editor-imdb',
-    watchUrl:'editor-watch-url',platform:'editor-platform',personalNote:'editor-personal-note'
+    watchUrl:'editor-watch-url',awards:'editor-awards',platform:'editor-platform',personalNote:'editor-personal-note'
   };
   function editorValue(id) { return document.getElementById(id).value.trim(); }
   function getSelectedPlatforms() { return Array.from(document.querySelectorAll('#editor-platform-picker input[name="editor-platform"]:checked')).map(input=>input.value); }
@@ -89,7 +89,7 @@
       // Perde'ye özel alanları boş bırakıldıklarında da açıkça kaydet:
       // düzenleme sırasında eski notun/bağlantının yanlışlıkla geri gelmesini önler.
       if (key === 'platform') value[key] = getSelectedPlatforms();
-      else if (['watchUrl','personalNote'].includes(key)) value[key] = raw;
+      else if (['watchUrl','personalNote','awards'].includes(key)) value[key] = raw;
       else if (raw) value[key] = ['year','tmdbId','seasons','episodes'].includes(key) ? Number(raw) : raw;
     });
     value.type = editorType;
