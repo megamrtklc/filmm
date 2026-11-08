@@ -8363,3 +8363,58 @@ body.detail-synopsis-open{overflow:hidden}
 #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid{gap:5px!important}
 #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card{height:66px!important;min-height:66px!important;max-height:66px!important}
 }
+
+
+/* PERDE MOOD GALLERY — expanded list, cinematic recommendation and clean outer frame */
+#dashboard-view .home-feature-row #daily-pick-section,
+#dashboard-view .home-feature-row #daily-pick-section::before,
+#dashboard-view .home-feature-row #daily-pick-section::after,
+#dashboard-view .home-feature-row #daily-pick-section #mood-discovery-result,
+#dashboard-view .home-feature-row #daily-pick-section #mood-discovery-result::before,
+#dashboard-view .home-feature-row #daily-pick-section #mood-discovery-result::after{
+  background:transparent!important;border:0!important;box-shadow:none!important;outline:0!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section #mood-discovery-result{
+  display:block!important;position:static!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+  padding:0!important;margin:0!important;overflow:visible!important;border-radius:0!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-shell{height:auto!important;min-height:0!important;overflow:visible!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-body{align-items:start!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid.is-expanded{
+  max-height:330px!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;
+  padding:2px 5px 5px 0!important;scrollbar-width:thin;scrollbar-color:rgba(215,182,110,.55) rgba(255,255,255,.06);
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid.is-expanded::-webkit-scrollbar{width:5px}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid.is-expanded::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:8px}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid.is-expanded::-webkit-scrollbar-thumb{background:rgba(215,182,110,.55);border-radius:8px}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation{
+  position:relative!important;isolation:isolate!important;min-height:100%!important;grid-template-columns:104px minmax(0,1fr)!important;
+  gap:12px!important;align-items:center!important;padding:14px!important;overflow:hidden!important;
+  border:1px solid rgba(215,182,110,.28)!important;border-radius:13px!important;background:#11151d!important;box-shadow:0 12px 30px rgba(0,0,0,.25)!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-backdrop{position:absolute!important;z-index:-1!important;inset:0!important;overflow:hidden!important;pointer-events:none!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-backdrop img{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;opacity:.48!important;filter:saturate(.82)!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-backdrop span{
+  position:absolute!important;inset:0!important;background:linear-gradient(90deg,rgba(10,13,19,.82),rgba(10,13,19,.91)),linear-gradient(0deg,rgba(10,13,19,.5),rgba(10,13,19,.18))!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-poster{
+  position:relative!important;z-index:1!important;width:104px!important;max-width:104px!important;height:156px!important;object-fit:cover!important;
+  border:1px solid rgba(255,255,255,.25)!important;border-radius:8px!important;box-shadow:0 8px 22px rgba(0,0,0,.48)!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy{position:relative!important;z-index:1!important;overflow:visible!important;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-result-label{font-size:8px!important;letter-spacing:.08em!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy h3{font-size:clamp(13px,1.15vw,16px)!important;line-height:1.22!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-meta{font-size:9px!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-description{font-size:9px!important;line-height:1.45!important;-webkit-line-clamp:4!important;line-clamp:4!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-result-actions button{font-size:8px!important;min-height:30px!important}
+@media(max-width:760px){
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid.is-expanded{max-height:390px!important}
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation{grid-template-columns:94px minmax(0,1fr)!important}
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-poster{width:94px!important;max-width:94px!important;height:141px!important}
+}
+@media(max-width:420px){
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important;padding:10px!important}
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-poster{width:82px!important;max-width:82px!important;height:123px!important}
+}
