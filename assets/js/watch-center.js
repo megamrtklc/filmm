@@ -25,6 +25,7 @@
   function savedProgress(item) { const row = progress()[String(item.id)]; return row && Number(row.time) > 0 ? row : null; }
   function isWatched(item) { const manual = manualEntry(item); return manual?.status === 'watched' || (item.type === 'tv' ? (seriesEntry(item).status === 'completed' || watchedEpisodeCount(item) > 0) : completedCount(item) > 0); }
   function isUnfinished(item) {
+    if (isWatched(item)) return false;
     const entry = seriesEntry(item);
     return !!savedProgress(item) || manualEntry(item)?.status === 'watching' || (item.type === 'tv' && ['paused','dropped'].includes(entry.status)) ||
       (item.type === 'tv' && entry.status === 'watching' && watchedEpisodeCount(item) > 0);
@@ -46,7 +47,7 @@
     const rating = item.tmdbRating || item.rating || '';
     let status = '';
     if (mode === 'unfinished') status = item.type === 'tv' ? (watchedEpisodeCount(item) + ' bölüm izlendi') : (percent + '% tamamlandı');
-    else if (mode === 'watched') status = item.type === 'tv' ? (watchedEpisodeCount(item) + ' bölüm izlendi') : (completedCount(item) + ' kez tamamlandı');
+    else if (mode === 'watched') status = item.type === 'tv' ? (watchedEpisodeCount(item) ? watchedEpisodeCount(item) + ' bölüm izlendi' : 'İzlendi') : (completedCount(item) ? completedCount(item) + ' kez tamamlandı' : 'İzlendi');
     else if (mode === 'watchlist') status = 'İzleme listende';
     return '<article class="wc-media-card"><button type="button" class="wc-poster-button" data-wc-open="' + esc(item.id) + '" aria-label="' + esc(item.title) + ' detayını aç">' +
       (image ? '<img class="wc-poster" src="' + esc(image) + '" alt="' + esc(item.title) + '" loading="lazy">' : '<span class="wc-poster-placeholder"><i class="fa-solid fa-film"></i></span>') +
@@ -183,7 +184,9 @@
       const previous = index >= 0 ? entries[index] : {id};
       const updated = {...previous, id, status: nextStatus, updatedAt: Date.now()};
       if (index >= 0) entries[index] = updated; else entries.push(updated);
-      try { localStorage.setItem('perde_watch_diary_v1', JSON.stringify(entries)); } catch (_) {}
+      const savedList = list('ny7_watchlist').filter(value => String(value) !== id);
+      try { localStorage.setItem('perde_watch_diary_v1', JSON.stringify(entries)); localStorage.setItem('ny7_watchlist', JSON.stringify(savedList)); } catch (_) {}
+      if (typeof watchlist !== 'undefined') watchlist = savedList;
       render(); return;
     }
     const remove = event.target.closest('[data-wc-remove]');
