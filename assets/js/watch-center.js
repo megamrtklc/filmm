@@ -80,6 +80,10 @@
     const image = ep.image?.medium || ep.image?.original || poster(item);
     return '<article class="wc-next-episode"><div class="wc-next-image">' + (image ? '<img src="' + esc(image) + '" alt="" loading="lazy">' : '<i class="fa-solid fa-tv"></i>') + '</div><div class="wc-next-copy"><span>SIRADAKİ BÖLÜM</span><strong>' + esc(item.title) + '</strong><p>Sezon ' + esc(ep.season) + ' · Bölüm ' + esc(ep.number) + ' — ' + esc(title) + '</p><small>' + next.watched + ' / ' + next.total + ' bölüm tamamlandı</small><button type="button" data-wc-series="' + esc(item.id) + '">Dizi rehberini aç <i class="fa-solid fa-arrow-right"></i></button></div></article>';
   }
+  function episodeSetupCard(item) {
+    const image = poster(item);
+    return '<article class="wc-next-episode wc-episode-setup"><div class="wc-next-image">' + (image ? '<img src="' + esc(image) + '" alt="" loading="lazy">' : '<i class="fa-solid fa-tv"></i>') + '</div><div class="wc-next-copy"><span>DİZİ TAKİBİ</span><strong>' + esc(item.title) + '</strong><p>Bölüm listesini yükleyerek sıradaki bölümünü belirle.</p><button type="button" data-wc-series="' + esc(item.id) + '">Bölüm rehberini hazırla <i class="fa-solid fa-arrow-right"></i></button></div></article>';
+  }
   function getCollections() {
     const all = catalog();
     const diaryEntries = manualDiary();
@@ -89,8 +93,9 @@
     const watchlistItems = all.filter(item => watchIds.has(String(item.id)));
     const trackedSeries = all.filter(item => item.type === 'tv' && (['watching','paused'].includes(seriesEntry(item).status) || manualEntry(item)?.status === 'watching'));
     const nextEpisodes = trackedSeries.map(item => ({item, next:getNextEpisode(item)})).filter(row => row.next);
+    const seriesNeedingGuide = trackedSeries.filter(item => { const cached = read('perde_tvmaze_episodes_v1_' + String(item.id), []); return !Array.isArray(cached) || !cached.length; });
     const totalSeconds = Object.values(stats()).reduce((sum,row) => sum + (Number(row?.seconds) || 0), 0);
-    return {all,watched,unfinished,watchlistItems,nextEpisodes,totalSeconds};
+    return {all,watched,unfinished,watchlistItems,nextEpisodes,seriesNeedingGuide,totalSeconds};
   }
   function filtered(items) {
     const q = query.trim().toLocaleLowerCase('tr-TR');
@@ -111,7 +116,7 @@
       '<article class="wc-stat-card"><span><i class="fa-solid fa-clock-rotate-left"></i> YARIM KALANLAR</span><strong>' + data.unfinished.length + '</strong><small>Kaldığın yerden devam edebileceklerin</small></article>' +
       '<article class="wc-stat-card"><span><i class="fa-solid fa-hourglass-half"></i> İZLEME SÜRESİ</span><strong>' + esc(formatTime(data.totalSeconds)) + '</strong><small>Bu cihazda kaydedilen oynatma süresi</small></article></div>' +
       section('Kaldığın yerden devam et','DEVAM EDENLER',recent,'unfinished',4) +
-      (upcoming.length ? '<section class="wc-section"><div class="wc-section-heading"><div><span>DİZİ TAKİBİ</span><h2>Sıradaki bölümlerin</h2></div><button type="button" data-wc-tab="episodes">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div><div class="wc-episode-grid">' + upcoming.map(row => episodeCard(row.item,row.next)).join('') + '</div></section>' : '') +
+      (upcoming.length ? '<section class="wc-section"><div class="wc-section-heading"><div><span>DİZİ TAKİBİ</span><h2>Sıradaki bölümlerin</h2></div><button type="button" data-wc-tab="episodes">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div><div class="wc-episode-grid">' + upcoming.map(row => episodeCard(row.item,row.next)).join('') + '</div></section>' : (data.seriesNeedingGuide.length ? '<section class="wc-section"><div class="wc-section-heading"><div><span>DİZİ TAKİBİ</span><h2>Bölüm rehberini hazırla</h2></div><button type="button" data-wc-tab="episodes">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div><div class="wc-episode-grid">' + data.seriesNeedingGuide.slice(0,2).map(episodeSetupCard).join('') + '</div></section>' : '')) +
       section('İzleme listenden','SONRA İZLE',data.watchlistItems,'watchlist',4);
   }
   function renderTab(data) {
@@ -119,8 +124,9 @@
     const subtitle = {watched:'TAMAMLADIKLARIN',watchlist:'SONRA İZLE',unfinished:'KALDIĞIN YERDEN',episodes:'DİZİ TAKİBİ'}[activeTab] || '';
     if (activeTab === 'episodes') {
       const rows = data.nextEpisodes;
+      const setup = data.seriesNeedingGuide || [];
       return '<section class="wc-section"><div class="wc-section-heading"><div><span>' + subtitle + '</span><h2>' + title + '</h2><p>İzlediğin bölümler dikkate alınarak sıradaki bölümün gösterilir.</p></div></div>' +
-        (rows.length ? '<div class="wc-episode-grid">' + rows.map(row => episodeCard(row.item,row.next)).join('') + '</div>' : emptyState('Henüz sıradaki bölüm belirlenmedi','Dizi detay sayfasındaki bölüm rehberini açıp izlediğin bölümleri işaretlediğinde burada sıradaki bölümün görünür.')) + '</section>';
+        (rows.length ? '<div class="wc-episode-grid">' + rows.map(row => episodeCard(row.item,row.next)).join('') + '</div>' : (setup.length ? '<div class="wc-episode-grid">' + setup.map(episodeSetupCard).join('') + '</div>' : emptyState('Henüz sıradaki bölüm belirlenmedi','Bir diziyi izleme durumuna aldığında bölüm takibini burada görebilirsin.'))) + '</section>';
     }
     const sourceItems = activeTab === 'watchlist' ? data.watchlistItems : data[activeTab];
     const items = filtered(Array.isArray(sourceItems) ? sourceItems : []);
