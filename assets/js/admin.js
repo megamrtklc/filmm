@@ -35,6 +35,7 @@
     $$$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.page === page));
     $('#breadcrumb-current').textContent = pageNames[page];
     $('#admin-sidebar').classList.remove('open');
+    if (typeof syncSidebarToggle === 'function') syncSidebarToggle();
     window.scrollTo({top:0,behavior:'smooth'});
     history.replaceState(null, '', '#'+page);
     if(page==='backups') loadAutomaticBackupStatus();
@@ -1424,7 +1425,23 @@
   });
   $$('.nav-item').forEach(button => button.addEventListener('click',() => navigate(button.dataset.page)));
   $$('[data-goto]').forEach(button => button.addEventListener('click',() => navigate(button.dataset.goto)));
-  $('#mobile-menu').addEventListener('click',() => $('#admin-sidebar').classList.toggle('open'));
+  const sidebarToggle = $('#mobile-menu');
+  const adminSidebar = $('#admin-sidebar');
+  const syncSidebarToggle = () => {
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    const expanded = isMobile ? adminSidebar.classList.contains('open') : !document.body.classList.contains('sidebar-collapsed');
+    sidebarToggle.setAttribute('aria-expanded', String(expanded));
+    sidebarToggle.setAttribute('aria-label', expanded ? 'Sol menüyü daralt' : 'Sol menüyü genişlet');
+    sidebarToggle.title = expanded ? 'Sol menüyü daralt' : 'Sol menüyü genişlet';
+    sidebarToggle.innerHTML = '<i class="fa-solid ' + (expanded ? 'fa-bars' : 'fa-bars-staggered') + '"></i>';
+  };
+  sidebarToggle.addEventListener('click', () => {
+    if (window.matchMedia('(max-width: 900px)').matches) adminSidebar.classList.toggle('open');
+    else document.body.classList.toggle('sidebar-collapsed');
+    syncSidebarToggle();
+  });
+  window.addEventListener('resize', syncSidebarToggle, {passive:true});
+  syncSidebarToggle();
   ['#catalog-search','#catalog-type','#catalog-genre','#catalog-year','#catalog-rating','#catalog-sort'].forEach(selector => $(selector).addEventListener(selector==='#catalog-search'?'input':'change',() => {catalogPage=1;renderCatalog();}));
   $('#catalog-table-body').addEventListener('change',event=>{
     const checkbox=event.target.closest('[data-catalog-select]');if(!checkbox)return;
