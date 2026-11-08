@@ -1361,44 +1361,94 @@ function getDetailEpisodeProgress(id){
 function setDetailEpisodeWatched(id,season,episode,watched){
  try{const all=JSON.parse(localStorage.getItem(DETAIL_EPISODE_PROGRESS_KEY)||'{}');if(!all[String(id)]||typeof all[String(id)]!=='object')all[String(id)]={};all[String(id)][season+'_'+episode]={watched,updatedAt:Date.now()};localStorage.setItem(DETAIL_EPISODE_PROGRESS_KEY,JSON.stringify(all));return true;}catch(_){return false;}
 }
+function updateDetailSeriesDashboard(item){
+ const dashboard=document.getElementById('detail-series-dashboard');if(!dashboard)return;
+ const seasons=detailEpisodeState.seasons||[],total=seasons.reduce((sum,season)=>sum+(Number(season.episode_count)||0),0);
+ const progress=getDetailEpisodeProgress(item.id);
+ const watched=Object.values(progress).filter(entry=>entry&&entry.watched).length;
+ const percent=total?Math.min(100,Math.round(watched/total*100)):0;
+ const totalNode=dashboard.querySelector('.series-stat-card:nth-child(2) strong');if(totalNode)totalNode.textContent=total;
+ const seasonNode=dashboard.querySelector('.series-stat-card:first-child strong');if(seasonNode)seasonNode.textContent=seasons.length;
+ const watchedNode=dashboard.querySelector('.series-stat-card:nth-child(3) strong');if(watchedNode)watchedNode.textContent=watched;
+ const pct=dashboard.querySelector('.series-progress-copy strong');if(pct)pct.textContent='%'+percent;
+ const bar=dashboard.querySelector('.series-progress-track span');if(bar)bar.style.width=percent+'%';
+ const note=dashboard.querySelector('.series-progress-card small');if(note)note.textContent=watched+' / '+total+' bölüm tamamlandı';
+}
 function renderDetailEpisodeCards(item,data,seasonNumber){
  const root=document.getElementById('detail-episodes-content');if(!root)return;
  const episodes=Array.isArray(data.episodes)?data.episodes:[];
  const progress=getDetailEpisodeProgress(item.id);
  const watchedCount=episodes.filter(ep=>progress[seasonNumber+'_'+ep.episode_number]?.watched).length;
+ const season=detailEpisodeState.seasons.find(entry=>Number(entry.season_number)===Number(seasonNumber));
  const cards=episodes.map(ep=>{
   const no=Number(ep.episode_number)||0,watched=!!progress[seasonNumber+'_'+no]?.watched;
   const still=ep.still_path?'https://image.tmdb.org/t/p/w780'+ep.still_path:(item.tmdbPoster||item.image||'');
   const meta=[Number(ep.runtime)>0?ep.runtime+' dk':'',ep.air_date?new Date(ep.air_date+'T12:00:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}):''].filter(Boolean).join(' · ');
-  return '<article class="detail-episode-card'+(watched?' is-watched':'')+'">'+
+  const overview=String(ep.overview||'').trim();
+  return '<article class="detail-episode-card'+(watched?' is-watched':'')+'" data-episode-card data-episode-name="'+escapeCountryHtml((ep.name||'').toLocaleLowerCase('tr-TR'))+'" data-episode-number="'+no+'">'+
    '<div class="detail-episode-art"><img src="'+escapeCountryHtml(still)+'" alt="'+escapeCountryHtml(ep.name||('Bölüm '+no))+'" loading="lazy"><span class="detail-episode-number">'+String(no).padStart(2,'0')+'</span><span class="detail-episode-watched-badge"'+(watched?'':' hidden')+'><i class="fa-solid fa-check"></i> İzlendi</span></div>'+
    '<div class="detail-episode-copy"><div class="detail-episode-title-row"><h3>'+escapeCountryHtml(ep.name||('Bölüm '+no))+'</h3></div>'+
    (meta?'<small class="detail-episode-meta">'+escapeCountryHtml(meta)+'</small>':'')+
-   '<p>'+escapeCountryHtml(ep.overview||'Bu bölüm için henüz açıklama eklenmemiş.')+'</p>'+
+   (overview?'<p class="detail-episode-overview">'+escapeCountryHtml(overview)+'</p>':'<p class="detail-episode-overview is-empty">Bu bölüm için açıklama bulunmuyor.</p>')+
+   (overview?'<button type="button" class="detail-episode-overview-toggle" aria-expanded="false">Devamını oku</button>':'')+
    '<button type="button" class="detail-episode-toggle" data-episode-toggle data-season="'+seasonNumber+'" data-episode="'+no+'" aria-pressed="'+watched+'"><i class="fa-solid '+(watched?'fa-check':'fa-circle')+'"></i> '+(watched?'İzlendi':'İzledim olarak işaretle')+'</button></div></article>';
  }).join('');
  const percent=episodes.length?Math.round(watchedCount/episodes.length*100):0;
+ const seasonButtons=detailEpisodeState.seasons.map(entry=>{
+  const active=Number(entry.season_number)===Number(seasonNumber);
+  const seen=Object.entries(progress).filter(([key,value])=>key.startsWith(entry.season_number+'_')&&value?.watched).length;
+  return '<button type="button" class="detail-season-chip'+(active?' is-active':'')+'" data-season-choice="'+entry.season_number+'" aria-pressed="'+active+'"><strong>'+entry.name.replace(/</g,'&lt;')+'</strong><small>'+seen+'/'+entry.episode_count+' bölüm</small></button>';
+ }).join('');
  root.innerHTML=
-  '<div class="detail-episodes-heading"><div><span>DİZİ REHBERİ</span><h2>Bölümler</h2><p>İzlemek istediğin bölümü seç, ilerlemeni burada takip et.</p></div></div>'+
-  '<div class="detail-episode-toolbar"><label for="detail-season-select">Sezon</label><select id="detail-season-select" aria-label="Sezon seç">'+detailEpisodeState.seasons.map(season=>'<option value="'+season.season_number+'" '+(Number(season.season_number)===seasonNumber?'selected':'')+'>Sezon '+season.season_number+'</option>').join('')+'</select><span class="detail-episode-progress">'+watchedCount+' / '+episodes.length+' izlendi</span></div>'+
+  '<div class="detail-episodes-heading"><div><span>DİZİ REHBERİ</span><h2>Bölümler</h2><p>Sezonunu seç, bölüm takibini kaldığın yerden sürdür.</p></div></div>'+
+  '<div class="detail-season-rail" aria-label="Sezon seçimi">'+seasonButtons+'</div>'+
+  '<div class="detail-episode-toolbar"><label class="detail-episode-search-wrap"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="detail-episode-search" type="search" placeholder="Bölüm adı veya numarası ara" autocomplete="off"></label>'+
+  '<label class="detail-episode-unwatched"><input id="detail-episode-unwatched" type="checkbox"><span>Sadece izlenmeyenler</span></label>'+
+  '<button type="button" id="detail-season-mark-all" class="detail-season-mark-all"><i class="fa-solid fa-check-double"></i> Sezonu tamamla</button>'+
+  '<span class="detail-episode-progress">'+watchedCount+' / '+episodes.length+' izlendi</span></div>'+
   '<div class="detail-episode-progress-track"><span style="width:'+percent+'%"></span></div>'+
-  (cards?'<div class="detail-episode-list">'+cards+'</div>':'<p class="detail-episodes-empty">Bu sezonda bölüm bilgisi bulunamadı.</p>');
- root.querySelector('#detail-season-select')?.addEventListener('change',event=>loadDetailEpisodeSeason(item,Number(event.target.value)));
+  '<div class="detail-episode-list">'+cards+'</div>'+
+  '<p class="detail-episodes-filter-empty" hidden>Bu aramayla eşleşen bölüm bulunamadı.</p>';
+ const applyFilters=()=>{
+  const query=(root.querySelector('#detail-episode-search')?.value||'').trim().toLocaleLowerCase('tr-TR');
+  const onlyUnwatched=!!root.querySelector('#detail-episode-unwatched')?.checked;
+  let visible=0;
+  root.querySelectorAll('[data-episode-card]').forEach(card=>{
+   const match=(!query||card.dataset.episodeName.includes(query)||card.dataset.episodeNumber.includes(query))&&(!onlyUnwatched||!card.classList.contains('is-watched'));
+   card.hidden=!match;if(match)visible++;
+  });
+  const empty=root.querySelector('.detail-episodes-filter-empty');if(empty)empty.hidden=visible>0;
+ };
+ root.querySelector('#detail-episode-search')?.addEventListener('input',applyFilters);
+ root.querySelector('#detail-episode-unwatched')?.addEventListener('change',applyFilters);
+ root.querySelectorAll('[data-season-choice]').forEach(button=>button.addEventListener('click',()=>loadDetailEpisodeSeason(item,Number(button.dataset.seasonChoice))));
+ root.querySelector('#detail-season-mark-all')?.addEventListener('click',()=>{
+  episodes.forEach(ep=>setDetailEpisodeWatched(item.id,seasonNumber,Number(ep.episode_number),true));
+  renderDetailEpisodeCards(item,data,seasonNumber);updateDetailSeriesDashboard(item);
+ });
  root.querySelectorAll('[data-episode-toggle]').forEach(button=>button.addEventListener('click',()=>{
-  const season=Number(button.dataset.season),episode=Number(button.dataset.episode),current=button.getAttribute('aria-pressed')==='true',next=!current;
-  setDetailEpisodeWatched(item.id,season,episode,next);
+  const seasonNo=Number(button.dataset.season),episode=Number(button.dataset.episode),current=button.getAttribute('aria-pressed')==='true',next=!current;
+  setDetailEpisodeWatched(item.id,seasonNo,episode,next);
   button.setAttribute('aria-pressed',String(next));
   button.innerHTML='<i class="fa-solid '+(next?'fa-check':'fa-circle')+'"></i> '+(next?'İzlendi':'İzledim olarak işaretle');
   const card=button.closest('.detail-episode-card');card?.classList.toggle('is-watched',next);
   const badge=card?.querySelector('.detail-episode-watched-badge');if(badge)badge.hidden=!next;
-  const fresh=getDetailEpisodeProgress(item.id),count=episodes.filter(ep=>fresh[season+'_'+ep.episode_number]?.watched).length;
+  const fresh=getDetailEpisodeProgress(item.id),count=episodes.filter(ep=>fresh[seasonNo+'_'+ep.episode_number]?.watched).length;
   const label=root.querySelector('.detail-episode-progress'),bar=root.querySelector('.detail-episode-progress-track span');
   if(label)label.textContent=count+' / '+episodes.length+' izlendi';
-  if(bar)bar.style.width=(episodes.length?Math.round(count/episodes.length*100):0)+'%';
+  if(bar)bar.style.width+(episodes.length?Math.round(count/episodes.length*100):0)+'%';
+  const seasonChip=root.querySelector('[data-season-choice="'+seasonNo+'"] small');if(seasonChip)seasonChip.textContent=count+'/'+episodes.length+' bölüm';
+  applyFilters();updateDetailSeriesDashboard(item);
  }));
+ root.querySelectorAll('.detail-episode-overview-toggle').forEach(button=>button.addEventListener('click',()=>{
+  const paragraph=button.parentElement.querySelector('.detail-episode-overview'),expanded=button.getAttribute('aria-expanded')==='true';
+  button.setAttribute('aria-expanded',String(!expanded));button.textContent=expanded?'Devamını oku':'Daha az göster';paragraph?.classList.toggle('is-expanded',!expanded);
+ }));
+ updateDetailSeriesDashboard(item);
 }
 async function loadDetailEpisodeSeason(item,seasonNumber){
  const root=document.getElementById('detail-episodes-content'),request=detailEpisodeRequest,auth=getDetailTmdbAuth();if(!root||!auth)return;
+ try{localStorage.setItem('perde_last_series_season_v1_'+String(item.id),String(seasonNumber));}catch(_){}
  root.innerHTML='<div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Bölümler yükleniyor…</div>';
  try{
   const response=await fetch('https://api.themoviedb.org/3/tv/'+encodeURIComponent(item.tmdbId)+'/season/'+seasonNumber+'?language=tr-TR'+auth.query,{headers:auth.headers});
@@ -1419,10 +1469,10 @@ async function renderDetailEpisodes(item){
   if(!response.ok)throw new Error('TMDB HTTP '+response.status);
   const data=await response.json();if(request!==detailEpisodeRequest||String(detailEpisodeState.itemId)!==String(item.id))return;
   detailEpisodeState.seasons=(Array.isArray(data.seasons)?data.seasons:[]).filter(season=>Number(season.season_number)>0&&Number(season.episode_count)>0);
-  const tmdbTotal=detailEpisodeState.seasons.reduce((sum,season)=>sum+(Number(season.episode_count)||0),0);const dashboard=document.getElementById('detail-series-dashboard');if(dashboard){const totalNode=dashboard.querySelector('.series-stat-card:nth-child(2) strong');if(totalNode)totalNode.textContent=tmdbTotal;const seasonNode=dashboard.querySelector('.series-stat-card:first-child strong');if(seasonNode)seasonNode.textContent=detailEpisodeState.seasons.length;const progress=getDetailEpisodeProgress(item.id),watched=Object.values(progress).filter(entry=>entry&&entry.watched).length,percent=tmdbTotal?Math.min(100,Math.round(watched/tmdbTotal*100)):0;const watchedNode=dashboard.querySelector('.series-stat-card:nth-child(3) strong');if(watchedNode)watchedNode.textContent=watched;const pct=dashboard.querySelector('.series-progress-copy strong');if(pct)pct.textContent='%'+percent;const bar=dashboard.querySelector('.series-progress-track span');if(bar)bar.style.width=percent+'%';const note=dashboard.querySelector('.series-progress-card small');if(note)note.textContent=watched+' / '+tmdbTotal+' bölüm tamamlandı';}
+  updateDetailSeriesDashboard(item);
   if(!detailEpisodeState.seasons.length){root.innerHTML=heading+'<p class="detail-episodes-empty">Bu dizi için sezon bilgisi bulunamadı.</p>';return;}
   root.innerHTML=heading+'<span class="detail-episodes-total">'+detailEpisodeState.seasons.length+' sezon</span><div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Bölümler hazırlanıyor…</div>';
-  await loadDetailEpisodeSeason(item,Number(detailEpisodeState.seasons[0].season_number));
+  let preferredSeason=0;try{preferredSeason=Number(localStorage.getItem('perde_last_series_season_v1_'+String(item.id)))||0;}catch(_){};if(!detailEpisodeState.seasons.some(season=>Number(season.season_number)===preferredSeason))preferredSeason=Number(detailEpisodeState.seasons[0].season_number);await loadDetailEpisodeSeason(item,preferredSeason);
   if(request===detailEpisodeRequest&&!root.querySelector('.detail-episodes-heading'))root.insertAdjacentHTML('afterbegin',heading);
  }catch(error){if(request!==detailEpisodeRequest)return;root.innerHTML=heading+'<p class="detail-episodes-empty">Sezon bilgileri şu anda alınamadı. TMDB bağlantısını kontrol edip tekrar deneyebilirsin.</p>';console.warn('Dizi sezon bilgileri alınamadı:',error);}
 }
