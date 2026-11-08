@@ -7,10 +7,17 @@
   const read = (key, fallback) => { try { const value = JSON.parse(localStorage.getItem(key) || 'null'); return value && typeof value === 'object' ? value : fallback; } catch (_) { return fallback; } };
   const list = key => { const value = read(key, []); return Array.isArray(value) ? value : []; };
   const catalog = () => typeof mediaDatabase !== 'undefined' && Array.isArray(mediaDatabase) ? mediaDatabase : [];
-  const diary = () => read('perde_series_diary_v1', {});
-  const progress = () => read('perde_player_progress_v3', {});
-  const stats = () => read('perde_player_stats_v3', {});
-  const manualDiary = () => list('perde_watch_diary_v1');
+  let seriesDiarySnapshot = {}, progressSnapshot = {}, statsSnapshot = {}, manualDiarySnapshot = [];
+  const diary = () => seriesDiarySnapshot;
+  const progress = () => progressSnapshot;
+  const stats = () => statsSnapshot;
+  const manualDiary = () => manualDiarySnapshot;
+  function refreshStorageSnapshot() {
+    seriesDiarySnapshot = read('perde_series_diary_v1', {});
+    progressSnapshot = read('perde_player_progress_v3', {});
+    statsSnapshot = read('perde_player_stats_v3', {});
+    manualDiarySnapshot = list('perde_watch_diary_v1');
+  }
   function manualEntry(item) { return manualDiary().find(entry => String(entry.id) === String(item.id)) || null; }
   let activeTab = 'overview';
   let query = '';
@@ -135,6 +142,7 @@
   function render() {
     const root = $(VIEW_ID);
     if (!root) return;
+    refreshStorageSnapshot();
     const data = getCollections();
     root.querySelectorAll('[data-wc-tab]').forEach(button => {
       button.classList.toggle('is-active', button.dataset.wcTab === activeTab);
