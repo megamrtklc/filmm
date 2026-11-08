@@ -8409,3 +8409,27 @@ body.detail-synopsis-open{overflow:hidden}
  #dashboard-view .home-feature-row #daily-pick-section .mood-discovery-actions{flex-wrap:nowrap!important;gap:6px!important}
  #dashboard-view .home-feature-row #daily-pick-section .mood-discovery-actions button{flex:1 1 0!important;min-width:0!important;padding:0 6px!important;font-size:9px!important;min-height:35px!important}
 }
+
+
+/* Film detay: konu kartının alt kenarını afiş altındaki Filmi izle butonuyla hizala */
+#detail-page-view:not(.is-series-redesign) .detail-overlap{
+  align-items:stretch!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-poster-column{
+  align-self:stretch!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  align-self:stretch!important;
+  min-height:100%!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-copy .detail-description-panel{
+  display:flex!important;
+  flex:1 1 auto!important;
+  flex-direction:column!important;
+  min-height:0!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-description-panel .detail-score-row{
+  margin-top:auto!important;
+}
