@@ -43,7 +43,8 @@
             }
         }
     </script><link rel="stylesheet" href="assets/css/style.css?v=20261108-mood-discovery-C4">
-    <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">\n</head>
+    <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
+    <link rel="stylesheet" href="assets/css/watch-center.css?v=20261108-watch-center-v1">\n</head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
     <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
@@ -94,6 +95,7 @@
             <a href="#/diziler"><i class="fa-solid fa-tv"></i> Diziler</a>
             <a href="#/kesfet"><i class="fa-solid fa-compass"></i> Keşfet</a>
             <a href="#/listem"><i class="fa-solid fa-bookmark"></i> Listem</a>
+            <a href="#/izleme-merkezi" data-watch-center-nav><i class="fa-solid fa-chart-line"></i> İzleme Merkezi</a>
             <div class="nav-dropdown" id="categories-menu">
                 <button type="button" class="nav-trigger" onclick="toggleHeaderMenu('categories-menu')" aria-expanded="false"><i class="fa-solid fa-layer-group"></i> Kategoriler <i class="fa-solid fa-chevron-down nav-chevron"></i></button>
                 <div class="nav-menu category-menu">
@@ -240,6 +242,29 @@
                 <div id="live-tv-grid" class="live-tv-grid"></div>
             </section>
         </main>
+    </div>
+
+    <!-- KİŞİSEL İZLEME MERKEZİ -->
+    <div id="watch-center-view" class="watch-center-view hidden" hidden>
+        <header class="wc-hero">
+            <div class="wc-hero-copy">
+                <span class="wc-eyebrow">PERDE · KİŞİSEL ALANIN</span>
+                <h1 id="wc-page-title">İzleme yolculuğun</h1>
+                <p>İzlediklerini, listeni ve yarım kalan yapımlarını tek bir yerde takip et. Kayıtların bu cihazda korunur.</p>
+            </div>
+            <div class="wc-hero-mark" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></div>
+        </header>
+        <div class="wc-toolbar">
+            <nav class="wc-tabs" aria-label="İzleme merkezi bölümleri">
+                <button type="button" class="is-active" data-wc-tab="overview" aria-pressed="true">Genel Bakış</button>
+                <button type="button" data-wc-tab="watched" aria-pressed="false">İzlediklerim</button>
+                <button type="button" data-wc-tab="watchlist" aria-pressed="false">İzleme Listem</button>
+                <button type="button" data-wc-tab="unfinished" aria-pressed="false">Yarım Bıraktıklarım</button>
+                <button type="button" data-wc-tab="episodes" aria-pressed="false">Sıradaki Bölümler</button>
+            </nav>
+            <label class="wc-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="wc-search" type="search" placeholder="Bu bölümde yapım ara..." aria-label="İzleme merkezinde yapım ara"></label>
+        </div>
+        <main id="wc-content" aria-live="polite"></main>
     </div>
 
     <!-- SİNEMATİK FİLM / DİZİ DETAY SAYFASI -->
@@ -467,5 +492,6 @@
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
     <script src="assets/js/player-pro.js?v=20261108-audio-track-detect-v1"></script>
     <script src="assets/js/series-pro.js?v=20261107-series-v5"></script>
+    <script src="assets/js/watch-center.js?v=20261108-watch-center-v1"></script>
 </body>
 </html>
