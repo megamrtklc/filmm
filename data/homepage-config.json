@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-08T11:40:46.090Z",
+  "updatedAt": "2026-11-08T11:50:00.000Z",
   "settings": {
-    "desktopCount": 8,
-    "mobileCount": 4,
+    "desktopCount": 6,
+    "mobileCount": 3,
     "interval": 6,
     "autoplay": true,
     "pauseOnHover": true
