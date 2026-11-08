@@ -115,7 +115,8 @@
       return '<section class="wc-section"><div class="wc-section-heading"><div><span>' + subtitle + '</span><h2>' + title + '</h2><p>İzlediğin bölümler dikkate alınarak sıradaki bölümün gösterilir.</p></div></div>' +
         (rows.length ? '<div class="wc-episode-grid">' + rows.map(row => episodeCard(row.item,row.next)).join('') + '</div>' : emptyState('Henüz sıradaki bölüm belirlenmedi','Dizi detay sayfasındaki bölüm rehberini açıp izlediğin bölümleri işaretlediğinde burada sıradaki bölümün görünür.')) + '</section>';
     }
-    const items = filtered(data[activeTab]);
+    const sourceItems = activeTab === 'watchlist' ? data.watchlistItems : data[activeTab];
+    const items = filtered(Array.isArray(sourceItems) ? sourceItems : []);
     return section(title,subtitle,items,activeTab,0);
   }
   function render() {
