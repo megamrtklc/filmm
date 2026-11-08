@@ -30,11 +30,17 @@
   function watchedEpisodeCount(item) { const value = seriesEntry(item).watched; return Array.isArray(value) ? value.length : 0; }
   function completedCount(item) { return Number(stats()[String(item.id)]?.completed) || 0; }
   function savedProgress(item) { const row = progress()[String(item.id)]; return row && Number(row.time) > 0 ? row : null; }
-  function isWatched(item) { const manual = manualEntry(item); return manual?.status === 'watched' || (item.type === 'tv' ? (seriesEntry(item).status === 'completed' || watchedEpisodeCount(item) > 0) : completedCount(item) > 0); }
+  function isWatched(item) {
+    const manual = manualEntry(item);
+    if (manual?.status === 'watched') return true;
+    if (manual?.status === 'watching') return false;
+    return item.type === 'tv' ? (seriesEntry(item).status === 'completed' || watchedEpisodeCount(item) > 0) : completedCount(item) > 0;
+  }
   function isUnfinished(item) {
-    if (isWatched(item)) return false;
+    const manual = manualEntry(item);
+    if (manual?.status === 'watched') return false;
     const entry = seriesEntry(item);
-    return !!savedProgress(item) || manualEntry(item)?.status === 'watching' || (item.type === 'tv' && ['paused','dropped'].includes(entry.status)) ||
+    return !!savedProgress(item) || manual?.status === 'watching' || (item.type === 'tv' && ['paused','dropped'].includes(entry.status)) ||
       (item.type === 'tv' && entry.status === 'watching' && watchedEpisodeCount(item) > 0);
   }
   function formatTime(seconds) {
