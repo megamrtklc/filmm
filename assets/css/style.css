@@ -7519,3 +7519,126 @@ body.detail-synopsis-open{overflow:hidden}
   #dashboard-view .homepage-main .collection-rail,
   #dashboard-view .homepage-main .saved-collection-rail {grid-auto-columns:38%!important}
 }
+
+/* MOBILE HOTFIX — prevent hero controls, synopsis and arrows from colliding */
+@media (max-width: 767px) {
+  #dashboard-view .home-feature-row #hero-section.hero-section {
+    height:680px!important;
+    min-height:680px!important;
+    padding:22px 18px 158px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-layout {
+    display:grid!important;
+    grid-template-rows:auto minmax(0,1fr) 112px!important;
+    align-content:start!important;
+    align-items:start!important;
+    gap:14px!important;
+    min-height:0!important;
+    height:100%!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-topbar {
+    position:relative!important;
+    inset:auto!important;
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-kicker-wrap {
+    flex-wrap:wrap!important;
+    gap:7px!important;
+    width:100%!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-actions {
+    display:flex!important;
+    flex-wrap:wrap!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+    width:100%!important;
+    max-width:100%!important;
+    gap:7px!important;
+    margin:0!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-actions #hero-ratings {
+    display:flex!important;
+    flex-wrap:wrap!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    gap:5px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy {
+    position:relative!important;
+    inset:auto!important;
+    align-self:start!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0 0 8px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-title {
+    margin:0 0 10px!important;
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta {
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 0 10px!important;
+    flex-wrap:wrap!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc {
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:3!important;
+    -webkit-box-orient:vertical!important;
+    overflow:hidden!important;
+    overflow-wrap:anywhere!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-arrows {
+    position:absolute!important;
+    right:16px!important;
+    bottom:139px!important;
+    top:auto!important;
+    display:flex!important;
+    flex-direction:row!important;
+    gap:8px!important;
+    padding:0!important;
+    z-index:8!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-arrow {
+    width:36px!important;
+    height:36px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-thumbnails {
+    bottom:14px!important;
+    left:14px!important;
+    right:14px!important;
+    height:112px!important;
+    align-items:flex-end!important;
+  }
+}
+@media (max-width: 420px) {
+  #dashboard-view .home-feature-row #hero-section.hero-section {
+    height:660px!important;
+    min-height:660px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-layout {
+    grid-template-rows:auto minmax(0,1fr) 108px!important;
+    gap:12px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-actions button {
+    min-height:32px!important;
+    padding:6px 9px!important;
+    font-size:10px!important;
+  }
+}
