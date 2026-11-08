@@ -502,13 +502,33 @@ function renderHomeCollections() {
     fill('featured-rail', featured);
     const savedItems=valid.filter(item=>favorites.some(id=>String(id)===String(item.id)));
     const favoriteGenres=[...new Set(savedItems.flatMap(item=>[...(item.genre||'').split('/'),...(item.category||'').split('/')]).map(value=>value.trim().toLocaleLowerCase('tr-TR')).filter(Boolean))];
-    const personalized=valid.filter(item=>!savedItems.some(saved=>String(saved.id)===String(item.id))).map(item=>{
-        const tags=((item.genre||'')+' / '+(item.category||'')).toLocaleLowerCase('tr-TR');
-        const affinity=favoriteGenres.reduce((sum,genre)=>sum+(tags.includes(genre)?5:0),0);
-        const rating=Math.max(0,Math.min(10,Number.parseFloat(item.rating)||0));
-        return {item,score:affinity+rating*.45+(item.type==='movie'?0.2:0)};
-    }).sort((a,b)=>b.score-a.score).slice(0,12).map(row=>row.item);
-    fill('personalized-rail',personalized.length?personalized:featured.slice(0,12));
+    const shuffleItems=items=>{
+        const copy=[...items];
+        for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
+        return copy;
+    };
+    const moviePool=shuffleItems(valid.filter(item=>item.type==='movie'));
+    const seriesPool=shuffleItems(valid.filter(item=>item.type==='tv'));
+    const personalized=[];
+    // Mümkün olduğunda iki film + iki dizi; katalogda eksik tür varsa kalan yerleri diğer tür doldurur.
+    personalized.push(...moviePool.slice(0,2),...seriesPool.slice(0,2));
+    const selectedIds=new Set(personalized.map(item=>String(item.id)));
+    personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,4-personalized.length));
+    const personalizedSelection=shuffleItems(personalized).slice(0,4);
+    const personalizedRail=document.getElementById('personalized-rail');
+    if(personalizedRail){
+        personalizedRail.classList.add('personalized-row-rail');
+        personalizedRail.innerHTML=personalizedSelection.length?personalizedSelection.map(item=>`
+            <article class="personalized-row-card" data-detail-id="${item.id}" tabindex="0" role="button" aria-label="${item.title} detayını aç">
+                <div class="personalized-row-poster"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async"></div>
+                <div class="personalized-row-copy">
+                    <div class="personalized-row-topline"><span>${item.type==='tv'?'DİZİ':'FİLM'}</span><b>★ ${item.rating||'—'}</b></div>
+                    <h3>${item.title}</h3>
+                    <p>${item.year||''}${item.genre?' · '+String(item.genre).split('/')[0].trim():''}</p>
+                </div>
+                <i class="fa-solid fa-chevron-right personalized-row-arrow" aria-hidden="true"></i>
+            </article>`).join(''):'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
+    }
     fill('top-movies-rail', movies);
     fill('top-series-rail', series);
     [['featured-rail','öne çıkan yapımlarda'],['personalized-rail','sana özel seçkilerde'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
