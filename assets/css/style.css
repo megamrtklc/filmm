@@ -6948,3 +6948,59 @@ body.detail-synopsis-open{overflow:hidden}
 #detail-page-view .detail-episodes-loading i{margin-right:8px;color:#d7ad55}
 @media(max-width:760px){#detail-page-view .detail-episodes{margin:20px auto 24px}#detail-page-view .detail-episodes-heading h2{font-size:18px}#detail-page-view .detail-episode-list{grid-template-columns:1fr}#detail-page-view .detail-episode-card{grid-template-columns:112px minmax(0,1fr);gap:10px;padding:8px}#detail-page-view .detail-episode-toolbar{flex-wrap:wrap;padding:10px}#detail-page-view .detail-episode-progress{font-size:10px}}
 @media(max-width:380px){#detail-page-view .detail-episode-card{grid-template-columns:96px minmax(0,1fr)}#detail-page-view .detail-episode-title-row h3{font-size:12px}}
+
+
+/* =========================================================
+   PERDE — Dizi detay deneyimi / kapsamlı sadeleştirme
+   ========================================================= */
+.detail-series-panel{display:none!important}
+.detail-series-dashboard{position:relative;z-index:2;margin:34px auto 28px;width:min(1160px,calc(100% - 48px));padding:clamp(22px,3vw,34px);overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:22px;background:linear-gradient(135deg,rgba(25,28,37,.97),rgba(13,15,21,.98));box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.detail-series-dashboard:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,#f5bd4f,rgba(245,189,79,.08))}
+.series-dashboard-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:25px}
+.series-kicker{display:inline-flex;align-items:center;gap:8px;color:#e9b84e;font-size:10px;font-weight:900;letter-spacing:.17em}
+.series-dashboard-heading h2{margin:9px 0 5px;color:#fff;font-size:clamp(22px,3vw,30px);font-weight:850;letter-spacing:-.035em}
+.series-dashboard-heading p{margin:0;color:#9da3b1;font-size:13px;line-height:1.6}
+.series-jump-button{display:inline-flex;align-items:center;gap:10px;flex:none;padding:12px 16px;border:1px solid rgba(245,189,79,.3);border-radius:12px;background:rgba(245,189,79,.09);color:#f4c96f;font-size:12px;font-weight:800;transition:.2s}
+.series-jump-button:hover{background:rgba(245,189,79,.17);transform:translateY(-2px)}
+.series-dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(230px,1.5fr);gap:12px}
+.series-stat-card,.series-progress-card{min-height:112px;padding:17px;border:1px solid rgba(255,255,255,.07);border-radius:15px;background:rgba(255,255,255,.035)}
+.series-stat-card{display:flex;flex-direction:column;gap:5px}
+.series-stat-card span,.series-progress-copy span{color:#858c9a;font-size:9px;font-weight:900;letter-spacing:.14em}
+.series-stat-card strong{color:#fff;font-size:29px;line-height:1.1;font-weight:850}
+.series-stat-card small,.series-progress-card small{color:#9299a7;font-size:11px}
+.series-progress-card{display:flex;flex-direction:column;justify-content:center;gap:12px}
+.series-progress-copy{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.series-progress-copy strong{color:#f3c568;font-size:20px;font-weight:850}
+.series-progress-track,.detail-episode-progress-track{height:6px;overflow:hidden;border-radius:20px;background:rgba(255,255,255,.1)}
+.series-progress-track span,.detail-episode-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#bd8730,#f5ce79);transition:width .3s ease}
+.detail-episodes{width:min(1160px,calc(100% - 48px));margin:0 auto 42px;padding:clamp(20px,3vw,32px);border:1px solid rgba(255,255,255,.08);border-radius:22px;background:#101219}
+.detail-episodes-heading{display:flex;align-items:flex-end;justify-content:space-between;margin:0 0 22px;padding-bottom:19px;border-bottom:1px solid rgba(255,255,255,.08)}
+.detail-episodes-heading span{color:#e9b84e;font-size:9px;font-weight:900;letter-spacing:.17em}
+.detail-episodes-heading h2{margin:7px 0 4px;color:#fff;font-size:clamp(21px,2.5vw,27px);font-weight:850;letter-spacing:-.03em}
+.detail-episodes-heading p{margin:0;color:#969dab;font-size:12px}
+.detail-episode-toolbar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.detail-episode-toolbar label{color:#aeb4c0;font-size:12px;font-weight:700}
+.detail-episode-toolbar select{min-width:135px;padding:10px 34px 10px 12px;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:#1b1f29;color:#fff;font-size:12px}
+.detail-episode-progress{margin-left:auto;color:#e7c16d;font-size:11px;font-weight:800}
+.detail-episode-progress-track{margin-bottom:20px}
+.detail-episode-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.detail-episode-card{display:grid;grid-template-columns:minmax(125px,37%) minmax(0,1fr);gap:15px;min-width:0;padding:11px;border:1px solid rgba(255,255,255,.075);border-radius:15px;background:#171a23;transition:border-color .2s,background .2s}
+.detail-episode-card:hover{border-color:rgba(245,189,79,.3);background:#1b1f29}
+.detail-episode-art{position:relative;min-height:105px;overflow:hidden;border-radius:10px;background:#242936}
+.detail-episode-art img{position:absolute;width:100%;height:100%;inset:0;object-fit:cover;transition:transform .35s}
+.detail-episode-card:hover .detail-episode-art img{transform:scale(1.04)}
+.detail-episode-art:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.detail-episode-art>span{position:absolute;z-index:1;left:9px;bottom:8px;color:#fff;font-size:12px;font-weight:900}
+.detail-episode-copy{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:2px 1px}
+.detail-episode-title-row{display:flex;align-items:flex-start;gap:8px;width:100%}
+.detail-episode-title-row h3{flex:1;margin:0;color:#f5f6f8;font-size:14px;line-height:1.35;font-weight:800}
+.detail-episode-watched-mark{display:none;color:#75d6a0;font-size:12px}
+.detail-episode-card.is-watched .detail-episode-watched-mark{display:block}
+.detail-episode-meta{margin-top:6px;color:#e2b85d;font-size:10px}
+.detail-episode-copy p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;margin:7px 0 10px;color:#a5abb7;font-size:11px;line-height:1.55}
+.detail-episode-toggle{margin-top:auto;padding:7px 10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#c5cad3;font-size:10px;font-weight:750;transition:.2s}
+.detail-episode-toggle:hover,.detail-episode-card.is-watched .detail-episode-toggle{border-color:rgba(117,214,160,.3);background:rgba(117,214,160,.08);color:#85dfaa}
+.detail-episodes-empty,.detail-episodes-loading{padding:24px;text-align:center;color:#a0a6b2;font-size:12px}
+@media(max-width:850px){.series-dashboard-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.series-progress-card{grid-column:1/-1;min-height:90px}.detail-episode-list{grid-template-columns:1fr}}
+@media(max-width:600px){.detail-series-dashboard,.detail-episodes{width:calc(100% - 28px);margin-top:22px;padding:18px;border-radius:17px}.series-dashboard-heading{align-items:flex-start;flex-direction:column;gap:14px}.series-jump-button{width:100%;justify-content:center}.series-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.series-stat-card{min-height:94px;padding:13px}.series-stat-card strong{font-size:25px}.series-progress-card{grid-column:1/-1}.detail-episode-card{grid-template-columns:112px minmax(0,1fr);gap:11px;padding:9px}.detail-episode-art{min-height:100px}.detail-episode-copy p{-webkit-line-clamp:2}.detail-episode-toolbar{flex-wrap:wrap}.detail-episode-toolbar select{min-width:115px}.detail-episode-progress{width:100%;margin:0}.detail-episodes-heading{margin-bottom:17px}}
+@media(max-width:390px){.detail-episode-card{grid-template-columns:96px minmax(0,1fr)}.detail-episode-title-row h3{font-size:12px}.detail-episode-copy p{font-size:10px}}
