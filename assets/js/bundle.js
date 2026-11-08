@@ -351,6 +351,7 @@ function renderMoodRecommendation(item, category) {
     if (!result || !item) return;
     const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
     const poster = escapeCountryHtml(item.image || item.backdrop || '');
+    const backdrop = escapeCountryHtml(item.backdrop || item.tmdbBackdrop || item.image || '');
     const typeLabel = item.type === 'tv' ? 'Dizi' : 'Film';
     const categoryLabel = category || (item.genre || (item.type === 'tv' ? 'Dizi' : 'Film'));
     const rating = escapeCountryHtml(item.rating || '—');
@@ -361,22 +362,30 @@ function renderMoodRecommendation(item, category) {
         '<i class="fa-solid ' + option.icon + '" aria-hidden="true"></i><span>' + option.label + '</span></button>'
     ).join('');
     result.innerHTML = `
+        <div class="mood-simple-backdrop" aria-hidden="true" style="background-image:url(&quot;${backdrop}&quot;)"></div>
+        <div class="mood-simple-scrim" aria-hidden="true"></div>
         <div class="mood-simple-heading">
             <span class="mood-discovery-eyebrow"><i class="fa-solid fa-clapperboard"></i> MODUNA GÖRE KEŞFET</span>
             <h2>Bugün nasıl bir şey izlemek istersin?</h2>
             <p>Ruh haline uygun bir yapım seçelim.</p>
         </div>
         <div class="mood-simple-feature">
-            <div class="mood-discovery-poster"><img src="${poster}" alt="${title}" loading="eager"></div>
+            <div class="mood-simple-poster-column">
+                <div class="mood-discovery-poster"><img src="${poster}" alt="${title}" loading="eager"></div>
+                <div class="mood-discovery-poster-meta">
+                    <span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>
+                    ${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}
+                    <span class="mood-discovery-imdb mood-discovery-imdb-inline"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb</span></span>
+                </div>
+            </div>
             <div class="mood-discovery-copy">
                 <span class="mood-discovery-tag">${escapeCountryHtml(categoryLabel)} <b>•</b> ${typeLabel}</span>
-                <h3>${title}</h3>
+                <h3 title="${title}">${title}</h3>
                 ${originalTitleMarkup(item,'mood-original-title')}
-                <div class="mood-discovery-meta"><span><i class="fa-regular fa-calendar"></i> ${escapeCountryHtml(item.year || '—')}</span>${item.duration ? '<span><i class="fa-regular fa-clock"></i> ' + escapeCountryHtml(item.duration) + '</span>' : ''}<span class="mood-discovery-imdb mood-discovery-imdb-inline"><i class="fa-solid fa-star" aria-hidden="true"></i><strong>${rating}</strong><span>IMDb</span></span></div>
                 <p class="mood-discovery-description">${description}</p>
                 <div class="mood-discovery-actions">
-                    <button type="button" class="mood-discovery-primary" onclick="openDetailPage('${id}')"><i class="fa-solid fa-circle-info"></i> Detayları Gör</button>
-                    <button type="button" class="mood-discovery-again" onclick="chooseMoodPick(activeMoodCategory)" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i> Başka öner</button>
+                    <button type="button" class="mood-discovery-primary" onclick="openDetailPage('${id}')"><i class="fa-solid fa-circle-info"></i><span>Detayları Gör</span></button>
+                    <button type="button" class="mood-discovery-again" onclick="chooseMoodPick(activeMoodCategory)" aria-label="Başka öner"><i class="fa-solid fa-shuffle"></i><span>Başka Öner</span></button>
                 </div>
             </div>
         </div>
