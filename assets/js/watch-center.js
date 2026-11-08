@@ -87,7 +87,8 @@
     const watched = all.filter(isWatched);
     const unfinished = all.filter(isUnfinished);
     const watchlistItems = all.filter(item => watchIds.has(String(item.id)));
-    const nextEpisodes = all.filter(item => item.type === 'tv' && ['watching','paused'].includes(seriesEntry(item).status)).map(item => ({item, next:getNextEpisode(item)})).filter(row => row.next);
+    const trackedSeries = all.filter(item => item.type === 'tv' && (['watching','paused'].includes(seriesEntry(item).status) || manualEntry(item)?.status === 'watching'));
+    const nextEpisodes = trackedSeries.map(item => ({item, next:getNextEpisode(item)})).filter(row => row.next);
     const totalSeconds = Object.values(stats()).reduce((sum,row) => sum + (Number(row?.seconds) || 0), 0);
     return {all,watched,unfinished,watchlistItems,nextEpisodes,totalSeconds};
   }
