@@ -310,26 +310,26 @@ function fitHeroTitleToWidth() {
 
 
 
-// MODUNA GÖRE KEŞFET — sıfırdan minimal arayüz, tek ruh hali seçimi.
+// PERDE MOOD GALLERY — sinematik sahneler, tek seçim, altı kartlık ilk görünüm.
 const moodCategoryOptions = [
-    { value:'Aksiyon', label:'Aksiyon', icon:'fa-bolt', terms:['aksiyon'] },
-    { value:'Komedi', label:'Komedi', icon:'fa-face-laugh', terms:['komedi','comedy'] },
-    { value:'Romantik', label:'Romantik', icon:'fa-heart', terms:['romantik','romance'] },
-    { value:'Korku', label:'Korku', icon:'fa-ghost', terms:['korku','horror'] },
-    { value:'Gerilim', label:'Gerilim', icon:'fa-eye', terms:['gerilim','thriller'] },
-    { value:'Gizem', label:'Gizem', icon:'fa-magnifying-glass', terms:['gizem','mystery'] },
-    { value:'Bilim Kurgu', label:'Bilim Kurgu', icon:'fa-robot', terms:['bilim kurgu','bilim-kurgu','science fiction','sci-fi'] },
-    { value:'Macera', label:'Macera', icon:'fa-compass', terms:['macera','adventure'] },
-    { value:'Dram', label:'Dram', icon:'fa-masks-theater', terms:['dram','drama'] },
-    { value:'Fantastik', label:'Fantastik', icon:'fa-wand-magic-sparkles', terms:['fantastik','fantasy','fantazi'] },
-    { value:'Tarih', label:'Tarih', icon:'fa-landmark', terms:['tarih','history'] },
-    { value:'Belgesel', label:'Belgesel', icon:'fa-clapperboard', terms:['belgesel','documentary'] },
-    { value:'Animasyon', label:'Animasyon', icon:'fa-wand-magic', terms:['animasyon','animation'] },
-    { value:'Aile', label:'Aile', icon:'fa-people-group', terms:['aile','family'] },
-    { value:'Suç', label:'Suç', icon:'fa-user-secret', terms:['suç','crime'] },
-    { value:'Savaş & Politik', label:'Savaş & Politik', icon:'fa-shield-halved', terms:['savaş','politik','war'] },
-    { value:'Müzik', label:'Müzik', icon:'fa-music', terms:['müzik','music'] },
-    { value:'Vahşi Batı', label:'Vahşi Batı', icon:'fa-hat-cowboy', terms:['vahşi batı','western'] }
+    { value:'Aksiyon', label:'Aksiyon', note:'Adrenalin dolu', image:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=700&q=85', terms:['aksiyon','action'] },
+    { value:'Romantik', label:'Romantik', note:'Kalbe dokunan', image:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=700&q=85', terms:['romantik','romance'] },
+    { value:'Gizem', label:'Gizem', note:'Sırlarla dolu', image:'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=85', terms:['gizem','mystery'] },
+    { value:'Korku', label:'Korku', note:'Ürpertici atmosfer', image:'https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=700&q=85', terms:['korku','horror'] },
+    { value:'Bilim Kurgu', label:'Bilim Kurgu', note:'Başka dünyalar', image:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=85', terms:['bilim kurgu','bilim-kurgu','science fiction','sci-fi'] },
+    { value:'Komedi', label:'Komedi', note:'Keyifli hikâyeler', image:'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=700&q=85', terms:['komedi','comedy'] },
+    { value:'Gerilim', label:'Gerilim', note:'Nefes kesen', image:'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=700&q=85', terms:['gerilim','thriller'] },
+    { value:'Macera', label:'Macera', note:'Keşfedilmeyi bekleyen', image:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=700&q=85', terms:['macera','adventure'] },
+    { value:'Dram', label:'Dram', note:'Güçlü hikâyeler', image:'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=700&q=85', terms:['dram','drama'] },
+    { value:'Fantastik', label:'Fantastik', note:'Sınırların ötesinde', image:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=700&q=85', terms:['fantastik','fantasy','fantazi'] },
+    { value:'Suç', label:'Suç', note:'Karanlık dosyalar', image:'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=700&q=85', terms:['suç','crime'] },
+    { value:'Animasyon', label:'Animasyon', note:'Renkli dünyalar', image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=85', terms:['animasyon','animation'] },
+    { value:'Tarih', label:'Tarih', note:'Geçmişe yolculuk', image:'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=700&q=85', terms:['tarih','history'] },
+    { value:'Belgesel', label:'Belgesel', note:'Gerçek dünyanın izinde', image:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=85', terms:['belgesel','documentary'] },
+    { value:'Aile', label:'Aile', note:'Birlikte izlenecek', image:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=700&q=85', terms:['aile','family'] },
+    { value:'Savaş & Politik', label:'Savaş & Politik', note:'Tarihin dönüm noktaları', image:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=700&q=85', terms:['savaş','politik','war'] },
+    { value:'Müzik', label:'Müzik', note:'Ritmi hisset', image:'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=700&q=85', terms:['müzik','music'] },
+    { value:'Vahşi Batı', label:'Vahşi Batı', note:'Sınırların ötesinde', image:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=700&q=85', terms:['vahşi batı','western'] }
 ];
 let activeMoodCategory = '';
 let lastMoodRecommendationId = null;
@@ -351,7 +351,7 @@ function renderMoodDiscovery(recommendation = null) {
     const visibleOptions = moodShowAll ? moodCategoryOptions : moodCategoryOptions.slice(0,6);
     const choices = visibleOptions.map(option => {
         const selected = activeMoodCategory === option.value;
-        return '<button type="button" class="mood-v2-choice'+(selected?' is-selected':'')+'" onclick="chooseMoodPick(\''+option.value.replace(/'/g,"\\'")+'\')" aria-pressed="'+selected+'"><i class="fa-solid '+option.icon+'" aria-hidden="true"></i><span>'+option.label+'</span><i class="fa-solid fa-check mood-v2-check" aria-hidden="true"></i></button>';
+        return '<button type="button" class="mood-gallery-card'+(selected?' is-selected':'')+'" onclick="chooseMoodPick(\\''+option.value.replace(/'/g,"\\\\'")+'\\')" aria-pressed="'+selected+'"><img src="'+option.image+'" alt="" loading="lazy" decoding="async"><span class="mood-gallery-shade"></span><span class="mood-gallery-card-copy"><strong>'+option.label+'</strong><small>'+option.note+'</small></span><span class="mood-gallery-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span></button>';
     }).join('');
     const selectedLabel = moodCategoryOptions.find(option => option.value === activeMoodCategory)?.label || '';
     let recommendationMarkup = '';
@@ -361,9 +361,9 @@ function renderMoodDiscovery(recommendation = null) {
         const id = String(recommendation.id).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
         const typeLabel = recommendation.type === 'tv' ? 'Dizi' : 'Film';
         const rating = escapeCountryHtml(recommendation.rating || '—');
-        recommendationMarkup = '<article class="mood-v2-recommendation"><img class="mood-v2-poster" src="'+poster+'" alt="'+title+'" loading="lazy"><div class="mood-v2-recommendation-copy"><span class="mood-v2-result-label">SANA UYGUN ÖNERİ · '+typeLabel.toLocaleUpperCase('tr-TR')+'</span><h3>'+title+'</h3><p class="mood-v2-meta">'+escapeCountryHtml(recommendation.year||'—')+' <span>•</span> <i class="fa-solid fa-star"></i> '+rating+'</p><p class="mood-v2-description">'+escapeCountryHtml(recommendation.desc||'Bu yapımı keşfetmek için detaylarına göz at.')+'</p><div class="mood-v2-result-actions"><button type="button" class="mood-v2-open" onclick="openDetailPage(\''+id+'\')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="mood-v2-again" onclick="generateMoodPick()"><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div></article>';
+        recommendationMarkup = '<article class="mood-gallery-recommendation"><img class="mood-gallery-poster" src="'+poster+'" alt="'+title+'" loading="lazy"><div class="mood-gallery-recommendation-copy"><span class="mood-gallery-result-label">SANA ÖZEL ÖNERİ · '+typeLabel.toLocaleUpperCase('tr-TR')+'</span><h3>'+title+'</h3><p class="mood-gallery-meta">'+escapeCountryHtml(recommendation.year||'—')+' <span>•</span> <i class="fa-solid fa-star"></i> '+rating+'</p><p class="mood-gallery-description">'+escapeCountryHtml(recommendation.desc||'Bu yapımı keşfetmek için detaylarına göz at.')+'</p><div class="mood-gallery-result-actions"><button type="button" class="mood-gallery-open" onclick="openDetailPage(\\''+id+'\\')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="mood-gallery-again" onclick="generateMoodPick()"><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div></article>';
     }
-    result.innerHTML = '<div class="mood-v2-shell"><div class="mood-v2-heading"><div><span class="mood-v2-eyebrow">PERDE’DE KEŞFET</span><h2>Bugün nasıl bir şey izlemek istersin?</h2><p>Ruh halini seç, sana uygun film ve dizileri bulalım.</p></div><span class="mood-v2-mark" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span></div><div class="mood-v2-selector"><div class="mood-v2-label-row"><span>Bir ruh hali seç</span><span class="mood-v2-single-note">Tek seçim</span></div><div class="mood-v2-choices">'+choices+'</div>'+(moodCategoryOptions.length>6?'<button type="button" class="mood-v2-more" onclick="moodShowAll=!moodShowAll;renderMoodDiscovery()">'+(moodShowAll?'Daha az göster':'Tüm ruh hallerini gör')+' <i class="fa-solid fa-chevron-'+(moodShowAll?'up':'down')+'"></i></button>':'')+'<button type="button" class="mood-v2-submit" '+(activeMoodCategory?'':'disabled')+' onclick="generateMoodPick()"><span>Bana Yapım Öner</span><i class="fa-solid fa-arrow-right"></i></button></div>'+(recommendationMarkup|| (activeMoodCategory?'<p class="mood-v2-hint"><i class="fa-regular fa-circle-check"></i> '+selectedLabel+' seçildi. Sana uygun öneriyi görmek için butona dokun.</p>':''))+'</div>';
+    result.innerHTML = '<div class="mood-gallery-shell"><header class="mood-gallery-heading"><div><span class="mood-gallery-eyebrow">PERDE’DE KEŞFET</span><h2>Bugün hangi dünyaya girmek istersin?</h2><p>Ruh halini seç. Sıradaki hikâyeni birlikte bulalım.</p></div><span class="mood-gallery-heading-mark" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></span></header><div class="mood-gallery-label-row"><strong>Bir ruh hali seç</strong><span>Tek seçim yapabilirsin</span></div><div class="mood-gallery-grid">'+choices+'</div>'+(moodCategoryOptions.length>6?'<button type="button" class="mood-gallery-more" onclick="moodShowAll=!moodShowAll;renderMoodDiscovery()">'+(moodShowAll?'Daha az göster':'Tüm ruh hallerini gör')+' <i class="fa-solid fa-chevron-'+(moodShowAll?'up':'down')+'"></i></button>':'')+(activeMoodCategory?'<button type="button" class="mood-gallery-submit" onclick="generateMoodPick()"><span>'+selectedLabel+' ruh halinde yapım bul</span><i class="fa-solid fa-arrow-right"></i></button>':'<p class="mood-gallery-hint">Kartlardan birini seçerek keşfe başla.</p>')+(recommendationMarkup||'')+'</div>';
 }
 
 function chooseMoodPick(category) {
@@ -376,14 +376,11 @@ function generateMoodPick() {
     if (!activeMoodCategory) return;
     const candidates = getMoodCandidates(activeMoodCategory);
     if (!candidates.length) {
-        const result = document.getElementById('mood-discovery-result');
-        if (result) {
-            renderMoodDiscovery();
-            const notice = document.createElement('p');
-            notice.className = 'mood-v2-empty';
-            notice.textContent = 'Bu ruh halinde henüz önerilebilecek bir yapım bulunamadı. Başka bir ruh hali deneyebilirsin.';
-            result.querySelector('.mood-v2-shell')?.appendChild(notice);
-        }
+        renderMoodDiscovery();
+        const notice = document.createElement('p');
+        notice.className = 'mood-gallery-empty';
+        notice.textContent = 'Bu ruh halinde henüz önerilebilecek bir yapım bulunamadı. Başka bir ruh hali deneyebilirsin.';
+        document.getElementById('mood-discovery-result')?.querySelector('.mood-gallery-shell')?.appendChild(notice);
         return;
     }
     let pool = candidates.filter(item => String(item.id) !== String(lastMoodRecommendationId));
