@@ -838,7 +838,7 @@ function hideDirectorProfile(){
 }
 function filterByDirector(director,update=true){
  const selected=String(director||'').trim();if(!selected)return;
- activeCatalogCountry='';activeCatalogGenre='all';activeCatalogGenreTag='';activeCatalogDirector=countryKey(selected);activeCatalogType='all';activeCatalogQuery='';
+ activeCatalogCountry='';activeCatalogGenre='all';activeCatalogGenreTag='';activeCatalogDirector=countryKey(selected);activeCatalogType='all';activeCatalogQuery='';directorFilmographySort='newest';
  const search=document.getElementById('search-input');if(search)search.value='';
  document.getElementById('dashboard-view').classList.remove('hidden');
  document.getElementById('detail-page-view').classList.add('hidden');document.getElementById('actor-page-view').classList.add('hidden');document.getElementById('detail-related').classList.add('hidden');
@@ -864,6 +864,24 @@ document.addEventListener('click',function(event){
  const genre=event.target.closest('[data-genre]');if(genre){filterByGenreTag(genre.dataset.genre);return;}
 });
 
+let directorFilmographySort='newest';
+function ensureDirectorFilmographyToolbar(){
+ const grid=document.getElementById('media-grid');
+ if(!grid)return null;
+ let toolbar=document.getElementById('director-filmography-toolbar');
+ if(!toolbar){
+  toolbar=document.createElement('div');
+  toolbar.id='director-filmography-toolbar';
+  toolbar.className='director-filmography-toolbar';
+  toolbar.innerHTML='<div class="director-filmography-count"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i><span id="director-filmography-count">Yönetmenin filmleri</span></div><label>Sıralama <select id="director-filmography-sort" aria-label="Filmografi sıralaması"><option value="newest">En yeni</option><option value="oldest">En eski</option><option value="az">A–Z</option></select></label>';
+  grid.parentNode.insertBefore(toolbar,grid);
+  toolbar.querySelector('select').addEventListener('change',event=>{directorFilmographySort=event.target.value;renderFilteredCatalog();});
+ }
+ toolbar.hidden=!activeCatalogDirector;
+ const select=toolbar.querySelector('select');
+ if(select)select.value=directorFilmographySort;
+ return toolbar;
+}
 function renderFilteredCatalog() {
             const query = activeCatalogQuery.trim().toLocaleLowerCase('tr-TR');
             const filtered = mediaDatabase.filter(m => {
@@ -873,13 +891,24 @@ function renderFilteredCatalog() {
                 const genreMatch = activeCatalogGenre === 'all' || genre.includes(needle) || category.includes(needle);
                 const typeMatch = activeCatalogType === 'all' || m.type === activeCatalogType;
                 const countryMatch = !activeCatalogCountry || countryTokens(m.country).some(x=>countryIdentity(x)===activeCatalogCountry);
-                const directorMatch = !activeCatalogDirector || countryKey(m.director)===activeCatalogDirector || countryTokens(m.director).some(x=>countryKey(x)===activeCatalogDirector);
+                const directorValue=m.tmdbDirector||m.director;
+                const directorMatch = !activeCatalogDirector || countryKey(directorValue)===activeCatalogDirector || countryTokens(directorValue).some(x=>countryKey(x)===activeCatalogDirector);
                 const itemGenres = [...new Set([...countryTokens(m.category),...countryTokens(m.genre)])];
                 const genreTagMatch = !activeCatalogGenreTag || itemGenres.some(x=>countryKey(x)===activeCatalogGenreTag);
                 const searchMatch = !query || mediaSearchText(m).includes(normalizeMediaSearchText(query)) || category.includes(query) || genre.includes(query);
                 return genreMatch && typeMatch && searchMatch && countryMatch && directorMatch && genreTagMatch;
             });
-            if (activeCatalogType === 'movie' || activeCatalogType === 'tv') filtered.reverse();
+            if(activeCatalogDirector){
+                const yearOf=m=>Number(String(m.tmdbReleaseDate||m.year||'').match(/\d{4}/)?.[0]||0);
+                filtered.sort((a,b)=>{
+                    if(directorFilmographySort==='oldest')return yearOf(a)-yearOf(b);
+                    if(directorFilmographySort==='az')return String(a.title||'').localeCompare(String(b.title||''),'tr');
+                    return yearOf(b)-yearOf(a);
+                });
+                const count=document.getElementById('director-filmography-count');
+                if(count)count.textContent=filtered.length+' film bulundu';
+            }else if (activeCatalogType === 'movie' || activeCatalogType === 'tv') filtered.reverse();
+            ensureDirectorFilmographyToolbar();
             renderMediaGrid(filtered);
         }
 
@@ -1814,15 +1843,21 @@ function renderFilmDetailExtras(item){
  const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').trim();
  const directors=countryTokens(item.tmdbDirector||item.director).map(normalize).filter(Boolean);
  const sameDirector=directors.length?mediaDatabase.filter(candidate=>{
-  if(!candidate||String(candidate.id)===String(item.id)||candidate.type==='tv'||!candidate.title||!candidate.image)return false;
+  if(!candidate||String(candidate.id)===String(item.id)||candidate.type==='tv'||!candidate.title||!(candidate.tmdbPoster||candidate.image))return false;
   const names=countryTokens(candidate.tmdbDirector||candidate.director).map(normalize);
   return names.some(name=>directors.includes(name));
- }).slice(0,8):[];
- const directorMarkup=sameDirector.length
-  ?'<div class="detail-director-film-grid">'+sameDirector.map(media=>'<button type="button" class="detail-director-film" data-detail-extra-id="'+escapeCountryHtml(media.id)+'"><img src="'+escapeCountryHtml(media.tmdbPoster||media.image)+'" alt="'+escapeCountryHtml(media.title)+'" loading="lazy"><span><strong>'+escapeCountryHtml(media.title)+'</strong><small>'+escapeCountryHtml(media.year||'')+'</small></span></button>').join('')+'</div>'
+ }):[];
+ const previewFilms=sameDirector.slice(0,6);
+ const directorName=countryTokens(item.tmdbDirector||item.director)[0]||'';
+ const directorMarkup=previewFilms.length
+  ?'<div class="detail-director-film-grid">'+previewFilms.map(media=>'<button type="button" class="detail-director-film" data-detail-extra-id="'+escapeCountryHtml(media.id)+'"><img src="'+escapeCountryHtml(media.tmdbPoster||media.image)+'" alt="'+escapeCountryHtml(media.title)+'" loading="lazy"><span><strong>'+escapeCountryHtml(media.title)+'</strong><small>'+escapeCountryHtml(media.year||String(media.tmdbReleaseDate||'').slice(0,4)||'')+'</small></span></button>').join('')+'</div>'
   :'<p class="detail-extra-empty">Katalogda aynı yönetmene ait başka film bulunamadı.</p>';
- root.innerHTML='<div class="detail-film-extra-grid"><article class="detail-film-extra-card detail-awards-card"><div class="detail-film-extra-heading"><span>ÖDÜLLER & ADAYLIKLAR</span><i class="fa-solid fa-trophy" aria-hidden="true"></i></div><h2>Başarıları</h2><div id="detail-awards-content" class="detail-awards-content"></div></article><article class="detail-film-extra-card detail-same-director-card"><div class="detail-film-extra-heading"><span>YÖNETMENİN DİĞER FİLMLERİ</span><i class="fa-solid fa-clapperboard" aria-hidden="true"></i></div><h2>Aynı yönetmenden</h2>'+directorMarkup+'</article></div>';
+ const directorMore=sameDirector.length
+  ?'<button type="button" class="detail-director-more" data-director-filmography="'+escapeCountryHtml(directorName)+'"><span>'+(sameDirector.length>6?'Tümünü Gör':'Yönetmenin Filmografisini Gör')+'</span><strong>'+sameDirector.length+' Film</strong><i class="fa-solid fa-arrow-right"></i></button>'
+  :'';
+ root.innerHTML='<div class="detail-film-extra-grid"><article class="detail-film-extra-card detail-awards-card"><div class="detail-film-extra-heading"><span>ÖDÜLLER & ADAYLIKLAR</span><i class="fa-solid fa-trophy" aria-hidden="true"></i></div><h2>Başarıları</h2><div id="detail-awards-content" class="detail-awards-content"></div></article><article class="detail-film-extra-card detail-same-director-card"><div class="detail-film-extra-heading"><span>YÖNETMENİN DİĞER FİLMLERİ</span><i class="fa-solid fa-clapperboard" aria-hidden="true"></i></div><h2>Aynı yönetmenden</h2>'+directorMarkup+directorMore+'</article></div>';
  root.querySelectorAll('[data-detail-extra-id]').forEach(button=>button.addEventListener('click',()=>openDetailPage(button.dataset.detailExtraId)));
+ root.querySelector('[data-director-filmography]')?.addEventListener('click',event=>filterByDirector(event.currentTarget.dataset.directorFilmography));
  loadFilmAwards(item);
 }
 
