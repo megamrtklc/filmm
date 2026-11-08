@@ -1401,19 +1401,17 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
  root.innerHTML=
   '<div class="detail-episodes-heading"><div><span>DİZİ REHBERİ</span><h2>Bölümler</h2><p>Sezonunu seç, bölüm takibini kaldığın yerden sürdür.</p></div></div>'+
   '<div class="detail-season-picker"><button type="button" class="detail-season-step" data-season-step="'+(previous?previous.season_number:'')+'" '+(previous?'':'disabled')+' aria-label="Önceki sezon"><i class="fa-solid fa-chevron-left"></i></button><label><span>SEZON SEÇİMİ</span><select id="detail-season-select" aria-label="Sezon seç">'+options+'</select></label><button type="button" class="detail-season-step" data-season-step="'+(next?next.season_number:'')+'" '+(next?'':'disabled')+' aria-label="Sonraki sezon"><i class="fa-solid fa-chevron-right"></i></button><small class="detail-season-count">'+(seasonIndex+1)+' / '+detailEpisodeState.seasons.length+'</small></div>'+
-  '<div class="detail-episode-toolbar"><label class="detail-episode-search-wrap"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="detail-episode-search" type="search" placeholder="Bölüm adı veya numarası ara" autocomplete="off"></label>'+
-  '<label class="detail-episode-unwatched"><input id="detail-episode-unwatched" type="checkbox"><span>Sadece izlenmeyenler</span></label>'+
+  '<div class="detail-episode-toolbar"><label class="detail-episode-unwatched"><input id="detail-episode-unwatched" type="checkbox"><span>Sadece izlenmeyenler</span></label>'+
   '<button type="button" id="detail-season-mark-all" class="detail-season-mark-all"><i class="fa-solid fa-check-double"></i> Sezonu tamamla</button>'+
   '<span class="detail-episode-progress">'+watchedCount+' / '+episodes.length+' izlendi</span></div>'+
   '<div class="detail-episode-progress-track"><span style="width:'+percent+'%"></span></div>'+
   '<div class="detail-episode-list">'+cards+'</div>'+
   '<div class="detail-episode-pagination" aria-label="Bölüm sayfaları"><button type="button" data-page-prev aria-label="Önceki sayfa"><i class="fa-solid fa-chevron-left"></i></button><span data-page-label></span><button type="button" data-page-next aria-label="Sonraki sayfa"><i class="fa-solid fa-chevron-right"></i></button></div>'+
-  '<p class="detail-episodes-filter-empty" hidden>Bu aramayla eşleşen bölüm bulunamadı.</p>';
+  '<p class="detail-episodes-filter-empty" hidden>Bu sezonda gösterilecek bölüm bulunamadı.</p>';
  const applyFilters=()=>{
-  const query=(root.querySelector('#detail-episode-search')?.value||'').trim().toLocaleLowerCase('tr-TR');
   const onlyUnwatched=!!root.querySelector('#detail-episode-unwatched')?.checked;
   const all=[...root.querySelectorAll('[data-episode-card]')];
-  const filtered=all.filter(card=>(!query||card.dataset.episodeName.includes(query)||card.dataset.episodeNumber.includes(query))&&(!onlyUnwatched||!card.classList.contains('is-watched')));
+  const filtered=all.filter(card=>!onlyUnwatched||!card.classList.contains('is-watched'));
   const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));page=Math.min(page,pages);
   all.forEach(card=>{card.hidden=true;});
   filtered.forEach((card,index)=>{card.hidden=index<(page-1)*PAGE_SIZE||index>=page*PAGE_SIZE;});
@@ -1426,7 +1424,6 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
  const changeSeason=value=>{if(value)loadDetailEpisodeSeason(item,Number(value));};
  root.querySelector('#detail-season-select')?.addEventListener('change',event=>changeSeason(event.target.value));
  root.querySelectorAll('[data-season-step]').forEach(button=>button.addEventListener('click',()=>changeSeason(button.dataset.seasonStep)));
- root.querySelector('#detail-episode-search')?.addEventListener('input',()=>{page=1;applyFilters();});
  root.querySelector('#detail-episode-unwatched')?.addEventListener('change',()=>{page=1;applyFilters();});
  root.querySelector('[data-page-prev]')?.addEventListener('click',()=>{page=Math.max(1,page-1);applyFilters();});
  root.querySelector('[data-page-next]')?.addEventListener('click',()=>{page++;applyFilters();});
