@@ -7445,3 +7445,40 @@ body.detail-synopsis-open{overflow:hidden}
     aspect-ratio:2 / 3!important;
   }
 }
+
+/* Manşet konu metni: dört satır ve daha geniş metin alanı */
+.home-feature-row #hero-section .hero-copy{
+  width:min(82%,780px)!important;
+  max-width:82%!important;
+}
+.home-feature-row #hero-section .hero-copy #hero-desc{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;
+  line-clamp:4!important;
+  width:100%!important;
+  max-width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:6.4em!important;
+  overflow:hidden!important;
+  line-height:1.6!important;
+}
+@media(max-width:820px){
+  .home-feature-row #hero-section .hero-copy{
+    width:calc(100% - 25px)!important;
+    max-width:calc(100% - 25px)!important;
+  }
+}
+@media(max-width:560px){
+  .home-feature-row #hero-section .hero-copy{
+    width:calc(100% - 17px)!important;
+    max-width:calc(100% - 17px)!important;
+  }
+  .home-feature-row #hero-section .hero-copy #hero-desc{
+    -webkit-line-clamp:4!important;
+    line-clamp:4!important;
+    max-height:6.4em!important;
+    font-size:11px!important;
+  }
+}
