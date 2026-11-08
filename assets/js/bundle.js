@@ -2513,7 +2513,13 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 renderHeroThumbnails();
                 restartHeroTimer();
                 renderHomeCollections();
-                initializeMoodDiscovery();
+                try {
+                    initializeMoodDiscovery();
+                } catch (moodError) {
+                    console.error('Moduna göre keşfet alanı başlatılamadı; katalog yüklemesi sürdürülecek:', moodError);
+                    const moodResult = document.getElementById('mood-discovery-result');
+                    if (moodResult) moodResult.innerHTML = '<div class="mood-discovery-empty">Keşif önerisi şu anda hazırlanamadı.</div>';
+                }
                 renderMediaGrid();
                 renderLiveTv();
                 window.dispatchEvent(new Event('perde:catalog-ready'));
