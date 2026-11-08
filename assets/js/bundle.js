@@ -1398,7 +1398,7 @@ async function renderDetailEpisodes(item){
  const panel=document.getElementById('detail-episodes'),root=document.getElementById('detail-episodes-content');if(!panel||!root)return;
  if(item.type!=='tv'){panel.hidden=true;root.innerHTML='';return;}
  panel.hidden=false;const request=++detailEpisodeRequest;detailEpisodeState={itemId:String(item.id),seasons:[]};
- const heading='<div class="detail-episodes-heading"><div><span>DİZİ REHBERİ</span><h2>Sezonlar ve Bölümler</h2><p>İzlediğin bölümleri işaretleyerek takibini tut.</p></div></div>';
+ const heading='<div class="detail-episodes-heading"><div><span>BÖLÜM KÜTÜPHANESİ</span><h2>Sezonlar ve bölümler</h2><p>Bir sezon seç, bölümlerini görüntüle ve izlediklerini işaretle.</p></div></div>';
  root.innerHTML=heading+'<div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Sezonlar yükleniyor…</div>';
  const auth=getDetailTmdbAuth();if(!auth||!item.tmdbId){root.innerHTML=heading+'<p class="detail-episodes-empty">Bölüm listesi için Yönetim Merkezi’ndeki TMDB erişim anahtarı gerekli.</p>';return;}
  try{
@@ -1406,6 +1406,7 @@ async function renderDetailEpisodes(item){
   if(!response.ok)throw new Error('TMDB HTTP '+response.status);
   const data=await response.json();if(request!==detailEpisodeRequest||String(detailEpisodeState.itemId)!==String(item.id))return;
   detailEpisodeState.seasons=(Array.isArray(data.seasons)?data.seasons:[]).filter(season=>Number(season.season_number)>0&&Number(season.episode_count)>0);
+  const tmdbTotal=detailEpisodeState.seasons.reduce((sum,season)=>sum+(Number(season.episode_count)||0),0);const dashboard=document.getElementById('detail-series-dashboard');if(dashboard){const totalNode=dashboard.querySelector('.series-stat-card:nth-child(2) strong');if(totalNode)totalNode.textContent=tmdbTotal;const seasonNode=dashboard.querySelector('.series-stat-card:first-child strong');if(seasonNode)seasonNode.textContent=detailEpisodeState.seasons.length;const progress=getDetailEpisodeProgress(item.id),watched=Object.values(progress).filter(entry=>entry&&entry.watched).length,percent=tmdbTotal?Math.min(100,Math.round(watched/tmdbTotal*100)):0;const watchedNode=dashboard.querySelector('.series-stat-card:nth-child(3) strong');if(watchedNode)watchedNode.textContent=watched;const pct=dashboard.querySelector('.series-progress-copy strong');if(pct)pct.textContent='%'+percent;const bar=dashboard.querySelector('.series-progress-track span');if(bar)bar.style.width=percent+'%';const note=dashboard.querySelector('.series-progress-card small');if(note)note.textContent=watched+' / '+tmdbTotal+' bölüm tamamlandı';}
   if(!detailEpisodeState.seasons.length){root.innerHTML=heading+'<p class="detail-episodes-empty">Bu dizi için sezon bilgisi bulunamadı.</p>';return;}
   root.innerHTML=heading+'<span class="detail-episodes-total">'+detailEpisodeState.seasons.length+' sezon</span><div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Bölümler hazırlanıyor…</div>';
   await loadDetailEpisodeSeason(item,Number(detailEpisodeState.seasons[0].season_number));
@@ -1413,6 +1414,24 @@ async function renderDetailEpisodes(item){
  }catch(error){if(request!==detailEpisodeRequest)return;root.innerHTML=heading+'<p class="detail-episodes-empty">Sezon bilgileri şu anda alınamadı. TMDB bağlantısını kontrol edip tekrar deneyebilirsin.</p>';console.warn('Dizi sezon bilgileri alınamadı:',error);}
 }
 
+function updateDetailSeriesDashboard(item){
+ const dashboard=document.getElementById('detail-series-dashboard');if(!dashboard)return;
+ if(!item||item.type!=='tv'){dashboard.hidden=true;dashboard.innerHTML='';return;}
+ dashboard.hidden=false;
+ const seasons=Number(item.seasons)||0,total=Number(String(item.episodes||'').replace(/[^0-9]/g,''))||0;
+ const progress=getDetailEpisodeProgress(item.id);
+ const watched=Object.values(progress).filter(entry=>entry&&entry.watched).length;
+ const percent=total?Math.min(100,Math.round(watched/total*100)):0;
+ dashboard.innerHTML=
+  '<div class="series-dashboard-heading"><div><span class="series-kicker"><i class="fa-solid fa-tv"></i> PERDE DİZİ MERKEZİ</span><h2>İzleme yolculuğun</h2><p>Sezonlarını keşfet, bölümlerini takip et ve kaldığın yeri kaybetme.</p></div><button type="button" class="series-jump-button" data-series-jump><i class="fa-solid fa-list-ol"></i> Bölümlere göz at <i class="fa-solid fa-arrow-down"></i></button></div>'+
+  '<div class="series-dashboard-grid">'+
+   '<div class="series-stat-card"><span>SEZON</span><strong>'+ (seasons||'—') +'</strong><small>Toplam sezon</small></div>'+
+   '<div class="series-stat-card"><span>BÖLÜM</span><strong>'+ (total||'—') +'</strong><small>Toplam bölüm</small></div>'+
+   '<div class="series-stat-card"><span>İZLEDİĞİN</span><strong>'+watched+'</strong><small>İşaretlediğin bölüm</small></div>'+
+   '<div class="series-progress-card"><div class="series-progress-copy"><span>GENEL İLERLEME</span><strong>%'+percent+'</strong></div><div class="series-progress-track"><span style="width:'+percent+'%"></span></div><small>'+(total?watched+' / '+total+' bölüm tamamlandı':'Bölüm sayısı henüz belirtilmemiş')+'</small></div>'+
+  '</div>';
+ dashboard.querySelector('[data-series-jump]')?.addEventListener('click',()=>document.getElementById('detail-episodes')?.scrollIntoView({behavior:'smooth',block:'start'}));
+}
 function renderDetailSeries(item){
  const panel=document.getElementById('detail-series-panel');
  const stats=document.getElementById('detail-series-stats');
@@ -1420,22 +1439,11 @@ function renderDetailSeries(item){
  const durationSeparator=document.getElementById('detail-duration-separator');
  if(!panel||!stats)return;
  const isSeries=item.type==='tv';
- panel.hidden=!isSeries;
+ panel.hidden=true;
  if(duration)duration.hidden=isSeries||!item.duration;
  if(durationSeparator)durationSeparator.hidden=isSeries||!item.duration;
- if(!isSeries){stats.innerHTML='';return;}
- const seasons=item.seasons?String(item.seasons):'Bilgi yok';
- const episodes=item.episodes?String(item.episodes):'Bilgi yok';
- const averageRaw=String(item.duration||'Bilgi yok');
- const average=/bölüm/i.test(averageRaw)?averageRaw:averageRaw+' / Bölüm';
- stats.innerHTML=
-  '<div class="detail-series-group detail-series-total">'+
-   '<span class="detail-series-value"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><strong>'+escapeCountryHtml(seasons)+' Sezon</strong></span>'+
-   '<span class="detail-series-value" style="color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important"><i class="fa-solid fa-film" aria-hidden="true"></i><strong style="color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important">'+escapeCountryHtml(episodes)+' Bölüm</strong></span>'+
-  '</div>'+
-  '<div class="detail-series-group detail-series-average">'+
-   '<span class="detail-series-value"><i class="fa-regular fa-clock" aria-hidden="true"></i><strong>'+escapeCountryHtml(average)+'</strong></span>'+
-  '</div>';
+ stats.innerHTML='';
+ updateDetailSeriesDashboard(item);
 }
 function ensureDetailSynopsisPopup(){
  let popup=document.getElementById('detail-synopsis-popup');
