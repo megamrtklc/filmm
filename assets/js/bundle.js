@@ -1447,7 +1447,7 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
  updateDetailSeriesDashboard(item);
 }
 async function loadDetailEpisodeSeason(item,seasonNumber){
- const root=document.getElementById('detail-episodes-content'),request=detailEpisodeRequest,auth=getDetailTmdbAuth();if(!root||!auth)return;
+ const root=document.getElementById('detail-episodes-content'),request=++detailEpisodeRequest,auth=getDetailTmdbAuth();if(!root||!auth)return;
  try{localStorage.setItem('perde_last_series_season_v1_'+String(item.id),String(seasonNumber));}catch(_){}
  root.innerHTML='<div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Bölümler yükleniyor…</div>';
  try{
