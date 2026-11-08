@@ -7420,3 +7420,40 @@ body.detail-synopsis-open{overflow:hidden}
 .director-filmography-toolbar select{min-height:34px;max-width:150px;padding:0 28px 0 10px;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:#171a21;color:#f2f2f3;font-size:11px;outline:none}
 .director-filmography-toolbar select:focus{border-color:#c8a45d}
 @media(max-width:520px){.director-filmography-toolbar{align-items:flex-start;flex-direction:column}.director-filmography-toolbar label{width:100%;justify-content:space-between}.director-filmography-toolbar select{flex:0 1 160px}}
+
+
+/* Manşet slider: tüm afişlerde sabit 2:3 oran, tutarlı ölçü ve aktif kartta ölçek farkı yok */
+#dashboard-view .home-feature-row #hero-section .hero-thumbnails{
+  align-items:flex-end!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb{
+  box-sizing:border-box!important;
+  flex:0 0 var(--hero-card-width,82px)!important;
+  width:var(--hero-card-width,82px)!important;
+  min-width:var(--hero-card-width,82px)!important;
+  height:auto!important;
+  aspect-ratio:2 / 3!important;
+  align-self:flex-end!important;
+  transform:translateY(0)!important;
+  transform-origin:center bottom!important;
+  overflow:hidden!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb img{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb:hover,
+#dashboard-view .home-feature-row #hero-section .hero-thumb.active{
+  transform:translateY(-6px)!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-thumb{
+    height:auto!important;
+    aspect-ratio:2 / 3!important;
+  }
+}
