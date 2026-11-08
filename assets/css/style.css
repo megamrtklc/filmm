@@ -8812,3 +8812,59 @@ body.detail-synopsis-open{overflow:hidden}
 .catalog-page-arrow{font-size:11px}
 .catalog-page-ellipsis{padding:0 3px;color:#647084}
 @media(max-width:520px){.media-grid-pagination{justify-content:center}.catalog-page-summary{width:100%;text-align:center}.catalog-page-controls{width:100%;gap:5px}.catalog-page-button{min-width:34px;height:36px;padding:0 9px}}
+
+
+/* Günün Sürprizi — manşet ve Mood Gallery ile aynı hizada, sinematik üçüncü kart */
+@media(min-width:1200px){
+ .home-feature-row{grid-template-columns:minmax(0,1.9fr) minmax(300px,1fr) minmax(255px,.82fr)!important;gap:16px!important}
+}
+.daily-surprise-card{
+ position:relative;isolation:isolate;min-width:0;height:440px;min-height:440px;overflow:hidden;
+ border:1px solid rgba(220,190,128,.2);border-radius:22px;
+ background:linear-gradient(145deg,#25221d,#111318 72%);box-shadow:0 14px 34px rgba(0,0,0,.22);
+}
+.daily-surprise-content{position:relative;width:100%;height:100%;min-height:inherit;overflow:hidden}
+.daily-surprise-backdrop{position:absolute;inset:0;z-index:-1;background:#15171d}
+.daily-surprise-backdrop img{width:100%;height:100%;object-fit:cover;object-position:center;opacity:.55;filter:saturate(.82);transform:scale(1.04)}
+.daily-surprise-backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,17,.28),rgba(10,12,17,.55) 38%,rgba(10,12,17,.96) 100%),linear-gradient(90deg,rgba(10,12,17,.3),transparent)}
+.daily-surprise-inner{height:100%;min-height:inherit;display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:21px 19px}
+.daily-surprise-topline{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.daily-surprise-eyebrow{display:inline-flex;align-items:center;gap:7px;color:#e0c58d;font-size:9px;font-weight:850;letter-spacing:.13em}
+.daily-surprise-eyebrow i{font-size:12px;color:#e8c477}
+.daily-surprise-type{padding:5px 8px;border:1px solid rgba(226,199,145,.28);border-radius:5px;background:rgba(12,14,18,.38);color:#e8d9b7;font-size:9px;font-weight:800;letter-spacing:.1em}
+.daily-surprise-copy{margin-top:auto;min-width:0}
+.daily-surprise-kicker{color:#d9b875;font-size:9px;font-weight:850;letter-spacing:.17em}
+.daily-surprise-copy h2{margin:8px 0 11px;color:#fff;font-size:clamp(21px,1.8vw,29px);font-weight:900;line-height:1.13;letter-spacing:-.025em;text-shadow:0 3px 18px rgba(0,0,0,.5);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;overflow-wrap:anywhere}
+.daily-surprise-meta{display:flex;align-items:center;gap:9px;color:#d2d1d0;font-size:12px;font-weight:650}
+.daily-surprise-dot{color:#b79a62}
+.daily-surprise-imdb{display:inline-flex;align-items:center;gap:5px;color:#e8dfcd;font-size:10px}
+.daily-surprise-imdb i{color:#f4c64e}
+.daily-surprise-imdb b{color:#fff;font-size:12px;font-weight:850}
+.daily-surprise-actions{display:grid;grid-template-columns:1fr;gap:8px}
+.daily-surprise-actions button{width:100%;min-height:39px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:800;transition:transform .18s ease,background .18s ease,border-color .18s ease}
+.daily-surprise-actions button:hover{transform:translateY(-2px)}
+.daily-surprise-open{border:1px solid #e5c98e;background:linear-gradient(135deg,#dfc17e,#b78b46);color:#19150e}
+.daily-surprise-again{border:1px solid rgba(224,194,133,.38);background:rgba(255,255,255,.08);color:#f2e7d1;backdrop-filter:blur(8px)}
+.daily-surprise-loading{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#d4c19a;font-size:12px}
+.daily-surprise-loading i{font-size:27px;opacity:.8}
+@media(max-width:1199px){
+ .home-feature-row{grid-template-columns:minmax(0,1.5fr) minmax(290px,1fr)!important}
+ .daily-surprise-card{grid-column:1/-1;height:220px;min-height:220px}
+ .daily-surprise-inner{padding:17px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;gap:10px 18px}
+ .daily-surprise-topline{grid-column:1/-1}
+ .daily-surprise-copy{align-self:end}
+ .daily-surprise-copy h2{font-size:clamp(20px,2.5vw,27px);margin:5px 0 8px;-webkit-line-clamp:2;line-clamp:2}
+ .daily-surprise-actions{align-self:end;width:190px}
+}
+@media(max-width:820px){
+ .daily-surprise-card{grid-column:auto;height:245px;min-height:245px;border-radius:17px}
+ .daily-surprise-inner{display:flex;gap:12px;padding:17px}
+ .daily-surprise-copy h2{font-size:clamp(20px,5vw,25px);-webkit-line-clamp:2;line-clamp:2}
+ .daily-surprise-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .daily-surprise-actions button{min-height:40px;font-size:10px}
+}
+@media(max-width:380px){
+ .daily-surprise-card{height:230px;min-height:230px}
+ .daily-surprise-inner{padding:14px}
+ .daily-surprise-actions button{font-size:9px;gap:5px}
+}
