@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261108-season-selector-v1">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261108-player-redesign-v1">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">\n</head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
@@ -389,6 +389,7 @@
             <div class="ny7-player-heading"><span><i class="fa-solid fa-circle-play"></i> PERDE ORIGINAL PLAYER</span><h2 id="player-media-title">Film oynatıcı</h2></div>
             <div class="ny7-player-header-actions"><span class="ny7-player-live-label"><i></i> SİNEMA MODU</span><button type="button" onclick="closePlayer()" class="ny7-player-close" aria-label="Oynatıcıyı kapat"><i class="fa-solid fa-xmark"></i></button></div>
         </header>
+        <div class="ny7-player-intro" aria-label="İzleme bilgisi"><span class="ny7-player-intro-line"><i class="fa-solid fa-film"></i> PERDE’DE ŞİMDİ</span><p>Kesintisiz sinema deneyimi</p></div>
         <main class="ny7-player-layout">
             <section class="ny7-player-main-column">
                 <div class="ny7-player-stage" id="player-stage">
@@ -445,7 +446,11 @@
                 </div>
                 <div class="ny7-player-underbar"><div><span class="ny7-player-underbar-dot"></span><span>ŞİMDİ İZLİYORSUN</span><strong id="player-underbar-title">Perde Sinema</strong></div><div class="ny7-player-statline"><span><i class="fa-regular fa-clock"></i> Bu filmde <b id="player-stat-minutes">0 dk</b></span><span><i class="fa-solid fa-check-circle"></i> <b id="player-stat-completed">0</b> tamamlandı</span></div><span class="ny7-player-shortcuts">Space oynat · ← / → 10 sn · F tam ekran · M sessiz</span></div>
             </section>
-
+            <aside class="ny7-player-side" aria-label="Yapım bilgileri">
+                <section class="ny7-player-side-card ny7-player-media-card"><div class="ny7-player-side-heading"><span>ŞU ANDA İZLİYORSUN</span><i class="fa-solid fa-clapperboard"></i></div><div class="ny7-player-media-info"><img id="player-info-poster" src="" alt="" loading="lazy"><div><span id="player-info-type">PERDE ARŞİVİ</span><h3 id="player-info-title">Yapım bilgisi</h3><p id="player-info-meta">Film / Dizi</p></div></div><p id="player-info-overview" class="ny7-player-overview">İzlediğin yapımın bilgileri burada görüntülenir.</p></section>
+                <section class="ny7-player-side-card ny7-player-session-card"><div class="ny7-player-side-heading"><span>İZLEME OTURUMU</span><i class="fa-solid fa-wave-square"></i></div><div class="ny7-player-session-row"><span>Oynatma</span><strong id="player-session-status">Hazır</strong></div><div class="ny7-player-session-row"><span>Ses / Altyazı</span><strong>Oynatıcıdan seç</strong></div><div class="ny7-player-session-row"><span>Tam ekran</span><strong>F tuşu</strong></div></section>
+                <section class="ny7-player-side-card ny7-player-help-card"><span class="ny7-player-help-icon"><i class="fa-solid fa-keyboard"></i></span><div><strong>Kontroller elinin altında</strong><p>Space oynat / duraklat · ← → 10 saniye sar · M sessiz · F tam ekran</p></div></section>
+            </aside>
         </main>
     </div>
 
@@ -456,7 +461,7 @@
     
     
     
-    <script src="assets/js/bundle.js?v=20261108-episode-play-v1"></script>
+    <script src="assets/js/bundle.js?v=20261108-player-redesign-v1"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
