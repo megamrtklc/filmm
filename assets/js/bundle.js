@@ -445,42 +445,6 @@ function generateMoodPick() {
     try { sessionStorage.setItem('perde-mood-last-id',String(chosen.id)); } catch(error) {}
     renderMoodDiscovery(chosen);
 }
-let dailySurpriseCurrentId = null;
-
-function renderDailySurprise(item) {
-    const host = document.getElementById('daily-surprise-content');
-    if (!host || !item) return;
-    dailySurpriseCurrentId = item.id;
-    const title = escapeCountryHtml(item.title || 'İsimsiz yapım');
-    const image = escapeCountryHtml(item.tmdbBackdrop || item.backdrop || item.image || '');
-    const year = escapeCountryHtml(item.year || '—');
-    const rating = escapeCountryHtml(item.rating || '—');
-    const typeLabel = item.type === 'tv' ? 'DİZİ' : 'FİLM';
-    const id = escapeCountryHtml(item.id);
-    host.innerHTML = '<div class="daily-surprise-backdrop" aria-hidden="true"><img src="'+image+'" alt="" loading="eager" decoding="async"><span></span></div>' +
-        '<div class="daily-surprise-inner"><div class="daily-surprise-topline"><span class="daily-surprise-eyebrow"><i class="fa-solid fa-sparkles"></i> PERDE’DEN BUGÜNE</span><span class="daily-surprise-type">'+typeLabel+'</span></div>' +
-        '<div class="daily-surprise-copy"><span class="daily-surprise-kicker">GÜNÜN SÜRPRİZİ</span><h2>'+title+'</h2><div class="daily-surprise-meta"><span>'+year+'</span><span class="daily-surprise-dot">•</span><span class="daily-surprise-imdb"><i class="fa-solid fa-star"></i> IMDb <b>'+rating+'</b></span></div></div>' +
-        '<div class="daily-surprise-actions"><button type="button" class="daily-surprise-open" data-surprise-open="'+id+'"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="daily-surprise-again" data-surprise-again><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div>';
-    host.querySelector('[data-surprise-open]')?.addEventListener('click', event => openDetailPage(event.currentTarget.dataset.surpriseOpen));
-    host.querySelector('[data-surprise-again]')?.addEventListener('click', chooseAnotherDailySurprise);
-}
-
-function chooseAnotherDailySurprise() {
-    const candidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-    if (!candidates.length) return;
-    let pool = candidates.filter(item => String(item.id) !== String(dailySurpriseCurrentId));
-    if (!pool.length) pool = candidates;
-    renderDailySurprise(pool[Math.floor(Math.random() * pool.length)]);
-}
-
-function initializeDailySurprise() {
-    const candidates = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
-    if (!candidates.length) return;
-    const now = new Date();
-    const dayKey = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
-    renderDailySurprise(candidates[dayKey % candidates.length]);
-}
-
 function initializeMoodDiscovery() {
     activeMoodCategory = '';
     lastMoodRecommendationId = null;
@@ -2608,7 +2572,6 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
                 renderHomeCollections();
                 try {
                     initializeMoodDiscovery();
-                    initializeDailySurprise();
                 } catch (moodError) {
                     console.error('Moduna göre keşfet alanı başlatılamadı; katalog yüklemesi sürdürülecek:', moodError);
                     const moodResult = document.getElementById('mood-discovery-result');
