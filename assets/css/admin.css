@@ -801,3 +801,59 @@
 .subtitle-online-result .outline-button{white-space:nowrap;flex-shrink:0}
 .subtitle-online-empty{padding:12px;color:#aaa;font-size:12px;border:1px dashed rgba(255,255,255,.12);border-radius:10px}
 @media(max-width:600px){.subtitle-online-result{align-items:flex-start;flex-direction:column}.subtitle-online-result .outline-button{width:100%}}
+
+
+/* Yönetim menüsü: tüm ekran yüksekliklerinde erişilebilir kaydırma */
+.admin-sidebar{
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+.admin-brand{flex:0 0 auto;padding-bottom:22px}
+.admin-nav{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(216,173,85,.42) transparent;
+  padding:0 3px 12px 0;
+}
+.admin-nav::-webkit-scrollbar{width:5px}
+.admin-nav::-webkit-scrollbar-track{background:transparent}
+.admin-nav::-webkit-scrollbar-thumb{background:rgba(216,173,85,.38);border-radius:8px}
+.sidebar-bottom{flex:0 0 auto;margin-top:10px}
+@media(max-height:850px) and (min-width:901px){
+  .admin-sidebar{padding-top:15px;padding-bottom:12px}
+  .admin-brand{padding-bottom:12px}
+  .sidebar-caption{padding-top:9px;padding-bottom:5px}
+  .nav-item{padding-top:9px;padding-bottom:9px}
+  .sidebar-status{padding:9px;margin-bottom:6px}
+  .back-to-site{padding-top:7px;padding-bottom:7px}
+}
+@media(max-width:900px){
+  .admin-sidebar{
+    position:fixed;
+    inset:0 auto 0 0;
+    width:min(310px,88vw);
+    height:100vh;
+    height:100dvh;
+    transform:translateX(-105%);
+    transition:transform .25s ease;
+    box-shadow:18px 0 48px rgba(0,0,0,.62);
+    z-index:60;
+  }
+  .admin-sidebar.open{transform:translateX(0)}
+  .admin-main{margin-left:0}
+  .mobile-menu{display:grid;flex:0 0 36px}
+  .admin-topbar{padding-left:16px;padding-right:16px}
+}
+@media(max-width:900px) and (max-height:620px){
+  .admin-sidebar{padding-top:10px;padding-bottom:8px}
+  .admin-brand{padding-bottom:8px}
+  .sidebar-caption{padding-top:6px;padding-bottom:3px}
+  .nav-item{padding-top:7px;padding-bottom:7px}
+  .sidebar-status{padding:7px;margin-bottom:4px}
+  .back-to-site{padding-top:5px;padding-bottom:5px}
+}
