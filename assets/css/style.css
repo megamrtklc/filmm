@@ -8289,3 +8289,28 @@ body.detail-synopsis-open{overflow:hidden}
 /* Eski keşif kartından kalan kapsayıcı stillerini devre dışı bırak. */
 #dashboard-view #daily-pick-section .mood-discovery-result{display:block!important;position:relative!important;isolation:auto!important;min-height:0!important;height:auto!important;overflow:visible!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
 #dashboard-view #daily-pick-section .mood-discovery-result:before{display:none!important;content:none!important}
+
+
+/* PERDE — keşif kartı için ikinci kart alanını boş bırak: manşetin yarı genişliği */
+#dashboard-view .home-feature-row #daily-pick-section.mood-discovery-hero{
+  width:calc(50% - 12px)!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:24px 0 8px!important;
+  grid-column:auto!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-shell{
+  width:100%!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+@media(max-width:760px){
+  #dashboard-view .home-feature-row #daily-pick-section.mood-discovery-hero{
+    width:100%!important;
+    margin:16px 0 8px!important;
+  }
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
