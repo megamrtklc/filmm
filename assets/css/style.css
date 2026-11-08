@@ -8418,3 +8418,46 @@ body.detail-synopsis-open{overflow:hidden}
   #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important;padding:10px!important}
   #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-poster{width:82px!important;max-width:82px!important;height:123px!important}
 }
+
+
+/* Mood Gallery — show every mood at once, without an inner scroll area */
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-auto-rows:52px!important;
+  gap:7px!important;
+  max-height:none!important;
+  height:auto!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid.is-expanded{
+  max-height:none!important;overflow:visible!important;padding:0!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card{
+  height:52px!important;min-height:52px!important;max-height:52px!important;
+  border-radius:8px!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card-copy{
+  left:7px!important;right:7px!important;bottom:7px!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card-copy strong{
+  font-size:10px!important;line-height:1.1!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card-copy small{display:none!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-more{display:none!important}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-chooser{min-width:0!important}
+@media(max-width:760px){
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-auto-rows:58px!important;gap:7px!important;
+  }
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card{
+    height:58px!important;min-height:58px!important;max-height:58px!important;
+  }
+}
+@media(max-width:420px){
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-grid{grid-auto-rows:53px!important;gap:5px!important}
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card{height:53px!important;min-height:53px!important;max-height:53px!important}
+  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-card-copy strong{font-size:9px!important}
+}
