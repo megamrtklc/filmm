@@ -157,8 +157,6 @@
 .hero-rating-badge b{font-size:10px;font-weight:900;letter-spacing:-.03em}
 .hero-rating-badge strong{font-size:12px;font-weight:900;color:#facc15}
 .hero-rating-badge .tmdb-mark{color:#55d58b}
-.hero-rating-badge .tomato-mark{color:#ff6b63}
-.hero-rating-badge .popcorn-mark{font-size:15px}
 #hero-meta{display:flex;flex-wrap:wrap;gap:5px 9px;line-height:1.6;max-width:680px}
 @media(max-width:700px){
  #hero-section{min-height:760px;padding-bottom:190px}
@@ -3219,12 +3217,6 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view .score-brand-tmdb{color:#01b4e4!important}
 #detail-page-view .score-brand-tmdb b{font-size:10px!important;font-weight:950!important;letter-spacing:.3px!important;color:#55d8f5!important}
 #detail-page-view .score-tmdb-symbol{width:17px!important;height:17px!important;display:grid!important;place-items:center!important;border:2px solid #01b4e4!important;border-radius:50%!important;color:#01b4e4!important;font-size:10px!important;font-style:normal!important;font-weight:900!important}
-#detail-page-view .score-rt{border-color:#e63946!important;box-shadow:0 0 0 1px rgba(230,57,70,.1),inset 0 0 14px rgba(230,57,70,.06)!important}
-#detail-page-view .score-brand-rt b{font-size:11px!important;font-weight:950!important;letter-spacing:.5px!important;color:#ff626b!important}
-#detail-page-view .score-rt-symbol{font-size:15px!important;font-style:normal!important}
-#detail-page-view .score-popcorn{border-color:#f04444!important;box-shadow:0 0 0 1px rgba(240,68,68,.1),inset 0 0 14px rgba(240,68,68,.06)!important}
-#detail-page-view .score-brand-popcorn b{font-size:8px!important;font-weight:950!important;letter-spacing:.15px!important;color:#ff7777!important}
-#detail-page-view .score-popcorn-symbol{font-size:15px!important;font-style:normal!important}
 #detail-page-view .score-imdb{border-color:#f5c518!important;box-shadow:0 0 0 1px rgba(245,197,24,.1),inset 0 0 14px rgba(245,197,24,.06)!important}
 #detail-page-view .detail-score-pill.is-unavailable strong{font-size:10px!important;color:#777f8d!important;font-weight:650!important}
 @media(max-width:760px){
@@ -3238,8 +3230,6 @@ body.trailer-popup-open{overflow:hidden}
 #detail-page-view .detail-score-pill{box-shadow:none!important}
 #detail-page-view .score-imdb{border-color:rgba(245,197,24,.42)!important;box-shadow:inset 0 0 10px rgba(245,197,24,.025)!important}
 #detail-page-view .score-tmdb{border-color:rgba(1,180,228,.42)!important;box-shadow:inset 0 0 10px rgba(1,180,228,.025)!important}
-#detail-page-view .score-rt{border-color:rgba(230,57,70,.42)!important;box-shadow:inset 0 0 10px rgba(230,57,70,.025)!important}
-#detail-page-view .score-popcorn{border-color:rgba(240,68,68,.42)!important;box-shadow:inset 0 0 10px rgba(240,68,68,.025)!important}
 
 
 /* Detail header metadata: country flags and director links replace the removed credits card */
@@ -5872,8 +5862,6 @@ body.detail-synopsis-open{overflow:hidden}
   font-weight:800;
 }
 #dashboard-view .home-feature-row #hero-section .hero-rating-badge .tmdb-mark{color:#8ed9ae}
-#dashboard-view .home-feature-row #hero-section .hero-rating-badge .tomato-mark{color:#f18b83}
-#dashboard-view .home-feature-row #hero-section .hero-rating-badge .popcorn-mark{font-size:12px}
 #dashboard-view .home-feature-row #hero-section #hero-meta{
   display:flex!important;
   align-items:center;
