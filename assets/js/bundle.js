@@ -898,6 +898,7 @@ function renderFilteredCatalog() {
                 const searchMatch = !query || mediaSearchText(m).includes(normalizeMediaSearchText(query)) || category.includes(query) || genre.includes(query);
                 return genreMatch && typeMatch && searchMatch && countryMatch && directorMatch && genreTagMatch;
             });
+            ensureDirectorFilmographyToolbar();
             if(activeCatalogDirector){
                 const yearOf=m=>Number(String(m.tmdbReleaseDate||m.year||'').match(/\d{4}/)?.[0]||0);
                 filtered.sort((a,b)=>{
@@ -908,7 +909,6 @@ function renderFilteredCatalog() {
                 const count=document.getElementById('director-filmography-count');
                 if(count)count.textContent=filtered.length+' film bulundu';
             }else if (activeCatalogType === 'movie' || activeCatalogType === 'tv') filtered.reverse();
-            ensureDirectorFilmographyToolbar();
             renderMediaGrid(filtered);
         }
 
