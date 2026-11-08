@@ -15,6 +15,7 @@
  let active='genre',genre='all',yearFrom='',yearTo='',person='',director='',type='all',sort='popular',limit=12,ready=false;
  function uniquePeople(key){const values=new Map();catalog().forEach(item=>{const raw=key==='actor'?castOf(item):[directorOf(item)];raw.forEach(name=>{const clean=String(name||'').trim();if(clean&&clean.length>1&&!values.has(norm(clean)))values.set(norm(clean),clean);});});return [...values.values()].sort((a,b)=>a.localeCompare(b,'tr'));}
  function genreOptions(){const values=new Map();catalog().forEach(item=>genresOf(item).forEach(name=>{if(name&&!values.has(norm(name)))values.set(norm(name),name);}));return [...values.values()].sort((a,b)=>a.localeCompare(b,'tr'));}
+ function populateDatalists(){const actors=$('pd-actor-options'),directors=$('pd-director-options');if(actors)actors.innerHTML=uniquePeople('actor').map(name=>'<option value="'+esc(name)+'"></option>').join('');if(directors)directors.innerHTML=uniquePeople('director').map(name=>'<option value="'+esc(name)+'"></option>').join('');}
  function renderGenreChips(){const host=$('pd-genre-options');if(!host)return;const options=genreOptions();host.innerHTML=['Tüm türler',...options].map((name,index)=>{const value=index===0?'all':name;return '<button type="button" class="pd-genre-chip'+(genre===value?' is-active':'')+'" data-pd-genre="'+esc(value)+'">'+esc(name)+'</button>';}).join('');}
  function renderResults(){
   const host=$('pd-results'),count=$('pd-result-count');if(!host)return;
@@ -24,8 +25,8 @@
    if(!kind)return false;
    if(active==='genre')return genre==='all'||genresOf(item).some(value=>norm(value)===norm(genre));
    if(active==='year'){const y=yearOf(item);return !!y&&(!yearFrom||y>=Number(yearFrom))&&(!yearTo||y<=Number(yearTo));}
-   if(active==='actor')return !!q&&castOf(item).some(name=>norm(name)===q);
-   if(active==='director')return !!q&&norm(directorOf(item))===q;
+   if(active==='actor')return !!q&&castOf(item).some(name=>norm(name).includes(q));
+   if(active==='director')return !!q&&norm(directorOf(item)).includes(q);
    return true;
   });
   const score=item=>Number.parseFloat(item.tmdbRating||item.rating)||0;
@@ -53,7 +54,7 @@
  }
  function init(){
   if(ready||!root()||!catalog().length)return false;
-  ready=true;populateYears();renderGenreChips();renderResults();return true;
+  ready=true;populateYears();populateDatalists();renderGenreChips();renderResults();return true;
  }
  document.addEventListener('click',event=>{
   const mode=event.target.closest('[data-pd-mode]');if(mode){setMode(mode.dataset.pdMode);return;}
