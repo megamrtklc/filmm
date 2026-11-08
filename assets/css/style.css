@@ -8192,3 +8192,32 @@ body.detail-synopsis-open{overflow:hidden}
     width:100%!important;max-width:none!important;margin:0!important;
   }
 }
+
+
+/* PERDE AŞAMA 2 — Moduna Göre Keşfet, manşetin altında bağımsız tam genişlik */
+#dashboard-view .home-feature-row #daily-pick-section{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:24px 0 0!important;
+  padding:0!important;
+  grid-column:1 / -1!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-discovery-result{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  overflow:visible;
+}
+@media(max-width:760px){
+  #dashboard-view .home-feature-row #daily-pick-section{
+    margin-top:16px!important;
+  }
+  #dashboard-view .home-feature-row #daily-pick-section .mood-discovery-result{
+    border-radius:14px!important;
+  }
+}
