@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-07T23:31:54.798Z",
+  "updatedAt": "2026-11-08T00:35:59.722Z",
   "settings": {
-    "desktopCount": 8,
+    "desktopCount": 6,
     "mobileCount": 4,
     "interval": 6,
     "autoplay": true,
@@ -10,55 +10,25 @@
   },
   "heroSlides": [
     {
-      "id": "perde-mw71eehr",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "perde-mw6yns6p",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "perde-mw6xs3qb",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "perde-mw6xrtd2",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "perde-mw6xr2mm",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
-      "id": "archive-66",
-      "active": true,
-      "headline": "",
-      "description": ""
-    },
-    {
       "id": "archive-26",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "perde-mw67it9i",
+      "id": "archive-103",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "archive-51",
+      "id": "archive-124",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-99",
       "active": true,
       "headline": "",
       "description": ""
@@ -70,31 +40,31 @@
       "description": ""
     },
     {
-      "id": "archive-84",
+      "id": "archive-2",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "archive-106",
+      "id": "archive-4",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "archive-59",
+      "id": "archive-23",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "archive-82",
+      "id": "archive-98",
       "active": true,
       "headline": "",
       "description": ""
     },
     {
-      "id": "perde-mw63ykt1",
+      "id": "archive-105",
       "active": true,
       "headline": "",
       "description": ""
