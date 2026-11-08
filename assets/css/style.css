@@ -7404,3 +7404,19 @@ body.detail-synopsis-open{overflow:hidden}
 #detail-film-extras .detail-award-empty{box-sizing:border-box;max-width:100%;overflow-wrap:anywhere}
 #detail-film-extras .detail-film-extra-grid{align-items:stretch}
 @media(max-width:760px){#detail-film-extras .detail-film-extra-card{width:100%;min-width:0}#detail-film-extras .detail-award-list li{padding:9px}}
+
+
+/* Yönetmen filmografisi: detay önizlemesi ve tam katalog araçları */
+#detail-film-extras .detail-director-more{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:13px;padding:12px 13px;border:1px solid rgba(204,170,99,.3);border-radius:10px;background:linear-gradient(100deg,rgba(190,151,77,.13),rgba(255,255,255,.025));color:#e9d4a5;text-align:left;transition:border-color .2s,background .2s,transform .2s}
+#detail-film-extras .detail-director-more:hover{border-color:rgba(220,184,111,.7);background:rgba(190,151,77,.18);transform:translateY(-1px)}
+#detail-film-extras .detail-director-more span{font-size:11px;font-weight:750}
+#detail-film-extras .detail-director-more strong{margin-left:auto;color:#fff;font-size:10px}
+#detail-film-extras .detail-director-more i{color:#d5b36e;font-size:11px}
+.director-filmography-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px;padding:12px 14px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:linear-gradient(110deg,rgba(29,33,42,.94),rgba(15,17,23,.94))}
+.director-filmography-toolbar[hidden]{display:none!important}
+.director-filmography-count{display:flex;align-items:center;gap:9px;color:#e8d2a0;font-size:12px;font-weight:800}
+.director-filmography-count i{color:#c7a15c}
+.director-filmography-toolbar label{display:flex;align-items:center;gap:9px;color:#9299a5;font-size:10px;font-weight:700}
+.director-filmography-toolbar select{min-height:34px;max-width:150px;padding:0 28px 0 10px;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:#171a21;color:#f2f2f3;font-size:11px;outline:none}
+.director-filmography-toolbar select:focus{border-color:#c8a45d}
+@media(max-width:520px){.director-filmography-toolbar{align-items:flex-start;flex-direction:column}.director-filmography-toolbar label{width:100%;justify-content:space-between}.director-filmography-toolbar select{flex:0 1 160px}}
