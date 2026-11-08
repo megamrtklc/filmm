@@ -353,14 +353,23 @@ function renderMoodDiscovery(recommendation = null) {
     let recommendationMarkup = '';
     if (recommendation) {
         const title = escapeCountryHtml(recommendation.title || 'İsimsiz yapım');
-        const poster = escapeCountryHtml(recommendation.image || '');
-        const backdrop = escapeCountryHtml(recommendation.tmdbBackdrop || recommendation.backdrop || recommendation.image || '');
+        const resizeTmdbImage = (value, size) => {
+            let url = String(value || '').trim();
+            if (url.includes('image.tmdb.org/t/p/')) {
+                ['/w45/','/w92/','/w154/','/w185/','/w342/','/w500/','/w780/','/w1280/','/original/'].forEach(version => { url = url.replace(version, '/'+size+'/'); });
+            }
+            return url;
+        };
+        const posterUrl = resizeTmdbImage(recommendation.tmdbPoster || recommendation.image, 'w342');
+        const backdropUrl = resizeTmdbImage(recommendation.tmdbBackdrop || recommendation.backdrop || recommendation.tmdbPoster || recommendation.image, 'w780');
+        const poster = escapeCountryHtml(posterUrl);
+        const backdrop = escapeCountryHtml(backdropUrl);
         const id = escapeCountryHtml(recommendation.id);
         const typeLabel = recommendation.type === 'tv' ? 'Dizi' : 'Film';
         const rating = escapeCountryHtml(recommendation.rating || '—');
         const runtime = recommendation.tmdbRuntime || recommendation.duration || '';
         const runtimeLabel = runtime ? '<span class="mood-gallery-runtime"><i class="fa-regular fa-clock"></i> '+escapeCountryHtml(runtime)+'</span>' : '';
-        recommendationMarkup = '<article class="mood-gallery-recommendation"><div class="mood-gallery-recommendation-backdrop" aria-hidden="true"><img src="'+backdrop+'" alt="" loading="eager" decoding="async"><span></span></div><div class="mood-gallery-poster-frame"><img class="mood-gallery-poster" data-mood-poster src="'+poster+'" alt="'+title+'" loading="eager" fetchpriority="high" decoding="async" crossorigin="anonymous"></div><div class="mood-gallery-recommendation-copy"><span class="mood-gallery-result-label">SANA ÖZEL ÖNERİ · '+typeLabel.toLocaleUpperCase('tr-TR')+'</span><h3>'+title+'</h3><p class="mood-gallery-meta"><span class="mood-gallery-year">'+escapeCountryHtml(recommendation.year||'—')+'</span><span class="mood-gallery-meta-dot">•</span><span class="mood-gallery-rating" aria-label="IMDb puanı"><i class="fa-solid fa-star"></i><b>IMDb</b><strong>'+rating+'</strong></span>'+runtimeLabel+'</p><p class="mood-gallery-description">'+escapeCountryHtml(recommendation.desc||'Bu yapımı keşfetmek için detaylarına göz at.')+'</p><div class="mood-gallery-result-actions"><button type="button" class="mood-gallery-open" data-mood-open="'+id+'"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="mood-gallery-again" data-mood-again><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div></article>';
+        recommendationMarkup = '<article class="mood-gallery-recommendation"><div class="mood-gallery-recommendation-backdrop" aria-hidden="true"><img data-mood-backdrop src="'+backdrop+'" alt="" loading="eager" decoding="async"><span></span></div><div class="mood-gallery-poster-frame"><img class="mood-gallery-poster" data-mood-poster src="'+poster+'" alt="'+title+'" loading="eager" fetchpriority="high" decoding="async"></div><div class="mood-gallery-recommendation-copy"><span class="mood-gallery-result-label">SANA ÖZEL ÖNERİ · '+typeLabel.toLocaleUpperCase('tr-TR')+'</span><h3>'+title+'</h3><p class="mood-gallery-meta"><span class="mood-gallery-year">'+escapeCountryHtml(recommendation.year||'—')+'</span><span class="mood-gallery-meta-dot">•</span><span class="mood-gallery-rating" aria-label="IMDb puanı"><i class="fa-solid fa-star"></i><b>IMDb</b><strong>'+rating+'</strong></span>'+runtimeLabel+'</p><p class="mood-gallery-description">'+escapeCountryHtml(recommendation.desc||'Bu yapımı keşfetmek için detaylarına göz at.')+'</p><div class="mood-gallery-result-actions"><button type="button" class="mood-gallery-open" data-mood-open="'+id+'"><i class="fa-solid fa-arrow-up-right-from-square"></i> Detayları Gör</button><button type="button" class="mood-gallery-again" data-mood-again><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div></div></article>';
     }
     result.innerHTML = '<div class="mood-gallery-shell mood-gallery-dropdown-layout"><header class="mood-gallery-heading"><div class="mood-gallery-heading-copy"><span class="mood-gallery-eyebrow">PERDE’DE KEŞFET</span><h2>Bugün hangi dünyaya girmek istersin?</h2><p>Bir ruh hali seç, sıradaki hikâyeni birlikte bulalım.</p></div><div class="mood-gallery-controls"><div class="mood-gallery-select-wrap"><span>RUH HALİNİ SEÇ</span><div class="mood-gallery-picker"><button type="button" class="mood-gallery-picker-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="mood-gallery-options"><span class="mood-gallery-picker-symbol"><i class="fa-solid fa-wand-magic-sparkles"></i></span><span class="mood-gallery-picker-value">'+(selectedOption?escapeCountryHtml(selectedOption.label):'Bir ruh hali seç')+'</span><i class="fa-solid fa-chevron-down mood-gallery-picker-chevron"></i></button><div class="mood-gallery-options" id="mood-gallery-options" role="listbox" aria-label="Ruh hali seçenekleri" hidden>'+options+'</div></div></div></div></header><div class="mood-gallery-wide-result">'+(recommendationMarkup||'<div class="mood-gallery-side-empty"><i class="fa-solid fa-film"></i><strong>Keşif yolculuğun burada başlasın</strong><span>Sana tüm arşivimizden rastgele bir film veya dizi seçtik.</span></div>')+'</div></div>';
     const trigger = result.querySelector('.mood-gallery-picker-trigger');
@@ -379,7 +388,25 @@ function renderMoodDiscovery(recommendation = null) {
     result.querySelector('[data-mood-open]')?.addEventListener('click', event => openDetailPage(event.currentTarget.dataset.moodOpen));
     result.querySelector('[data-mood-again]')?.addEventListener('click', generateMoodPick);
     const posterElement = result.querySelector('[data-mood-poster]');
+    const backdropElement = result.querySelector('[data-mood-backdrop]');
+    if (backdropElement) backdropElement.addEventListener('error', () => {
+        backdropElement.hidden = true;
+    }, {once:true});
     if (posterElement) {
+        posterElement.addEventListener('error', () => {
+            const item = recommendation;
+            const alternatives = [item?.tmdbPoster,item?.image,item?.tmdbBackdrop,item?.backdrop]
+                .filter(Boolean).map(value => String(value).trim()).filter((value,index,list) => list.indexOf(value)===index);
+            const next = alternatives.find(value => value !== posterElement.dataset.failedSrc);
+            if (next) {
+                posterElement.dataset.failedSrc = posterElement.src;
+                posterElement.src = next;
+            } else {
+                posterElement.hidden = true;
+                posterElement.closest('.mood-gallery-poster-frame')?.classList.add('mood-poster-unavailable');
+            }
+        });
+
         const applyAmbilight = () => {
             try {
                 const canvas = document.createElement('canvas');
