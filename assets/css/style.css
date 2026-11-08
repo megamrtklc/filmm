@@ -8748,3 +8748,54 @@ body.detail-synopsis-open{overflow:hidden}
  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy h3{font-size:14px!important;line-height:1.25!important}
  #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-description{font-size:11px!important}
 }
+
+
+/* Mood Gallery C4 — faster poster paint, top-aligned copy, refined type and IMDb */
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation{
+ align-items:start!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy{
+ align-self:start!important;padding-top:0!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy h3{
+ font-size:clamp(20px,2vw,24px)!important;line-height:1.2!important;margin:5px 0 10px!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-result-label{
+ font-size:11px!important;letter-spacing:.11em!important;line-height:1.35!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-meta{
+ font-size:13px!important;line-height:1.4!important;gap:9px!important;margin:0 0 11px!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-rating{
+ display:inline-flex!important;align-items:center!important;gap:5px!important;
+ padding:3px 8px!important;border:1px solid rgba(211,178,111,.22)!important;
+ border-radius:6px!important;background:rgba(194,158,91,.09)!important;
+ color:#d9c69e!important;font-size:11px!important;line-height:1!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-rating i{
+ color:#c6a35f!important;font-size:10px!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-rating b{
+ color:#cfc4ad!important;font-size:9px!important;font-weight:650!important;letter-spacing:.04em!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-rating strong{
+ color:#f0e6d2!important;font-size:12px!important;font-weight:750!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-description{
+ font-size:14px!important;line-height:1.62!important;
+}
+#dashboard-view .home-feature-row #daily-pick-section .mood-gallery-poster-frame .mood-gallery-poster{
+ content-visibility:visible!important;
+}
+@media(max-width:760px){
+ #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy h3{
+  font-size:19px!important;line-height:1.22!important;margin:4px 0 8px!important;
+ }
+ #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-result-label{font-size:10px!important}
+ #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-meta{font-size:12px!important;gap:7px!important;margin-bottom:9px!important}
+ #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-description{font-size:13px!important;line-height:1.55!important}
+}
+@media(max-width:380px){
+ #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-recommendation-copy h3{font-size:17px!important}
+ #dashboard-view .home-feature-row #daily-pick-section .mood-gallery-description{font-size:12px!important}
+}
