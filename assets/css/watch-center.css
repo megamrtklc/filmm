@@ -89,3 +89,5 @@
  .wc-next-image{width:92px;height:72px}
 }
 @media(max-width:360px){.wc-hero-mark{display:none}.wc-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wc-stat-card>span{font-size:7px}}
+
+.wc-card-mark{min-height:28px;padding:0 9px;border:1px solid rgba(214,180,107,.3);border-radius:6px;background:rgba(214,180,107,.13);color:#e8cc91;font-size:9px;font-weight:800;white-space:nowrap}
