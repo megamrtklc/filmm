@@ -125,8 +125,7 @@ function fitHeroTitleToWidth() {
             ratings.innerHTML = `
                 <span class="hero-rating-badge imdb"><b>IMDb</b><strong>${ratingValue(item.rating)}</strong></span>
                 <span class="hero-rating-badge tmdb"><b class="tmdb-mark">TMDB</b><strong>${ratingValue(item.tmdbRating)}</strong></span>
-                <span class="hero-rating-badge tomato"><b class="tomato-mark">🍅 RT</b><strong>${ratingValue(item.rottenTomatoes)}</strong></span>
-                <span class="hero-rating-badge popcorn"><b class="popcorn-mark">🍿</b><strong>${ratingValue(item.popcornmeter)}</strong></span>`;
+`;
             const runtime = item.type === 'tv'
                 ? [item.tmdbSeasons || item.seasons ? `${item.tmdbSeasons || item.seasons} sezon` : '', item.tmdbEpisodes || item.episodes ? `${item.tmdbEpisodes || item.episodes} bölüm` : '', item.tmdbRuntime || item.duration || ''].filter(Boolean).join(' • ')
                 : (item.tmdbRuntime || item.duration || '');
@@ -1888,12 +1887,10 @@ function openDetailPage(id,update=true){
  updateDetailSynopsis(item);
  const readScore=(...values)=>{for(const value of values){const candidate=value&&typeof value==='object'?(value.value??value.score??value.rating):value;if(candidate!==undefined&&candidate!==null&&String(candidate).trim()!==''&&String(candidate).trim().toLowerCase()!=='n/a')return String(candidate).trim();}return '';};
  const scoreItems=[
-  {key:'imdb',logo:'IMDb',value:readScore(item.rating,item.imdbRating,item.imdb_rating),suffix:''},
-  {key:'tmdb',logo:'TMDB',value:readScore(item.tmdbRating,item.tmdb_rating,item.tmdb?.value,item.tmdb?.rating,item.vote_average),suffix:''},
-  {key:'rt',logo:'RT',value:readScore(item.rottenTomatoes,item.rtRating,item.rotten_tomatoes?.value,item.rotten_tomatoes),suffix:'%'},
-  {key:'popcorn',logo:'POPCORN',value:readScore(item.popcornmeter,item.popcornMeter,item.popcorn_rating),suffix:'%'}
+  {key:'imdb',logo:'IMDb',value:readScore(item.rating,item.imdbRating,item.imdb_rating)},
+  {key:'tmdb',logo:'TMDB',value:readScore(item.tmdbRating,item.tmdb_rating,item.tmdb?.value,item.tmdb?.rating,item.vote_average)}
  ];
- document.getElementById('detail-score-items').innerHTML=scoreItems.map(score=>'<span class="detail-score-pill score-'+score.key+(score.value?'':' is-unavailable')+'"><span class="score-brand score-brand-'+score.key+'" aria-label="'+score.logo+'">'+(score.key==='imdb'?'<b>IMDb</b>':score.key==='tmdb'?'<i class="score-tmdb-symbol">T</i><b>TMDB</b>':score.key==='rt'?'<i class="score-rt-symbol" aria-hidden="true">🍅</i><b>RT</b>':'<i class="score-popcorn-symbol" aria-hidden="true">🍿</i><b>POPCORNMETER</b>')+'</span><strong>'+(score.value?escapeCountryHtml(score.value)+(score.suffix&&!String(score.value).includes('%')?score.suffix:''):'Veri yok')+'</strong></span>').join('');
+ document.getElementById('detail-score-items').innerHTML=scoreItems.map(score=>'<span class="detail-score-pill score-'+score.key+(score.value?'':' is-unavailable')+'"><span class="score-brand score-brand-'+score.key+'" aria-label="'+score.logo+'">'+(score.key==='imdb'?'<b>IMDb</b>':'<i class="score-tmdb-symbol">T</i><b>TMDB</b>')+'</span><strong>'+(score.value?escapeCountryHtml(score.value):'Veri yok')+'</strong></span>').join('');
  updateDetailButtons(item.id);
  
  document.getElementById('detail-trailer-btn').onclick=()=>openTrailerPopup(item.id);
