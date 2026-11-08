@@ -7269,3 +7269,91 @@ body.detail-synopsis-open{overflow:hidden}
 @media(max-width:760px){#player-modal.ny7-player-modal{padding-bottom:24px}#player-modal .ny7-player-header{padding:12px 14px;gap:10px}#player-modal .ny7-player-back,#player-modal .ny7-player-close{width:38px;height:38px;flex-basis:38px}#player-modal .ny7-player-live-label{display:none}#player-modal .ny7-player-intro{margin:19px auto 12px;padding:0 14px}#player-modal .ny7-player-layout{grid-template-columns:minmax(0,1fr);padding:0 14px;gap:12px}#player-modal .ny7-player-stage{min-height:0;border-radius:10px}#player-modal .ny7-player-controls{padding:28px 10px 10px}#player-modal .ny7-player-control-row{gap:5px;flex-wrap:wrap}#player-modal .ny7-player-control-left,#player-modal .ny7-player-control-right{gap:5px}#player-modal .ny7-player-control-right{margin-left:auto}#player-modal .ny7-player-volume{width:52px}#player-modal .ny7-player-time{font-size:9px}#player-modal .ny7-player-control-right select{max-width:78px;font-size:9px}#player-modal .ny7-player-underbar{padding:11px;gap:9px}#player-modal .ny7-player-statline{margin-left:0;width:100%}#player-modal .ny7-player-side{display:grid;grid-template-columns:1fr 1fr;gap:9px}#player-modal .ny7-player-media-card{grid-column:1/-1}#player-modal .ny7-player-help-card{grid-column:1/-1}#player-modal .ny7-player-side-card{padding:12px}#player-modal .ny7-player-overview{-webkit-line-clamp:3}}
 @media(max-width:420px){#player-modal .ny7-player-side{grid-template-columns:1fr}#player-modal .ny7-player-media-card,#player-modal .ny7-player-help-card{grid-column:auto}#player-modal .ny7-player-heading h2{max-width:210px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#player-modal .ny7-player-control-left .ny7-player-volume{display:none}#player-modal .ny7-player-control-right select{max-width:66px}#player-modal .ny7-player-side-card{padding:13px}}
 @media(prefers-reduced-motion:reduce){#player-modal .ny7-player-stage,#player-modal .ny7-player-side-card{scroll-behavior:auto;transition:none!important}}
+
+
+/* Film detay v2 — afiş ve konu alanı için çakışmasız, sabit grid */
+#detail-page-view:not(.is-series-redesign) .detail-main{
+  width:min(1240px,calc(100% - 48px))!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  min-width:0!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-overlap{
+  display:grid!important;
+  grid-template-columns:minmax(0,220px) minmax(0,1fr)!important;
+  align-items:start!important;
+  column-gap:clamp(24px,3vw,38px)!important;
+  row-gap:24px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-poster-column{
+  position:relative!important;
+  z-index:1!important;
+  width:100%!important;
+  max-width:220px!important;
+  min-width:0!important;
+  align-self:start!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-copy{
+  position:relative!important;
+  z-index:2!important;
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  align-self:start!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-copy>*{
+  min-width:0!important;
+  max-width:100%!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-copy .detail-description-panel{
+  position:relative!important;
+  display:block!important;
+  float:none!important;
+  clear:both!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  margin:22px 0 0!important;
+  overflow:hidden!important;
+}
+#detail-page-view:not(.is-series-redesign) .detail-description-panel p{
+  overflow-wrap:anywhere;
+}
+@media(max-width:760px){
+  #detail-page-view:not(.is-series-redesign) .detail-main{
+    width:calc(100% - 32px)!important;
+  }
+  #detail-page-view:not(.is-series-redesign) .detail-overlap{
+    grid-template-columns:minmax(0,104px) minmax(0,1fr)!important;
+    column-gap:16px!important;
+    row-gap:18px!important;
+    align-items:start!important;
+  }
+  #detail-page-view:not(.is-series-redesign) .detail-poster-column{
+    width:100%!important;
+    max-width:104px!important;
+  }
+  #detail-page-view:not(.is-series-redesign) .detail-copy{
+    width:100%!important;
+    max-width:100%!important;
+    padding-top:5px!important;
+  }
+  #detail-page-view:not(.is-series-redesign) .detail-copy .detail-description-panel{
+    margin-top:16px!important;
+    padding:14px!important;
+  }
+}
+@media(max-width:390px){
+  #detail-page-view:not(.is-series-redesign) .detail-overlap{
+    grid-template-columns:minmax(0,88px) minmax(0,1fr)!important;
+    column-gap:12px!important;
+  }
+  #detail-page-view:not(.is-series-redesign) .detail-poster-column{
+    max-width:88px!important;
+  }
+}
