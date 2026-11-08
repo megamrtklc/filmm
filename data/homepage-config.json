@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-08T11:50:00.000Z",
+  "updatedAt": "2026-11-08T12:23:02.479Z",
   "settings": {
-    "desktopCount": 6,
+    "desktopCount": 8,
     "mobileCount": 3,
     "interval": 6,
     "autoplay": true,
@@ -71,6 +71,12 @@
     },
     {
       "id": "archive-105",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "archive-34",
       "active": true,
       "headline": "",
       "description": ""
