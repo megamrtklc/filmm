@@ -523,10 +523,26 @@ function renderHomeCollections() {
         rail.innerHTML = items.length ? items.map(card).join('') : '<p class="text-sm text-slate-500">Bu koleksiyonda henüz içerik yok.</p>';
     };
     const valid = mediaDatabase.filter(item => item.image && item.title);
-    const featured = [...valid].sort((a,b) => score(b)-score(a)).slice(0,12);
+    const featured = [...valid].sort((a,b) => score(b)-score(a)).slice(0,5);
     const movies = valid.filter(item => item.type === 'movie').sort((a,b) => score(b)-score(a)).slice(0,12);
     const series = valid.filter(item => item.type === 'tv').sort((a,b) => score(b)-score(a)).slice(0,12);
-    fill('featured-rail', featured);
+    const featuredRail = document.getElementById('featured-rail');
+    if (featuredRail) {
+        featuredRail.classList.add('featured-number-rail');
+        featuredRail.innerHTML = featured.length ? featured.map((item,index) => `
+            <article class="featured-number-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
+                <span class="featured-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>
+                <div class="featured-number-poster">
+                    <img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="${index<3?'eager':'lazy'}" decoding="async">
+                    <span class="collection-rating">★ ${escapeCountryHtml(item.rating || '—')}</span>
+                </div>
+                <div class="featured-number-copy">
+                    <h3>${escapeCountryHtml(item.title)}</h3>
+                    ${originalTitleMarkup(item,'collection-original-title')}
+                    <p>${escapeCountryHtml(item.year || '')} <span>•</span> ${item.type === 'tv' ? 'Dizi' : 'Film'}</p>
+                </div>
+            </article>`).join('') : '<p class="text-sm text-slate-500">Bu koleksiyonda henüz içerik yok.</p>';
+    }
     const savedItems=valid.filter(item=>favorites.some(id=>String(id)===String(item.id)));
     const favoriteGenres=[...new Set(savedItems.flatMap(item=>[...(item.genre||'').split('/'),...(item.category||'').split('/')]).map(value=>value.trim().toLocaleLowerCase('tr-TR')).filter(Boolean))];
     const shuffleItems=items=>{
