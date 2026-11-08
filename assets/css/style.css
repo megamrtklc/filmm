@@ -7155,3 +7155,18 @@ body.detail-synopsis-open{overflow:hidden}
  #detail-page-view.is-series-redesign .detail-season-mark-all{font-size:9px;padding:0 8px}
  #detail-page-view.is-series-redesign .detail-episode-progress{width:100%;margin:0}
 }
+
+/* Compact season navigation and episode pagination */
+#detail-page-view .detail-season-picker{display:flex;align-items:center;gap:10px;margin:0 0 15px;padding:12px 14px;border:1px solid #ffffff12;border-radius:12px;background:#11151d}
+#detail-page-view .detail-season-picker label{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}
+#detail-page-view .detail-season-picker label>span{color:#d7ad55;font-size:9px;font-weight:850;letter-spacing:.14em}
+#detail-page-view .detail-season-picker select{width:100%;min-width:0;padding:10px 12px;border:1px solid #ffffff18;border-radius:8px;background:#1b202a;color:#f5f5f6;font-size:13px;font-weight:750}
+#detail-page-view .detail-season-step{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid #ffffff18;border-radius:9px;background:#ffffff08;color:#e5c778}
+#detail-page-view .detail-season-step:disabled{opacity:.3;cursor:not-allowed}
+#detail-page-view .detail-season-count{flex:0 0 auto;color:#9299a7;font-size:10px;font-variant-numeric:tabular-nums}
+#detail-page-view .detail-episode-pagination{display:flex;align-items:center;justify-content:center;gap:16px;margin:18px auto 2px}
+#detail-page-view .detail-episode-pagination button{display:grid;place-items:center;width:36px;height:36px;border:1px solid #ffffff1c;border-radius:9px;background:#171b24;color:#e7c16d}
+#detail-page-view .detail-episode-pagination button:disabled{opacity:.3;cursor:not-allowed}
+#detail-page-view .detail-episode-pagination span{min-width:120px;text-align:center;color:#b9bfca;font-size:11px;font-weight:750;font-variant-numeric:tabular-nums}
+#detail-page-view .detail-episode-card[hidden]{display:none!important}
+@media(max-width:600px){#detail-page-view .detail-season-picker{gap:7px;padding:10px}#detail-page-view .detail-season-step{flex-basis:34px;width:34px;height:36px}#detail-page-view .detail-season-count{font-size:9px}#detail-page-view .detail-season-picker select{font-size:12px;padding:10px 8px}}
