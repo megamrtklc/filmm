@@ -45,7 +45,7 @@
     </script><link rel="stylesheet" href="assets/css/style.css?v=20261108-mood-discovery-C4">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
     <link rel="stylesheet" href="assets/css/watch-center.css?v=20261108-watch-center-v2">
-    <link rel="stylesheet" href="assets/css/discovery-studio.css?v=20261108-discovery-v1">\n</head>
+</head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
     <!-- DİZİSOL REFERANSLI ÜST MENÜ -->
@@ -177,42 +177,6 @@
 
             <!-- ANA SAYFA KOLEKSİYONLARI -->
             <section id="home-collections" class="home-collections space-y-10" aria-label="Öne çıkan film ve dizi koleksiyonları">
-                <!-- PERDE KEŞİF STÜDYOSU -->
-                <section id="perde-discovery" aria-label="Tür, yıl, oyuncu ve yönetmene göre keşfet">
-                    <div class="pd-heading">
-                        <div><span class="pd-eyebrow">ARŞİVİNİ KEŞFET</span><h2>Aradığın hikâyeyi bul</h2><p>Tür, yıl, oyuncu veya yönetmen seç; Perde arşivindeki yapımları anında filtrele.</p></div>
-                        <span class="pd-heading-mark" aria-hidden="true"><i class="fa-solid fa-compass"></i></span>
-                    </div>
-                    <div class="pd-modes" role="group" aria-label="Keşif yöntemi">
-                        <button type="button" class="pd-mode is-active" data-pd-mode="genre" aria-pressed="true"><i class="fa-solid fa-shapes"></i> Türe göre</button>
-                        <button type="button" class="pd-mode" data-pd-mode="year" aria-pressed="false"><i class="fa-solid fa-calendar-days"></i> Yıla göre</button>
-                        <button type="button" class="pd-mode" data-pd-mode="actor" aria-pressed="false"><i class="fa-solid fa-user"></i> Oyuncuya göre</button>
-                        <button type="button" class="pd-mode" data-pd-mode="director" aria-pressed="false"><i class="fa-solid fa-clapperboard"></i> Yönetmene göre</button>
-                    </div>
-                    <div class="pd-panel" data-pd-panel="genre">
-                        <span class="pd-field-label">Bir tür seç</span>
-                        <div id="pd-genre-options" class="pd-genre-options"><button type="button" class="pd-genre-chip is-active" data-pd-genre="all">Tüm türler</button></div>
-                    </div>
-                    <div class="pd-panel" data-pd-panel="year" hidden>
-                        <div class="pd-filter-row">
-                            <div class="pd-field"><label for="pd-year-from">Başlangıç yılı</label><select id="pd-year-from"><option value="">Yıl seç</option></select></div>
-                            <div class="pd-field"><label for="pd-year-to">Bitiş yılı</label><select id="pd-year-to"><option value="">Yıl seç</option></select></div>
-                        </div>
-                    </div>
-                    <div class="pd-panel" data-pd-panel="actor" hidden>
-                        <div class="pd-filter-row"><div class="pd-field"><label for="pd-actor-input">Oyuncu adı</label><input id="pd-actor-input" type="search" list="pd-actor-options" placeholder="Örn. Leonardo DiCaprio" autocomplete="off"><datalist id="pd-actor-options"></datalist></div></div>
-                    </div>
-                    <div class="pd-panel" data-pd-panel="director" hidden>
-                        <div class="pd-filter-row"><div class="pd-field"><label for="pd-director-input">Yönetmen adı</label><input id="pd-director-input" type="search" list="pd-director-options" placeholder="Örn. Christopher Nolan" autocomplete="off"><datalist id="pd-director-options"></datalist></div></div>
-                    </div>
-                    <div class="pd-result-toolbar">
-                        <div><strong>Keşif sonuçları</strong><span id="pd-result-count">Katalog hazırlanıyor…</span></div>
-                        <div class="pd-sort-wrap"><label for="pd-type">Tür</label><select id="pd-type"><option value="all">Film + Dizi</option><option value="movie">Filmler</option><option value="tv">Diziler</option></select><label for="pd-sort">Sırala</label><select id="pd-sort"><option value="popular">Puana göre</option><option value="newest">En yeni</option><option value="oldest">En eski</option></select><button type="button" class="pd-reset" id="pd-reset">Sıfırla</button></div>
-                    </div>
-                    <div id="pd-results" class="pd-results" aria-live="polite"><div class="pd-empty"><i class="fa-solid fa-clapperboard"></i><strong>Katalog hazırlanıyor…</strong></div></div>
-                    <button type="button" id="pd-load-more" class="pd-load-more" hidden>Daha fazla yapım göster <i class="fa-solid fa-arrow-down"></i></button>
-                </section>
-
                 <div id="collection-featured" class="collection-section space-y-4">
                     <div class="collection-heading"><div><p class="collection-eyebrow">KEŞFET</p><h2>Öne Çıkan Yapımlar</h2></div></div>
                     <div id="featured-rail" class="collection-rail"></div>
@@ -531,6 +495,5 @@
     <script src="assets/js/player-pro.js?v=20261108-audio-track-detect-v1"></script>
     <script src="assets/js/series-pro.js?v=20261107-series-v5"></script>
     <script src="assets/js/watch-center.js?v=20261108-watch-center-v2"></script>
-    <script src="assets/js/discovery-studio.js?v=20261108-discovery-v1"></script>
 </body>
 </html>
