@@ -7394,7 +7394,7 @@ body.detail-synopsis-open{overflow:hidden}
 #detail-film-extras .detail-award-copy strong{display:block;max-width:100%;color:#e5e7eb;font-size:11px;line-height:1.45;overflow-wrap:anywhere;word-break:break-word}
 #detail-film-extras .detail-award-copy small{display:block;color:#a5aab4;font-size:9px;line-height:1.4}
 #detail-film-extras .detail-award-list li>a{flex:0 0 auto;color:#c8a45d;font-size:10px}
-#detail-film-extras .detail-award-list:not(.is-expanded) li:nth-child(n+5){display:none}
+#detail-film-extras #detail-awards-content:not(.is-expanded) .detail-award-list li:nth-child(n+5){display:none}#detail-film-extras #detail-awards-content.is-expanded .detail-award-list li:nth-child(n+5){display:flex}
 #detail-film-extras .detail-award-more{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:34px;margin-top:9px;padding:7px 10px;border:1px solid #c8a45d35;border-radius:8px;background:#c8a45d0b;color:#d9bd82;font-size:10px;font-weight:700}
 #detail-film-extras .detail-award-more:hover{background:#c8a45d18}
 #detail-film-extras .detail-award-source{margin-top:9px;color:#818895;font-size:9px}
