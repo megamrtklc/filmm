@@ -141,6 +141,29 @@
     const select = $('player-subtitle-track');
     if (select) select.value = selected >= 0 ? String(selected) : '-1';
   }
+
+  // Native MP4 ses kanalları yalnızca tarayıcı AudioTrackList sunuyorsa seçilebilir.
+  // HLS/DASH kanalları kendi adaptif oynatma motorları tarafından yönetilir.
+  function refreshNativeAudioTracks() {
+    if (hls || dash) return;
+    const audioTracks = video.audioTracks;
+    const tracks = audioTracks ? Array.from(audioTracks) : [];
+    const select = $('player-audio-track');
+    if (!tracks.length) {
+      setOptions('player-audio-track', [], 'Bu tarayıcı MP4 ses seçimini desteklemiyor');
+      return;
+    }
+    if (tracks.length < 2) {
+      setOptions('player-audio-track', [], 'Tek ses kanalı mevcut');
+      return;
+    }
+    const selected = tracks.findIndex(track => track.enabled);
+    setOptions('player-audio-track', tracks.map((track, index) => ({
+      value: index,
+      label: track.label || track.language || ('Ses ' + (index + 1))
+    })), 'Ses dili');
+    if (select) select.value = String(selected >= 0 ? selected : 0);
+  }
   function attachSavedSubtitleTracks() {
     if (typeof mediaDatabase === 'undefined' || !Array.isArray(mediaDatabase)) return;
     const episode = window.perdeEpisodeContext || null;
@@ -184,6 +207,8 @@
           value: index, label: track.name || track.lang || ('Ses ' + (index + 1))
         }));
         setOptions('player-audio-track', tracks, 'Ses dili');
+        const audioSelect = $('player-audio-track');
+        if (audioSelect && hls.audioTrack >= 0) audioSelect.value = String(hls.audioTrack);
         video.play().catch(() => {});
       });
       hls.on(window.Hls.Events.ERROR, (_event, data) => {
@@ -228,8 +253,10 @@
       if (/\.m3u8(?:$|[?#])|\.mpd(?:$|[?#])/i.test(source) && attachAdaptive(source)) return;
       destroyAdaptive();
       if ($('player-quality')) setOptions('player-quality', [], 'Tek kalite kaynağı');
-      if ($('player-audio-track')) setOptions('player-audio-track', [], 'Ek ses parçası yok');
-      return originalAttach.call(this, url, label);
+      if ($('player-audio-track')) setOptions('player-audio-track', [], 'Ses kanalları algılanıyor…');
+      const result = originalAttach.call(this, url, label);
+      refreshNativeAudioTracks();
+      return result;
     };
   }
   if (typeof originalOpen === 'function') {
@@ -308,14 +335,20 @@
     }
   });
   $('player-audio-track')?.addEventListener('change', event => {
+    if (event.target.value === '') return;
     const value = Number(event.target.value);
-    if (value < 0) return;
+    if (!Number.isInteger(value) || value < 0) return;
     if (hls) hls.audioTrack = value;
     else if (dash) {
       const tracks = dash.getTracksFor('audio') || [];
       if (tracks[value]) dash.setCurrentTrack(tracks[value]);
+    } else if (video.audioTracks && video.audioTracks[value]) {
+      Array.from(video.audioTracks).forEach((track, index) => { track.enabled = index === value; });
     }
   });
+  video.addEventListener('loadedmetadata', refreshNativeAudioTracks);
+  video.audioTracks?.addEventListener?.('addtrack', refreshNativeAudioTracks);
+  video.audioTracks?.addEventListener?.('removetrack', refreshNativeAudioTracks);
   $('player-subtitle-track')?.addEventListener('change', event => {
     const selected = Number(event.target.value);
     Array.from(video.textTracks || []).forEach((track, index) => { track.mode = selected >= 0 && selected === index ? 'showing' : 'disabled'; });
