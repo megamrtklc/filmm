@@ -855,3 +855,33 @@
   .sidebar-status{padding:7px;margin-bottom:4px}
   .back-to-site{padding-top:5px;padding-bottom:5px}
 }
+
+/* Yönetim paneli sol menü aç/kapat */
+.admin-topbar .mobile-menu{
+  display:grid;
+  flex:0 0 36px;
+  width:36px;
+  height:36px;
+  color:var(--gold-bright);
+  border-color:#d8ad5540;
+  background:#171c25;
+}
+.admin-sidebar,.admin-main{transition:width .24s ease,margin-left .24s ease,transform .25s ease}
+@media(min-width:901px){
+  body.sidebar-collapsed .admin-sidebar{width:76px;padding-left:12px;padding-right:12px}
+  body.sidebar-collapsed .admin-main{margin-left:76px}
+  body.sidebar-collapsed .admin-brand{justify-content:center;padding-left:0;padding-right:0}
+  body.sidebar-collapsed .admin-brand>span:last-child,
+  body.sidebar-collapsed .admin-sidebar .sidebar-caption,
+  body.sidebar-collapsed .admin-sidebar .nav-item span,
+  body.sidebar-collapsed .admin-sidebar .sidebar-status,
+  body.sidebar-collapsed .admin-sidebar .back-to-site{display:none!important}
+  body.sidebar-collapsed .admin-sidebar .nav-item{justify-content:center;gap:0;padding:12px 6px}
+  body.sidebar-collapsed .admin-sidebar .nav-item i{width:auto;font-size:16px}
+  body.sidebar-collapsed .admin-sidebar .admin-nav{padding-right:0}
+  body.sidebar-collapsed .admin-sidebar .sidebar-bottom{display:flex;justify-content:center}
+  body.sidebar-collapsed .admin-topbar{padding-left:25px}
+}
+@media(max-width:900px){
+  .admin-topbar .mobile-menu{display:grid}
+}
