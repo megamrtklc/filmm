@@ -1950,7 +1950,9 @@ function attachPlayerSource(url,label){
  clearYouTubePlayer();
  ['player-big-play','player-controls'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=false;});
  video.pause();video.removeAttribute('src');video.replaceChildren();
- const currentItem=mediaDatabase.find(entry=>String(entry.id)===String(activePlayerMediaId));
+ const episodeContext=window.perdeEpisodeContext||null;
+ const catalogItemId=episodeContext?.seriesId||activePlayerMediaId;
+ const currentItem=mediaDatabase.find(entry=>String(entry.id)===String(catalogItemId));
  if(currentItem&&Array.isArray(currentItem.subtitles)){
   const episode=window.perdeEpisodeContext||null;
   const matchingTracks=currentItem.subtitles.filter(track=>track&&track.url&&(!track.season||(episode&&Number(track.season)===Number(episode.season)&&Number(track.episode)===Number(episode.episode))));
