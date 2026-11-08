@@ -8903,3 +8903,38 @@ body.detail-synopsis-open{overflow:hidden}
   align-self:start!important;height:auto!important;min-height:0!important;
  }
 }
+
+
+/* PERDE — masaüstünde kişisel seçki kartını Mood Gallery ile eşit yükseklikte doldur */
+@media(min-width:821px){
+ #dashboard-view>.home-mood-continue-row{align-items:stretch!important}
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section{align-self:stretch!important}
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-gallery-shell{height:100%!important;box-sizing:border-box!important}
+ #dashboard-view>.home-mood-continue-row>#collection-personalized{
+  align-self:stretch!important;height:100%!important;min-height:0!important;
+  display:flex!important;flex-direction:column!important;
+ }
+ #collection-personalized .collection-heading{flex:0 0 auto!important}
+ #collection-personalized .collection-rail{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;
+  grid-auto-columns:unset!important;gap:12px 10px!important;
+  flex:1 1 auto!important;min-height:0!important;align-content:space-between!important;
+  overflow:hidden!important;padding:2px 1px 0!important;
+ }
+ #collection-personalized .collection-card{
+  display:flex!important;flex-direction:column!important;min-width:0!important;height:100%!important;
+ }
+ #collection-personalized .collection-card:nth-child(n+9){display:none!important}
+ #collection-personalized .collection-poster-wrap{
+  flex:0 0 auto!important;width:100%!important;aspect-ratio:4/5!important;overflow:hidden!important;
+ }
+ #collection-personalized .collection-poster-wrap img{width:100%!important;height:100%!important;object-fit:cover!important}
+ #collection-personalized .collection-card-copy{flex:1 0 auto!important;min-width:0!important;padding:6px 1px 0!important}
+ #collection-personalized .collection-card-copy h3{
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;
+  overflow:hidden!important;min-height:2.5em!important;font-size:10px!important;line-height:1.25!important;
+ }
+ #collection-personalized .collection-card-copy p{font-size:8px!important}
+ #collection-personalized .rail-controls{display:none!important}
+}
