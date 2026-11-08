@@ -403,7 +403,7 @@ function generateMoodPick() {
 function initializeMoodDiscovery() {
     activeMoodCategory = '';
     lastMoodRecommendationId = null;
-    moodShowAll = false;
+    moodShowAll = true;
     renderMoodDiscovery();
 }
 
