@@ -9036,3 +9036,15 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-personalized .personalized-refresh{min-height:30px!important;padding:0 9px!important;font-size:9px!important}
  #collection-personalized .personalized-row-summary{display:none!important}
 }
+
+
+/* Mood Gallery: TMDB görselleri hızlı yükle, başarısız afişte kırık görsel gösterme */
+#dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-recommendation-backdrop img{
+  width:100%;height:100%;object-fit:cover;
+}
+#dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-poster-frame.mood-poster-unavailable{
+  min-height:156px;display:grid;place-items:center;background:linear-gradient(145deg,#202630,#11151c);
+}
+#dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-poster-frame.mood-poster-unavailable:after{
+  content:"AFİŞ YÜKLENEMEDİ";color:#aeb4bf;font-size:9px;font-weight:800;letter-spacing:.08em;text-align:center;
+}
