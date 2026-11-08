@@ -333,7 +333,7 @@ const moodCategoryOptions = [
 ];
 let activeMoodCategory = '';
 let lastMoodRecommendationId = null;
-let moodShowAll = false;
+let moodShowAll = true;
 
 function getMoodCandidates(category) {
     const valid = mediaDatabase.filter(item => item && item.id != null && item.title && item.image);
