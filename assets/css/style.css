@@ -8889,3 +8889,17 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-personalized .collection-heading h2{font-size:18px!important}
  #collection-personalized .collection-rail{grid-auto-columns:calc((100% - 22px)/3)!important;gap:11px!important}
 }
+
+/* Masaüstü düzeltmesi: eski yarım-genişlik kuralını geçersiz kıl */
+@media(min-width:821px){
+ #dashboard-view .home-mood-continue-row #daily-pick-section.mood-discovery-hero{
+  width:100%!important;max-width:none!important;min-width:0!important;
+  margin:0!important;grid-column:auto!important;align-self:start!important;
+ }
+ #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-shell{
+  width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important;
+ }
+ #dashboard-view .home-mood-continue-row #collection-personalized{
+  align-self:start!important;height:auto!important;min-height:0!important;
+ }
+}
