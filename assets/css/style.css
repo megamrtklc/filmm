@@ -7126,3 +7126,32 @@ body.detail-synopsis-open{overflow:hidden}
  #detail-page-view.is-series-redesign .series-redesign-poster-slot{width:84px}
  #detail-page-view.is-series-redesign #detail-title{font-size:22px}
 }
+
+/* Sezon seçimi ve akıllı bölüm takibi */
+#detail-page-view.is-series-redesign .detail-season-rail{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 12px;margin:0 0 16px;scrollbar-width:thin;scrollbar-color:#5a4b31 transparent}
+#detail-page-view.is-series-redesign .detail-season-chip{flex:0 0 auto;min-width:126px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:11px 14px;border:1px solid #ffffff1c;border-radius:9px;background:#11151c;color:#e7e9ed;text-align:left;transition:border-color .2s,background .2s}
+#detail-page-view.is-series-redesign .detail-season-chip strong{font-size:12px;font-weight:800}
+#detail-page-view.is-series-redesign .detail-season-chip small{color:#9299a5;font-size:10px}
+#detail-page-view.is-series-redesign .detail-season-chip.is-active{border-color:#c69b4c;background:linear-gradient(145deg,#302719,#171a20);box-shadow:inset 0 0 0 1px #c69b4c22}
+#detail-page-view.is-series-redesign .detail-episode-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 12px}
+#detail-page-view.is-series-redesign .detail-episode-search-wrap{display:flex;align-items:center;gap:9px;min-width:220px;flex:1;padding:0 12px;border:1px solid #ffffff1c;border-radius:8px;background:#11151c;color:#8e96a4}
+#detail-page-view.is-series-redesign .detail-episode-search-wrap input{width:100%;min-width:0;height:39px;border:0;outline:0;background:transparent;color:#fff;font-size:11px}
+#detail-page-view.is-series-redesign .detail-episode-unwatched{display:inline-flex;align-items:center;gap:7px;color:#b9bec8;font-size:11px;cursor:pointer}
+#detail-page-view.is-series-redesign .detail-episode-unwatched input{accent-color:#c69b4c}
+#detail-page-view.is-series-redesign .detail-season-mark-all{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 11px;border:1px solid #c69b4c55;border-radius:8px;background:#c69b4c12;color:#e8c77f;font-size:10px;font-weight:750}
+#detail-page-view.is-series-redesign .detail-episode-progress{margin-left:auto}
+#detail-page-view.is-series-redesign .detail-episode-card[hidden]{display:none!important}
+#detail-page-view.is-series-redesign .detail-episode-overview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:0}
+#detail-page-view.is-series-redesign .detail-episode-overview.is-expanded{display:block;overflow:visible}
+#detail-page-view.is-series-redesign .detail-episode-overview-toggle{margin:-5px 0 10px;padding:0;border:0;background:transparent;color:#d5b36e;font-size:10px;font-weight:700}
+#detail-page-view.is-series-redesign .detail-episode-overview-toggle[aria-expanded="true"]{color:#aeb4c0}
+#detail-page-view.is-series-redesign .detail-episodes-filter-empty{padding:28px 0;color:#aeb4c0;text-align:center;font-size:12px}
+#detail-page-view.is-series-redesign .detail-episodes-filter-empty[hidden]{display:none}
+@media(max-width:600px){
+ #detail-page-view.is-series-redesign .detail-season-chip{min-width:112px;padding:10px 11px}
+ #detail-page-view.is-series-redesign .detail-episode-toolbar{align-items:stretch}
+ #detail-page-view.is-series-redesign .detail-episode-search-wrap{flex-basis:100%;min-width:0}
+ #detail-page-view.is-series-redesign .detail-episode-unwatched{flex:1}
+ #detail-page-view.is-series-redesign .detail-season-mark-all{font-size:9px;padding:0 8px}
+ #detail-page-view.is-series-redesign .detail-episode-progress{width:100%;margin:0}
+}
