@@ -392,7 +392,8 @@ function renderMoodDiscovery(recommendation = null) {
                     const boost = value => Math.max(18,Math.min(230,Math.round(value*.82+22)));
                     return 'rgb('+boost(pixel[0])+' '+boost(pixel[1])+' '+boost(pixel[2])+')';
                 });
-                posterElement.closest('.mood-gallery-poster-frame')?.style.setProperty('--mood-glow-colors',colors.join(','));
+                const frame = posterElement.closest('.mood-gallery-poster-frame');
+                if (frame) ['--glow-a','--glow-b','--glow-c','--glow-d'].forEach((name,index)=>frame.style.setProperty(name,colors[index]));
             } catch(error) {
                 posterElement.closest('.mood-gallery-poster-frame')?.classList.add('mood-ambilight-fallback');
             }
