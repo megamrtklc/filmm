@@ -142,9 +142,10 @@
   }
   function attachSavedSubtitleTracks() {
     if (typeof mediaDatabase === 'undefined' || !Array.isArray(mediaDatabase)) return;
-    const item = mediaDatabase.find(entry => String(entry.id) === String(mediaId));
-    if (!item || !Array.isArray(item.subtitles)) return;
     const episode = window.perdeEpisodeContext || null;
+    const catalogItemId = episode?.seriesId || mediaId;
+    const item = mediaDatabase.find(entry => String(entry.id) === String(catalogItemId));
+    if (!item || !Array.isArray(item.subtitles)) return;
     const matchingTracks = item.subtitles.filter(track => track && track.url && (!track.season || (episode && Number(track.season) === Number(episode.season) && Number(track.episode) === Number(episode.episode))));
     const hasEpisodeDefault = !!episode && matchingTracks.some(track => track.season && track.default);
     matchingTracks.forEach(track => {
