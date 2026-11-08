@@ -21,6 +21,8 @@
   function manualEntry(item) { return manualDiary().find(entry => String(entry.id) === String(item.id)) || null; }
   let activeTab = 'overview';
   let query = '';
+  let annualGoal = 100;
+  try { annualGoal = Math.max(1, Number(localStorage.getItem('perde_annual_goal_v1')) || 100); } catch (_) {}
 
   function mediaFor(id) { return catalog().find(item => String(item.id) === String(id)); }
   function poster(item) { return item?.tmdbPoster || item?.image || item?.poster || ''; }
@@ -132,9 +134,60 @@
       (upcoming.length ? '<section class="wc-section"><div class="wc-section-heading"><div><span>DİZİ TAKİBİ</span><h2>Sıradaki bölümlerin</h2></div><button type="button" data-wc-tab="episodes">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div><div class="wc-episode-grid">' + upcoming.map(row => episodeCard(row.item,row.next)).join('') + '</div></section>' : (data.seriesNeedingGuide.length ? '<section class="wc-section"><div class="wc-section-heading"><div><span>DİZİ TAKİBİ</span><h2>Bölüm rehberini hazırla</h2></div><button type="button" data-wc-tab="episodes">Tümünü gör <i class="fa-solid fa-arrow-right"></i></button></div><div class="wc-episode-grid">' + data.seriesNeedingGuide.slice(0,2).map(episodeSetupCard).join('') + '</div></section>' : '')) +
       section('İzleme listenden','SONRA İZLE',data.watchlistItems,'watchlist',4);
   }
+
+  function timestampFor(item) {
+    const manual = manualEntry(item) || {}, series = seriesEntry(item) || {}, row = stats()[String(item.id)] || {};
+    const candidates = [manual.watchedAt,manual.completedAt,manual.updatedAt,row.completedAt,row.lastWatchedAt,row.updatedAt,series.completedAt,series.updatedAt];
+    for (const value of candidates) {
+      const number = Number(value);
+      if (Number.isFinite(number) && number > 0) return number < 1e12 ? number * 1000 : number;
+      const parsed = Date.parse(String(value || ''));
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return 0;
+  }
+  function genreNames(item) {
+    const raw = item.tmdbGenres || item.genres || item.category || '';
+    const values = Array.isArray(raw) ? raw : String(raw).split(/[;,/|]/);
+    return [...new Set(values.map(value => String(value?.name || value || '').trim()).filter(Boolean))];
+  }
+  function renderStatistics(data) {
+    const yearNow = new Date().getFullYear();
+    const dated = data.watched.map(item => ({item,time:timestampFor(item)})).filter(row => row.time && new Date(row.time).getFullYear() === yearNow);
+    const monthly = Array.from({length:12},(_,i)=>({label:new Date(yearNow,i,1).toLocaleDateString('tr-TR',{month:'short'}),value:0}));
+    dated.forEach(row => monthly[new Date(row.time).getMonth()].value++);
+    const maxMonth = Math.max(1,...monthly.map(row=>row.value));
+    const genreMap = new Map();
+    data.watched.forEach(item => genreNames(item).forEach(name=>genreMap.set(name,(genreMap.get(name)||0)+1)));
+    const genres = [...genreMap.entries()].sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const seriesCount = data.watched.filter(item=>item.type==='tv').length;
+    const filmCount = data.watched.filter(item=>item.type!=='tv').length;
+    const episodes = catalog().filter(item=>item.type==='tv').reduce((sum,item)=>sum+watchedEpisodeCount(item),0);
+    const goalPercent = Math.min(100,Math.round(dated.length/annualGoal*100));
+    const goalOptions = [50,100,150,200,260];
+    return '<section class="wc-statistics">' +
+      '<div class="wc-statistics-intro"><div><span class="wc-eyebrow">İZLEME RAPORUN</span><h2>İzleme alışkanlıkların</h2><p>Bu özet, bu cihazda tutulan izleme kayıtlarından oluşturulur. Tarih bilgisi olmayan eski kayıtlar yıllık grafiğe eklenmez.</p></div><span class="wc-statistics-year">'+yearNow+'</span></div>' +
+      '<div class="wc-stats-grid wc-stats-grid-wide">' +
+      '<article class="wc-stat-card"><span><i class="fa-solid fa-film"></i> İZLENEN FİLMLER</span><strong>'+filmCount+'</strong><small>İzleme geçmişindeki filmler</small></article>' +
+      '<article class="wc-stat-card"><span><i class="fa-solid fa-tv"></i> İZLENEN DİZİLER</span><strong>'+seriesCount+'</strong><small>İzleme geçmişindeki diziler</small></article>' +
+      '<article class="wc-stat-card"><span><i class="fa-solid fa-clapperboard"></i> İZLENEN BÖLÜMLER</span><strong>'+episodes+'</strong><small>Dizi bölüm takip kayıtları</small></article>' +
+      '<article class="wc-stat-card"><span><i class="fa-solid fa-hourglass-half"></i> TOPLAM SÜRE</span><strong>'+esc(formatTime(data.totalSeconds))+'</strong><small>Kaydedilmiş oynatma süresi</small></article></div>' +
+      '<div class="wc-statistics-grid">' +
+      '<section class="wc-chart-panel"><div class="wc-panel-heading"><div><span>YILLIK HEDEF</span><h3>'+yearNow+' izleme hedefi</h3></div><strong>'+dated.length+' / '+annualGoal+'</strong></div>' +
+      '<div class="wc-goal-track"><i style="width:'+goalPercent+'%"></i></div><div class="wc-goal-foot"><span>'+goalPercent+'% tamamlandı</span><span>'+Math.max(0,annualGoal-dated.length)+' yapım kaldı</span></div>' +
+      '<div class="wc-goal-options">'+goalOptions.map(value=>'<button type="button" data-wc-goal="'+value+'" class="'+(annualGoal===value?'is-active':'')+'">'+value+'</button>').join('')+'</div>' +
+      '<p class="wc-data-note">Yıllık hedef, bu yıl tarih bilgisi bulunan izleme kayıtlarını sayar.</p></section>' +
+      '<section class="wc-chart-panel"><div class="wc-panel-heading"><div><span>EN ÇOK İZLEDİĞİN</span><h3>Favori türlerin</h3></div></div>' +
+      (genres.length?'<div class="wc-genre-bars">'+genres.map(([name,count])=>'<div class="wc-genre-row"><span>'+esc(name)+'</span><div><i style="width:'+Math.round(count/genres[0][1]*100)+'%"></i></div><b>'+count+'</b></div>').join('')+'</div>':'<p class="wc-data-note">Tür bilgisi bulunan izlenmiş yapım henüz yok.</p>')+'</section>' +
+      '</div><section class="wc-chart-panel wc-month-panel"><div class="wc-panel-heading"><div><span>AYLIK DAĞILIM</span><h3>'+yearNow+' izleme takvimi</h3></div><strong>'+dated.length+' kayıt</strong></div>' +
+      '<div class="wc-month-chart">'+monthly.map(row=>'<div class="wc-month-column"><span>'+row.value+'</span><div><i style="height:'+Math.max(row.value?8:2,Math.round(row.value/maxMonth*100))+'%"></i></div><small>'+esc(row.label)+'</small></div>').join('')+'</div>' +
+      (dated.length?'':'<p class="wc-data-note">Bu yıl için tarihli izleme kaydı bulunamadı. Yeni izleme kayıtları geldikçe grafik dolacak.</p>')+'</section></section>';
+  }
+
   function renderTab(data) {
-    const title = {watched:'İzlediklerim',watchlist:'İzleme listem',unfinished:'Yarım bıraktıklarım',episodes:'Sıradaki bölümler'}[activeTab] || 'Genel Bakış';
+    const title = {watched:'İzlediklerim',watchlist:'İzleme listem',unfinished:'Yarım bıraktıklarım',episodes:'Sıradaki bölümler',statistics:'İzleme istatistiklerin'}[activeTab] || 'Genel Bakış';
     const subtitle = {watched:'TAMAMLADIKLARIN',watchlist:'SONRA İZLE',unfinished:'KALDIĞIN YERDEN',episodes:'DİZİ TAKİBİ'}[activeTab] || '';
+    if (activeTab === 'statistics') return renderStatistics(data);
     if (activeTab === 'episodes') {
       const rows = data.nextEpisodes;
       const setup = data.seriesNeedingGuide || [];
@@ -183,11 +236,13 @@
     document.querySelectorAll('.main-nav a[data-watch-center-nav]').forEach(link => link.classList.remove('is-active'));
   }
   function setTab(tab) {
-    if (!['overview','watched','watchlist','unfinished','episodes'].includes(tab)) return;
+    if (!['overview','watched','watchlist','unfinished','episodes','statistics'].includes(tab)) return;
     activeTab = tab;
     render();
   }
   document.addEventListener('click', event => {
+    const goal = event.target.closest('[data-wc-goal]');
+    if (goal) { annualGoal = Number(goal.dataset.wcGoal) || 100; try { localStorage.setItem('perde_annual_goal_v1', String(annualGoal)); } catch (_) {} render(); return; }
     const tab = event.target.closest('[data-wc-tab]');
     if (tab) { setTab(tab.dataset.wcTab); return; }
     const open = event.target.closest('[data-wc-open]');
