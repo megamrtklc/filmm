@@ -7041,3 +7041,88 @@ body.detail-synopsis-open{overflow:hidden}
 @media(max-width:900px){#detail-page-view .detail-episode-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}}
 @media(max-width:600px){#detail-page-view .detail-episodes{width:calc(100% - 30px);margin:24px auto 34px}#detail-page-view .detail-episodes-heading{margin-bottom:18px}#detail-page-view .detail-episodes-heading h2{font-size:23px}#detail-page-view .detail-episodes-heading p{font-size:11px}#detail-page-view .detail-episode-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 11px}#detail-page-view .detail-episode-copy{padding-top:9px}#detail-page-view .detail-episode-title-row h3{font-size:12px}#detail-page-view .detail-episode-copy p{font-size:10px;min-height:30px;margin:6px 0 8px}#detail-page-view .detail-episode-meta{font-size:9px}#detail-page-view .detail-episode-toggle{font-size:10px}#detail-page-view .detail-episode-toolbar{gap:8px}#detail-page-view #detail-season-select{min-width:120px;padding:9px 28px 9px 10px}#detail-page-view .detail-episode-progress{font-size:10px}}
 @media(max-width:360px){#detail-page-view .detail-episode-list{grid-template-columns:1fr}#detail-page-view .detail-episode-title-row h3{font-size:14px}}
+
+
+/* Perde TV detail — independent editorial page structure */
+#detail-page-view.is-series-redesign{padding:0 0 70px;background:#08090c;color:#f6f6f7}
+#detail-page-view.is-series-redesign .detail-visual,
+#detail-page-view.is-series-redesign .detail-main{display:none!important}
+#detail-page-view.is-series-redesign .series-redesign{display:block;min-height:100vh;background:#08090c}
+#detail-page-view.is-series-redesign .series-redesign[hidden]{display:none!important}
+#detail-page-view.is-series-redesign .series-redesign-hero{position:relative;isolation:isolate;min-height:570px;overflow:hidden;background:#101218}
+#detail-page-view.is-series-redesign .series-redesign-backdrop{position:absolute;z-index:-2;inset:0;overflow:hidden}
+#detail-page-view.is-series-redesign .series-redesign-backdrop img{width:100%;height:100%;min-height:570px;display:block;object-fit:cover;object-position:center 30%;opacity:.65}
+#detail-page-view.is-series-redesign .series-redesign-hero:before{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(8,9,12,.97) 0%,rgba(8,9,12,.82) 38%,rgba(8,9,12,.25) 100%),linear-gradient(0deg,#08090c 0%,rgba(8,9,12,.05) 58%,rgba(8,9,12,.4) 100%)}
+#detail-page-view.is-series-redesign .series-redesign-topbar{position:relative;z-index:3;width:min(1240px,calc(100% - 48px));height:72px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;color:#d2d5dc;font-size:10px;font-weight:800;letter-spacing:.16em}
+#detail-page-view.is-series-redesign .series-redesign-back{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid #ffffff35;border-radius:7px;background:#090b10a8;color:#fff;font-size:12px;font-weight:650;letter-spacing:0}
+#detail-page-view.is-series-redesign .series-redesign-hero-inner{width:min(1240px,calc(100% - 48px));min-height:490px;margin:0 auto;padding:54px 0 58px;display:grid;grid-template-columns:190px minmax(0,1fr);align-items:end;gap:42px}
+#detail-page-view.is-series-redesign .series-redesign-poster-slot{width:190px}
+#detail-page-view.is-series-redesign .detail-poster-column{width:100%;display:flex;flex-direction:column;gap:9px}
+#detail-page-view.is-series-redesign .detail-poster-frame{width:100%;aspect-ratio:2/3;border-radius:8px;overflow:hidden;box-shadow:0 20px 60px #0009}
+#detail-page-view.is-series-redesign .detail-poster-frame img{width:100%;height:100%;object-fit:cover}
+#detail-page-view.is-series-redesign .detail-poster-trailer,
+#detail-page-view.is-series-redesign .detail-poster-watch{width:100%;min-height:40px;border-radius:7px;font-size:11px}
+#detail-page-view.is-series-redesign .series-redesign-copy-slot{min-width:0;max-width:800px}
+#detail-page-view.is-series-redesign .detail-copy{width:100%;max-width:none;padding:0;background:transparent;border:0;box-shadow:none}
+#detail-page-view.is-series-redesign .detail-rating-row{margin-bottom:12px}
+#detail-page-view.is-series-redesign #detail-category{color:#e8c57b!important;font-size:10px;letter-spacing:.13em}
+#detail-page-view.is-series-redesign #detail-title{max-width:850px;margin:0;color:#fff;font-size:clamp(34px,5vw,62px);font-weight:850;line-height:1.02;letter-spacing:-.045em}
+#detail-page-view.is-series-redesign .detail-original-title{display:block;margin-top:8px;color:#c4c8d0;font-size:14px}
+#detail-page-view.is-series-redesign .detail-subline{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:16px;color:#d0d2d8;font-size:12px}
+#detail-page-view.is-series-redesign .detail-description-panel{max-width:720px;margin-top:24px;padding:0;background:transparent;border:0;box-shadow:none}
+#detail-page-view.is-series-redesign .detail-description-panel>h2{margin:0 0 8px;color:#fff;font-size:12px;font-weight:750}
+#detail-page-view.is-series-redesign #detail-desc{max-width:690px;color:#d0d2da;font-size:13px;line-height:1.75}
+#detail-page-view.is-series-redesign .detail-score-row{display:flex;align-items:center;justify-content:flex-start;gap:18px;margin-top:17px}
+#detail-page-view.is-series-redesign .detail-score-items{display:flex;flex-wrap:wrap;gap:8px}
+#detail-page-view.is-series-redesign .detail-score-pill{min-height:32px;padding:5px 9px;border:1px solid #ffffff20;border-radius:6px;background:#090b1099}
+#detail-page-view.is-series-redesign .series-redesign-content{width:min(1240px,calc(100% - 48px));margin:0 auto}
+#detail-page-view.is-series-redesign #detail-series-dashboard{display:none!important}
+#detail-page-view.is-series-redesign #detail-episodes{width:100%;margin:0;padding:42px 0 38px;border:0;border-radius:0;background:transparent}
+#detail-page-view.is-series-redesign .detail-episodes-heading{margin:0 0 22px}
+#detail-page-view.is-series-redesign .detail-episodes-heading h2{font-size:27px}
+#detail-page-view.is-series-redesign .detail-episode-toolbar{margin-bottom:12px}
+#detail-page-view.is-series-redesign .detail-episode-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 20px}
+#detail-page-view.is-series-redesign .detail-episode-card{background:transparent}
+#detail-page-view.is-series-redesign .detail-episode-art{border-radius:8px;aspect-ratio:16/9}
+#detail-page-view.is-series-redesign #detail-personal-info,
+#detail-page-view.is-series-redesign #detail-credits,
+#detail-page-view.is-series-redesign #detail-related{width:100%;margin:0;padding:30px 0;border-top:1px solid #ffffff14;background:transparent}
+#detail-page-view.is-series-redesign #detail-related{border-bottom:0}
+#detail-page-view.is-series-redesign #detail-related .detail-related-heading{margin-bottom:18px}
+#detail-page-view.is-series-redesign #detail-related .detail-related-heading h2{font-size:25px}
+@media(max-width:800px){
+ #detail-page-view.is-series-redesign .series-redesign-hero{min-height:0}
+ #detail-page-view.is-series-redesign .series-redesign-backdrop img{min-height:560px}
+ #detail-page-view.is-series-redesign .series-redesign-hero-inner{min-height:0;grid-template-columns:132px minmax(0,1fr);gap:22px;padding:64px 0 36px;align-items:center}
+ #detail-page-view.is-series-redesign .series-redesign-poster-slot{width:132px}
+ #detail-page-view.is-series-redesign #detail-title{font-size:clamp(25px,5.8vw,40px)}
+ #detail-page-view.is-series-redesign .detail-description-panel{margin-top:14px}
+ #detail-page-view.is-series-redesign #detail-desc{font-size:12px;line-height:1.6}
+ #detail-page-view.is-series-redesign .series-redesign-content{width:calc(100% - 32px)}
+ #detail-page-view.is-series-redesign .detail-episode-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 13px}
+}
+@media(max-width:520px){
+ #detail-page-view.is-series-redesign .series-redesign-topbar{width:calc(100% - 32px);height:58px}
+ #detail-page-view.is-series-redesign .series-redesign-hero-inner{width:calc(100% - 32px);grid-template-columns:100px minmax(0,1fr);gap:15px;padding:58px 0 28px}
+ #detail-page-view.is-series-redesign .series-redesign-poster-slot{width:100px}
+ #detail-page-view.is-series-redesign .detail-poster-trailer,
+ #detail-page-view.is-series-redesign .detail-poster-watch{min-height:34px;font-size:9px}
+ #detail-page-view.is-series-redesign #detail-title{font-size:25px;line-height:1.06}
+ #detail-page-view.is-series-redesign .detail-original-title{font-size:10px}
+ #detail-page-view.is-series-redesign .detail-subline{gap:6px;margin-top:10px;font-size:10px}
+ #detail-page-view.is-series-redesign .detail-description-panel>h2{font-size:11px}
+ #detail-page-view.is-series-redesign #detail-desc{font-size:10px;line-height:1.5}
+ #detail-page-view.is-series-redesign .detail-score-pill{min-height:27px;padding:4px 6px;font-size:9px}
+ #detail-page-view.is-series-redesign .detail-score-actions{gap:5px}
+ #detail-page-view.is-series-redesign .series-redesign-content{width:calc(100% - 28px)}
+ #detail-page-view.is-series-redesign #detail-episodes{padding:28px 0}
+ #detail-page-view.is-series-redesign .detail-episodes-heading h2{font-size:22px}
+ #detail-page-view.is-series-redesign .detail-episode-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 10px}
+ #detail-page-view.is-series-redesign .detail-episode-title-row h3{font-size:11px}
+ #detail-page-view.is-series-redesign .detail-episode-copy p{font-size:9px}
+}
+@media(max-width:360px){
+ #detail-page-view.is-series-redesign .series-redesign-hero-inner{grid-template-columns:84px minmax(0,1fr);gap:12px}
+ #detail-page-view.is-series-redesign .series-redesign-poster-slot{width:84px}
+ #detail-page-view.is-series-redesign #detail-title{font-size:22px}
+}
