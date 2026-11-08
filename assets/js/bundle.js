@@ -1734,7 +1734,8 @@ function renderFilmDetailExtras(item){
   return names.some(name=>directors.includes(name));
  }).slice(0,8):[];
  const rawAwards=item.awards||item.tmdbAwards||item.awardSummary||item.nominations||item.oscars||[];
- const awardRows=(Array.isArray(rawAwards)?rawAwards:[rawAwards]).map(value=>{
+ const awardValues=Array.isArray(rawAwards)?rawAwards:(typeof rawAwards==='string'?rawAwards.split(/\r?\n/):[rawAwards]);
+ const awardRows=awardValues.map(value=>{
   if(typeof value==='string')return value.trim();
   if(!value||typeof value!=='object')return '';
   const name=value.name||value.title||value.award||value.organization||'';
