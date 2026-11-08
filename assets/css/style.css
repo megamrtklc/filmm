@@ -7525,3 +7525,17 @@ body.detail-synopsis-open{overflow:hidden}
     transition:none!important;
   }
 }
+
+
+/* Manşet katman sırası: afiş şeridi ve seçili afiş metnin önünde kalsın */
+#dashboard-view .home-feature-row #hero-section .hero-copy{
+  position:relative!important;
+  z-index:4!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumbnails{
+  position:absolute!important;
+  z-index:18!important;
+  isolation:isolate!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-thumb{z-index:1!important}
+#dashboard-view .home-feature-row #hero-section .hero-thumb.active{z-index:20!important}
