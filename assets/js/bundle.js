@@ -2007,7 +2007,18 @@ function openPlayerForMedia(id){
  ['player-big-play','player-controls'].forEach(id=>{const node=document.getElementById(id);if(node)node.hidden=false;});
  document.getElementById('player-empty-state').hidden=false;
  setPlayerError('');
- loadSavedPlayerSource(activePlayerMediaId,window.perdeEpisodeContext?'':item.watchUrl);
+ const episodeContext=window.perdeEpisodeContext||null;
+ let episodeWatchUrl='';
+ if(episodeContext&&item.watchUrl){
+  let sourceName=String(item.watchUrl);
+  try{sourceName=decodeURIComponent(sourceName);}catch(_){}
+  const season=Number(episodeContext.season),episode=Number(episodeContext.episode);
+  if(season>0&&episode>0){
+   const episodePattern=new RegExp('s0*'+season+'[\\s._-]*e0*'+episode+'(?:\\D|$)','i');
+   if(episodePattern.test(sourceName))episodeWatchUrl=String(item.watchUrl).trim();
+  }
+ }
+ loadSavedPlayerSource(activePlayerMediaId,episodeContext?episodeWatchUrl:item.watchUrl);
 }
 function saveAndPlayStream(){
  if(!activePlayerMediaId)return;
