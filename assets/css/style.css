@@ -8278,3 +8278,7 @@ body.detail-synopsis-open{overflow:hidden}
  #dashboard-view #daily-pick-section .mood-v2-result-actions{gap:6px}
  #dashboard-view #daily-pick-section .mood-v2-result-actions button{min-height:34px;padding:0 9px;font-size:9px}
 }
+
+/* Eski keşif kartından kalan kapsayıcı stillerini devre dışı bırak. */
+#dashboard-view #daily-pick-section .mood-discovery-result{display:block!important;position:relative!important;isolation:auto!important;min-height:0!important;height:auto!important;overflow:visible!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#dashboard-view #daily-pick-section .mood-discovery-result:before{display:none!important;content:none!important}
