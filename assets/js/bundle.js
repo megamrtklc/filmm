@@ -1351,7 +1351,7 @@ const DETAIL_EPISODE_PROGRESS_KEY='perde_episode_progress_v1';
 let detailEpisodeRequest=0,detailEpisodeState={itemId:'',seasons:[]};
 function getDetailTmdbAuth(){
  let token='';try{token=(localStorage.getItem('perde_tmdb_read_token_v1')||'').trim();}catch(_){}
- if(/^[a-z0-9]{32}$/i.test(token))return {query:'?api_key='+encodeURIComponent(token),headers:{Accept:'application/json'}};
+ if(/^[a-z0-9]{32}$/i.test(token))return {query:'&api_key='+encodeURIComponent(token),headers:{Accept:'application/json'}};
  if(token.split('.').length===3&&token.startsWith('eyJ'))return {query:'',headers:{Accept:'application/json',Authorization:'Bearer '+token}};
  return null;
 }
