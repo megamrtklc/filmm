@@ -1,14 +1,20 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-08T00:35:59.722Z",
+  "updatedAt": "2026-11-08T11:40:46.090Z",
   "settings": {
-    "desktopCount": 6,
+    "desktopCount": 8,
     "mobileCount": 4,
     "interval": 6,
     "autoplay": true,
     "pauseOnHover": true
   },
   "heroSlides": [
+    {
+      "id": "archive-6",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
     {
       "id": "archive-26",
       "active": true,
