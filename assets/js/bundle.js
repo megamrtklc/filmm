@@ -563,54 +563,95 @@ document.addEventListener('error', function(event) {
 }, true);
 
 // Katalog listeleme, arama ve filtreleme
-function renderMediaGrid(items = mediaDatabase) {
-            const container = document.getElementById('media-grid');
-            if (items.length === 0) {
-                const isList = location.hash.startsWith('#/listem');
-                container.innerHTML = `<div class="col-span-full ny7-empty-state">
-                    <span class="ny7-empty-icon"><i class="fa-solid ${isList ? 'fa-bookmark' : 'fa-film'}"></i></span>
-                    <h3>${isList ? 'Listen henüz boş' : 'Aradığın yapımı bulamadık'}</h3>
-                    <p>${isList ? 'Beğendiğin film ve dizileri listene ekleyerek burada saklayabilirsin.' : 'Filtreleri değiştirebilir veya kataloğun tamamına göz atabilirsin.'}</p>
-                    <button type="button" onclick="switchTab('all')"><i class="fa-solid fa-compass"></i> Keşfetmeye başla</button>
-                </div>`;
-                return;
-            }
+let currentMediaGridItems = null;
+let currentMediaGridPage = 1;
+const MEDIA_GRID_PAGE_SIZE = 12;
 
-            container.innerHTML = items.map(m => {
-                const isFav = favorites.includes(m.id) || favorites.includes(String(m.id));
-                const isWatch = watchlist.includes(m.id) || watchlist.includes(String(m.id));
-                return `
-                <div data-detail-id="${m.id}" role="button" tabindex="0" aria-label="${m.title} detayını aç" class="movie-card group cursor-pointer" style="--theme-glow: ${m.themeColor}">
-                    <div class="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-slate-900 shadow-xl">
-                        <img src="${m.image}" alt="${m.title}" loading="lazy" decoding="async" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
-                        
-                        <div class="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center z-10">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-black bg-black/80 text-brand-yellow border border-amber-400/30">
-                                ★ ${m.rating}
-                            </span>
-                            <div class="flex gap-1">
-                                <button onclick="toggleFavorite('${m.id}', event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all">
-                                    <i class="${isFav ? 'fa-solid text-brand-red' : 'fa-regular'} fa-heart text-xs"></i>
-                                </button>
-                                <button onclick="toggleWatchlist('${m.id}', event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all">
-                                    <i class="${isWatch ? 'fa-solid text-brand-yellow' : 'fa-regular'} fa-bookmark text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="absolute bottom-3 left-3 right-3 space-y-1">
-                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">
-                                ${m.tmdbGenres || m.category}
-                            </span>
-                            <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
-                            ${originalTitleMarkup(m,'grid-original-title')}
-                            <p class="text-[10px] text-slate-400 font-medium">${m.year} • ${m.duration}</p>
-                        </div>
+function renderMediaGrid(items) {
+    const container = document.getElementById('media-grid');
+    if (!container) return;
+    if (arguments.length > 0) {
+        currentMediaGridItems = Array.isArray(items) ? items.slice() : [];
+        currentMediaGridPage = 1;
+    } else if (!Array.isArray(currentMediaGridItems)) {
+        currentMediaGridItems = Array.isArray(mediaDatabase) ? mediaDatabase.slice() : [];
+    }
+    const allItems = currentMediaGridItems;
+    const totalPages = Math.max(1, Math.ceil(allItems.length / MEDIA_GRID_PAGE_SIZE));
+    currentMediaGridPage = Math.min(Math.max(1, currentMediaGridPage), totalPages);
+    if (allItems.length === 0) {
+        const isList = location.hash.startsWith('#/listem');
+        container.innerHTML = `<div class="col-span-full ny7-empty-state">
+            <span class="ny7-empty-icon"><i class="fa-solid ${isList ? 'fa-bookmark' : 'fa-film'}"></i></span>
+            <h3>${isList ? 'Listen henüz boş' : 'Aradığın yapımı bulamadık'}</h3>
+            <p>${isList ? 'Beğendiğin film ve dizileri listene ekleyerek burada saklayabilirsin.' : 'Filtreleri değiştirebilir veya kataloğun tamamına göz atabilirsin.'}</p>
+            <button type="button" onclick="switchTab('all')"><i class="fa-solid fa-compass"></i> Keşfetmeye başla</button>
+        </div>`;
+        renderMediaGridPagination(0, 0, 0);
+        return;
+    }
+    const firstIndex = (currentMediaGridPage - 1) * MEDIA_GRID_PAGE_SIZE;
+    const visibleItems = allItems.slice(firstIndex, firstIndex + MEDIA_GRID_PAGE_SIZE);
+    container.innerHTML = visibleItems.map(m => {
+        const isFav = favorites.includes(m.id) || favorites.includes(String(m.id));
+        const isWatch = watchlist.includes(m.id) || watchlist.includes(String(m.id));
+        return `
+        <div data-detail-id="${m.id}" role="button" tabindex="0" aria-label="${m.title} detayını aç" class="movie-card group cursor-pointer" style="--theme-glow: ${m.themeColor}">
+            <div class="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-slate-900 shadow-xl">
+                <img src="${m.image}" alt="${m.title}" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
+                <div class="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center z-10">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black bg-black/80 text-brand-yellow border border-amber-400/30">★ ${m.rating}</span>
+                    <div class="flex gap-1">
+                        <button onclick="toggleFavorite('${m.id}', event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all"><i class="${isFav ? 'fa-solid text-brand-red' : 'fa-regular'} fa-heart text-xs"></i></button>
+                        <button onclick="toggleWatchlist('${m.id}', event)" class="w-7 h-7 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-all"><i class="${isWatch ? 'fa-solid text-brand-yellow' : 'fa-regular'} fa-bookmark text-xs"></i></button>
                     </div>
                 </div>
-            `}).join('');
+                <div class="absolute bottom-3 left-3 right-3 space-y-1">
+                    <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">${m.tmdbGenres || m.category}</span>
+                    <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
+                    ${originalTitleMarkup(m,'grid-original-title')}
+                    <p class="text-[10px] text-slate-400 font-medium">${m.year} • ${m.duration}</p>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    renderMediaGridPagination(firstIndex + 1, Math.min(firstIndex + MEDIA_GRID_PAGE_SIZE, allItems.length), totalPages);
+}
+
+function renderMediaGridPagination(from, to, totalPages) {
+    let nav = document.getElementById('media-grid-pagination');
+    const grid = document.getElementById('media-grid');
+    if (!grid) return;
+    if (!nav) {
+        nav = document.createElement('nav');
+        nav.id = 'media-grid-pagination';
+        nav.className = 'media-grid-pagination';
+        nav.setAttribute('aria-label', 'Katalog sayfaları');
+        grid.insertAdjacentElement('afterend', nav);
+    }
+    if (totalPages <= 1) { nav.innerHTML = ''; nav.hidden = true; return; }
+    nav.hidden = false;
+    const makeButton = (label, page, extra = '', disabled = false, current = false) =>
+        `<button type="button" class="catalog-page-button ${extra}" data-page="${page}" ${disabled ? 'disabled' : ''} ${current ? 'aria-current="page"' : ''}>${label}</button>`;
+    let buttons = makeButton('<i class="fa-solid fa-chevron-left"></i>', currentMediaGridPage - 1, 'catalog-page-arrow', currentMediaGridPage === 1);
+    for (let page = 1; page <= totalPages; page++) {
+        if (totalPages > 7 && page > 2 && page < totalPages - 1 && Math.abs(page - currentMediaGridPage) > 1) {
+            if (page === 3 || page === totalPages - 2) buttons += '<span class="catalog-page-ellipsis">…</span>';
+            continue;
         }
+        buttons += makeButton(String(page), page, '', false, page === currentMediaGridPage);
+    }
+    buttons += makeButton('<i class="fa-solid fa-chevron-right"></i>', currentMediaGridPage + 1, 'catalog-page-arrow', currentMediaGridPage === totalPages);
+    nav.innerHTML = `<div class="catalog-page-summary">${from}–${to} / ${currentMediaGridItems.length} yapım</div><div class="catalog-page-controls">${buttons}</div>`;
+    nav.querySelectorAll('button[data-page]').forEach(button => button.addEventListener('click', () => {
+        const nextPage = Number(button.dataset.page);
+        if (!Number.isFinite(nextPage) || nextPage < 1 || nextPage > totalPages || nextPage === currentMediaGridPage) return;
+        currentMediaGridPage = nextPage;
+        renderMediaGrid();
+        grid.scrollIntoView({behavior:'smooth', block:'start'});
+    }));
+}
 
         function renderLiveTv() {
             const container = document.getElementById('live-tv-grid');
