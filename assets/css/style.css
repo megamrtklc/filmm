@@ -9362,3 +9362,57 @@ body.detail-synopsis-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   #hero-section .hero-arrow{transition:none!important}
 }
+
+
+/* PERDE HOTFIX — eski yüksek özgüllüklü manşet kurallarını kesin olarak geçersiz kıl */
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+  position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;
+  flex:1 1 auto!important;min-width:0!important;width:auto!important;
+  display:flex!important;gap:11px!important;align-items:flex-end!important;
+  padding:10px 4px 12px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+  flex:0 0 78px!important;width:78px!important;min-width:78px!important;
+  height:116px!important;aspect-ratio:2/3!important;
+  border-radius:8px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb img{
+  width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrows{
+  position:absolute!important;left:50%!important;right:auto!important;bottom:145px!important;
+  transform:translateX(-50%)!important;z-index:100!important;
+  display:flex!important;flex-direction:row!important;align-items:center!important;gap:5px!important;
+  padding:4px!important;border:1px solid rgba(255,255,255,.14)!important;
+  border-radius:999px!important;background:rgba(8,10,14,.58)!important;
+  box-shadow:0 6px 22px rgba(0,0,0,.24)!important;
+  -webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrow{
+  width:33px!important;height:33px!important;min-width:33px!important;
+  display:grid!important;place-items:center!important;border-radius:50%!important;
+  border:1px solid rgba(255,255,255,.12)!important;background:rgba(255,255,255,.06)!important;
+  color:#f4ead6!important;transform:none!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrow:hover{
+  background:rgba(226,189,120,.2)!important;border-color:rgba(226,189,120,.55)!important;
+  color:#f0d39a!important;
+}
+@media(max-width:820px){
+ #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+  flex:0 0 70px!important;width:70px!important;min-width:70px!important;height:105px!important;
+ }
+}
+@media(max-width:767px){
+ #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{gap:8px!important;padding-left:2px!important;padding-right:2px!important}
+ #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+  flex:0 0 62px!important;width:62px!important;min-width:62px!important;height:93px!important;
+ }
+ #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrows{bottom:142px!important}
+ #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrow{width:31px!important;height:31px!important;min-width:31px!important}
+}
+@media(max-width:380px){
+ #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+  flex:0 0 58px!important;width:58px!important;min-width:58px!important;height:87px!important;
+ }
+}
