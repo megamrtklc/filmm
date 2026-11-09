@@ -1,6 +1,12 @@
 /* PERDE — mobile app-style bottom navigation */
 (function(){
   'use strict';
+  function closeMobileCategories(){
+    var panel=document.getElementById('mobile-category-panel');
+    var trigger=document.querySelector('[data-mobile-categories-toggle]');
+    if(panel) panel.hidden=true;
+    if(trigger) trigger.setAttribute('aria-expanded','false');
+  }
   function syncMobileNavigation(){
     var hash=(window.location.hash||'').toLowerCase();
     var route='home';
@@ -15,8 +21,27 @@
     });
   }
   document.addEventListener('click',function(event){
+    var toggle=event.target.closest('[data-mobile-categories-toggle]');
+    if(toggle){
+      event.preventDefault();
+      var panel=document.getElementById('mobile-category-panel');
+      var open=panel && panel.hidden;
+      closeMobileCategories();
+      if(panel && open){ panel.hidden=false; toggle.setAttribute('aria-expanded','true'); }
+      return;
+    }
+    var option=event.target.closest('.mobile-category-option');
+    if(option){
+      closeMobileCategories();
+      document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(function(item){item.classList.remove('is-active');item.removeAttribute('aria-current');});
+      var categoryTrigger=document.querySelector('[data-mobile-categories-toggle]');
+      if(categoryTrigger) categoryTrigger.classList.add('is-active');
+      return;
+    }
+    if(!event.target.closest('.mobile-category-panel')) closeMobileCategories();
     var item=event.target.closest('.mobile-bottom-nav [data-mobile-route]');
     if(!item) return;
+    closeMobileCategories();
     if(item.getAttribute('data-mobile-route')==='home'){
       event.preventDefault();
       if(typeof window.showDashboard==='function') window.showDashboard();
@@ -24,7 +49,7 @@
     }
     syncMobileNavigation();
   });
-  window.addEventListener('hashchange',syncMobileNavigation);
+  window.addEventListener('hashchange',function(){closeMobileCategories();syncMobileNavigation();});
   document.addEventListener('DOMContentLoaded',syncMobileNavigation);
   syncMobileNavigation();
 })();
