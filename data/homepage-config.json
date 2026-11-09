@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T14:31:39.518Z",
+  "updatedAt": "2026-11-09T14:58:55.326Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -106,7 +106,7 @@
       ]
     },
     "movies": {
-      "title": "Popüler içerikler",
+      "title": "En çok izlenenler",
       "active": false,
       "displayCount": 6,
       "itemIds": [
