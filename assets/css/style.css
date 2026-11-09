@@ -10809,3 +10809,24 @@ body.detail-synopsis-open{overflow:hidden}
  #daily-pick-section .mood-discovery-result{border-radius:10px!important}
  #collection-personalized .personalized-editorial-card{border-radius:7px!important}
 }
+
+
+/* PERDE — Öne Çıkan Yapımlar: TOP 10 sinematik yatay sıralama */
+#collection-featured .featured-number-rail{
+ display:grid!important;grid-auto-flow:column!important;grid-auto-columns:clamp(168px,13vw,190px)!important;
+ grid-template-columns:none!important;gap:clamp(42px,6vw,82px)!important;
+ overflow-x:auto!important;overflow-y:visible!important;padding:14px 18px 18px 4px!important;
+ scroll-snap-type:x mandatory!important;scrollbar-width:thin!important;
+ scrollbar-color:rgba(255,255,255,.2) transparent!important;
+}
+#collection-featured .featured-number-card{position:relative!important;min-width:0!important;overflow:visible!important;scroll-snap-align:start!important;transition:transform .28s ease!important}
+#collection-featured .featured-number-card:hover,#collection-featured .featured-number-card:focus-visible{transform:translateY(-5px)!important}
+#collection-featured .featured-number{z-index:0!important;left:-43px!important;top:auto!important;bottom:42px!important;color:rgba(205,208,214,.38)!important;font-size:clamp(104px,10vw,148px)!important;line-height:.78!important;font-weight:900!important;letter-spacing:-.1em!important;text-shadow:none!important;opacity:1!important;pointer-events:none!important}
+#collection-featured .featured-number-poster{z-index:1!important;width:100%!important;margin:0!important;aspect-ratio:2/3!important;border-radius:9px!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:5px 7px 0 rgba(255,255,255,.10),0 14px 28px rgba(0,0,0,.32)!important}
+#collection-featured .featured-number-poster img{width:100%!important;height:100%!important;object-fit:cover!important}
+#collection-featured .featured-number-copy{z-index:2!important;padding:12px 3px 0 5px!important}
+#collection-featured .featured-number-copy h3{color:#f2f3f5!important;font-size:13px!important;font-weight:650!important;line-height:1.35!important;white-space:normal!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;min-height:35px!important;text-overflow:clip!important}
+#collection-featured .featured-number-copy p{font-size:10px!important;color:#9da2ac!important}
+#collection-featured .featured-number-poster .collection-rating{display:none!important}
+@media(max-width:820px){#collection-featured .featured-number-rail{grid-auto-columns:clamp(150px,43vw,190px)!important;gap:38px!important;padding-left:8px!important}#collection-featured .featured-number{left:-34px!important;bottom:39px!important;font-size:clamp(94px,23vw,124px)!important;color:rgba(205,208,214,.38)!important}#collection-featured .featured-number-copy{padding-left:3px!important}}
+@media(max-width:380px){#collection-featured .featured-number-rail{grid-auto-columns:43vw!important;gap:34px!important}}
