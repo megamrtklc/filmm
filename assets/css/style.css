@@ -11016,3 +11016,20 @@ body.detail-synopsis-open{overflow:hidden}
 @media(max-width:560px){
  #collection-featured .featured-number{font-weight:500!important;left:-17px!important}
 }
+
+
+/* Homepage hover preview card */
+.perde-hover-preview{position:fixed;z-index:10050;display:none;overflow:hidden;background:#202328;border:1px solid rgba(255,255,255,.09);border-radius:15px;box-shadow:0 22px 70px rgba(0,0,0,.72);opacity:0;transform:translateY(8px) scale(.985);transition:opacity .18s ease,transform .18s ease;pointer-events:none}
+.perde-hover-preview.is-visible{display:block;opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.perde-preview-media{position:relative;width:100%;aspect-ratio:16/9;background:#08090b;overflow:hidden}
+.perde-preview-poster,.perde-preview-player,.perde-preview-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.perde-preview-copy{padding:18px 20px 20px;color:#fff}
+.perde-preview-title-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.perde-preview-title{font-size:20px;line-height:1.2;font-weight:800;margin:0 0 6px}
+.perde-preview-meta{font-size:13px;line-height:1.45;color:#d1d5db;margin:0}
+.perde-preview-desc{font-size:13px;line-height:1.55;color:#b8bbc1;margin:12px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.perde-preview-watch{flex:0 0 auto;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;gap:7px;background:#facc15;color:#171717;font-size:0;font-weight:800;transition:transform .2s ease,background .2s ease}
+.perde-preview-watch span{display:none}
+.perde-preview-watch:hover{transform:scale(1.07);background:#ffe04a}
+@media(max-width:600px){.perde-hover-preview{width:min(360px,calc(100vw - 20px))!important;left:10px!important;top:auto!important;bottom:12px!important}.perde-preview-copy{padding:14px 15px 16px}.perde-preview-title{font-size:17px}.perde-preview-desc{font-size:12px;-webkit-line-clamp:2}}
+@media(prefers-reduced-motion:reduce){.perde-hover-preview{transition:none}}
