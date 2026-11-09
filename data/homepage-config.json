@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T12:22:41.506Z",
+  "updatedAt": "2026-11-09T14:01:25.635Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -129,6 +129,18 @@
         "archive-21",
         "archive-25",
         "archive-17"
+      ]
+    },
+    "personalized": {
+      "title": "Senin İçin Seçtiklerimiz",
+      "active": true,
+      "displayCount": 5,
+      "itemIds": [
+        "archive-26",
+        "archive-103",
+        "archive-124",
+        "archive-99",
+        "archive-125"
       ]
     }
   }
