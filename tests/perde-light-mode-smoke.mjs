@@ -320,7 +320,7 @@ async function checkPage(file, label, viewport, mobile) {
       }));
       report.routeChecks.push({ page: label, route, ...routeState });
       const routeName = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
-      await page.screenshot({ path: `${output}/${label}-${routeName}.png`, fullPage: true, animations: 'disabled' });
+      if (route === '#/filmler' && !mobile) await page.screenshot({ path: `${output}/${label}-filmler.png`, fullPage: true, animations: 'disabled' });
       if (routeState.scrollWidth - routeState.viewportWidth > 16) {
         throw new Error(`${label} ${route}: horizontal overflow ${routeState.scrollWidth}px > ${routeState.viewportWidth}px`);
       }
@@ -356,7 +356,9 @@ async function checkPage(file, label, viewport, mobile) {
         viewportWidth: innerWidth
       }));
       report.routeChecks.push({ page: label, adminTab: key, ...active });
-      await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
+      if (!mobile && ['catalog', 'homeRails', 'editor'].includes(key)) {
+        await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
+      }
       if (active.scrollWidth - active.viewportWidth > 16) {
         throw new Error(`${label} admin tab ${key}: horizontal overflow ${active.scrollWidth}px > ${active.viewportWidth}px`);
       }
