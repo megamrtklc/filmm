@@ -9479,3 +9479,25 @@ body.detail-synopsis-open{overflow:hidden}
     padding-left:42px!important;
   }
 }
+
+/* Manşet etiketi: ilk afişle aynı sol hizaya al ve ikonu vurgula */
+#dashboard-view .home-feature-row #hero-section .hero-kicker-wrap{
+  padding-left:48px!important;
+  box-sizing:border-box!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-kicker{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:9px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-kicker i{
+  color:#e2bd78!important;
+  font-size:14px!important;
+  line-height:1!important;
+  filter:drop-shadow(0 2px 6px rgba(226,189,120,.28));
+}
+@media(max-width:767px){
+  #dashboard-view .home-feature-row #hero-section .hero-kicker-wrap{
+    padding-left:42px!important;
+  }
+}
