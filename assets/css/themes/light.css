@@ -812,3 +812,44 @@ html[data-theme="light"] .admin-content .tmdb-result-state {
 html[data-theme="light"] .admin-content .catalog-rating-badge {
   background:#f5c518!important;color:#262626!important;
 }
+
+
+/* Small contrast corrections for controls and subtitle management */
+html[data-theme="light"] .admin-content .preview-pill {
+  background:#f4f0e8!important;border:1px solid #eadfc9!important;color:#94702f!important;
+}
+html[data-theme="light"] .admin-content .subtitle-online-heading strong,
+html[data-theme="light"] .admin-content .subtitle-online-heading span,
+html[data-theme="light"] .admin-content .subtitle-online-result,
+html[data-theme="light"] .admin-content .editor-subtitle-status,
+html[data-theme="light"] .admin-content .editor-subtitle-help {
+  color:#68717e!important;
+}
+html[data-theme="light"] .admin-content .subtitle-online-heading strong {
+  color:#9b742f!important;
+}
+html[data-theme="light"] .admin-content .subtitle-online-result {
+  background:#fff!important;border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .admin-content .home-rail-visibility {
+  background:#f5f0e6!important;border-color:#e8dcc5!important;color:#8d6a2d!important;
+}
+html[data-theme="light"] .admin-content .home-rail-visibility.is-published {
+  background:#eff8f2!important;border-color:#d9ecdf!important;color:#397b59!important;
+}
+html[data-theme="light"] .admin-content .home-rail-visibility-wrap small,
+html[data-theme="light"] .admin-content .home-rail-list-heading span {
+  color:#858b97!important;
+}
+html[data-theme="light"] .admin-content .collection-delete-button {
+  background:#fff1f0!important;border-color:#f1d4d2!important;color:#bd5550!important;
+}
+html[data-theme="light"] .admin-content .collection-delete-button:hover {
+  background:#ffe8e6!important;border-color:#e9b9b6!important;
+}
+html[data-theme="light"] .admin-content .editor-subtitle-item button {
+  color:#bd5550!important;
+}
+html[data-theme="light"] .admin-content .editor-subtitle-item input {
+  accent-color:#c7953e;
+}
