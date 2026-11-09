@@ -11611,7 +11611,8 @@ body.detail-synopsis-open{overflow:hidden}
   isolation:isolate!important;
   overflow:hidden!important;
   box-sizing:border-box!important;
-  border:1px solid rgba(205,169,101,.18)!important;
+  border:0!important;
+  outline:0!important;
   border-radius:15px!important;
   background:
     radial-gradient(ellipse at 78% 0%,rgba(167,133,85,.10),transparent 42%),
@@ -11664,5 +11665,29 @@ body.detail-synopsis-open{overflow:hidden}
   #dashboard-view #collection-personalized .collection-heading{
     padding-bottom:10px!important;
     margin-bottom:11px!important;
+  }
+}
+
+
+/* PERDE — Keşfet ve kişisel seçki kartları aynı hizada ve eşit yükseklikte */
+@media(min-width:821px){
+  #dashboard-view>.home-mood-continue-row{
+    align-items:stretch!important;
+  }
+  #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+  #dashboard-view>.home-mood-continue-row>#collection-personalized{
+    align-self:stretch!important;
+    height:458px!important;
+    min-height:458px!important;
+    max-height:458px!important;
+    margin-top:0!important;
+    margin-bottom:0!important;
+    box-sizing:border-box!important;
+  }
+  #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-gallery-shell,
+  #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-discovery-result{
+    height:100%!important;
+    min-height:458px!important;
+    box-sizing:border-box!important;
   }
 }
