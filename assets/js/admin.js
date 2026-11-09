@@ -1016,7 +1016,7 @@
   const homepageRailLabels={featured:'Öne Çıkan Yapımlar',movies:'Yüksek Puanlı Filmler',series:'Öne Çıkan Diziler',personalized:'Senin İçin Seçtiklerimiz'};
   let homepageRails={};
   let homepageRailPickersReady=false;
-  const homepageRailReplaceIndex={featured:null,movies:null,series:null};
+  const homepageRailReplaceIndex={featured:null,movies:null,series:null,personalized:null};
   function homepageRailDefaults(records=catalog){
     const score=item=>Number.parseFloat(item.rating)||0;
     const valid=records.filter(item=>item&&item.id!=null&&item.title&&item.image);
