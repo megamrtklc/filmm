@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-home-rails-manager-v1">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-home-rails-search-v2">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -288,63 +288,54 @@
 
 
         <section class="page-view" id="page-homeRails">
-          <div class="page-heading"><div><span class="eyebrow">ANA SAYFA DÜZENİ</span><h1>Anasayfa Rafları</h1><p>Her bölüm için gösterilecek kart sayısını seç ve yapımları sırala.</p></div><span class="status-chip"><i class="fa-solid fa-cloud-check"></i> Kalıcı kayıt</span></div>
-          <div class="home-rails-simple-note"><i class="fa-solid fa-circle-info"></i><span>Her vitrinde en az 6, en fazla 15 yapım bulunabilir. Kartları yukarı / aşağı taşıyabilir veya listeden kaldırabilirsin.</span></div>
+          <div class="page-heading"><div><span class="eyebrow">ANA SAYFA DÜZENİ</span><h1>Anasayfa Rafları</h1><p>Her vitrinin kart sayısını ve içeriğini buradan düzenle.</p></div><span class="status-chip"><i class="fa-solid fa-cloud-check"></i> Kalıcı kayıt</span></div>
+          <div class="home-rails-simple-note"><i class="fa-solid fa-circle-info"></i><span>Arama sonuçları raf türüne göre filtrelenir. Önceden eklenen yapımlar “Seçildi” olarak işaretlenir. Seçili kart listesi kendi içinde kaydırılır.</span></div>
           <div class="home-rails-manager-grid">
             <section class="surface-card home-rail-manager" data-home-rail="featured">
               <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 01</span><h2>Öne Çıkan Yapımlar</h2><p>Film ve diziler birlikte gösterilir.</p></div><label class="home-rail-active"><input id="home-rail-featured-active" type="checkbox" checked><span>Yayında</span></label></div>
-              <label class="hero-field-label" for="home-rail-featured-title">Bölüm başlığı</label>
-              <input class="home-rail-title-input" id="home-rail-featured-title" maxlength="64" value="Öne Çıkan Yapımlar">
+              <label class="hero-field-label" for="home-rail-featured-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-featured-title" maxlength="64" value="Öne Çıkan Yapımlar">
               <div class="home-rail-controls">
-                <label>Gösterilecek kart sayısı
-                  <select id="home-rail-featured-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select>
+                <label>Gösterilecek kart sayısı<select id="home-rail-featured-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select></label>
+                <label class="home-rail-search-label">Katalogda ara
+                  <input type="search" id="home-rail-featured-search" class="home-rail-search" placeholder="Film veya dizi adı yaz…" autocomplete="off">
                 </label>
-                <label class="home-rail-add-label">Katalogdan yapım ekle
-                  <select id="home-rail-featured-select"><option value="">Yapım seç…</option></select>
-                </label>
-                <button class="gold-button" id="home-rail-featured-add" type="button"><i class="fa-solid fa-plus"></i> Ekle</button>
               </div>
+              <div class="home-rail-search-results" id="home-rail-featured-results" aria-live="polite"></div>
               <p class="home-rail-warning" id="home-rail-featured-warning" role="status"></p>
               <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-featured-count">0 / 15</span></div>
               <div class="home-rail-items" id="home-rail-featured-list"></div>
             </section>
             <section class="surface-card home-rail-manager" data-home-rail="movies">
-              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 02</span><h2>Yüksek Puanlı Filmler</h2><p>Yalnızca filmler eklenebilir.</p></div><label class="home-rail-active"><input id="home-rail-movies-active" type="checkbox" checked><span>Yayında</span></label></div>
-              <label class="hero-field-label" for="home-rail-movies-title">Bölüm başlığı</label>
-              <input class="home-rail-title-input" id="home-rail-movies-title" maxlength="64" value="Yüksek Puanlı Filmler">
+              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 02</span><h2>Yüksek Puanlı Filmler</h2><p>Aramada yalnızca filmler gösterilir.</p></div><label class="home-rail-active"><input id="home-rail-movies-active" type="checkbox" checked><span>Yayında</span></label></div>
+              <label class="hero-field-label" for="home-rail-movies-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-movies-title" maxlength="64" value="Yüksek Puanlı Filmler">
               <div class="home-rail-controls">
-                <label>Gösterilecek kart sayısı
-                  <select id="home-rail-movies-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select>
+                <label>Gösterilecek kart sayısı<select id="home-rail-movies-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select></label>
+                <label class="home-rail-search-label">Katalogda ara
+                  <input type="search" id="home-rail-movies-search" class="home-rail-search" placeholder="Film adı yaz…" autocomplete="off">
                 </label>
-                <label class="home-rail-add-label">Katalogdan yapım ekle
-                  <select id="home-rail-movies-select"><option value="">Film seç…</option></select>
-                </label>
-                <button class="gold-button" id="home-rail-movies-add" type="button"><i class="fa-solid fa-plus"></i> Ekle</button>
               </div>
+              <div class="home-rail-search-results" id="home-rail-movies-results" aria-live="polite"></div>
               <p class="home-rail-warning" id="home-rail-movies-warning" role="status"></p>
               <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-movies-count">0 / 15</span></div>
               <div class="home-rail-items" id="home-rail-movies-list"></div>
             </section>
             <section class="surface-card home-rail-manager" data-home-rail="series">
-              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 03</span><h2>Öne Çıkan Diziler</h2><p>Yalnızca diziler eklenebilir.</p></div><label class="home-rail-active"><input id="home-rail-series-active" type="checkbox" checked><span>Yayında</span></label></div>
-              <label class="hero-field-label" for="home-rail-series-title">Bölüm başlığı</label>
-              <input class="home-rail-title-input" id="home-rail-series-title" maxlength="64" value="Öne Çıkan Diziler">
+              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 03</span><h2>Öne Çıkan Diziler</h2><p>Aramada yalnızca diziler gösterilir.</p></div><label class="home-rail-active"><input id="home-rail-series-active" type="checkbox" checked><span>Yayında</span></label></div>
+              <label class="hero-field-label" for="home-rail-series-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-series-title" maxlength="64" value="Öne Çıkan Diziler">
               <div class="home-rail-controls">
-                <label>Gösterilecek kart sayısı
-                  <select id="home-rail-series-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select>
+                <label>Gösterilecek kart sayısı<select id="home-rail-series-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select></label>
+                <label class="home-rail-search-label">Katalogda ara
+                  <input type="search" id="home-rail-series-search" class="home-rail-search" placeholder="Dizi adı yaz…" autocomplete="off">
                 </label>
-                <label class="home-rail-add-label">Katalogdan yapım ekle
-                  <select id="home-rail-series-select"><option value="">Dizi seç…</option></select>
-                </label>
-                <button class="gold-button" id="home-rail-series-add" type="button"><i class="fa-solid fa-plus"></i> Ekle</button>
               </div>
+              <div class="home-rail-search-results" id="home-rail-series-results" aria-live="polite"></div>
               <p class="home-rail-warning" id="home-rail-series-warning" role="status"></p>
               <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-series-count">0 / 15</span></div>
               <div class="home-rail-items" id="home-rail-series-list"></div>
             </section>
           </div>
           <div class="home-rails-save-row"><div><b id="home-rails-save-title">Anasayfa raf ayarları</b><small id="home-rails-save-status">Değişiklikler henüz kaydedilmedi.</small></div><button class="gold-button" id="home-rails-save" type="button"><i class="fa-solid fa-cloud-arrow-up"></i> Değişiklikleri kaydet ve yayınla</button></div>
-          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Katalogdaki yapımlar silinmez; yalnızca ilgili anasayfa kartı vitrinden kaldırılır.</p>
+          <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Kaldırma işlemi yalnızca ilgili vitrinden kaldırır; katalog kaydı silinmez.</p>
         </section>
 
         <section class="page-view" id="page-hero">
