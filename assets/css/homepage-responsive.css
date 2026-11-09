@@ -1057,3 +1057,19 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
   #mobile-hero-section .mobile-hero-topline{top:56px!important}
   #mobile-hero-section .mobile-hero-content{padding-top:150px!important}
 }
+
+
+/* PERDE — phone hero: top labels higher, artwork lifted slightly */
+@media screen and (max-width:767px){
+  #mobile-hero-section .mobile-hero-topline{
+    top:18px!important;
+  }
+  #mobile-hero-section .mobile-hero-art img{
+    transform:scale(1.06) translateY(-2.5%)!important;
+  }
+}
+@media screen and (max-width:380px){
+  #mobile-hero-section .mobile-hero-topline{
+    top:16px!important;
+  }
+}
