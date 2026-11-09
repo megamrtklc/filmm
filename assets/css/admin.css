@@ -1135,3 +1135,24 @@
 .collection-delete-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgba(220,90,90,.3);border-radius:8px;background:rgba(220,90,90,.07);color:#e6a0a0;cursor:pointer;font:700 10px 'DM Sans',sans-serif}
 .collection-delete-button:hover{background:rgba(220,90,90,.14);border-color:rgba(220,90,90,.55)}
 @media(max-width:680px){.collection-management-tools{grid-template-columns:minmax(0,1fr) auto}.collection-management-tools .collection-order-field{grid-column:1}.collection-management-tools .collection-delete-button{grid-column:2;grid-row:2}}
+
+
+/* Koleksiyonlar sayfasi: iki adimli, ferah ve sade yerlesim */
+#page-collections .collection-workflow-note{padding:11px 14px;margin-bottom:14px;border-radius:10px}
+#page-collections .collection-summary-strip{gap:9px;margin-bottom:14px}
+#page-collections .collection-summary-strip>div{padding:10px 13px;border-radius:10px}
+#page-collections .collection-summary-strip .catalog-summary-icon{width:30px;height:30px;min-width:30px}
+#page-collections .collection-summary-strip b{font-size:18px}
+#page-collections .collection-manager-layout{grid-template-columns:minmax(230px,.72fr) minmax(0,1.8fr);gap:12px}
+#page-collections .collection-library,#page-collections .collection-editor,#page-collections .collection-preview-panel{padding:15px}
+#page-collections .collection-preview-panel{grid-column:1/-1}
+#page-collections .collection-preview-rail{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+#page-collections .collection-preview-card b{font-size:10px}
+#page-collections .collection-step-heading{margin-bottom:5px}
+#page-collections .collection-list{gap:5px;margin-top:10px}
+#page-collections .collection-list-item{padding:9px;border-radius:8px}
+#page-collections .collection-list-icon{width:29px;height:29px;border-radius:7px}
+#page-collections .collection-list-copy b{font-size:11px}
+#page-collections .collection-list-copy small{font-size:9px}
+@media(max-width:900px){#page-collections .collection-manager-layout{grid-template-columns:minmax(0,1fr)}#page-collections .collection-preview-panel{grid-column:auto}#page-collections .collection-preview-rail{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:560px){#page-collections .collection-summary-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}#page-collections .collection-summary-strip>div{gap:7px;padding:9px 7px}#page-collections .collection-summary-strip small{font-size:7px;letter-spacing:.04em}#page-collections .collection-summary-strip b{font-size:16px}#page-collections .collection-summary-strip .catalog-summary-icon{width:25px;height:25px;min-width:25px}#page-collections .collection-preview-rail{grid-template-columns:repeat(3,minmax(0,1fr))}}
