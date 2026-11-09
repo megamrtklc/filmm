@@ -936,3 +936,26 @@
 .home-rail-item-actions .home-rail-remove:hover{background:rgba(223,133,133,.12)}
 .home-rail-controls>.gold-button:disabled{opacity:.45;cursor:not-allowed;transform:none}
 @media(max-width:650px){.home-rail-controls{grid-template-columns:1fr 1fr}.home-rail-controls>.gold-button{grid-column:1/-1;width:100%}}
+
+/* Anasayfa rafları: sabit kart düzeni ve türüne göre arama */
+.home-rails-manager-grid{grid-template-columns:minmax(0,1fr);gap:16px}
+.home-rail-manager{display:grid;grid-template-columns:minmax(0,1fr);min-width:0;overflow:hidden}
+.home-rail-controls{grid-template-columns:180px minmax(0,1fr);align-items:end}
+.home-rail-search{width:100%;height:41px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:#11151c;color:#f3f3f3;font-size:12px;outline:none}
+.home-rail-search:focus{border-color:var(--gold)}
+.home-rail-search-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px;max-height:220px;overflow:auto;padding:2px}
+.home-rail-search-result{display:flex;align-items:center;gap:9px;min-width:0;padding:8px 10px;border:1px solid rgba(255,255,255,.07);border-radius:8px;background:#11151c}
+.home-rail-search-result-type{flex:0 0 35px;color:#b99b60;font-size:8px;font-weight:800}
+.home-rail-search-result-title{display:grid;gap:2px;min-width:0;flex:1}
+.home-rail-search-result-title b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#eee}
+.home-rail-search-result-title small{font-size:9px;color:#89919d}
+.home-rail-search-result button{flex:0 0 auto;border:1px solid rgba(216,173,85,.28);border-radius:6px;background:rgba(216,173,85,.1);color:#e8c77f;padding:5px 9px;font-size:10px;cursor:pointer}
+.home-rail-selected-label{flex:0 0 auto;color:#83c99f;font-size:10px;font-weight:700;white-space:nowrap}
+.home-rail-search-empty{grid-column:1/-1;padding:12px;border:1px dashed var(--line);border-radius:8px;color:var(--muted);font-size:11px;text-align:center}
+.home-rail-items{max-height:390px;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;align-content:start}
+.home-rail-item{grid-template-columns:25px 38px minmax(0,1fr) auto}
+.home-rail-item>img,.home-rail-item-placeholder{width:38px;height:50px}
+.home-rail-item-actions{flex-wrap:nowrap}
+.home-rail-item-actions button{flex:0 0 auto}
+.home-rail-manager-heading{margin-bottom:12px}
+@media(max-width:700px){.home-rail-controls{grid-template-columns:1fr}.home-rail-search-results{grid-template-columns:1fr;max-height:190px}.home-rail-item{grid-template-columns:20px 34px minmax(0,1fr) auto}.home-rail-item>img,.home-rail-item-placeholder{width:34px;height:46px}.home-rail-item-actions{gap:3px}}
