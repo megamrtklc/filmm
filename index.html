@@ -44,7 +44,7 @@
         }
     </script><link rel="stylesheet" href="assets/css/style.css?v=20261109-editorial-cards-v23">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
-    <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261109-responsive-v1">
+    <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261109-mobile-nav-v1">
     
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
@@ -115,6 +115,17 @@
             </div>
         </nav>
     </header>
+
+
+
+    <!-- Mobil uygulama tarzı alt gezinme -->
+    <nav class="mobile-bottom-nav" aria-label="Mobil ana gezinme">
+        <a href="#" class="mobile-nav-item" data-mobile-route="home" aria-label="Anasayfa"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Anasayfa</span></a>
+        <a href="#/filmler" class="mobile-nav-item" data-mobile-route="filmler" aria-label="Filmler"><i class="fa-solid fa-film" aria-hidden="true"></i><span>Filmler</span></a>
+        <a href="#/diziler" class="mobile-nav-item" data-mobile-route="diziler" aria-label="Diziler"><i class="fa-solid fa-tv" aria-hidden="true"></i><span>Diziler</span></a>
+        <a href="#/kesfet" class="mobile-nav-item" data-mobile-route="kesfet" aria-label="Keşfet"><i class="fa-solid fa-compass" aria-hidden="true"></i><span>Keşfet</span></a>
+        <a href="#/listem" class="mobile-nav-item" data-mobile-route="listem" aria-label="Listem"><i class="fa-solid fa-bookmark" aria-hidden="true"></i><span>Listem</span></a>
+    </nav>
 
     <!-- DASHBOARD VIEW -->
     <div id="dashboard-view" class="flex-1 flex flex-col transition-opacity duration-300">
@@ -449,7 +460,8 @@
     </div>
 
     <!-- Modüler JavaScript dosyaları -->
-    <script src="assets/js/responsive-mode.js?v=20261109-responsive-v1"></script>
+<script src="assets/js/mobile-bottom-nav.js?v=20261109-mobile-nav-v1"></script>
+    <script src="assets/js/responsive-mode.js?v=20261109-mobile-nav-v1"></script>
     <script src="assets/js/bundle.js?v=20261109-personalized-rail-v20"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
