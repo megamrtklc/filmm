@@ -1102,3 +1102,13 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 @media(prefers-reduced-motion:reduce){
   #dashboard-view #mobile-hero-section .mobile-hero-overlay-arrows button{transition:none!important}
 }
+
+
+/* Telefon manşet başlığı tek satırda kalır; uzun başlıklar JS ile sığacak kadar küçülür. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  #mobile-hero-section #mobile-hero-title{
+    display:block!important;width:100%!important;max-width:100%!important;
+    white-space:nowrap!important;overflow:visible!important;overflow-wrap:normal!important;
+    word-break:normal!important;line-height:1.08!important;
+  }
+}

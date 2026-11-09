@@ -101,6 +101,18 @@ function fitHeroTitleToWidth() {
             title.style.whiteSpace = 'normal';
         }
         window.addEventListener('resize', fitHeroTitleToWidth);
+        function fitMobileHeroTitleToWidth() {
+            const title = document.getElementById('mobile-hero-title');
+            if (!title) return;
+            title.style.fontSize = '';
+            const baseSize = parseFloat(window.getComputedStyle(title).fontSize) || 38;
+            let size = baseSize;
+            while (title.scrollWidth > title.clientWidth + 1 && size > 17) {
+                size -= 1;
+                title.style.fontSize = size + 'px';
+            }
+        }
+        window.addEventListener('resize', fitMobileHeroTitleToWidth);
 
         function setHeroMedia(id, userAction = false) {
             const item = mediaDatabase.find(m => m.id === id) || mediaDatabase[0];
@@ -136,7 +148,7 @@ function fitHeroTitleToWidth() {
                 <span class="hero-rating-badge tmdb"><b class="tmdb-mark">TMDB</b><strong>${ratingValue(item.tmdbRating)}</strong></span>
 `;
             const runtime = item.type === 'tv'
-                ? [item.tmdbSeasons || item.seasons ? `${item.tmdbSeasons || item.seasons} sezon` : '', item.tmdbEpisodes || item.episodes ? `${item.tmdbEpisodes || item.episodes} bölüm` : '', item.tmdbRuntime || item.duration || ''].filter(Boolean).join(' • ')
+                ? [item.tmdbSeasons || item.seasons ? `${item.tmdbSeasons || item.seasons} sezon` : '', item.tmdbEpisodes || item.episodes ? `${item.tmdbEpisodes || item.episodes} bölüm` : ''].filter(Boolean).join(' • ')
                 : (item.tmdbRuntime || item.duration || '');
             const meta = document.getElementById('hero-meta');
             meta.replaceChildren();
@@ -175,7 +187,10 @@ function fitHeroTitleToWidth() {
                 const mobileType = document.getElementById('mobile-hero-type');
                 if (mobileType) mobileType.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i> DİZİ' : '<i class="fa-solid fa-film" aria-hidden="true"></i> FİLM';
                 const mobileTitle = document.getElementById('mobile-hero-title');
-                if (mobileTitle) mobileTitle.textContent = heroPresentation.headline || item.title;
+                if (mobileTitle) {
+                    mobileTitle.textContent = heroPresentation.headline || item.title;
+                    fitMobileHeroTitleToWidth();
+                }
                 const mobileOriginal = document.getElementById('mobile-hero-original-title');
                 if (mobileOriginal) { mobileOriginal.textContent = item.originalTitle || ''; mobileOriginal.hidden = !item.originalTitle; }
                 const mobileRatings = document.getElementById('mobile-hero-ratings');
