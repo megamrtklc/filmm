@@ -2384,10 +2384,11 @@ document.addEventListener('keydown', function(event) {
         if(trailerId)playTimer=setTimeout(()=>{
             if(activeId!==String(item.id)||!box.classList.contains('is-visible'))return;
             poster.style.display='none';
-            player.innerHTML='<iframe title="'+String(item.title||'').replace(/[<>&"]/g,'')+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+trailerId+'?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+            player.innerHTML='<iframe title="'+String(item.title||'').replace(/[<>&"]/g,'')+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+trailerId+'?autoplay=1&mute=0&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin='+encodeURIComponent(window.location.origin)+'" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
             const frame=player.querySelector('iframe');
             const volume=Number(box.querySelector('.perde-preview-volume-range').value)||30;
             frame.addEventListener('load',()=>{
+                frame.contentWindow.postMessage(JSON.stringify({event:'command',func:'unMute',args:[]}),'*');
                 frame.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[volume]}),'*');
             },{once:true});
         },2000);
