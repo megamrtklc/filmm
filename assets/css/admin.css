@@ -1324,3 +1324,63 @@ body.catalog-delete-open{overflow:hidden}
   max-height:min(360px,55vh)!important;
   overscroll-behavior:contain!important;
 }
+
+
+/* PERDE — Koleksiyon Rafları: sade akış ve renk kodlu çalışma alanları */
+#page-collections .collection-workflow-note{
+  padding:10px 14px;margin:0 0 13px;border:1px solid rgba(199,157,83,.2);
+  background:linear-gradient(105deg,rgba(199,157,83,.075),rgba(255,255,255,.018));
+}
+#page-collections .collection-workflow-note b{font-size:12px}
+#page-collections .collection-workflow-note span{font-size:11px}
+#page-collections .collection-summary-strip{gap:10px;margin-bottom:14px}
+#page-collections .collection-summary-strip>div{
+  border:1px solid rgba(255,255,255,.07);border-radius:11px;
+  background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+}
+#page-collections .collection-summary-strip>div:nth-child(1){border-left:3px solid #6d9fe0;background:linear-gradient(110deg,rgba(65,112,174,.17),rgba(20,29,43,.55))}
+#page-collections .collection-summary-strip>div:nth-child(2){border-left:3px solid #69bd9a;background:linear-gradient(110deg,rgba(58,135,105,.16),rgba(19,34,30,.5))}
+#page-collections .collection-summary-strip>div:nth-child(3){border-left:3px solid #b18ad8;background:linear-gradient(110deg,rgba(126,86,161,.17),rgba(34,25,43,.52))}
+#page-collections .collection-manager-layout{gap:13px;align-items:stretch}
+#page-collections .collection-library,
+#page-collections .collection-editor,
+#page-collections .collection-preview-panel{
+  border:1px solid rgba(255,255,255,.075);border-radius:13px;overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.13);
+}
+#page-collections .collection-library{
+  background:linear-gradient(145deg,rgba(38,67,103,.34),rgba(19,25,36,.97) 58%);
+  border-top:2px solid rgba(109,159,224,.72);
+}
+#page-collections .collection-editor{
+  background:linear-gradient(145deg,rgba(35,83,65,.25),rgba(18,27,26,.98) 55%);
+  border-top:2px solid rgba(105,189,154,.72);
+}
+#page-collections .collection-preview-panel{
+  background:linear-gradient(145deg,rgba(77,53,99,.25),rgba(25,21,33,.98) 58%);
+  border-top:2px solid rgba(177,138,216,.72);
+}
+#page-collections .collection-step-heading{margin-bottom:13px;gap:10px}
+#page-collections .collection-library .collection-step-heading>span{
+  color:#a9c9f1;background:rgba(109,159,224,.17)
+}
+#page-collections .collection-editor .collection-step-heading>span{
+  color:#9cddbf;background:rgba(105,189,154,.16)
+}
+#page-collections .collection-preview-panel .collection-step-heading>span{
+  color:#d0b2ed;background:rgba(177,138,216,.17)
+}
+#page-collections .collection-list-item{background:rgba(7,14,24,.28);border-color:rgba(160,190,225,.07)}
+#page-collections .collection-list-item:hover{background:rgba(83,130,190,.13);border-color:rgba(109,159,224,.3)}
+#page-collections .collection-list-item.selected{background:rgba(83,130,190,.2);border-color:rgba(109,159,224,.58)}
+#page-collections .collection-list-icon{background:rgba(109,159,224,.15);color:#a9c9f1}
+#page-collections .collection-create-form{border-color:rgba(160,190,225,.15)}
+#page-collections .collection-editor-title{border-color:rgba(105,189,154,.2)}
+#page-collections .collection-item-row{background:rgba(6,18,15,.32);border-color:rgba(105,189,154,.12)}
+#page-collections .collection-items-heading{border-color:rgba(105,189,154,.2)}
+#page-collections .collection-preview-note{border-color:rgba(177,138,216,.2)}
+#page-collections .collection-preview-card img,
+#page-collections .collection-preview-card>.collection-item-placeholder{box-shadow:0 5px 14px rgba(0,0,0,.25)}
+@media(max-width:900px){
+  #page-collections .collection-library,#page-collections .collection-editor,#page-collections .collection-preview-panel{padding:14px}
+}
