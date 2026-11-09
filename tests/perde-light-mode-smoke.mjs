@@ -6,7 +6,7 @@ const output = 'artifacts';
 await fs.mkdir(output, { recursive: true });
 
 const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
-const report = { checks: [], pageErrors: [] };
+const report = { checks: [], routeChecks: [], imageDiagnostics: [], pageErrors: [] };
 
 async function checkPage(file, label, viewport, mobile) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
@@ -29,6 +29,40 @@ async function checkPage(file, label, viewport, mobile) {
     return document.documentElement.dataset.theme === 'light' && link && link.sheet;
   }, null, { timeout: 15000 });
   await page.waitForTimeout(1800);
+
+  // Trigger native lazy-loading before taking full-page screenshots.
+  await page.evaluate(async () => {
+    const step = Math.max(400, Math.floor(innerHeight * 0.75));
+    for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+      window.scrollTo(0, y);
+      await new Promise(resolve => setTimeout(resolve, 110));
+    }
+    const images = [...document.images];
+    await Promise.race([
+      Promise.all(images.map(img => img.complete ? Promise.resolve() : new Promise(resolve => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+        setTimeout(resolve, 4500);
+      }))),
+      new Promise(resolve => setTimeout(resolve, 9000))
+    ]);
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(650);
+
+  const imageDiagnostics = await page.evaluate(() => [...document.images].map(img => ({
+    src: img.currentSrc || img.src,
+    loaded: img.complete && img.naturalWidth > 0,
+    naturalWidth: img.naturalWidth,
+    loading: img.loading || 'eager',
+    alt: img.alt || ''
+  })));
+  report.imageDiagnostics.push({
+    page: label,
+    total: imageDiagnostics.length,
+    loaded: imageDiagnostics.filter(x => x.loaded).length,
+    failed: imageDiagnostics.filter(x => !x.loaded).slice(0, 30)
+  });
 
   const state = await page.evaluate(() => {
     const header = document.querySelector('.site-header, .admin-sidebar');
@@ -234,6 +268,81 @@ async function checkPage(file, label, viewport, mobile) {
     darkRestore: darkResult,
     result: 'passed'
   });
+
+  if (file === 'index.html') {
+    const routes = ['#/filmler', '#/diziler', '#/kesfet', '#/listem', '#/kategori/Aksiyon'];
+    for (const route of routes) {
+      await page.evaluate(value => { location.hash = value; }, route);
+      await page.waitForTimeout(900);
+      await page.evaluate(async () => {
+        const step = Math.max(400, Math.floor(innerHeight * 0.75));
+        for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise(resolve => setTimeout(resolve, 90));
+        }
+        await Promise.race([
+          Promise.all([...document.images].map(img => img.complete ? Promise.resolve() : new Promise(resolve => {
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+            setTimeout(resolve, 2500);
+          }))),
+          new Promise(resolve => setTimeout(resolve, 6000))
+        ]);
+        window.scrollTo(0, 0);
+      });
+      await page.waitForTimeout(250);
+      const routeState = await page.evaluate(() => ({
+        hash: location.hash,
+        title: document.querySelector('#catalog-page h1, #detail-title, #dashboard-view h1, main h1')?.textContent?.trim() || '',
+        visibleViews: [...document.querySelectorAll('#dashboard-view, #catalog-page, #detail-page-view, #actor-page-view')]
+          .filter(el => !el.classList.contains('hidden') && getComputedStyle(el).display !== 'none')
+          .map(el => el.id),
+        scrollWidth: document.documentElement.scrollWidth,
+        viewportWidth: innerWidth,
+        imageCount: document.images.length,
+        brokenImages: [...document.images].filter(img => img.src && img.complete && img.naturalWidth === 0).length
+      }));
+      report.routeChecks.push({ page: label, route, ...routeState });
+      const routeName = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+      await page.screenshot({ path: `${output}/${label}-${routeName}.png`, fullPage: true, animations: 'disabled' });
+      if (routeState.scrollWidth > routeState.viewportWidth) {
+        throw new Error(`${label} ${route}: horizontal overflow ${routeState.scrollWidth}px > ${routeState.viewportWidth}px`);
+      }
+    }
+    const firstPoster = page.locator('[data-detail-id]').first();
+    if (await firstPoster.count()) {
+      await firstPoster.click({ timeout: 5000 }).catch(() => {});
+      await page.waitForTimeout(900);
+      const detailState = await page.evaluate(() => ({
+        hash: location.hash,
+        title: document.querySelector('#detail-title')?.textContent?.trim() || '',
+        visible: !!document.querySelector('#detail-page-view') && !document.querySelector('#detail-page-view').classList.contains('hidden')
+      }));
+      report.routeChecks.push({ page: label, route: 'detail-card-click', ...detailState });
+      if (detailState.visible) {
+        await page.screenshot({ path: `${output}/${label}-detail.png`, fullPage: true, animations: 'disabled' });
+      }
+    }
+  }
+
+  if (file === 'admin.html') {
+    for (const button of await page.locator('.admin-nav [data-page]').all()) {
+      const key = await button.getAttribute('data-page');
+      await button.click();
+      await page.waitForTimeout(350);
+      const active = await page.evaluate(() => ({
+        page: document.querySelector('.page-view.active')?.id || '',
+        heading: document.querySelector('.page-view.active h1')?.textContent?.trim() || '',
+        scrollWidth: document.documentElement.scrollWidth,
+        viewportWidth: innerWidth
+      }));
+      report.routeChecks.push({ page: label, adminTab: key, ...active });
+      await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
+      if (active.scrollWidth > active.viewportWidth) {
+        throw new Error(`${label} admin tab ${key}: horizontal overflow ${active.scrollWidth}px > ${active.viewportWidth}px`);
+      }
+    }
+  }
   await context.close();
 }
 
