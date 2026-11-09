@@ -1070,3 +1070,12 @@ html[data-theme="light"] .admin-content .view-switch {
 }html[data-theme="light"] .admin-content .catalog-card-art {
   background:linear-gradient(145deg,#f1f3f6,#e8ebf0)!important;
 }
+
+html[data-theme="light"] #detail-page-view .detail-main {
+  background:#fff!important;
+  color:var(--pl-ink)!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+}html[data-theme="light"] #detail-page-view .detail-cast-person {
+  background:#f8f9fb!important;
+  border-color:var(--pl-line)!important;
+}
