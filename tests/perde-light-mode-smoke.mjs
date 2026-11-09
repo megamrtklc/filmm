@@ -24,6 +24,11 @@ async function checkPage(file, label, viewport, mobile) {
       cssResponses.push({ status: response.status(), url: response.url() });
     }
   });
+  page.on('requestfailed', request => {
+    if (request.resourceType() === 'image') {
+      imageResponses.push({ status: 0, url: request.url(), error: request.failure()?.errorText || 'request failed' });
+    }
+  });
 
   await page.goto(`${base}/${file}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => {
@@ -329,7 +334,7 @@ async function checkPage(file, label, viewport, mobile) {
     await page.waitForTimeout(350);
     const detailTrigger = page.locator('#hero-watch-btn');
     if (await detailTrigger.count()) {
-      await detailTrigger.click({ timeout: 5000 }).catch(() => {});
+      await page.evaluate(() => document.getElementById('hero-watch-btn')?.click());
       await page.waitForTimeout(900);
       const detailState = await page.evaluate(() => ({
         hash: location.hash,
