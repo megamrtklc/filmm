@@ -10156,3 +10156,15 @@ body.detail-synopsis-open{overflow:hidden}
     animation:none!important;transition:none!important;
   }
 }
+
+
+/* MANŞET KONU METNİ — masaüstünde sağa doğru biraz daha geniş alan */
+@media(min-width:768px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    width:min(740px,72vw)!important;
+    max-width:min(740px,72vw)!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    max-width:900px!important;
+  }
+}
