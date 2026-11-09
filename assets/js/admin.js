@@ -1751,14 +1751,14 @@
   $('#catalog-poster-grid').addEventListener('click',event => {
     const deleteButton=event.target.closest('[data-catalog-delete]');
     if(deleteButton){deleteCatalogItem(deleteButton.dataset.catalogDelete,deleteButton);return;}
-    const deleteButton=event.target.closest('[data-catalog-delete]');
-    if(deleteButton){deleteCatalogItem(deleteButton.dataset.catalogDelete,deleteButton);return;}
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
     const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
     if (item) openEditor(item);
   });
   $('#catalog-table-body').addEventListener('click',event => {
+    const deleteButton=event.target.closest('[data-catalog-delete]');
+    if(deleteButton){deleteCatalogItem(deleteButton.dataset.catalogDelete,deleteButton);return;}
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
     const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
