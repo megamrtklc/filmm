@@ -104,7 +104,7 @@ async function checkPage(file, label, viewport, mobile) {
         return node ? getComputedStyle(node).backgroundColor : null;
       })(),
       discoverySurfaceBackground: (() => {
-        const node = document.querySelector('#daily-pick-section .mood-discovery-result');
+        const node = document.querySelector('#daily-pick-section .mood-gallery-recommendation');
         return node ? getComputedStyle(node).backgroundColor : null;
       })()
     };
@@ -128,7 +128,7 @@ async function checkPage(file, label, viewport, mobile) {
     throw new Error(`${label}: ranking rail is not light (${state.rankingSurfaceBackground})`);
   }
   if (file === 'index.html' && state.discoverySurfaceBackground !== 'rgb(255, 255, 255)') {
-    throw new Error(`${label}: discovery card is not light (${state.discoverySurfaceBackground})`);
+    throw new Error(`${label}: mood recommendation card is not light (${state.discoverySurfaceBackground})`);
   }
   if (file === 'index.html' && state.hero.titleText && state.hero.titleOpacity !== '1') {
     throw new Error(`${label}: hero title is visually hidden (opacity ${state.hero.titleOpacity})`);
