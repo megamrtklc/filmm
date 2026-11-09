@@ -651,6 +651,42 @@
     $('#health-result-count').textContent=rows.length.toLocaleString('tr-TR')+' kayıt';
     $('#health-issue-list').innerHTML=rows.length?rows.map(({item,labels})=>'<article class="health-issue-row"><div class="health-issue-poster">'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<i class="fa-solid fa-clapperboard"></i>')+'</div><div class="health-issue-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'Yıl yok')+' · '+escapeHtml(item.id)+'</small><div class="health-tags">'+labels.map(label=>'<span>'+escapeHtml(label)+'</span>').join('')+'</div></div><div class="health-issue-actions"><button type="button" class="row-action" data-health-edit="'+escapeHtml(item.id)+'">Düzenle</button><button type="button" class="row-action row-action-danger" data-health-delete="'+escapeHtml(item.id)+'"><i class="fa-regular fa-trash-can"></i> Sil</button></div></article>').join(''):'<div class="health-empty"><i class="fa-solid fa-circle-check"></i><b>Bu filtrede sorun görünmüyor</b><span>Seçili kontrol başlığı için katalog kayıtları tamam.</span></div>';
   }
+  function confirmCatalogDeletion(item){
+    return new Promise(resolve=>{
+      let modal=$('#catalog-delete-modal');
+      if(!modal){
+        modal=document.createElement('div');modal.id='catalog-delete-modal';modal.className='catalog-delete-modal';modal.innerHTML='<div class="catalog-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="catalog-delete-title"><div class="catalog-delete-icon"><i class="fa-solid fa-trash-can"></i></div><h2 id="catalog-delete-title">Silmek istediğinizden Emin misiniz?</h2><p class="catalog-delete-message">İlgili yapım adını yaz</p><strong class="catalog-delete-name"></strong><div class="catalog-delete-actions"><button type="button" class="catalog-delete-confirm"><i class="fa-regular fa-trash-can"></i> Sil</button><button type="button" class="catalog-delete-cancel">Pencereyi kapat</button></div></div>';
+        document.body.appendChild(modal);
+      }
+      modal.querySelector('.catalog-delete-name').textContent=String(item.title||'İsimsiz yapım');
+      modal.hidden=false;document.body.classList.add('catalog-delete-open');
+      const finish=value=>{modal.hidden=true;document.body.classList.remove('catalog-delete-open');modal.querySelector('.catalog-delete-confirm').onclick=null;modal.querySelector('.catalog-delete-cancel').onclick=null;modal.onclick=null;resolve(value);};
+      modal.querySelector('.catalog-delete-confirm').onclick=()=>finish(true);
+      modal.querySelector('.catalog-delete-cancel').onclick=()=>finish(false);
+      modal.onclick=event=>{if(event.target===modal)finish(false);};
+      modal.querySelector('.catalog-delete-cancel').focus();
+    });
+  }
+  async function deleteCatalogItem(id,button){
+    const item=catalog.find(row=>String(row.id)===String(id));
+    if(!item)return toast('Silinecek yapım katalogda bulunamadı.');
+    if(!await confirmCatalogDeletion(item))return;
+    if(!getGithubToken()){setGithubTokenStatus('Silme işlemi için GitHub bağlantısı gerekli.');return toast('Önce Veri Kaynakları bölümünden GitHub bağlantısını kur.');}
+    const original=button.innerHTML;button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Siliniyor…';
+    try{
+      const current=await githubCatalogRequest('GET');
+      if(!current.sha||!current.content)throw new Error('GitHub katalog dosyası okunamadı.');
+      const latest=JSON.parse(decodeGithubContent(current.content));
+      if(!Array.isArray(latest))throw new Error('Katalog dosyasının biçimi geçersiz.');
+      const index=latest.findIndex(row=>String(row.id)===String(id));
+      if(index<0)throw new Error('Yapım GitHub kataloğunda bulunamadı; başka bir işlemle silinmiş olabilir.');
+      const deleted=latest[index];latest.splice(index,1);
+      await githubCatalogRequest('PUT',{message:'Delete Perde catalog item: '+String(deleted.title||id),content:encodeGithubContent(JSON.stringify(latest,null,2)+'\\n'),sha:current.sha,branch:'main'});
+      catalog=latest;selectedCatalogIds.delete(String(id));catalogPage=Math.min(catalogPage,Math.max(1,Math.ceil(catalogMatches().length/catalogPageSize)));
+      renderOverview();initCatalogFilters();renderCatalog();renderCatalogHealth();renderWatchLinks();initHeroManager();initCollections();
+      toast('"'+String(deleted.title||'Yapım')+'" katalogdan silindi.');
+    }catch(error){button.disabled=false;button.innerHTML=original;toast('Yapım silinemedi: '+error.message);}
+  }
   async function deleteHealthCatalogItem(id,button){
     const item=catalog.find(row=>String(row.id)===String(id));
     if(!item)return toast('Silinecek yapım katalogda bulunamadı.');
@@ -799,7 +835,7 @@
     }).join('');
     tableBody.innerHTML = pageRows.map(item => {
       const missing = catalogQuality(item);
-      return '<tr><td><div class="catalog-name"><input class="catalog-row-check" type="checkbox" data-catalog-select="'+escapeHtml(item.id)+'" aria-label="'+escapeHtml(item.title)+' seç" '+(selectedCatalogIds.has(String(item.id))?'checked':'')+'>'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td>'+(missing.length?'<span class="catalog-quality-warning">'+escapeHtml(missing.join(' · '))+'</span>':'<span class="catalog-quality-good"><i class="fa-solid fa-check"></i> Tam</span>')+'</td><td><button class="row-action" type="button" data-inspect="'+escapeHtml(item.id)+'">İncele</button></td></tr>';
+      return '<tr><td><div class="catalog-name"><input class="catalog-row-check" type="checkbox" data-catalog-select="'+escapeHtml(item.id)+'" aria-label="'+escapeHtml(item.title)+' seç" '+(selectedCatalogIds.has(String(item.id))?'checked':'')+'>'+(poster(item)?'<img src="'+poster(item)+'" alt="" loading="lazy" onerror="this.remove()">':'<span class="recent-poster"></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.director||'Yönetmen bilgisi yok')+'</small></span></div></td><td><span class="type-pill">'+(item.type==='tv'?'Dizi':'Film')+'</span></td><td>'+escapeHtml(item.year||'—')+'</td><td>'+(item.rating?'★ '+escapeHtml(item.rating):'—')+'</td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td>'+(missing.length?'<span class="catalog-quality-warning">'+escapeHtml(missing.join(' · '))+'</span>':'<span class="catalog-quality-good"><i class="fa-solid fa-check"></i> Tam</span>')+'</td><td><div class="catalog-table-actions"><button class="catalog-edit-button" type="button" data-inspect="'+escapeHtml(item.id)+'"><i class="fa-solid fa-pen-to-square"></i> Düzenle</button><button class="catalog-delete-button" type="button" data-catalog-delete="'+escapeHtml(item.id)+'"><i class="fa-regular fa-trash-can"></i> Sil</button></div></td></tr>';
     }).join('');
     grid.hidden = catalogView !== 'grid';
     $('#catalog-table-view').hidden = catalogView !== 'table';
@@ -1713,6 +1749,10 @@
   });
   $$('[data-catalog-view]').forEach(button => button.addEventListener('click',() => setCatalogView(button.dataset.catalogView)));
   $('#catalog-poster-grid').addEventListener('click',event => {
+    const deleteButton=event.target.closest('[data-catalog-delete]');
+    if(deleteButton){deleteCatalogItem(deleteButton.dataset.catalogDelete,deleteButton);return;}
+    const deleteButton=event.target.closest('[data-catalog-delete]');
+    if(deleteButton){deleteCatalogItem(deleteButton.dataset.catalogDelete,deleteButton);return;}
     const button = event.target.closest('[data-inspect]');
     if (!button) return;
     const item = catalog.find(entry => String(entry.id) === button.dataset.inspect);
