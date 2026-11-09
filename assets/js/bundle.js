@@ -109,9 +109,18 @@ function fitHeroTitleToWidth() {
             heroCurrentId = item.id; heroCurrentTitle = item.title;
             const section = document.getElementById('hero-section');
             const bg = document.getElementById('hero-bg');
+            const heroCopy = section.querySelector('.hero-copy');
             if (heroImageSwapTimer) window.clearTimeout(heroImageSwapTimer);
             section.classList.add('is-changing');
-            heroImageSwapTimer = window.setTimeout(() => { bg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image; bg.alt = item.title; section.classList.remove('is-changing'); heroImageSwapTimer = null; }, 150);
+            if (heroCopy) heroCopy.classList.add('is-entering');
+            heroImageSwapTimer = window.setTimeout(() => {
+                bg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image;
+                bg.alt = item.title;
+                heroImageSwapTimer = window.setTimeout(() => {
+                    section.classList.remove('is-changing');
+                    heroImageSwapTimer = null;
+                }, 650);
+            }, 150);
             const typeBadge = document.getElementById('hero-type-badge');
             if (typeBadge) typeBadge.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i><span>DİZİ</span>' : '<i class="fa-solid fa-film" aria-hidden="true"></i><span>FİLM</span>';
             const heroPresentation = heroPresentationById[String(item.id)] || {};
@@ -156,6 +165,9 @@ function fitHeroTitleToWidth() {
                 meta.appendChild(part);
             });
             document.getElementById('hero-desc').innerText = heroPresentation.description || item.tmdbOverview || item.desc || '';
+            if (heroCopy) {
+                requestAnimationFrame(() => window.setTimeout(() => heroCopy.classList.remove('is-entering'), 45));
+            }
             document.querySelectorAll('.hero-thumb').forEach((el,i) => {
                 const active = heroItems[i]?.id === item.id;
                 el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active));
