@@ -758,3 +758,67 @@ html.perde-touch-compact #dashboard-view > .home-mood-continue-row[hidden],
 html.perde-touch-compact #dashboard-view > .home-mood-continue-row.hidden {
   display: none !important;
 }
+
+/* TV / geniş fiziksel ekran: tarayıcı viewport'u dar raporlasa da masaüstü ana sayfa */
+html.perde-tv-wide #dashboard-view>.home-feature-row,
+html.perde-tv-wide #dashboard-view .home-feature-row{
+  display:grid!important;grid-template-columns:minmax(0,1.65fr) minmax(300px,.82fr)!important;
+  align-items:stretch!important;gap:20px!important;padding:132px 26px 0!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section.hero-section{
+  height:auto!important;min-height:620px!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section .hero-layout{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:48px minmax(0,1fr) 150px!important;
+  min-height:620px!important;height:100%!important;padding:28px 26px 14px!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section .hero-copy{
+  grid-row:2!important;width:min(100%,850px)!important;max-width:850px!important;
+  margin:0!important;align-self:center!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section .hero-copy h1{
+  font-size:clamp(34px,3.2vw,58px)!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+  grid-row:3!important;display:flex!important;min-height:0!important;width:100%!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+  height:100%!important;gap:12px!important;overflow-x:auto!important;
+}
+html.perde-tv-wide #dashboard-view>.home-mood-continue-row{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:18px!important;padding:18px 26px 0!important;
+}
+html.perde-tv-wide #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+html.perde-tv-wide #dashboard-view>.home-mood-continue-row>#collection-personalized{
+  width:auto!important;min-width:0!important;height:auto!important;
+  min-height:440px!important;max-height:none!important;margin:0!important;
+}
+html.perde-tv-wide #dashboard-view .homepage-main{padding:24px 26px 0!important}
+html.perde-tv-wide .site-header{
+  display:grid!important;grid-template-columns:auto minmax(0,1fr) minmax(220px,280px)!important;
+  grid-template-rows:78px!important;align-items:center!important;
+  height:78px!important;min-height:78px!important;padding:0 28px!important;
+  gap:22px!important;flex-direction:row!important;
+}
+html.perde-tv-wide .site-header .header-topline{display:contents!important}
+html.perde-tv-wide .site-header .header-brand{grid-column:1!important}
+html.perde-tv-wide .site-header .main-nav{
+  grid-column:2!important;grid-row:1!important;display:flex!important;
+  flex:1 1 auto!important;min-width:0!important;width:auto!important;
+  height:100%!important;overflow-x:auto!important;gap:clamp(12px,1.2vw,22px)!important;
+}
+html.perde-tv-wide .site-header .main-nav>a,
+html.perde-tv-wide .site-header .main-nav .nav-trigger{
+  font-size:clamp(12px,1vw,15px)!important;flex:0 0 auto!important;
+}
+html.perde-tv-wide .site-header .header-actions{
+  grid-column:3!important;grid-row:1!important;display:flex!important;
+  width:100%!important;max-width:none!important;flex:0 1 auto!important;
+}
+html.perde-tv-wide .site-header .header-search-shell{flex:1 1 auto!important;min-width:0!important}
+html.perde-tv-wide .site-header .header-search-shell .glass-search{
+  width:100%!important;min-width:0!important;height:42px!important;
+}
+html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13px!important}
