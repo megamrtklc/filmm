@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-uniform-selected-cards-v1">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-collection-tools-v1">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -271,6 +271,12 @@
               <div class="collection-editor-empty" id="collection-editor-empty"><i class="fa-solid fa-arrow-left"></i><b>Önce bir koleksiyon seç</b><span>Soldaki listeden bir raf seçtiğinde düzenleme alanı burada açılır.</span></div>
               <div id="collection-editor-content" hidden>
                 <div class="collection-editor-title"><div><span class="eyebrow">DÜZENLENEN RAF</span><h3 id="collection-editor-name"></h3><p id="collection-editor-description"></p></div><button class="outline-button collection-visibility" id="collection-visibility" type="button"><i class="fa-solid fa-eye"></i> Yayında</button></div>
+                <div class="collection-management-tools">
+                  <label class="collection-rename-field"><span>Raf adı</span><input id="collection-rename-input" type="text" maxlength="48" autocomplete="off" aria-label="Raf adı"></label>
+                  <button class="outline-button" id="collection-rename-save" type="button"><i class="fa-solid fa-check"></i> Adı kaydet</button>
+                  <label class="collection-order-field"><span>Ana sayfadaki yeri</span><select id="collection-home-order" aria-label="Ana sayfadaki raf sırası"></select></label>
+                  <button class="collection-delete-button" id="collection-delete" type="button"><i class="fa-regular fa-trash-can"></i> Rafı sil</button>
+                </div>
                 <div class="collection-add-row"><label class="hero-field-label" for="collection-item-select">Katalogdan film veya dizi ekle</label><div class="collection-picker-row"><div class="catalog-picker" id="collection-catalog-picker" data-picker-select="collection-item-select"><div class="catalog-picker-search"><i class="fa-solid fa-magnifying-glass"></i><input id="collection-item-search" type="search" placeholder="Yapım adıyla ara…" autocomplete="off"></div><div class="catalog-picker-filters" role="group" aria-label="Yapım türü"><button type="button" class="active" data-picker-filter="all">Tümü</button><button type="button" data-picker-filter="movie">Filmler</button><button type="button" data-picker-filter="tv">Diziler</button></div><div class="catalog-picker-results" id="collection-catalog-results" aria-live="polite"><span class="catalog-picker-hint">Yapım aramak için adını yaz.</span></div><div class="catalog-picker-selected" id="collection-catalog-selected">Henüz yapım seçilmedi.</div></div><select id="collection-item-select" class="catalog-picker-native" aria-hidden="true" tabindex="-1"><option value="">Film veya dizi seç…</option></select><button class="gold-button" id="collection-add-item" type="button"><i class="fa-solid fa-plus"></i> Ekle</button></div></div>
                 <div class="collection-items-heading"><b>Bu raftaki yapımlar</b><span id="collection-items-count">0 yapım</span></div>
                 <div class="collection-items-list" id="collection-items-list"><div class="loading-line">İçerik bekleniyor.</div></div>
@@ -564,6 +570,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261109-rail-synopsis-desc-v1"></script>
+  <script src="assets/js/admin.js?v=20261109-collection-tools-v1"></script>
 </body>
 </html>
