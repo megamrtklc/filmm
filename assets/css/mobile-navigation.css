@@ -279,3 +279,19 @@
 }
 @keyframes mobileCategoryDropIn { from {opacity:0;transform:translateY(8px) scale(.985);} to {opacity:1;transform:translateY(0) scale(1);} }
 @media (max-width: 380px) { #mobile-category-panel {left:8px !important;right:8px !important;padding:12px !important;} .mobile-category-grid .mobile-category-option {min-height:39px;padding-inline:8px;font-size:10px;} }
+
+/* Final guard: on true phone viewport, only the bottom dock owns primary navigation. */
+@media screen and (max-width: 767px) {
+  html:not(.perde-touch-compact) body#theme-body header.site-header > nav.main-nav,
+  html:not(.perde-touch-compact) body#theme-body .site-header nav.main-nav,
+  html:not(.perde-touch-compact) body#theme-body .site-header .main-nav {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+}
