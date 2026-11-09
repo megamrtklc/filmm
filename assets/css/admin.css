@@ -1430,3 +1430,29 @@ body{background:var(--bg)!important;color:var(--text)!important}
 .outline-button{color:#906a2e!important;border-color:rgba(167,123,50,.48)!important}
 .toast{background:#faf8f2!important;color:#302d26!important;border-color:var(--line)!important}
 @media(max-width:800px){.admin-sidebar{background:#eee9de!important}.admin-main{background:var(--bg)!important}}
+
+
+/* Perde yönetim paneli görünüm seçici */
+.admin-theme-switcher{min-width:112px}
+.admin-body[data-theme="dark"]{--bg:#0c0e13;--surface:#151922;--surface-2:#1b202b;--text:#eceef2;--muted:#a2a8b3;--line:rgba(255,255,255,.1);background:var(--bg)!important;color:var(--text)!important;color-scheme:dark}
+.admin-body[data-theme="dark"] .admin-sidebar{background:linear-gradient(180deg,#151922,#10131a)!important;border-color:rgba(255,255,255,.09)!important}
+.admin-body[data-theme="dark"] .admin-brand,.admin-body[data-theme="dark"] .admin-brand b{color:#f2eee5!important}
+.admin-body[data-theme="dark"] .sidebar-caption{color:#8992a1!important}
+.admin-body[data-theme="dark"] .nav-item{color:#c3c8d1!important}.admin-body[data-theme="dark"] .nav-item i{color:#a6aebb!important}
+.admin-body[data-theme="dark"] .nav-item:hover{background:rgba(255,255,255,.06)!important;color:#fff!important}
+.admin-body[data-theme="dark"] .nav-item.active{background:rgba(167,123,50,.16)!important;color:#e5c27e!important}
+.admin-body[data-theme="dark"] .admin-topbar{background:rgba(17,20,27,.94)!important;border-color:var(--line)!important}
+.admin-body[data-theme="dark"] .breadcrumbs,.admin-body[data-theme="dark"] .breadcrumbs b{color:#d8dbe2!important}
+.admin-body[data-theme="dark"] .page-heading h1,.admin-body[data-theme="dark"] .page-heading h2,.admin-body[data-theme="dark"] .page-heading h3,.admin-body[data-theme="dark"] .card-heading h2,.admin-body[data-theme="dark"] .section-title-row h2{color:#f1eee7!important}
+.admin-body[data-theme="dark"] .page-heading p,.admin-body[data-theme="dark"] .section-title-row p,.admin-body[data-theme="dark"] .card-heading p,.admin-body[data-theme="dark"] .eyebrow{color:#a7adba!important}
+.admin-body[data-theme="dark"] .surface-card,.admin-body[data-theme="dark"] .stat-card,.admin-body[data-theme="dark"] .feature-card,.admin-body[data-theme="dark"] .integration-card,.admin-body[data-theme="dark"] .settings-list,.admin-body[data-theme="dark"] .table-card,.admin-body[data-theme="dark"] .home-rail-manager,.admin-body[data-theme="dark"] .collection-library,.admin-body[data-theme="dark"] .collection-editor,.admin-body[data-theme="dark"] .collection-preview-panel{background:#171c26!important;border-color:rgba(255,255,255,.1)!important;color:#eceef2!important}
+.admin-body[data-theme="dark"] .stat-card strong,.admin-body[data-theme="dark"] .stat-label,.admin-body[data-theme="dark"] .catalog-table td,.admin-body[data-theme="dark"] .setting-row b,.admin-body[data-theme="dark"] .feature-card h3{color:#eceef2!important}
+.admin-body[data-theme="dark"] .admin-search input,.admin-body[data-theme="dark"] .catalog-toolbar select,.admin-body[data-theme="dark"] .collection-create-fields input,.admin-body[data-theme="dark"] .collection-add-row select,.admin-body[data-theme="dark"] .home-rail-title-input,.admin-body[data-theme="dark"] input,.admin-body[data-theme="dark"] select,.admin-body[data-theme="dark"] textarea{background:#10141c!important;color:#eceef2!important;border-color:rgba(255,255,255,.15)!important;color-scheme:dark}
+.admin-body[data-theme="dark"] .catalog-table th{background:#202633!important;color:#c6b58e!important}
+.admin-body[data-theme="dark"] .catalog-table td{border-color:rgba(255,255,255,.08)!important}
+.admin-body[data-theme="dark"] .icon-button{background:#202633!important;color:#e2e5eb!important;border-color:var(--line)!important}
+.admin-body[data-theme="dark"] .collection-step-heading h2,.admin-body[data-theme="dark"] .collection-step-heading p,.admin-body[data-theme="dark"] .collection-preview-card b{color:#eceef2!important}
+.admin-body[data-theme="dark"] .collection-list-item{background:#202633!important;color:#eceef2!important}
+.admin-body[data-theme="dark"] .collection-item-row{background:#111820!important;border-color:rgba(255,255,255,.1)!important}
+.admin-body[data-theme="dark"] .theme-switcher{background:rgba(255,255,255,.07);color:#e8c77f;border-color:rgba(220,184,111,.4)}
+@media(max-width:560px){.admin-theme-switcher{min-width:38px;width:38px;padding:0}.admin-theme-switcher .theme-switcher-label{display:none}}
