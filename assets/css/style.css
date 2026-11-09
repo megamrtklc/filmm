@@ -11008,6 +11008,7 @@ body.detail-synopsis-open{overflow:hidden}
 
 /* TOP 10 sıra numarası: daha hafif tipografi ve afişe biraz daha yakın konum */
 #collection-featured .featured-number{
+ color:rgba(220,224,232,.72)!important;
  font-weight:500!important;
  letter-spacing:-.075em!important;
  -webkit-text-stroke:0!important;
