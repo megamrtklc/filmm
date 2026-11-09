@@ -361,7 +361,7 @@ function renderMoodDiscovery(recommendation = null) {
     const result = document.getElementById('mood-discovery-result');
     if (!result) return;
     const selectedOption = moodCategoryOptions.find(option => option.value === activeMoodCategory);
-    const options = moodCategoryOptions.map((option,index) => '<button type="button" class="mood-gallery-option'+(activeMoodCategory===option.value?' is-selected':'')+'" role="option" aria-selected="'+(activeMoodCategory===option.value)+'" data-mood-option="'+escapeCountryHtml(option.value)+'"><span class="mood-gallery-option-index">'+String(index+1).padStart(2,'0')+'</span><span>'+escapeCountryHtml(option.label)+'</span><i class="fa-solid fa-check" aria-hidden="true"></i></button>').join('');
+    const options = moodCategoryOptions.map((option,index) => '<button type="button" class="mood-gallery-option'+(activeMoodCategory===option.value?' is-selected':'')+'" role="option" aria-selected="'+(activeMoodCategory===option.value)+'" data-mood-option="'+escapeCountryHtml(option.value)+'"><span class="mood-gallery-option-index">'+String(index+1)+'</span><span>'+escapeCountryHtml(option.label)+'</span><i class="fa-solid fa-check" aria-hidden="true"></i></button>').join('');
     let recommendationMarkup = '';
     if (recommendation) {
         const title = escapeCountryHtml(recommendation.title || 'İsimsiz yapım');
