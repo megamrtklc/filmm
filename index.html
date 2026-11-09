@@ -44,7 +44,7 @@
         }
     </script><link rel="stylesheet" href="assets/css/style.css?v=20261109-editorial-cards-v23">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
-    <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261109-desktop-site-v4">
+    <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261109-mobile-hero-v1">
     <link rel="stylesheet" href="assets/css/mobile-navigation.css?v=20261109-mobile-categories-v3">
     
 </head>
@@ -185,6 +185,37 @@
                         <button class="hero-arrow" type="button" data-hero-direction="1" aria-label="Sonraki yapım" title="Sonraki yapım"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                     </div>
 
+                </div>
+            </div>
+        
+        </section>
+        <!-- Yalnızca gerçek telefon görünümünde kullanılan bağımsız mobil manşet -->
+        <section id="mobile-hero-section" class="mobile-hero-section" aria-label="Öne çıkan yapım">
+            <div class="mobile-hero-art">
+                <img id="mobile-hero-bg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=85" alt="Öne çıkan yapım" fetchpriority="high">
+                <div class="mobile-hero-shade"></div>
+            </div>
+            <div class="mobile-hero-topline">
+                <span class="mobile-hero-kicker"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i> ÖNE ÇIKAN YAPIM</span>
+                <span id="mobile-hero-type" class="mobile-hero-type"><i class="fa-solid fa-film" aria-hidden="true"></i> FİLM</span>
+            </div>
+            <div class="mobile-hero-content">
+                <div id="mobile-hero-ratings" class="mobile-hero-ratings" aria-label="Yapım puanları"></div>
+                <h1 id="mobile-hero-title">THE BATMAN</h1>
+                <small id="mobile-hero-original-title" class="mobile-hero-original-title" hidden></small>
+                <div id="mobile-hero-meta" class="mobile-hero-meta"></div>
+                <p id="mobile-hero-desc">Öne çıkan yapımın hikâyesi.</p>
+                <div class="mobile-hero-actions">
+                    <button id="mobile-hero-watch-btn" type="button" onclick="openDetailPage(heroCurrentId)"><i class="fa-solid fa-play" aria-hidden="true"></i> Şimdi İzle</button>
+                    <button id="mobile-hero-list-btn" type="button" onclick="toggleWatchlist(heroCurrentId)" aria-label="İzleme listeme ekle"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>Listeme Ekle</span></button>
+                </div>
+            </div>
+            <div class="mobile-hero-controls">
+                <span class="mobile-hero-control-label">PERDE SEÇKİSİ</span>
+                <div class="mobile-hero-control-actions">
+                    <span id="mobile-hero-counter">01 / 01</span>
+                    <button type="button" data-mobile-hero-direction="-1" aria-label="Önceki yapım"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                    <button type="button" data-mobile-hero-direction="1" aria-label="Sonraki yapım"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
                 </div>
             </div>
         </section>
@@ -480,7 +511,7 @@
     <!-- Modüler JavaScript dosyaları -->
 <script src="assets/js/mobile-bottom-nav.js?v=20261109-mobile-nav-v1"></script>
     <script src="assets/js/responsive-mode.js?v=20261109-mobile-nav-v1"></script>
-    <script src="assets/js/bundle.js?v=20261109-personalized-rail-v20"></script>
+    <script src="assets/js/bundle.js?v=20261109-mobile-hero-v1"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
