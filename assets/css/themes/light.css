@@ -1057,3 +1057,16 @@ html[data-theme="light"] .admin-table {
 }html[data-theme="light"] ::placeholder {
   color:#9aa1ad!important;
 }
+
+html[data-theme="light"] .admin-content .view-switch {
+  background:#f3f4f6!important;
+  border-color:var(--pl-line)!important;
+}html[data-theme="light"] .admin-content .view-switch-button {
+  color:#68707d!important;
+}html[data-theme="light"] .admin-content .view-switch-button.active {
+  background:#fff5e4!important;
+  color:#946a2d!important;
+  box-shadow:inset 0 0 0 1px #e8d6b5!important;
+}html[data-theme="light"] .admin-content .catalog-card-art {
+  background:linear-gradient(145deg,#f1f3f6,#e8ebf0)!important;
+}
