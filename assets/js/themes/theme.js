@@ -7,7 +7,7 @@
   'use strict';
 
   const STORAGE_KEY = 'perde_theme_preference_v1';
-  const LIGHT_STYLESHEET = 'assets/css/themes/light.css?v=light-20261109-v2';
+  const LIGHT_STYLESHEET = 'assets/css/themes/light.css?v=light-20261109-v7';
   const rootInitiallyHadDarkClass = document.documentElement.classList.contains('dark');
   const originalThemeColor = document.querySelector('meta[name="theme-color"]')?.getAttribute('content') || '#0b0c10';
 

@@ -6,7 +6,7 @@ const output = 'artifacts';
 await fs.mkdir(output, { recursive: true });
 
 const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
-const report = { checks: [], pageErrors: [] };
+const report = { checks: [], routeChecks: [], imageDiagnostics: [], pageErrors: [] };
 
 async function checkPage(file, label, viewport, mobile) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
@@ -14,12 +14,19 @@ async function checkPage(file, label, viewport, mobile) {
     try { localStorage.setItem('perde_theme_preference_v1', 'light'); } catch (_) {}
   });
   const page = await context.newPage();
-  page.on('pageerror', error => report.pageErrors.push({ page: label, message: error.message }));
+  page.on('pageerror', error => report.pageErrors.push({ page: label, message: error.message, stack: error.stack || '' }));
 
   const cssResponses = [];
+  const imageResponses = [];
   page.on('response', response => {
+    if (response.request().resourceType() === 'image') imageResponses.push({ status: response.status(), url: response.url() });
     if (response.url().includes('/assets/css/themes/light.css')) {
       cssResponses.push({ status: response.status(), url: response.url() });
+    }
+  });
+  page.on('requestfailed', request => {
+    if (request.resourceType() === 'image') {
+      imageResponses.push({ status: 0, url: request.url(), error: request.failure()?.errorText || 'request failed' });
     }
   });
 
@@ -29,6 +36,43 @@ async function checkPage(file, label, viewport, mobile) {
     return document.documentElement.dataset.theme === 'light' && link && link.sheet;
   }, null, { timeout: 15000 });
   await page.waitForTimeout(1800);
+
+  // Trigger native lazy-loading before taking full-page screenshots.
+  await page.evaluate(async () => {
+    const step = Math.max(400, Math.floor(innerHeight * 0.75));
+    const maxScroll = document.documentElement.scrollHeight;
+    for (let y = 0; y < maxScroll; y += step) {
+      window.scrollTo(0, y);
+      await new Promise(resolve => setTimeout(resolve, 110));
+    }
+    const images = [...document.images];
+    await Promise.race([
+      Promise.all(images.map(img => img.complete ? Promise.resolve() : new Promise(resolve => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+        setTimeout(resolve, 4500);
+      }))),
+      new Promise(resolve => setTimeout(resolve, 9000))
+    ]);
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(650);
+
+  const imageDiagnostics = await page.evaluate(() => [...document.images].map(img => ({
+    src: img.currentSrc || img.src,
+    loaded: img.complete && img.naturalWidth > 0,
+    naturalWidth: img.naturalWidth,
+    loading: img.loading || 'eager',
+    alt: img.alt || ''
+  })));
+  report.imageDiagnostics.push({
+    page: label,
+    total: imageDiagnostics.length,
+    loaded: imageDiagnostics.filter(x => x.loaded).length,
+    failed: imageDiagnostics.filter(x => !x.loaded && x.loading !== 'lazy').slice(0, 30),
+    deferredLazy: imageDiagnostics.filter(x => !x.loaded && x.loading === 'lazy').length,
+    imageResponses: imageResponses.filter(x => x.status >= 400).slice(0, 40)
+  });
 
   const state = await page.evaluate(() => {
     const header = document.querySelector('.site-header, .admin-sidebar');
@@ -52,12 +96,28 @@ async function checkPage(file, label, viewport, mobile) {
         const hero = document.querySelector('#hero-section');
         const title = document.querySelector('#hero-title');
         const copy = document.querySelector('#hero-section .hero-copy');
+        const bg = document.querySelector('#hero-bg');
+        const copyStyle = copy ? getComputedStyle(copy) : null;
+        const copyRect = copy ? copy.getBoundingClientRect() : null;
+        const titleStyle = title ? getComputedStyle(title) : null;
+        const titleRect = title ? title.getBoundingClientRect() : null;
         return {
           backgroundColor: hero ? getComputedStyle(hero).backgroundColor : null,
           backgroundImage: hero ? getComputedStyle(hero).backgroundImage : null,
           titleText: title?.textContent?.trim() || '',
-          titleOpacity: title ? getComputedStyle(title).opacity : null
-
+          titleOpacity: titleStyle?.opacity || null,
+          titleColor: titleStyle?.color || null,
+          titleDisplay: titleStyle?.display || null,
+          titleVisibility: titleStyle?.visibility || null,
+          titleFilter: titleStyle?.filter || null,
+          titleTransform: titleStyle?.transform || null,
+          titleRect: titleRect ? [titleRect.x, titleRect.y, titleRect.width, titleRect.height].map(Math.round) : null,
+          copyDisplay: copyStyle?.display || null,
+          copyVisibility: copyStyle?.visibility || null,
+          copyOpacity: copyStyle?.opacity || null,
+          copyRect: copyRect ? [copyRect.x, copyRect.y, copyRect.width, copyRect.height].map(Math.round) : null,
+          backdropLoaded: !!bg && bg.complete && bg.naturalWidth > 0,
+          backdropNaturalWidth: bg?.naturalWidth || 0
         };
       })(),
       rankingNumberColor: (() => {
@@ -71,6 +131,64 @@ async function checkPage(file, label, viewport, mobile) {
       discoverySurfaceBackground: (() => {
         const node = document.querySelector('#daily-pick-section .mood-gallery-recommendation');
         return node ? getComputedStyle(node).backgroundColor : null;
+      })(),
+      controlSurfaces: (() => {
+        const fixture = document.createElement('div');
+        fixture.style.display = 'none';
+        fixture.id = 'dashboard-view';
+        fixture.innerHTML = `
+          <div class="home-mood-continue-row">
+          <table class="admin-table"><thead><tr><th>Başlık</th></tr></thead><tbody><tr><td>İçerik</td></tr></tbody></table>
+          <select><option>Seçenek</option></select>
+          <div class="nav-menu">Menü</div>
+          <div class="search-category-menu">Arama</div>
+          <section id="daily-pick-section"><div class="mood-gallery-options">Ruh hali</div></section>
+          </div>
+          <div class="catalog-picker">Katalog</div>
+          <div class="modal-content">Pencere</div>
+        `;
+        document.body.appendChild(fixture);
+        const selectors = ['th', 'td', 'select', 'option', '.nav-menu', '.search-category-menu', '.mood-gallery-options', '.catalog-picker', '.modal-content'];
+        const values = Object.fromEntries(selectors.map(selector => {
+          const node = fixture.querySelector(selector);
+          const style = getComputedStyle(node);
+          return [selector, { background: style.backgroundColor, color: style.color, colorScheme: style.colorScheme }];
+        }));
+        fixture.remove();
+        return values;
+      })(),
+      layout: (() => {
+        const selectors = [
+          'body', '.site-header', '.main-nav', '.homepage-main',
+          '.home-feature-row', '#hero-section', '.hero-layout',
+          '.home-mood-continue-row', '#collection-featured',
+          '.collection-rail', '#catalog-page', '#detail-page-view',
+          '#actor-page-view', '.admin-shell', '.admin-sidebar',
+          '.admin-main', '.admin-topbar', '.admin-content'
+        ];
+        const properties = [
+          'display', 'position', 'boxSizing', 'width', 'height',
+          'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+          'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+          'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+          'gap', 'rowGap', 'columnGap', 'gridTemplateColumns',
+          'gridTemplateRows', 'flexDirection', 'alignItems',
+          'justifyContent', 'fontFamily', 'fontSize', 'lineHeight',
+          'letterSpacing', 'fontWeight', 'textAlign', 'whiteSpace',
+          'borderTopWidth', 'borderRightWidth', 'borderBottomWidth',
+          'borderLeftWidth', 'borderTopLeftRadius', 'borderTopRightRadius',
+          'borderBottomLeftRadius', 'borderBottomRightRadius'
+        ];
+        return selectors.map(selector => {
+          const node = document.querySelector(selector);
+          if (!node) return [selector, null];
+          const style = getComputedStyle(node);
+          const rect = node.getBoundingClientRect();
+          return [selector, {
+            rect: [rect.x, rect.y, rect.width, rect.height].map(Math.round),
+            style: Object.fromEntries(properties.map(property => [property, style[property]]))
+          }];
+        }).filter(([, value]) => value !== null);
       })()
     };
   });
@@ -101,8 +219,22 @@ async function checkPage(file, label, viewport, mobile) {
   if (mobile && file === 'index.html' && state.bodyPaddingLeft !== '0px') {
     throw new Error(`${label}: mobile layout retained desktop sidebar offset (${state.bodyPaddingLeft})`);
   }
-  if (!mobile && file === 'index.html' && state.bodyPaddingLeft !== '246px') {
-    throw new Error(`${label}: desktop sidebar offset changed (${state.bodyPaddingLeft})`);
+  if (file === 'index.html' && state.bodyPaddingLeft !== '0px') {
+    throw new Error(`${label}: original horizontal Perde layout should not have a sidebar offset (${state.bodyPaddingLeft})`);
+  }
+  const surfaces = state.controlSurfaces;
+  if (surfaces['th'].background !== 'rgb(243, 244, 246)' ||
+      surfaces['td'].background !== 'rgb(255, 255, 255)') {
+    throw new Error(`${label}: table surfaces are not using the light palette`);
+  }
+  for (const selector of ['select', 'option', '.nav-menu', '.search-category-menu',
+    '.mood-gallery-options', '.catalog-picker', '.modal-content']) {
+    if (surfaces[selector].background !== 'rgb(255, 255, 255)') {
+      throw new Error(`${label}: ${selector} surface is not light (${surfaces[selector].background})`);
+    }
+  }
+  if (surfaces['select'].colorScheme !== 'light') {
+    throw new Error(`${label}: native form controls are not using light color-scheme`);
   }
 
   const safeName = label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -110,13 +242,51 @@ async function checkPage(file, label, viewport, mobile) {
 
   const darkResult = await page.evaluate(() => {
     window.PerdeTheme.apply('dark');
+    const selectors = [
+      'body', '.site-header', '.main-nav', '.homepage-main',
+      '.home-feature-row', '#hero-section', '.hero-layout',
+      '.home-mood-continue-row', '#collection-featured',
+      '.collection-rail', '#catalog-page', '#detail-page-view',
+      '#actor-page-view', '.admin-shell', '.admin-sidebar',
+      '.admin-main', '.admin-topbar', '.admin-content'
+    ];
+    const properties = [
+      'display', 'position', 'boxSizing', 'width', 'height',
+      'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+      'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+      'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+      'gap', 'rowGap', 'columnGap', 'gridTemplateColumns',
+      'gridTemplateRows', 'flexDirection', 'alignItems',
+      'justifyContent', 'fontFamily', 'fontSize', 'lineHeight',
+      'letterSpacing', 'fontWeight', 'textAlign', 'whiteSpace',
+      'borderTopWidth', 'borderRightWidth', 'borderBottomWidth',
+      'borderLeftWidth', 'borderTopLeftRadius', 'borderTopRightRadius',
+      'borderBottomLeftRadius', 'borderBottomRightRadius'
+    ];
+    const layout = selectors.map(selector => {
+      const node = document.querySelector(selector);
+      if (!node) return [selector, null];
+      const style = getComputedStyle(node);
+      const rect = node.getBoundingClientRect();
+      return [selector, {
+        rect: [rect.x, rect.y, rect.width, rect.height].map(Math.round),
+        style: Object.fromEntries(properties.map(property => [property, style[property]]))
+      }];
+    }).filter(([, value]) => value !== null);
     return {
       dataTheme: document.documentElement.getAttribute('data-theme'),
-      darkClass: document.documentElement.classList.contains('dark')
+      darkClass: document.documentElement.classList.contains('dark'),
+      layout
     };
   });
+  if (file === 'index.html' && !mobile) {
+    await page.screenshot({ path: `${output}/${label}-dark.png`, fullPage: true, animations: 'disabled' });
+  }
   if (darkResult.dataTheme !== null) throw new Error(`${label}: dark switch left data-theme enabled`);
   if (file === 'index.html' && !darkResult.darkClass) throw new Error(`${label}: homepage dark class was not restored`);
+  if (JSON.stringify(state.layout) !== JSON.stringify(darkResult.layout)) {
+    throw new Error(`${label}: layout/typography changed when switching theme`);
+  }
 
   report.checks.push({
     page: label,
@@ -127,6 +297,91 @@ async function checkPage(file, label, viewport, mobile) {
     darkRestore: darkResult,
     result: 'passed'
   });
+
+  await page.evaluate(() => window.PerdeTheme?.apply('light'));
+  await page.waitForFunction(() => document.documentElement.dataset.theme === 'light' &&
+    document.getElementById('perde-light-theme-css')?.sheet, null, { timeout: 10000 });
+
+  if (file === 'index.html') {
+    const routes = ['#/filmler', '#/diziler', '#/kesfet', '#/listem', '#/kategori/Aksiyon'];
+    for (const route of routes) {
+      await page.evaluate(value => { location.hash = value; }, route);
+      await page.waitForTimeout(650);
+      const routeState = await page.evaluate(() => ({
+        hash: location.hash,
+        title: document.querySelector('#catalog-page h1, #detail-title, #dashboard-view h1, main h1')?.textContent?.trim() || '',
+        visibleViews: [...document.querySelectorAll('#dashboard-view, #catalog-page, #detail-page-view, #actor-page-view')]
+          .filter(el => !el.classList.contains('hidden') && getComputedStyle(el).display !== 'none')
+          .map(el => el.id),
+        scrollWidth: document.documentElement.scrollWidth,
+        viewportWidth: innerWidth,
+        imageCount: document.images.length,
+        brokenImages: [...document.images].filter(img => img.src && img.complete && img.naturalWidth === 0).length
+      }));
+      report.routeChecks.push({ page: label, route, ...routeState });
+      const routeName = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+
+      if (routeState.scrollWidth - routeState.viewportWidth > 16) {
+        throw new Error(`${label} ${route}: horizontal overflow ${routeState.scrollWidth}px > ${routeState.viewportWidth}px`);
+      }
+    }
+    await page.evaluate(() => window.showDashboard?.(true));
+    await page.waitForTimeout(350);
+    const detailTrigger = page.locator('#hero-watch-btn');
+    if (await detailTrigger.count()) {
+      await page.evaluate(() => document.getElementById('hero-watch-btn')?.click());
+      await page.waitForTimeout(900);
+      const detailState = await page.evaluate(() => {
+        const detailMain = document.querySelector('#detail-page-view .detail-main');
+        const castCard = document.querySelector('#detail-page-view .detail-cast-person');
+        return {
+          hash: location.hash,
+          title: document.querySelector('#detail-title')?.textContent?.trim() || '',
+          visible: !!document.querySelector('#detail-page-view') && !document.querySelector('#detail-page-view').classList.contains('hidden'),
+          detailSurface: detailMain ? getComputedStyle(detailMain).backgroundColor : null,
+          castSurface: castCard ? getComputedStyle(castCard).backgroundColor : null
+        };
+      });
+      report.routeChecks.push({ page: label, route: 'detail-card-click', ...detailState });
+      if (detailState.visible && detailState.detailSurface !== 'rgb(255, 255, 255)') {
+        throw new Error(`${label}: detail content surface is not light (${detailState.detailSurface})`);
+      }
+      if (detailState.visible && !mobile) {
+        await page.screenshot({ path: `${output}/${label}-detail.png`, fullPage: true, animations: 'disabled' });
+      }
+    }
+  }
+
+  if (file === 'admin.html') {
+    for (const button of await page.locator('.admin-nav [data-page]').all()) {
+      const key = await button.getAttribute('data-page');
+      if (mobile) await page.locator('#mobile-menu').click();
+      await button.click();
+      await page.waitForTimeout(350);
+      const active = await page.evaluate(() => {
+        const measure = () => ({
+          page: document.querySelector('.page-view.active')?.id || '',
+          heading: document.querySelector('.page-view.active h1')?.textContent?.trim() || '',
+          scrollWidth: document.documentElement.scrollWidth,
+          viewportWidth: innerWidth
+        });
+        const light = measure();
+        window.PerdeTheme.apply('dark');
+        const dark = measure();
+        window.PerdeTheme.apply('light');
+        return { ...light, darkScrollWidth: dark.scrollWidth, darkViewportWidth: dark.viewportWidth };
+      });
+      report.routeChecks.push({ page: label, adminTab: key, ...active });
+      if (!mobile && key === 'catalog') {
+        await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
+      }
+      const lightOverflow = Math.max(0, active.scrollWidth - active.viewportWidth);
+      const darkOverflow = Math.max(0, active.darkScrollWidth - active.darkViewportWidth);
+      if (lightOverflow - darkOverflow > 2) {
+        throw new Error(`${label} admin tab ${key}: light theme adds ${lightOverflow - darkOverflow}px horizontal overflow (light ${lightOverflow}px, dark ${darkOverflow}px)`);
+      }
+    }
+  }
   await context.close();
 }
 

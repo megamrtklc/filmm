@@ -32,7 +32,7 @@
   function navigate(page) {
     if (!pageNames[page]) return;
     $$('.page-view').forEach(view => view.classList.toggle('active', view.id === 'page-' + page));
-    $$$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.page === page));
+    $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.page === page));
     $('#breadcrumb-current').textContent = pageNames[page];
     $('#admin-sidebar').classList.remove('open');
     if (typeof syncSidebarToggle === 'function') syncSidebarToggle();

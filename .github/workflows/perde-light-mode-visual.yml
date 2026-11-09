@@ -12,6 +12,10 @@ on:
       - ".github/workflows/perde-light-mode-visual.yml"
   workflow_dispatch:
 
+concurrency:
+  group: perde-light-mode-visual-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
