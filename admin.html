@@ -349,6 +349,23 @@
               <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-series-count">0 / 15</span></div>
               <div class="home-rail-items" id="home-rail-series-list"></div>
             </section>
+            <section class="surface-card home-rail-manager" data-home-rail="personalized">
+              <div class="home-rail-manager-heading"><div><span class="eyebrow">KİŞİSEL SEÇKİ · 04</span><h2>Senin İçin Seçtiklerimiz</h2><p>Ana sayfadaki özel öneri kartında gösterilecek 5 yapımı belirle.</p></div><div class="home-rail-visibility-wrap"><small id="home-rail-personalized-visibility-status">Anasayfada yayında</small><button type="button" class="home-rail-visibility is-published" id="home-rail-personalized-visibility" aria-pressed="true">Gizle</button></div></div>
+              <label class="hero-field-label" for="home-rail-personalized-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-personalized-title" maxlength="64" value="Senin İçin Seçtiklerimiz">
+              <div class="home-rail-controls">
+                <label>Gösterilecek kart sayısı<select id="home-rail-personalized-display-count"><option value="5" selected>5 kart</option></select></label>
+                <label class="home-rail-select-label">Yapım seç
+                  <select id="home-rail-personalized-catalog-select" class="home-rail-catalog-select"><option value="">Katalogdan yapım seç…</option></select>
+                </label>
+                <label class="home-rail-search-label">Katalogda ara
+                  <input type="search" id="home-rail-personalized-search" class="home-rail-search" placeholder="Film veya dizi adı yaz…" autocomplete="off">
+                </label>
+              </div>
+              <div class="home-rail-search-results" id="home-rail-personalized-results" aria-live="polite"></div>
+              <p class="home-rail-warning" id="home-rail-personalized-warning" role="status"></p>
+              <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-personalized-count">0 / 5</span></div>
+              <div class="home-rail-items" id="home-rail-personalized-list"></div>
+            </section>
           </div>
           <div class="home-rails-save-row"><div><b id="home-rails-save-title">Anasayfa raf ayarları</b><small id="home-rails-save-status">Değişiklikler henüz kaydedilmedi.</small></div><button class="gold-button" id="home-rails-save" type="button"><i class="fa-solid fa-cloud-arrow-up"></i> Değişiklikleri kaydet ve yayınla</button></div>
           <p class="info-note"><i class="fa-solid fa-shield-halved"></i> Kaldırma işlemi yalnızca ilgili vitrinden kaldırır; katalog kaydı silinmez.</p>
@@ -570,6 +587,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261109-collection-tools-v1"></script>
+  <script src="assets/js/admin.js?v=20261109-personalized-manager-v2"></script>
 </body>
 </html>
