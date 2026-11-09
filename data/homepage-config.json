@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T14:58:55.326Z",
+  "updatedAt": "2026-11-09T15:19:18.049Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -89,7 +89,7 @@
       "series"
     ],
     "featured": {
-      "title": "Popüler Yapımlar",
+      "title": "En çok izlenenler",
       "active": true,
       "displayCount": 10,
       "itemIds": [
