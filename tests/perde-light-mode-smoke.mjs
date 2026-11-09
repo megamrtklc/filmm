@@ -269,6 +269,10 @@ async function checkPage(file, label, viewport, mobile) {
     result: 'passed'
   });
 
+  await page.evaluate(() => window.PerdeTheme?.apply('light'));
+  await page.waitForFunction(() => document.documentElement.dataset.theme === 'light' &&
+    document.getElementById('perde-light-theme-css')?.sheet, null, { timeout: 10000 });
+
   if (file === 'index.html') {
     const routes = ['#/filmler', '#/diziler', '#/kesfet', '#/listem', '#/kategori/Aksiyon'];
     for (const route of routes) {
@@ -309,7 +313,7 @@ async function checkPage(file, label, viewport, mobile) {
         throw new Error(`${label} ${route}: horizontal overflow ${routeState.scrollWidth}px > ${routeState.viewportWidth}px`);
       }
     }
-    const firstPoster = page.locator('[data-detail-id]').first();
+    const firstPoster = page.locator('[data-detail-id]:visible').first();
     if (await firstPoster.count()) {
       await firstPoster.click({ timeout: 5000 }).catch(() => {});
       await page.waitForTimeout(900);
@@ -326,6 +330,7 @@ async function checkPage(file, label, viewport, mobile) {
   }
 
   if (file === 'admin.html') {
+    if (mobile) await page.locator('#mobile-menu').click().catch(() => {});
     for (const button of await page.locator('.admin-nav [data-page]').all()) {
       const key = await button.getAttribute('data-page');
       await button.click();
