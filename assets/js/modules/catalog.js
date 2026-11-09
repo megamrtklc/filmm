@@ -60,7 +60,7 @@ function renderMediaGrid(items = mediaDatabase) {
                         </div>
 
                         <div class="absolute bottom-3 left-3 right-3 space-y-1">
-                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-red">
+                            <span class="catalog-card-category text-[9px] font-extrabold uppercase tracking-widest">
                                 ${m.category}
                             </span>
                             <h4 class="font-black text-white text-xs truncate group-hover:text-brand-yellow transition-colors">${m.title}</h4>
