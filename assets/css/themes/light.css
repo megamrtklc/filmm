@@ -1079,3 +1079,27 @@ html[data-theme="light"] #detail-page-view .detail-main {
   background:#f8f9fb!important;
   border-color:var(--pl-line)!important;
 }
+
+html[data-theme="light"] #detail-page-view .detail-episodes-heading h2,
+html[data-theme="light"] #detail-page-view .detail-cast-heading h3 {
+  color:#303642!important;
+}
+html[data-theme="light"] #detail-page-view .detail-episodes-heading p,
+html[data-theme="light"] #detail-page-view .detail-episodes-empty,
+html[data-theme="light"] #detail-page-view .detail-episodes-loading,
+html[data-theme="light"] #detail-page-view .detail-cast-person-copy small,
+html[data-theme="light"] #detail-page-view .detail-cast-controls {
+  color:#687283!important;
+}
+html[data-theme="light"] #detail-page-view .detail-episodes-total {
+  background:#f5f6f8!important;
+  border-color:var(--pl-line)!important;
+  color:#596273!important;
+}
+html[data-theme="light"] #detail-page-view .detail-cast-person-copy strong,
+html[data-theme="light"] #detail-page-view .detail-cast-person b {
+  color:#303642!important;
+}
+html[data-theme="light"] #detail-page-view .detail-cast-person small {
+  color:#737d8d!important;
+}
