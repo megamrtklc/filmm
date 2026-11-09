@@ -9779,3 +9779,76 @@ body.detail-synopsis-open{overflow:hidden}
     height:108px!important;
   }
 }
+
+
+/* MANŞET OKLARI — sağ kenarda dikey, afişlerden ayrılmış yeni kontrol tasarımı */
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+  padding-right:100px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrows{
+  position:absolute!important;
+  top:50%!important;
+  right:18px!important;
+  left:auto!important;
+  bottom:auto!important;
+  inset-inline:auto 18px!important;
+  transform:translateY(-50%)!important;
+  width:42px!important;
+  height:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:11px!important;
+  padding:9px 0!important;
+  border:1px solid rgba(226,189,120,.28)!important;
+  border-radius:24px!important;
+  background:rgba(10,13,18,.72)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.28)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+  pointer-events:none!important;
+  z-index:120!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrow{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  border:1px solid rgba(226,189,120,.38)!important;
+  border-radius:50%!important;
+  color:#f5dfb6!important;
+  background:linear-gradient(145deg,rgba(226,189,120,.2),rgba(255,255,255,.045))!important;
+  box-shadow:0 3px 10px rgba(0,0,0,.22)!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrow:hover{
+  color:#17130d!important;
+  background:#e2bd78!important;
+  border-color:#e2bd78!important;
+  transform:scale(1.07)!important;
+}
+@media(max-width:767px){
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+    padding-right:82px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrows{
+    right:12px!important;
+    inset-inline:auto 12px!important;
+    width:38px!important;
+    gap:8px!important;
+    padding:7px 0!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrow{
+    width:30px!important;
+    height:30px!important;
+    min-width:30px!important;
+  }
+}
+@media(max-width:380px){
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+    padding-right:74px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrows{
+    right:9px!important;
+    inset-inline:auto 9px!important;
+  }
+}
