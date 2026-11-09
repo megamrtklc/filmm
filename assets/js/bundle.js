@@ -548,9 +548,10 @@ function renderHomeCollections() {
         ids=ids.filter(id=>valid.some(item=>String(item.id)===id));
         if(key==='movies')ids=ids.filter(id=>valid.find(item=>String(item.id)===id)?.type==='movie');
         if(key==='series')ids=ids.filter(id=>valid.find(item=>String(item.id)===id)?.type==='tv');
-        sectionData[key]={title:String(saved?.title||defaults[key].title),active:saved?saved.active!==false:true,displayCount:Math.min(15,Math.max(6,Number(saved?.displayCount)||Math.min(12,Math.max(6,ids.length)))),itemIds:ids};
+        const maxItems=key==='featured'?5:15,minCount=key==='featured'?1:6;
+        sectionData[key]={title:String(saved?.title||defaults[key].title),active:saved?saved.active!==false:true,displayCount:Math.min(maxItems,Math.max(minCount,Number(saved?.displayCount)||(key==='featured'?5:Math.min(12,Math.max(6,ids.length))))),itemIds:ids.slice(0,maxItems)};
     });
-    const byIds=key=>sectionData[key].itemIds.slice(0,Math.min(15,Math.max(6,Number(sectionData[key].displayCount)||sectionData[key].itemIds.length))).map(id=>valid.find(item=>String(item.id)===id)).filter(Boolean);
+    const byIds=key=>sectionData[key].itemIds.slice(0,Math.min(key==='featured'?5:15,Math.max(key==='featured'?1:6,Number(sectionData[key].displayCount)||sectionData[key].itemIds.length))).map(id=>valid.find(item=>String(item.id)===id)).filter(Boolean);
     const featured=byIds('featured');
     const movies=byIds('movies');
     const series=byIds('series');
