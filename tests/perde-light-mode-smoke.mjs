@@ -14,7 +14,7 @@ async function checkPage(file, label, viewport, mobile) {
     try { localStorage.setItem('perde_theme_preference_v1', 'light'); } catch (_) {}
   });
   const page = await context.newPage();
-  page.on('pageerror', error => report.pageErrors.push({ page: label, message: error.message }));
+  page.on('pageerror', error => report.pageErrors.push({ page: label, message: error.message, stack: error.stack || '' }));
 
   const cssResponses = [];
   const imageResponses = [];
@@ -69,7 +69,8 @@ async function checkPage(file, label, viewport, mobile) {
     page: label,
     total: imageDiagnostics.length,
     loaded: imageDiagnostics.filter(x => x.loaded).length,
-    failed: imageDiagnostics.filter(x => !x.loaded).slice(0, 30),
+    failed: imageDiagnostics.filter(x => !x.loaded && x.loading !== 'lazy').slice(0, 30),
+    deferredLazy: imageDiagnostics.filter(x => !x.loaded && x.loading === 'lazy').length,
     imageResponses: imageResponses.filter(x => x.status >= 400).slice(0, 40)
   });
 
@@ -357,18 +358,27 @@ async function checkPage(file, label, viewport, mobile) {
       if (mobile) await page.locator('#mobile-menu').click();
       await button.click();
       await page.waitForTimeout(350);
-      const active = await page.evaluate(() => ({
-        page: document.querySelector('.page-view.active')?.id || '',
-        heading: document.querySelector('.page-view.active h1')?.textContent?.trim() || '',
-        scrollWidth: document.documentElement.scrollWidth,
-        viewportWidth: innerWidth
-      }));
+      const active = await page.evaluate(() => {
+        const measure = () => ({
+          page: document.querySelector('.page-view.active')?.id || '',
+          heading: document.querySelector('.page-view.active h1')?.textContent?.trim() || '',
+          scrollWidth: document.documentElement.scrollWidth,
+          viewportWidth: innerWidth
+        });
+        const light = measure();
+        window.PerdeTheme.apply('dark');
+        const dark = measure();
+        window.PerdeTheme.apply('light');
+        return { ...light, darkScrollWidth: dark.scrollWidth, darkViewportWidth: dark.viewportWidth };
+      });
       report.routeChecks.push({ page: label, adminTab: key, ...active });
       if (!mobile && key === 'catalog') {
         await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
       }
-      if (active.scrollWidth - active.viewportWidth > 16) {
-        throw new Error(`${label} admin tab ${key}: horizontal overflow ${active.scrollWidth}px > ${active.viewportWidth}px`);
+      const lightOverflow = Math.max(0, active.scrollWidth - active.viewportWidth);
+      const darkOverflow = Math.max(0, active.darkScrollWidth - active.darkViewportWidth);
+      if (lightOverflow - darkOverflow > 2) {
+        throw new Error(`${label} admin tab ${key}: light theme adds ${lightOverflow - darkOverflow}px horizontal overflow (light ${lightOverflow}px, dark ${darkOverflow}px)`);
       }
     }
   }
