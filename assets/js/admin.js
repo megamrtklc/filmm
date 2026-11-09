@@ -1044,7 +1044,7 @@
   }
   function renderHomepageRailOrder(){
     const host=$('#home-rail-order-list');if(!host)return;
-    host.innerHTML=homepageRails.order.map((key,index)=>'<div class="home-rail-order-item" draggable="true" data-home-rail-order-item="'+key+'"><span class="home-rail-order-grip" aria-hidden="true"><i class="fa-solid fa-grip-vertical"></i></span><span class="home-rail-order-number">'+String(index+1).padStart(2,'0')+'</span><b>'+escapeHtml(homepageRailLabels[key])+'</b><span class="home-rail-order-actions"><button type="button" data-home-rail-order-up="'+key+'" '+(index===0?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-order-down="'+key+'" '+(index===homepageRails.order.length-1?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span></div>').join('');
+    host.innerHTML=homepageRails.order.map((key,index)=>'<div class="home-rail-order-item" draggable="true" data-home-rail-order-item="'+key+'"><span class="home-rail-order-grip" aria-hidden="true"><i class="fa-solid fa-grip-vertical"></i></span><span class="home-rail-order-number">'+String(index+1).padStart(2,'0')+'</span><b>'+escapeHtml(homepageRails[key]?.title||homepageRailLabels[key])+'</b><span class="home-rail-order-actions"><button type="button" data-home-rail-order-up="'+key+'" '+(index===0?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-order-down="'+key+'" '+(index===homepageRails.order.length-1?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span></div>').join('');
   }
   function renderHomepageRails(){
     if(!homepageRails||!homepageRails.featured)return;
@@ -1159,7 +1159,7 @@
           }
           renderHomepageRails();renderHomepageRailSearch(targetKey);
         });
-        $('#home-rail-'+key+'-title').addEventListener('input',event=>{homepageRails[key].title=event.target.value.slice(0,64);});
+        $('#home-rail-'+key+'-title').addEventListener('input',event=>{homepageRails[key].title=event.target.value.slice(0,64);renderHomepageRailOrder();});
         $('#home-rail-'+key+'-visibility').addEventListener('click',()=>{homepageRails[key].active=!homepageRails[key].active;renderHomepageRails();});
         $('#home-rail-'+key+'-display-count').addEventListener('change',event=>{const min=key==='featured'?5:6,max=key==='featured'?10:15;homepageRails[key].displayCount=Math.min(max,Math.max(min,Number(event.target.value)||min));renderHomepageRails();});
         $('#home-rail-'+key+'-list').addEventListener('click',event=>{
