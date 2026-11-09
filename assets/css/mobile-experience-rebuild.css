@@ -331,7 +331,7 @@
   }
   .mobile-hero-original-title { margin: 0 0 7px !important; color: rgba(255,255,255,.72) !important; font-size: 11px !important; }
   .mobile-hero-meta { display: flex !important; flex-wrap: wrap !important; gap: 5px 8px !important; margin: 0 0 10px !important; color: rgba(255,255,255,.76) !important; font-size: 11px !important; font-weight: 550 !important; }
-  .mobile-hero-desc {
+  #mobile-hero-desc {
     display: -webkit-box !important;
     width: 100% !important;
     max-width: 480px !important;
@@ -741,7 +741,7 @@
   @media (orientation: landscape) and (max-height: 520px) {
     #mobile-hero-section { height: 440px !important; min-height: 400px !important; max-height: 440px !important; }
     .mobile-hero-content { max-width: 70% !important; }
-    .mobile-hero-desc { -webkit-line-clamp: 2; }
+    #mobile-hero-desc { -webkit-line-clamp: 2; }
     .mobile-bottom-nav { min-height: 58px !important; }
     .mobile-nav-item { min-height: 44px !important; flex-direction: row !important; gap: 7px !important; }
     .mobile-nav-item i { min-width: 32px !important; height: 30px !important; }
