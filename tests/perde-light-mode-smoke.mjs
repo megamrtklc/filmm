@@ -346,12 +346,21 @@ async function checkPage(file, label, viewport, mobile) {
     if (await detailTrigger.count()) {
       await page.evaluate(() => document.getElementById('hero-watch-btn')?.click());
       await page.waitForTimeout(900);
-      const detailState = await page.evaluate(() => ({
-        hash: location.hash,
-        title: document.querySelector('#detail-title')?.textContent?.trim() || '',
-        visible: !!document.querySelector('#detail-page-view') && !document.querySelector('#detail-page-view').classList.contains('hidden')
-      }));
+      const detailState = await page.evaluate(() => {
+        const detailMain = document.querySelector('#detail-page-view .detail-main');
+        const castCard = document.querySelector('#detail-page-view .detail-cast-person');
+        return {
+          hash: location.hash,
+          title: document.querySelector('#detail-title')?.textContent?.trim() || '',
+          visible: !!document.querySelector('#detail-page-view') && !document.querySelector('#detail-page-view').classList.contains('hidden'),
+          detailSurface: detailMain ? getComputedStyle(detailMain).backgroundColor : null,
+          castSurface: castCard ? getComputedStyle(castCard).backgroundColor : null
+        };
+      });
       report.routeChecks.push({ page: label, route: 'detail-card-click', ...detailState });
+      if (detailState.visible && detailState.detailSurface !== 'rgb(255, 255, 255)') {
+        throw new Error(`${label}: detail content surface is not light (${detailState.detailSurface})`);
+      }
       if (detailState.visible) {
         await page.screenshot({ path: `${output}/${label}-detail.png`, fullPage: true, animations: 'disabled' });
       }
