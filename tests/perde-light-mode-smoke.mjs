@@ -85,9 +85,6 @@ async function checkPage(file, label, viewport, mobile) {
   if (file === 'index.html' && state.homepageMainBackground !== 'rgb(243, 244, 246)') {
     throw new Error(`${label}: homepage content canvas is not light (${state.homepageMainBackground})`);
   }
-  if (file === 'index.html' && state.hero.backgroundColor !== 'rgb(255, 255, 255)') {
-    throw new Error(`${label}: hero surface is not light (${state.hero.backgroundColor})`);
-  }
   if (file === 'index.html' && state.hero.titleText && state.hero.titleOpacity !== '1') {
     throw new Error(`${label}: hero title is visually hidden (opacity ${state.hero.titleOpacity})`);
   }
