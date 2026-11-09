@@ -937,3 +937,62 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
     }
   }
 }
+
+
+/* PERDE — Telefonlara özel bağımsız sinematik manşet.
+   Tablet (768px+) ve masaüstü mevcut manşeti kullanmaya devam eder. */
+.mobile-hero-section{display:none}
+@media screen and (max-width:767px){
+  #dashboard-view .home-feature-row #hero-section{display:none!important}
+  #dashboard-view .home-feature-row #mobile-hero-section{
+    position:relative!important;display:flex!important;flex-direction:column!important;
+    justify-content:flex-end!important;isolation:isolate!important;overflow:hidden!important;
+    width:100%!important;min-height:650px!important;height:min(780px,calc(100svh - 72px))!important;
+    max-height:780px!important;margin:0!important;padding:0 18px 18px!important;
+    background:#08090d!important;border:0!important;
+  }
+  #mobile-hero-section .mobile-hero-art{position:absolute;inset:0;z-index:-2;overflow:hidden;background:#11131a}
+  #mobile-hero-section .mobile-hero-art img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 28%;transform:scale(1.015);transition:opacity .35s ease,transform 1.2s ease;filter:saturate(.92)}
+  #mobile-hero-section.is-changing .mobile-hero-art img{opacity:.45;transform:scale(1.045)}
+  #mobile-hero-section .mobile-hero-shade{position:absolute;inset:0;background:
+    linear-gradient(180deg,rgba(5,6,10,.18) 0%,rgba(5,6,10,.04) 25%,rgba(5,6,10,.25) 43%,rgba(5,6,10,.88) 67%,#08090d 100%),
+    linear-gradient(90deg,rgba(5,6,10,.34),transparent 80%)}
+  #mobile-hero-section .mobile-hero-topline{position:absolute;top:96px;left:18px;right:18px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  #mobile-hero-section .mobile-hero-kicker,#mobile-hero-section .mobile-hero-type{
+    display:inline-flex;align-items:center;gap:7px;min-height:29px;padding:0 10px;border:1px solid rgba(255,255,255,.19);
+    border-radius:999px;background:rgba(8,9,13,.48);color:#fff;font-size:9px;font-weight:850;letter-spacing:.1em;
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)
+  }
+  #mobile-hero-section .mobile-hero-kicker i{color:#f5c84b}
+  #mobile-hero-section .mobile-hero-type{color:#f5d77b}
+  #mobile-hero-section .mobile-hero-content{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;padding-top:270px}
+  #mobile-hero-section .mobile-hero-ratings{display:flex;align-items:center;gap:7px;margin-bottom:12px}
+  #mobile-hero-section .hero-rating-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid rgba(255,255,255,.16);border-radius:7px;background:rgba(8,9,13,.62);color:#fff;font-size:10px}
+  #mobile-hero-section .hero-rating-badge.imdb b{padding:2px 4px;border-radius:3px;background:#f5c518;color:#111;font-size:9px}
+  #mobile-hero-section .hero-rating-badge strong{font-size:11px}
+  #mobile-hero-section h1{margin:0;color:#fff;font-size:clamp(30px,9vw,46px);font-weight:950;line-height:.99;letter-spacing:-.045em;text-transform:uppercase;text-shadow:0 3px 20px rgba(0,0,0,.48);overflow-wrap:anywhere}
+  #mobile-hero-section .mobile-hero-original-title{display:block;margin-top:6px;color:rgba(255,255,255,.66);font-size:10px;font-weight:600}
+  #mobile-hero-section .mobile-hero-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px 9px;margin-top:12px;color:rgba(235,238,245,.82);font-size:10px;font-weight:650}
+  #mobile-hero-section .hero-meta-item{display:inline-flex;align-items:center;gap:5px}
+  #mobile-hero-section .hero-meta-item i{color:#f5c84b;font-size:10px}
+  #mobile-hero-section .hero-meta-separator{color:rgba(255,255,255,.35)}
+  #mobile-hero-section #mobile-hero-desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;margin:11px 0 0;color:rgba(235,238,245,.78);font-size:11px;line-height:1.55;font-weight:400}
+  #mobile-hero-section .mobile-hero-actions{display:flex;align-items:center;gap:9px;margin-top:17px}
+  #mobile-hero-section .mobile-hero-actions button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:43px;padding:0 15px;border-radius:11px;font-size:11px;font-weight:850;transition:transform .18s ease,background .18s ease}
+  #mobile-hero-section #mobile-hero-watch-btn{flex:1;background:#f5c518;color:#141414;box-shadow:0 7px 20px rgba(245,197,24,.2)}
+  #mobile-hero-section #mobile-hero-list-btn{flex:0 0 auto;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.09);color:#fff}
+  #mobile-hero-section .mobile-hero-actions button:active{transform:scale(.97)}
+  #mobile-hero-section .mobile-hero-controls{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:12px;border-top:1px solid rgba(255,255,255,.15)}
+  #mobile-hero-section .mobile-hero-control-label{color:rgba(255,255,255,.55);font-size:8px;font-weight:850;letter-spacing:.17em}
+  #mobile-hero-section .mobile-hero-control-actions{display:flex;align-items:center;gap:8px}
+  #mobile-hero-section #mobile-hero-counter{margin-right:3px;color:rgba(255,255,255,.72);font-size:9px;font-weight:750;font-variant-numeric:tabular-nums}
+  #mobile-hero-section .mobile-hero-control-actions button{display:grid;place-items:center;width:32px;height:32px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(255,255,255,.08);color:#fff}
+  #mobile-hero-section .mobile-hero-control-actions button:active{background:#f5c518;color:#111}
+}
+@media screen and (max-width:380px){
+  #dashboard-view .home-feature-row #mobile-hero-section{min-height:620px!important;padding-inline:15px!important}
+  #mobile-hero-section .mobile-hero-topline{left:15px;right:15px;top:91px}
+  #mobile-hero-section .mobile-hero-content{padding-top:250px}
+  #mobile-hero-section .mobile-hero-actions button{padding-inline:11px}
+}
+@media(prefers-reduced-motion:reduce){#mobile-hero-section .mobile-hero-art img{transition:none!important}}
