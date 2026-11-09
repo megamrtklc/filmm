@@ -42,7 +42,7 @@
                 }
             }
         }
-    </script><link rel="stylesheet" href="assets/css/style.css?v=20261110-hero-overlay-arrows-v24">
+    </script><link rel="stylesheet" href="assets/css/style.css?v=20261110-mobile-hero-overlay-arrows-v25">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
     <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261110-phone-landscape-v7">
     <link rel="stylesheet" href="assets/css/mobile-navigation.css?v=20261110-phone-landscape-v3">
@@ -180,14 +180,15 @@
                 </div>
                 <div class="hero-poster-zone">
                     <div id="hero-thumbnails-rail" class="hero-thumbnails no-scrollbar" aria-label="Son eklenen içerikler"></div>
+                    <div class="hero-arrows" role="group" aria-label="Manşet gezinme">
+                        <button class="hero-arrow" type="button" data-hero-direction="-1" aria-label="Önceki yapım" title="Önceki yapım"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                        <button class="hero-arrow" type="button" data-hero-direction="1" aria-label="Sonraki yapım" title="Sonraki yapım"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
                     
 
                 </div>
             </div>
-            <div class="hero-arrows" role="group" aria-label="Manşet gezinme">
-                <button class="hero-arrow" type="button" data-hero-direction="-1" aria-label="Önceki yapım" title="Önceki yapım"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
-                <button class="hero-arrow" type="button" data-hero-direction="1" aria-label="Sonraki yapım" title="Sonraki yapım"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-            </div>
+
         
         </section>
         <!-- Yalnızca gerçek telefon görünümünde kullanılan bağımsız mobil manşet -->
@@ -211,12 +212,14 @@
                     <button id="mobile-hero-trailer-btn" type="button" onclick="openTrailerPopup(heroCurrentId)" aria-label="Fragmanı izle"><i class="fa-solid fa-circle-play" aria-hidden="true"></i><span>Fragmanı İzle</span></button>
                 </div>
             </div>
+            <div class="mobile-hero-overlay-arrows" role="group" aria-label="Manşet gezinme">
+                <button type="button" data-mobile-hero-direction="-1" aria-label="Önceki yapım"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-hero-direction="1" aria-label="Sonraki yapım"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+            </div>
             <div class="mobile-hero-controls">
                 <span class="mobile-hero-control-label">PERDE SEÇKİSİ</span>
                 <div class="mobile-hero-control-actions">
                     <span id="mobile-hero-counter">01 / 01</span>
-                    <button type="button" data-mobile-hero-direction="-1" aria-label="Önceki yapım"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
-                    <button type="button" data-mobile-hero-direction="1" aria-label="Sonraki yapım"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
                 </div>
             </div>
         </section>
