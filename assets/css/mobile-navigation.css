@@ -1,6 +1,6 @@
 /* PERDE — premium mobile header and floating navigation
    Strictly limited to real phone-width layouts. Tablet and desktop remain untouched. */
-@media (max-width: 767px) {
+@media (max-width: 767px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
   body#theme-body {
     padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
   }
@@ -254,7 +254,7 @@
 
 
 /* Mobile category dropdown — fixed overlay, independent of dock flex layout */
-@media (max-width: 767px) {
+@media (max-width: 767px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
   #mobile-category-panel {
     position: fixed !important; z-index: 1001 !important;
     left: 12px !important; right: 12px !important;
@@ -281,7 +281,7 @@
 @media (max-width: 380px) { #mobile-category-panel {left:8px !important;right:8px !important;padding:12px !important;} .mobile-category-grid .mobile-category-option {min-height:39px;padding-inline:8px;font-size:10px;} }
 
 /* Final guard: on true phone viewport, only the bottom dock owns primary navigation. */
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
   html:not(.perde-touch-compact) body#theme-body header.site-header > nav.main-nav,
   html:not(.perde-touch-compact) body#theme-body .site-header nav.main-nav,
   html:not(.perde-touch-compact) body#theme-body .site-header .main-nav {
@@ -298,7 +298,7 @@
 
 
 /* PERDE — slim cinematic glass dock experiment (phone only) */
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
   body#theme-body {
     padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
   }
