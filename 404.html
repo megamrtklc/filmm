@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090b10">
+<meta name="robots" content="noindex,follow">
+<title>404 — Sahne Bulunamadı | Perde</title>
+<link rel="icon" type="image/svg+xml" href="assets/icons/perde-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--gold:#d5b477;--muted:#9ba1ad;--bg:#090b10}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);font-family:Inter,system-ui,sans-serif;color:#f5f1e9}
+body{min-height:100svh;display:grid;place-items:center;overflow:hidden;padding:28px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 43%,rgba(197,151,78,.15),transparent 34%),radial-gradient(ellipse at 50% 100%,rgba(31,39,53,.55),transparent 55%),linear-gradient(120deg,#090b10,#10131a 55%,#090b10)}
+.ambient{position:fixed;inset:-20%;pointer-events:none;opacity:.22;background:conic-gradient(from 225deg at 50% 50%,transparent 0 19%,rgba(221,185,122,.10) 22%,transparent 28% 100%);filter:blur(24px)}
+.film-edge{position:fixed;left:0;right:0;height:18px;opacity:.14;background:repeating-linear-gradient(90deg,transparent 0 18px,#d9c49b 18px 30px,transparent 30px 48px);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.film-edge.top{top:0}.film-edge.bottom{bottom:0}
+.shell{position:relative;width:min(760px,100%);text-align:center;padding:clamp(30px,6vw,64px) 24px;isolation:isolate}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#f5f1e9;margin-bottom:34px}
+.brand-mark{width:34px;height:34px;color:var(--gold)}
+.brand-name{font-family:Cinzel,Georgia,serif;font-size:25px;font-weight:800;letter-spacing:.04em}
+.brand-name span{color:var(--gold)}
+.kicker{display:flex;align-items:center;justify-content:center;gap:12px;color:#c8a66e;font-size:10px;font-weight:800;letter-spacing:.32em;text-transform:uppercase}
+.kicker:before,.kicker:after{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.kicker:after{transform:scaleX(-1)}
+.number{font-family:Cinzel,Georgia,serif;font-size:clamp(112px,27vw,218px);font-weight:800;line-height:.95;letter-spacing:-.07em;margin:15px 0 4px;color:transparent;background:linear-gradient(180deg,#f2dfb9 4%,#bd9557 48%,#70532e 100%);background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 12px 34px rgba(0,0,0,.4));position:relative}
+.number:after{content:"";position:absolute;inset:8% 12%;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.12) 48%,transparent 58%);pointer-events:none}
+h1{font-family:Cinzel,Georgia,serif;font-size:clamp(23px,4vw,34px);font-weight:700;letter-spacing:-.02em;margin:18px 0 12px}
+.desc{max-width:490px;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.85}
+.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 19px;border-radius:7px;text-decoration:none;font-size:12px;font-weight:750;letter-spacing:.02em;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.primary{background:linear-gradient(135deg,#e3c58e,#bd9453);color:#17130d;box-shadow:0 8px 24px rgba(190,148,83,.18)}
+.secondary{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.035);color:#e9e5dc}
+.secondary:hover{border-color:rgba(213,180,119,.55);background:rgba(213,180,119,.07)}
+.foot{margin-top:48px;color:#626a78;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:520px){body{padding:16px}.shell{padding:28px 12px}.brand{margin-bottom:28px}.desc{font-size:13px}.actions{gap:9px}.btn{width:100%}.foot{margin-top:36px}}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div><div class="film-edge top" aria-hidden="true"></div><div class="film-edge bottom" aria-hidden="true"></div>
+<main class="shell">
+<a class="brand" href="./index.html#/anasayfa" aria-label="Perde ana sayfa">
+<svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M7 8.5h26v23H7z" stroke="currentColor" stroke-width="1.8"/><path d="M13 8.5v23M27 8.5v23M7 14h6M27 14h6M7 26h6M27 26h6" stroke="currentColor" stroke-width="1.5"/><path d="m16.5 15.5 7.5 4.5-7.5 4.5z" fill="currentColor"/></svg>
+<span class="brand-name">perde<span>.</span></span>
+</a>
+<div class="kicker">Aradığınız sahne bulunamadı</div>
+<div class="number" aria-label="Hata 404">404</div>
+<h1>Bu sahne burada yok.</h1>
+<p class="desc">Aradığınız sayfa yayından kalkmış, adresi değişmiş ya da yanlış yazılmış olabilir. Dilerseniz ana sayfaya dönüp keşfe kaldığınız yerden devam edin.</p>
+<div class="actions">
+<a class="btn primary" href="./index.html#/anasayfa"><span aria-hidden="true">⌂</span> Ana Sayfaya Dön</a>
+<a class="btn secondary" href="./index.html#/filmler">Filmleri Keşfet <span aria-hidden="true">→</span></a>
+<a class="btn secondary" href="#" onclick="if(history.length>1){history.back();return false}return false;" id="back-link">← Önceki Sayfa</a>
+</div>
+<div class="foot">Perde · Her hikâyenin bir yeri var</div>
+</main>
+<script>
+document.getElementById('back-link').addEventListener('click',function(e){e.preventDefault();if(document.referrer&&new URL(document.referrer).origin===location.origin){history.back()}else{location.href='./index.html#/anasayfa'}});
+</script>
+</body>
+</html>
