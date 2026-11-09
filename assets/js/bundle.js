@@ -570,7 +570,7 @@ function renderHomeCollections() {
         featuredRail.classList.add('featured-number-rail');
         featuredRail.innerHTML = featured.length ? featured.map((item,index) => `
             <article class="featured-number-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
-                <span class="featured-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>
+                <span class="featured-number" aria-hidden="true">${String(index+1)}</span>
                 <div class="featured-number-poster">
                     <img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="${index<3?'eager':'lazy'}" decoding="async">
                     <span class="collection-rating">★ ${escapeCountryHtml(item.rating || '—')}</span>
