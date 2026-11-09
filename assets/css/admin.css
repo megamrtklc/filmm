@@ -1124,3 +1124,14 @@
 .home-rail-item-actions{height:30px!important;min-height:30px!important}
 .home-rail-item-actions .home-rail-remove{height:27px!important}
 }
+
+
+/* Koleksiyon rafları: sade yönetim kontrolleri */
+.collection-management-tools{display:grid;grid-template-columns:minmax(150px,1fr) auto minmax(130px,.72fr) auto;gap:8px;align-items:end;padding:12px 0 14px;border-bottom:1px solid var(--line)}
+.collection-management-tools label{display:grid;gap:5px;min-width:0}
+.collection-management-tools label>span{font-size:9px;font-weight:800;letter-spacing:.04em;color:var(--muted)}
+.collection-management-tools input,.collection-management-tools select{width:100%;min-width:0;height:36px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#11151d;color:var(--text);font:600 11px 'DM Sans',sans-serif}
+.collection-management-tools .outline-button,.collection-delete-button{height:36px;white-space:nowrap;padding:0 10px;font-size:10px}
+.collection-delete-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgba(220,90,90,.3);border-radius:8px;background:rgba(220,90,90,.07);color:#e6a0a0;cursor:pointer;font:700 10px 'DM Sans',sans-serif}
+.collection-delete-button:hover{background:rgba(220,90,90,.14);border-color:rgba(220,90,90,.55)}
+@media(max-width:680px){.collection-management-tools{grid-template-columns:minmax(0,1fr) auto}.collection-management-tools .collection-order-field{grid-column:1}.collection-management-tools .collection-delete-button{grid-column:2;grid-row:2}}
