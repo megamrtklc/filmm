@@ -681,7 +681,7 @@
       const index=latest.findIndex(row=>String(row.id)===String(id));
       if(index<0)throw new Error('Yapım GitHub kataloğunda bulunamadı; başka bir işlemle silinmiş olabilir.');
       const deleted=latest[index];latest.splice(index,1);
-      await githubCatalogRequest('PUT',{message:'Delete Perde catalog item: '+String(deleted.title||id),content:encodeGithubContent(JSON.stringify(latest,null,2)+'\\n'),sha:current.sha,branch:'main'});
+      await githubCatalogRequest('PUT',{message:'Delete Perde catalog item: '+String(deleted.title||id),content:encodeGithubContent(JSON.stringify(latest,null,2)+'\n'),sha:current.sha,branch:'main'});
       catalog=latest;selectedCatalogIds.delete(String(id));catalogPage=Math.min(catalogPage,Math.max(1,Math.ceil(catalogMatches().length/catalogPageSize)));
       renderOverview();initCatalogFilters();renderCatalog();renderCatalogHealth();renderWatchLinks();initHeroManager();initCollections();
       toast('"'+String(deleted.title||'Yapım')+'" katalogdan silindi.');
