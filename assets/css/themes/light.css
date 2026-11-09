@@ -1103,3 +1103,25 @@ html[data-theme="light"] #detail-page-view .detail-cast-person b {
 html[data-theme="light"] #detail-page-view .detail-cast-person small {
   color:#737d8d!important;
 }
+
+
+/* Final contrast pass: keep the homepage hero styling out of detail pages. */
+html[data-theme="light"] #dashboard-view #hero-title {
+  color:#282d37!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #detail-page-view #hero-title,
+html[data-theme="light"] #detail-page-view .series-redesign-copy-slot h1,
+html[data-theme="light"] #detail-page-view .detail-hero-title {
+  color:#fff!important;
+  text-shadow:0 2px 12px rgba(0,0,0,.48)!important;
+}
+html[data-theme="light"] #detail-page-view .detail-cast-person-copy,
+html[data-theme="light"] #detail-page-view .detail-cast-person-copy * {
+  color:#303642!important;
+}
+html[data-theme="light"] #detail-page-view .detail-cast-person-copy small,
+html[data-theme="light"] #detail-page-view .detail-cast-person-copy .role,
+html[data-theme="light"] #detail-page-view .detail-cast-person small {
+  color:#687283!important;
+}
