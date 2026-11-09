@@ -535,9 +535,30 @@ function renderHomeCollections() {
         rail.innerHTML = items.length ? items.map(card).join('') : '<p class="text-sm text-slate-500">Bu koleksiyonda henüz içerik yok.</p>';
     };
     const valid = mediaDatabase.filter(item => item.image && item.title);
-    const featured = [...valid].sort((a,b) => score(b)-score(a)).slice(0,5);
-    const movies = valid.filter(item => item.type === 'movie').sort((a,b) => score(b)-score(a)).slice(0,12);
-    const series = valid.filter(item => item.type === 'tv').sort((a,b) => score(b)-score(a)).slice(0,12);
+    const defaults = {
+        featured:{title:'Öne Çıkan Yapımlar',active:true,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,5).map(item=>String(item.id))},
+        movies:{title:'Yüksek Puanlı Filmler',active:true,itemIds:valid.filter(item=>item.type==='movie').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))},
+        series:{title:'Öne Çıkan Diziler',active:true,itemIds:valid.filter(item=>item.type==='tv').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))}
+    };
+    const configured=window.perdeHomepageRails||null;
+    const sectionData={};
+    ['featured','movies','series'].forEach(key=>{
+        const saved=configured&&configured[key]&&typeof configured[key]==='object'?configured[key]:null;
+        let ids=saved&&Array.isArray(saved.itemIds)?saved.itemIds.map(String):defaults[key].itemIds;
+        ids=ids.filter(id=>valid.some(item=>String(item.id)===id));
+        if(key==='movies')ids=ids.filter(id=>valid.find(item=>String(item.id)===id)?.type==='movie');
+        if(key==='series')ids=ids.filter(id=>valid.find(item=>String(item.id)===id)?.type==='tv');
+        sectionData[key]={title:String(saved?.title||defaults[key].title),active:saved?saved.active!==false:true,itemIds:ids};
+    });
+    const byIds=key=>sectionData[key].itemIds.map(id=>valid.find(item=>String(item.id)===id)).filter(Boolean);
+    const featured=byIds('featured');
+    const movies=byIds('movies');
+    const series=byIds('series');
+    const sectionIds={featured:'collection-featured',movies:'collection-movies',series:'collection-series'};
+    Object.entries(sectionIds).forEach(([key,id])=>{
+        const section=document.getElementById(id),heading=section?.querySelector('.collection-heading h2');
+        if(section){section.hidden=!sectionData[key].active;if(heading)heading.textContent=sectionData[key].title;}
+    });
     const featuredRail = document.getElementById('featured-rail');
     if (featuredRail) {
         featuredRail.classList.add('featured-number-rail');
@@ -2643,6 +2664,7 @@ heroPresentationById = {};
                     const configResponse = await fetch(new URL('./data/homepage-config.json?v=20261107-home-hero-v1', document.baseURI).href,{cache:'no-store',credentials:'omit'});
                     if (configResponse.ok) savedHeroConfig = await configResponse.json();
                 } catch (configError) { console.warn('Manşet ayarları yüklenemedi; varsayılan vitrin kullanılacak.',configError); }
+                window.perdeHomepageRails=savedHeroConfig?.homeRails||null;
                 const rawHeroSettings=savedHeroConfig?.settings||{};
                 const desktop=[4,5,6,8,10],mobile=[3,4,5,6],intervals=[4,6,8,10];
                 heroSettings={desktopCount:desktop.includes(Number(rawHeroSettings.desktopCount))?Number(rawHeroSettings.desktopCount):6,mobileCount:mobile.includes(Number(rawHeroSettings.mobileCount))?Number(rawHeroSettings.mobileCount):4,interval:intervals.includes(Number(rawHeroSettings.interval))?Number(rawHeroSettings.interval):6,autoplay:rawHeroSettings.autoplay!==false,pauseOnHover:rawHeroSettings.pauseOnHover!==false};
