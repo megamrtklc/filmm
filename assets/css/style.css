@@ -11314,3 +11314,14 @@ body.detail-synopsis-open{overflow:hidden}
   #collection-featured .featured-number-poster,
   #collection-featured .featured-number-poster img{transition:none!important}
 }
+
+
+/* Öne Çıkan Yapımlar — afiş yüksekliği %12 kısaltıldı; genişlik ve sıralama numaraları korunur */
+#collection-featured .featured-number-poster{
+  aspect-ratio:0.758 / 1!important;
+}
+#collection-featured .featured-number-poster img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+}
