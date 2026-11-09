@@ -563,7 +563,7 @@ function renderHomeCollections() {
     if(homeCollections&&customRails)orderedRailKeys.forEach(key=>{const section=document.getElementById(sectionIds[key]);if(section)section.before(customRails);});
     Object.entries(sectionIds).forEach(([key,id])=>{
         const section=document.getElementById(id),heading=section?.querySelector('.collection-heading h2');
-        if(section){section.hidden=!sectionData[key].active;if(heading)heading.textContent=sectionData[key].title;}
+        if(section){const isActive=sectionData[key].active;section.hidden=!isActive;if(isActive)section.style.removeProperty('display');else section.style.setProperty('display','none','important');if(heading)heading.textContent=sectionData[key].title;}
     });
     const featuredRail = document.getElementById('featured-rail');
     if (featuredRail) {
