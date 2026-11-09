@@ -10253,3 +10253,10 @@ body.detail-synopsis-open{overflow:hidden}
   #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb,
   #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb.active{transition:none!important;}
 }
+
+
+/* ANA SAYFA ODAKLI BÖLÜM GÖRÜNÜRLÜĞÜ — keşif ve kişisel öneri kartları yalnızca anasayfada */
+#dashboard-view .home-mood-continue-row[hidden],
+#dashboard-view .home-mood-continue-row.hidden {
+  display: none !important;
+}
