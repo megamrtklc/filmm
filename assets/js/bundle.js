@@ -2316,6 +2316,91 @@ document.addEventListener('keydown', function(event) {
 });
 
 
+/* Homepage hover preview: poster first, trailer after two seconds */
+(function initHomepageHoverPreview(){
+    if(window.__perdeHoverPreviewReady)return;
+    window.__perdeHoverPreviewReady=true;
+    let openTimer=null,playTimer=null,closeTimer=null,activeId=null,activeCard=null;
+    let panel=null;
+    const clearTimers=()=>{clearTimeout(openTimer);clearTimeout(playTimer);clearTimeout(closeTimer);};
+    const ensurePanel=()=>{
+        if(panel)return panel;
+        panel=document.createElement('div');
+        panel.id='perde-hover-preview';
+        panel.className='perde-hover-preview';
+        panel.setAttribute('role','dialog');
+        panel.setAttribute('aria-label','Yapım önizlemesi');
+        panel.innerHTML='<div class="perde-preview-media"><img class="perde-preview-poster" alt=""><div class="perde-preview-player"></div></div><div class="perde-preview-copy"><div class="perde-preview-title-row"><div><h3 class="perde-preview-title"></h3><p class="perde-preview-meta"></p></div><button type="button" class="perde-preview-watch"><i class="fa-solid fa-play"></i><span>İzle</span></button></div><p class="perde-preview-desc"></p></div>';
+        document.body.appendChild(panel);
+        panel.addEventListener('pointerenter',()=>{clearTimeout(closeTimer);});
+        panel.addEventListener('pointerleave',scheduleClose);
+        panel.querySelector('.perde-preview-watch').addEventListener('click',event=>{
+            event.preventDefault();event.stopPropagation();
+            const id=activeId;hidePreview();if(id)openDetailPage(id);
+        });
+        return panel;
+    };
+    const scheduleClose=()=>{clearTimeout(closeTimer);closeTimer=setTimeout(hidePreview,220);};
+    function hidePreview(){
+        clearTimers();activeId=null;activeCard=null;
+        if(panel){panel.classList.remove('is-visible');panel.querySelector('.perde-preview-player').innerHTML='';}
+    }
+    function positionPanel(card){
+        const box=ensurePanel(),rect=card.getBoundingClientRect();
+        const width=Math.min(430,window.innerWidth-24),height=410;
+        const left=Math.max(12,Math.min(window.innerWidth-width-12,rect.left+rect.width/2-width/2));
+        const top=Math.max(12,Math.min(window.innerHeight-height-12,rect.top+rect.height/2-height/2));
+        box.style.width=width+'px';box.style.left=left+'px';box.style.top=top+'px';
+    }
+    function showPreview(card){
+        const id=card.getAttribute('data-detail-id');
+        const item=mediaDatabase.find(entry=>String(entry.id)===String(id));
+        if(!item)return;
+        clearTimers();activeId=String(item.id);activeCard=card;
+        const box=ensurePanel(),poster=box.querySelector('.perde-preview-poster'),player=box.querySelector('.perde-preview-player');
+        const image=item.tmdbBackdrop||item.backdrop||item.image||item.poster||'';
+        poster.src=image;poster.alt=item.title+' görseli';poster.style.display='block';
+        player.innerHTML='';
+        box.querySelector('.perde-preview-title').textContent=item.title||'';
+        const genres=Array.isArray(item.tmdbGenres)?item.tmdbGenres.join(', '):(item.tmdbGenres||item.category||item.genre||'');
+        const kind=item.type==='tv'?'Dizi':'Film';
+        const duration=item.type==='tv'?[(item.seasons||item.tmdbSeasons)?(item.seasons||item.tmdbSeasons)+' Sezon':'',(item.episodes||item.tmdbEpisodes)?(item.episodes||item.tmdbEpisodes)+' Bölüm':''].filter(Boolean).join(' '):(item.duration||item.tmdbRuntime?((item.duration||item.tmdbRuntime)+' dk'):'');
+        box.querySelector('.perde-preview-meta').textContent=[item.year||item.releaseYear,genres,kind,duration].filter(Boolean).join(' | ');
+        box.querySelector('.perde-preview-desc').textContent=item.desc||item.tmdbOverview||'Bu yapım için konu özeti henüz eklenmemiş.';
+        positionPanel(card);box.classList.add('is-visible');
+        const trailerId=getHeroTrailerId(item.trailerUrl||item.tmdbTrailerUrl);
+        if(trailerId)playTimer=setTimeout(()=>{
+            if(activeId!==String(item.id)||!box.classList.contains('is-visible'))return;
+            poster.style.display='none';
+            player.innerHTML='<iframe title="'+String(item.title||'').replace(/[<>&"]/g,'')+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+trailerId+'?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+        },2000);
+    }
+    document.addEventListener('pointerover',event=>{
+        const card=event.target.closest('#dashboard-view [data-detail-id]');
+        if(!card||card.contains(event.relatedTarget)||event.pointerType==='touch')return;
+        clearTimeout(closeTimer);clearTimeout(openTimer);
+        openTimer=setTimeout(()=>showPreview(card),260);
+    });
+    document.addEventListener('pointerout',event=>{
+        const card=event.target.closest('#dashboard-view [data-detail-id]');
+        if(!card||card.contains(event.relatedTarget))return;
+        scheduleClose();
+    });
+    document.addEventListener('focusin',event=>{
+        const card=event.target.closest('#dashboard-view [data-detail-id]');
+        if(card)showPreview(card);
+    });
+    document.addEventListener('focusout',event=>{
+        if(event.target.closest('#dashboard-view [data-detail-id]')&&!event.relatedTarget?.closest('#perde-hover-preview'))scheduleClose();
+    });
+    window.addEventListener('scroll',()=>{if(activeCard&&panel?.classList.contains('is-visible'))positionPanel(activeCard);},{passive:true});
+    window.addEventListener('resize',()=>{if(activeCard&&panel?.classList.contains('is-visible'))positionPanel(activeCard);});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape')hidePreview();});
+    document.addEventListener('click',event=>{if(!event.target.closest('#perde-hover-preview')){if(panel?.classList.contains('is-visible')&&!event.target.closest('#dashboard-view [data-detail-id]'))hidePreview();}});
+})();
+
+
+
         const NY7_PLAYER_STORAGE_KEY='ny7_player_sources_v1';
 let activePlayerMediaId=null;
 let activePlayerObjectUrl=null;
