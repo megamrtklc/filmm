@@ -10907,3 +10907,17 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-featured .featured-number-poster{width:100%!important;margin:0!important}
  #collection-featured .featured-number-copy{padding:10px 0 0 3px!important}
 }
+
+
+/* TOP 10 son rötuş: numarayı öne al, afiş altı metaveriyi kaldır */
+#collection-featured .featured-number{
+ left:-51px!important;bottom:51px!important;
+ color:rgba(235,237,241,.94)!important;
+ font-size:clamp(124px,10.8vw,154px)!important;
+ font-weight:950!important;letter-spacing:-.095em!important;
+ text-shadow:0 3px 8px rgba(0,0,0,.42)!important;
+ -webkit-text-stroke:1px rgba(255,255,255,.14)!important;
+}
+#collection-featured .featured-number-copy{display:none!important}
+#collection-featured .featured-number-poster .collection-rating{display:none!important}
+@media(max-width:820px){#collection-featured .featured-number{left:-39px!important;bottom:46px!important;font-size:clamp(108px,25vw,134px)!important}}
