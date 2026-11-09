@@ -9585,3 +9585,29 @@ body.detail-synopsis-open{overflow:hidden}
     min-height:4.5em!important;max-height:4.5em!important;
   }
 }
+
+
+/* MANŞET — başlık, künyе ve konu arasındaki dikey boşlukları dengеле */
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-title{
+  margin:0 0 4px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{
+  margin-top:3px!important;
+  margin-bottom:5px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+  margin-top:4px!important;
+  line-height:1.45!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-title{
+    margin-bottom:3px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{
+    margin-top:2px!important;
+    margin-bottom:4px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    margin-top:3px!important;
+  }
+}
