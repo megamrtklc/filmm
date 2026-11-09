@@ -536,7 +536,7 @@ function renderHomeCollections() {
     };
     const valid = mediaDatabase.filter(item => item.image && item.title);
     const defaults = {
-        featured:{title:'Öne Çıkan Yapımlar',active:true,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,5).map(item=>String(item.id))},
+        featured:{title:'Öne Çıkan Yapımlar',active:true,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,10).map(item=>String(item.id))},
         movies:{title:'Yüksek Puanlı Filmler',active:true,itemIds:valid.filter(item=>item.type==='movie').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))},
         series:{title:'Öne Çıkan Diziler',active:true,itemIds:valid.filter(item=>item.type==='tv').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))}
     };
@@ -548,10 +548,10 @@ function renderHomeCollections() {
         ids=ids.filter(id=>valid.some(item=>String(item.id)===id));
         if(key==='movies')ids=ids.filter(id=>valid.find(item=>String(item.id)===id)?.type==='movie');
         if(key==='series')ids=ids.filter(id=>valid.find(item=>String(item.id)===id)?.type==='tv');
-        const maxItems=key==='featured'?5:15,minCount=key==='featured'?1:6;
-        sectionData[key]={title:String(saved?.title||defaults[key].title),active:saved?saved.active!==false:true,displayCount:Math.min(maxItems,Math.max(minCount,Number(saved?.displayCount)||(key==='featured'?5:Math.min(12,Math.max(6,ids.length))))),itemIds:ids.slice(0,maxItems)};
+        const maxItems=key==='featured'?10:15,minCount=key==='featured'?1:6;
+        sectionData[key]={title:String(saved?.title||defaults[key].title),active:saved?saved.active!==false:true,displayCount:Math.min(maxItems,Math.max(minCount,Number(saved?.displayCount)||(key==='featured'?10:Math.min(12,Math.max(6,ids.length))))),itemIds:ids.slice(0,maxItems)};
     });
-    const byIds=key=>sectionData[key].itemIds.slice(0,Math.min(key==='featured'?5:15,Math.max(key==='featured'?1:6,Number(sectionData[key].displayCount)||sectionData[key].itemIds.length))).map(id=>valid.find(item=>String(item.id)===id)).filter(Boolean);
+    const byIds=key=>sectionData[key].itemIds.slice(0,Math.min(key==='featured'?10:15,Math.max(key==='featured'?1:6,Number(sectionData[key].displayCount)||sectionData[key].itemIds.length))).map(id=>valid.find(item=>String(item.id)===id)).filter(Boolean);
     const featured=byIds('featured');
     const movies=byIds('movies');
     const series=byIds('series');
