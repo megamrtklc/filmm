@@ -596,7 +596,12 @@ function renderHomeCollections() {
         const personalized=[...moviePool.slice(0,2),...seriesPool.slice(0,2)];
         const selectedIds=new Set(personalized.map(item=>String(item.id)));
         personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,5-personalized.length));
-        const selection=shuffleItems(personalized).slice(0,5);
+        const savedPersonalized=window.perdeHomepageRails?.personalized;
+        const selection=savedPersonalized&&Array.isArray(savedPersonalized.itemIds)
+            ? savedPersonalized.itemIds.map(id=>valid.find(item=>String(item.id)===String(id))).filter(Boolean).slice(0,5)
+            : shuffleItems(personalized).slice(0,5);
+        const personalizedSection=document.getElementById('collection-personalized');
+        if(personalizedSection)personalizedSection.hidden=!!savedPersonalized&&savedPersonalized.active===false;
         if(!personalizedRail)return;
         personalizedRail.classList.remove('personalized-row-rail');
         personalizedRail.classList.add('personalized-editorial-rail');
