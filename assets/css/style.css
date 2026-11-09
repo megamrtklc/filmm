@@ -11557,6 +11557,9 @@ body.detail-synopsis-open{overflow:hidden}
   letter-spacing:-.018em!important;
   font-weight:650!important;
 }
+#dashboard-view #daily-pick-section .mood-gallery-heading-copy h2{
+  font-size:clamp(15px,1.35vw,19px)!important;
+}
 #dashboard-view #daily-pick-section .mood-gallery-heading-copy h2:before,
 #collection-personalized .collection-heading h2:before{
   content:"";
@@ -11573,6 +11576,9 @@ body.detail-synopsis-open{overflow:hidden}
   #collection-personalized .collection-heading h2{
     font-size:17px!important;
     gap:9px!important;
+  }
+  #dashboard-view #daily-pick-section .mood-gallery-heading-copy h2{
+    font-size:15px!important;
   }
   #dashboard-view #daily-pick-section .mood-gallery-heading-copy h2:before,
   #collection-personalized .collection-heading h2:before{height:20px}
