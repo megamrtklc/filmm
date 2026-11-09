@@ -277,6 +277,9 @@ async function checkPage(file, label, viewport, mobile) {
       layout
     };
   });
+  if (file === 'index.html' && !mobile) {
+    await page.screenshot({ path: `${output}/${label}-dark.png`, fullPage: true, animations: 'disabled' });
+  }
   if (darkResult.dataTheme !== null) throw new Error(`${label}: dark switch left data-theme enabled`);
   if (file === 'index.html' && !darkResult.darkClass) throw new Error(`${label}: homepage dark class was not restored`);
   if (JSON.stringify(state.layout) !== JSON.stringify(darkResult.layout)) {
