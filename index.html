@@ -44,6 +44,20 @@
         }
     </script><link rel="stylesheet" href="assets/css/style.css?v=20261109-editorial-cards-v23">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
+    <script>
+      (function(){
+        try {
+          if (localStorage.getItem('perde_theme_preference_v1') === 'light') {
+            document.documentElement.setAttribute('data-theme','light');
+            var link=document.createElement('link');
+            link.id='perde-light-theme-css';
+            link.rel='stylesheet';
+            link.href='assets/css/themes/light.css';
+            document.head.appendChild(link);
+          }
+        } catch (_) {}
+      })();
+    </script>
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
 
