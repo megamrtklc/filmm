@@ -11037,3 +11037,11 @@ body.detail-synopsis-open{overflow:hidden}
 /* Hover önizleme: İzle aksiyonu metinli buton */
 .perde-preview-watch{width:auto;min-width:88px;height:42px;padding:0 15px;border-radius:999px;font-size:13px;gap:8px}
 .perde-preview-watch span{display:inline}
+
+/* Fragman önizlemesi ses kontrolü */
+.perde-preview-volume{position:absolute;z-index:3;right:12px;bottom:12px;display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:999px;background:rgba(8,10,14,.82);backdrop-filter:blur(10px);color:#fff;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.perde-hover-preview:has(.perde-preview-player iframe) .perde-preview-volume{opacity:1;pointer-events:auto}
+.perde-preview-volume i{font-size:13px;width:14px;text-align:center}
+.perde-preview-volume-range{width:88px;accent-color:#facc15;cursor:pointer}
+.perde-preview-volume-value{font-size:11px;min-width:27px;color:#e5e7eb;font-variant-numeric:tabular-nums}
+@media(max-width:600px){.perde-preview-volume{right:8px;bottom:8px;padding:7px 9px}.perde-preview-volume-range{width:72px}}
