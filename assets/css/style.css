@@ -10702,3 +10702,49 @@ body.detail-synopsis-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
  #collection-personalized .personalized-editorial-card,#collection-personalized .personalized-editorial-image{transition:none!important}
 }
+
+
+/* DÜZELTME — 1 büyük kartın yanında 4 öneriyi kesin görünür tut */
+#collection-personalized .personalized-editorial-rail{
+ display:flex!important;flex-direction:row!important;align-items:stretch!important;
+ gap:10px!important;width:100%!important;min-width:0!important;
+}
+#collection-personalized .personalized-editorial-rail>.personalized-editorial-card.is-featured{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ flex:1.08 1 0!important;width:auto!important;min-width:0!important;
+}
+#collection-personalized .personalized-editorial-rail>.personalized-editorial-support{
+ display:grid!important;visibility:visible!important;opacity:1!important;
+ position:relative!important;flex:1 1 0!important;width:auto!important;min-width:0!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ grid-template-rows:repeat(2,minmax(0,1fr))!important;
+ gap:9px!important;overflow:hidden!important;
+}
+#collection-personalized .personalized-editorial-support>.personalized-editorial-card.is-supporting{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ position:relative!important;width:100%!important;min-width:0!important;
+ height:100%!important;min-height:0!important;
+}
+@media(max-width:820px){
+ #collection-personalized .personalized-editorial-rail{
+  display:flex!important;flex-direction:column!important;gap:9px!important;
+ }
+ #collection-personalized .personalized-editorial-rail>.personalized-editorial-card.is-featured{
+  flex:none!important;width:100%!important;height:220px!important;
+ }
+ #collection-personalized .personalized-editorial-rail>.personalized-editorial-support{
+  display:grid!important;flex:none!important;width:100%!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,145px)!important;overflow:visible!important;
+ }
+ #collection-personalized .personalized-editorial-support>.personalized-editorial-card.is-supporting{
+  height:145px!important;
+ }
+}
+@media(max-width:560px){
+ #collection-personalized .personalized-editorial-rail>.personalized-editorial-card.is-featured{height:205px!important}
+ #collection-personalized .personalized-editorial-rail>.personalized-editorial-support{
+  grid-template-rows:repeat(2,clamp(130px,39vw,160px))!important;
+ }
+ #collection-personalized .personalized-editorial-support>.personalized-editorial-card.is-supporting{height:100%!important}
+}
