@@ -996,3 +996,31 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
   #mobile-hero-section .mobile-hero-actions button{padding-inline:11px}
 }
 @media(prefers-reduced-motion:reduce){#mobile-hero-section .mobile-hero-art img{transition:none!important}}
+
+
+/* Mobile hero replacement — explicit direct-child selectors to defeat
+   legacy hero display rules without affecting tablet/desktop breakpoints. */
+@media screen and (max-width:767px){
+  #dashboard-view .home-feature-row > section#hero-section.hero-section{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+    position:absolute!important;
+    width:0!important;
+    height:0!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #dashboard-view .home-feature-row > section#mobile-hero-section.mobile-hero-section{
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+    position:relative!important;
+    width:100%!important;
+    height:min(780px,calc(100svh - 72px))!important;
+    min-height:650px!important;
+    max-height:780px!important;
+  }
+}
