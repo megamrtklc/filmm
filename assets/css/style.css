@@ -10796,3 +10796,16 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-personalized .personalized-editorial-card.is-supporting .personalized-editorial-content{padding:9px!important}
  #collection-personalized .personalized-editorial-card.is-supporting .personalized-editorial-content h3{font-size:12px!important}
 }
+
+
+/* PERDE’DE KEŞFET ve Senin İçin Seçtiklerimiz — daha köşeli kartlar */
+#daily-pick-section .mood-discovery-result{
+ border-radius:12px!important;
+}
+#collection-personalized .personalized-editorial-card{
+ border-radius:8px!important;
+}
+@media(max-width:700px){
+ #daily-pick-section .mood-discovery-result{border-radius:10px!important}
+ #collection-personalized .personalized-editorial-card{border-radius:7px!important}
+}
