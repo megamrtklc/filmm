@@ -53,10 +53,18 @@ async function checkPage(file, label, viewport, mobile) {
         const title = document.querySelector('#hero-title');
         const copy = document.querySelector('#hero-section .hero-copy');
         return {
+          backgroundColor: hero ? getComputedStyle(hero).backgroundColor : null,
           backgroundImage: hero ? getComputedStyle(hero).backgroundImage : null,
+          inlineStyle: hero?.getAttribute('style') || '',
           titleText: title?.textContent?.trim() || '',
           titleOpacity: title ? getComputedStyle(title).opacity : null,
-          copyClass: copy?.className || ''
+          copyClass: copy?.className || '',
+          lightRules: (() => {
+            const sheet = document.getElementById('perde-light-theme-css')?.sheet;
+            if (!sheet) return [];
+            return Array.from(sheet.cssRules).filter(rule => rule.selectorText?.includes('#hero-section'))
+              .map(rule => ({ selector: rule.selectorText, background: rule.style.background, backgroundColor: rule.style.backgroundColor, backgroundImage: rule.style.backgroundImage }));
+          })()
         };
       })(),
       rankingNumberColor: (() => {
@@ -76,6 +84,9 @@ async function checkPage(file, label, viewport, mobile) {
   }
   if (file === 'index.html' && state.homepageMainBackground !== 'rgb(243, 244, 246)') {
     throw new Error(`${label}: homepage content canvas is not light (${state.homepageMainBackground})`);
+  }
+  if (file === 'index.html' && state.hero.backgroundColor !== 'rgb(255, 255, 255)') {
+    throw new Error(`${label}: hero surface is not light (${state.hero.backgroundColor})`);
   }
   if (file === 'index.html' && state.hero.titleText && state.hero.titleOpacity !== '1') {
     throw new Error(`${label}: hero title is visually hidden (opacity ${state.hero.titleOpacity})`);
