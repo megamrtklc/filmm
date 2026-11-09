@@ -76,13 +76,14 @@ async function checkPage(file, label, viewport, mobile) {
         const fixture = document.createElement('div');
         fixture.style.display = 'none';
         fixture.id = 'dashboard-view';
-        fixture.className = 'home-mood-continue-row';
         fixture.innerHTML = `
+          <div class="home-mood-continue-row">
           <table class="admin-table"><thead><tr><th>Başlık</th></tr></thead><tbody><tr><td>İçerik</td></tr></tbody></table>
           <select><option>Seçenek</option></select>
           <div class="nav-menu">Menü</div>
           <div class="search-category-menu">Arama</div>
           <section id="daily-pick-section"><div class="mood-gallery-options">Ruh hali</div></section>
+          </div>
           <div class="catalog-picker">Katalog</div>
           <div class="modal-content">Pencere</div>
         `;
