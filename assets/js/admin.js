@@ -1060,7 +1060,7 @@
       else if(rail.itemIds.length<rail.displayCount)warning.textContent='Gösterilecek kart sayısı '+rail.displayCount+'. Bu sayıya ulaşmak için '+(rail.displayCount-rail.itemIds.length)+' yapım daha ekle.';
       else warning.textContent='';
       warning.classList.toggle('is-warning',!!warning.textContent);
-      const add=$('#home-rail-'+key+'-add');add.disabled=rail.itemIds.length>=15;
+      const add=$('#home-rail-'+key+'-add');if(add)add.disabled=rail.itemIds.length>=15;
       if(!rail.itemIds.length){list.innerHTML='<div class="home-rail-empty">Henüz yapım eklenmedi.</div>';return;}
       list.innerHTML=rail.itemIds.map((id,index)=>{
         const item=catalog.find(entry=>String(entry.id)===id);if(!item)return '';
