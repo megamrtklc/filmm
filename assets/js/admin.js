@@ -1060,11 +1060,11 @@
       const warning=$('#home-rail-'+key+'-warning');
       if(key==='featured'&&!rail.itemIds.length&&rail.active)warning.textContent='Yayınlamak için en az 1 yapım eklemelisin.';
       else if(key!=='featured'&&rail.itemIds.length<6&&rail.active)warning.textContent='Yayınlamak için en az 6 yapım eklemelisin. Şu anda '+rail.itemIds.length+' yapım seçili.';
-      else if(rail.itemIds.length>maxItems)warning.textContent='En fazla '+maxItems+' yapım ekleyebilirsin.';
+      else if(rail.itemIds.length>rail.displayCount)warning.textContent='Gösterilecek kart sayısı '+rail.displayCount+' olarak ayarlı. Fazla yapımları kaldırmalısın; yeni yapım ekleyemezsin.';
       else if(rail.active&&rail.itemIds.length<rail.displayCount)warning.textContent='Gösterilecek kart sayısı '+rail.displayCount+'. Bu sayıya ulaşmak için '+(rail.displayCount-rail.itemIds.length)+' yapım daha ekle.';
       else warning.textContent='';
       warning.classList.toggle('is-warning',!!warning.textContent);
-      const add=$('#home-rail-'+key+'-add');if(add)add.disabled=rail.itemIds.length>=(key==='featured'?5:15);
+      const add=$('#home-rail-'+key+'-add');if(add)add.disabled=rail.itemIds.length>=rail.displayCount;
       if(!rail.itemIds.length){list.innerHTML='<div class="home-rail-empty">Henüz yapım eklenmedi.</div>';return;}
       list.innerHTML=rail.itemIds.map((id,index)=>{
         const item=catalog.find(entry=>String(entry.id)===id);if(!item)return '';
@@ -1136,8 +1136,8 @@
             rail.itemIds[replaceIndex]=id;homepageRailReplaceIndex[key]=null;
           }else{
             if(rail.itemIds.includes(id)){toast('Bu yapım zaten seçili.');event.target.value='';return;}
-            const max=key==='featured'?5:15;
-            if(rail.itemIds.length>=max){toast('Bu rafta en fazla '+max+' kart olabilir.');event.target.value='';return;}
+            const max=rail.displayCount;
+            if(rail.itemIds.length>=max){toast('Gösterilecek kart sayısı '+max+'. Bu rafa daha fazla yapım ekleyemezsin. Önce kart sayısını artır veya bir yapımı kaldır.');event.target.value='';return;}
             rail.itemIds.push(id);
           }
           event.target.value='';renderHomepageRails();renderHomepageRailSearch(key);
@@ -1154,7 +1154,7 @@
             $('#home-rail-'+targetKey+'-search').placeholder=targetKey==='movies'?'Film adı yaz…':targetKey==='series'?'Dizi adı yaz…':'Film veya dizi adı yaz…';
           }else{
             if(rail.itemIds.includes(id))return;
-            if(rail.itemIds.length>=(targetKey==='featured'?5:15)){toast('Bu rafta en fazla '+(targetKey==='featured'?5:15)+' kart olabilir.');return;}
+            if(rail.itemIds.length>=rail.displayCount){toast('Gösterilecek kart sayısı '+rail.displayCount+'. Bu rafa daha fazla yapım ekleyemezsin. Önce kart sayısını artır veya bir yapımı kaldır.');return;}
             rail.itemIds.push(id);
           }
           renderHomepageRails();renderHomepageRailSearch(targetKey);
@@ -1183,8 +1183,8 @@
   }
   async function saveHomepageRails(){
     const button=$('#home-rails-save');
-    const invalid=homepageRailKeys.filter(key=>homepageRails[key].active&&(key==='featured'?homepageRails[key].itemIds.length<1||homepageRails[key].itemIds.length>5||homepageRails[key].itemIds.length<homepageRails[key].displayCount:homepageRails[key].itemIds.length<6||homepageRails[key].itemIds.length>15||homepageRails[key].itemIds.length<homepageRails[key].displayCount));
-    if(invalid.length){toast('Yayında olan raflarda seçilen kart sayısını karşılayacak kadar yapım olmalı. Gizli raflar yayın kontrolüne dahil edilmez.');return;}
+    const invalid=homepageRailKeys.filter(key=>homepageRails[key].active&&(key==='featured'?homepageRails[key].itemIds.length<1||homepageRails[key].itemIds.length>5||homepageRails[key].itemIds.length!==homepageRails[key].displayCount:homepageRails[key].itemIds.length<6||homepageRails[key].itemIds.length>15||homepageRails[key].itemIds.length!==homepageRails[key].displayCount));
+    if(invalid.length){toast('Her raftaki seçili yapım sayısı, “Gösterilecek kart sayısı” ile aynı olmalı. Fazla yapımları kaldır veya gösterim sayısını ayarla. Gizli raflar yayın kontrolüne dahil edilmez.');return;}
     if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor…';
     $('#home-rails-save-status').textContent='GitHub deposuna kaydediliyor…';
