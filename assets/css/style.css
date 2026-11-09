@@ -9469,4 +9469,13 @@ body.detail-synopsis-open{overflow:hidden}
  }
 }
 
-
+/* MANŞET — yapım bilgilerini ilk afişin sol kenarıyla hizala */
+#dashboard-view .home-feature-row #hero-section .hero-copy{
+  box-sizing:border-box!important;
+  padding-left:48px!important;
+}
+@media(max-width:767px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    padding-left:42px!important;
+  }
+}
