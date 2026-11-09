@@ -980,7 +980,7 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
   #mobile-hero-section .mobile-hero-actions{display:flex;align-items:center;gap:9px;margin-top:17px}
   #mobile-hero-section .mobile-hero-actions button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:43px;padding:0 15px;border-radius:11px;font-size:11px;font-weight:850;transition:transform .18s ease,background .18s ease}
   #mobile-hero-section #mobile-hero-watch-btn{flex:1;background:#f5c518;color:#141414;box-shadow:0 7px 20px rgba(245,197,24,.2)}
-  #mobile-hero-section #mobile-hero-list-btn{flex:0 0 auto;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.09);color:#fff}
+  #mobile-hero-section #mobile-hero-trailer-btn{flex:0 0 auto;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.09);color:#fff}
   #mobile-hero-section .mobile-hero-actions button:active{transform:scale(.97)}
   #mobile-hero-section .mobile-hero-controls{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:12px;border-top:1px solid rgba(255,255,255,.15)}
   #mobile-hero-section .mobile-hero-control-label{color:rgba(255,255,255,.55);font-size:8px;font-weight:850;letter-spacing:.17em}
@@ -1023,4 +1023,37 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
     min-height:650px!important;
     max-height:780px!important;
   }
+}
+
+
+/* Mobile hero compact layout + trailer CTA (phone only). */
+@media screen and (max-width:767px){
+  #dashboard-view .home-feature-row > section#mobile-hero-section.mobile-hero-section{
+    height:min(690px,calc(100svh - 140px))!important;
+    min-height:560px!important;
+    max-height:690px!important;
+  }
+  #mobile-hero-section .mobile-hero-topline{top:76px!important}
+  #mobile-hero-section .mobile-hero-content{padding-top:215px!important}
+  #mobile-hero-section .mobile-hero-ratings{margin-bottom:8px!important}
+  #mobile-hero-section .mobile-hero-meta{margin-top:9px!important}
+  #mobile-hero-section #mobile-hero-desc{margin-top:9px!important}
+  #mobile-hero-section .mobile-hero-actions{margin-top:12px!important}
+  #mobile-hero-section .mobile-hero-controls{margin-top:12px!important;padding-top:9px!important}
+  #mobile-hero-section #mobile-hero-trailer-btn{
+    flex:0 0 auto!important;
+    border:1px solid rgba(255,255,255,.3)!important;
+    background:rgba(255,255,255,.12)!important;
+    color:#fff!important;
+    box-shadow:0 6px 18px rgba(0,0,0,.16)!important;
+  }
+}
+@media screen and (max-width:380px){
+  #dashboard-view .home-feature-row > section#mobile-hero-section.mobile-hero-section{
+    height:min(650px,calc(100svh - 140px))!important;
+    min-height:530px!important;
+    max-height:650px!important;
+  }
+  #mobile-hero-section .mobile-hero-topline{top:70px!important}
+  #mobile-hero-section .mobile-hero-content{padding-top:190px!important}
 }
