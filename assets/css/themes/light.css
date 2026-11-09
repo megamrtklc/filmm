@@ -377,3 +377,77 @@ html[data-theme="light"] .vjs-tech{
   html[data-theme="light"] #hero-title{font-size:34px!important}
   html[data-theme="light"] .hero-thumb{flex-basis:25%!important;width:25%!important}
 }
+
+
+/* Detail page editorial cards and series episode tracker */
+html[data-theme="light"] .detail-main,
+html[data-theme="light"] .detail-overlap,
+html[data-theme="light"] .detail-lower,
+html[data-theme="light"] .detail-data-section,
+html[data-theme="light"] .detail-info-card,
+html[data-theme="light"] .detail-description-panel,
+html[data-theme="light"] .detail-cast-card,
+html[data-theme="light"] .detail-related{
+  color:var(--pl-ink)!important;
+}
+html[data-theme="light"] .detail-info-card,
+html[data-theme="light"] .detail-description-panel,
+html[data-theme="light"] .detail-data-section,
+html[data-theme="light"] .detail-cast-card{
+  background:#fff!important;border:1px solid var(--pl-line)!important;
+  border-radius:16px!important;box-shadow:var(--pl-shadow-soft)!important;
+}
+html[data-theme="light"] .detail-section-heading,
+html[data-theme="light"] .detail-cast-heading,
+html[data-theme="light"] .detail-related-heading{color:#303642!important}
+html[data-theme="light"] .detail-score-pill,
+html[data-theme="light"] .detail-secondary-btn{
+  background:#f7f8fa!important;border:1px solid var(--pl-line)!important;color:#5c6471!important;
+}
+html[data-theme="light"] .detail-cast-person-copy,
+html[data-theme="light"] .detail-cast-person-copy strong{color:#343a45!important}
+html[data-theme="light"] .series-redesign-hero{color:#fff!important}
+html[data-theme="light"] .series-redesign-content{
+  display:grid!important;gap:18px!important;padding:24px clamp(16px,3vw,44px) 55px!important;
+}
+html[data-theme="light"] .series-watch-system,
+html[data-theme="light"] .series-diary,
+html[data-theme="light"] .series-episodes,
+html[data-theme="light"] .series-global-stats{
+  background:#fff!important;border:1px solid var(--pl-line)!important;border-radius:17px!important;
+  box-shadow:var(--pl-shadow-soft)!important;color:var(--pl-ink)!important;padding:20px!important;
+}
+html[data-theme="light"] .series-guide-heading,
+html[data-theme="light"] .series-season-toolbar{border-color:var(--pl-line)!important}
+html[data-theme="light"] .series-guide-heading h2,
+html[data-theme="light"] .series-diary h2,
+html[data-theme="light"] .series-episodes h2{color:#303642!important}
+html[data-theme="light"] .series-field-label,
+html[data-theme="light"] .series-episode-meta,
+html[data-theme="light"] .series-episode-copy p{color:#858c98!important}
+html[data-theme="light"] .series-episode-row{
+  background:#fbfcfd!important;border:1px solid #eceef2!important;border-radius:12px!important;
+}
+html[data-theme="light"] .series-episode-copy h3,
+html[data-theme="light"] .series-episode-copy strong{color:#343a45!important}
+html[data-theme="light"] .series-progress-track{background:#eceef2!important}
+html[data-theme="light"] .series-save-note,
+html[data-theme="light"] .series-loading,
+html[data-theme="light"] .series-empty{color:#858c98!important}
+html[data-theme="light"] .detail-modal-panel{
+  background:#fff!important;color:var(--pl-ink)!important;border:1px solid var(--pl-line)!important;
+  box-shadow:0 24px 70px rgba(30,38,54,.22)!important;
+}
+html[data-theme="light"] .detail-modal-panel h2,
+html[data-theme="light"] .detail-modal-panel h3{color:#303642!important}
+html[data-theme="light"] .detail-modal-panel p{color:#707784!important}
+html[data-theme="light"] .actor-banner-shade{background:linear-gradient(90deg,rgba(243,244,246,.95),rgba(243,244,246,.55),rgba(243,244,246,.15))!important}
+html[data-theme="light"] .actor-banner-copy,
+html[data-theme="light"] .actor-hero-top{color:#303642!important}
+html[data-theme="light"] .actor-work-card{background:#fff!important;border:1px solid var(--pl-line)!important;box-shadow:var(--pl-shadow-soft)!important}
+html[data-theme="light"] .actor-work-card h3,
+html[data-theme="light"] .actor-work-card p{color:#454c58!important}
+html[data-theme="light"] .admin-body{background:var(--pl-bg)!important}
+html[data-theme="light"] .admin-sidebar .sidebar-caption{color:#a2a8b2!important}
+html[data-theme="light"] .admin-topbar{border-bottom:1px solid var(--pl-line)!important}
+html[data-theme="light"] .admin-content .page-view{color:var(--pl-ink)!important}
