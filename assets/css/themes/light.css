@@ -1,0 +1,52 @@
+/*
+ * Perde Light Mode — isolated theme layer
+ * The existing style.css and admin.css remain the dark-theme source of truth.
+ * All rules are gated by html[data-theme="light"].
+ */
+html[data-theme="light"] {
+  color-scheme: light;
+  --pl-bg: #f4f5f7;
+  --pl-surface: #ffffff;
+  --pl-surface-soft: #f8f9fb;
+  --pl-sidebar: #ffffff;
+  --pl-line: #e8eaf0;
+  --pl-text: #20232b;
+  --pl-muted: #858b98;
+  --pl-subtle: #a4a9b3;
+  --pl-accent: #e74d55;
+  --pl-accent-soft: #fff0f1;
+  --pl-gold: #e5ae3d;
+  --pl-shadow: 0 12px 36px rgba(31, 38,  fifty, .07);
+  --pl-radius-sm: 10px;
+  --pl-radius-md: 16px;
+  --pl-radius-lg: 22px;
+  background: var(--pl-bg);
+}
+
+/* Shared light canvas; component-specific layout styling is added in later phases. */
+html[data-theme="light"] body {
+  background: var(--pl-bg) !important;
+  color: var(--pl-text);
+}
+
+html[data-theme="light"] ::selection {
+  background: rgba(231, 77, 85, .16);
+  color: var(--pl-text);
+}
+
+html[data-theme="light"] .no-scrollbar {
+  scrollbar-width: none;
+}
+
+html[data-theme="light"] .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The video surface intentionally remains dark for a cinema-first viewing experience. */
+html[data-theme="light"] .player-container,
+html[data-theme="light"] .video-player,
+html[data-theme="light"] #video-player,
+html[data-theme="light"] .plyr,
+html[data-theme="light"] .vjs-tech {
+  color-scheme: dark;
+}
