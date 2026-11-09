@@ -573,9 +573,10 @@ function renderHomeCollections() {
         personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,4-personalized.length));
         const selection=shuffleItems(personalized).slice(0,4);
         if(!personalizedRail)return;
-        personalizedRail.classList.add('personalized-row-rail');
+        personalizedRail.classList.remove('personalized-row-rail');
+        personalizedRail.classList.add('personalized-tile-rail');
         personalizedRail.innerHTML=selection.length?selection.map((item,index)=>{
-            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\s+/g,' ').trim();
             const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
             const meta=[item.year||'',genre].filter(Boolean).join(' · ');
             return `
