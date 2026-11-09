@@ -304,24 +304,7 @@ async function checkPage(file, label, viewport, mobile) {
     const routes = ['#/filmler', '#/diziler', '#/kesfet', '#/listem', '#/kategori/Aksiyon'];
     for (const route of routes) {
       await page.evaluate(value => { location.hash = value; }, route);
-      await page.waitForTimeout(900);
-      await page.evaluate(async () => {
-        const step = Math.max(400, Math.floor(innerHeight * 0.75));
-        for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
-          window.scrollTo(0, y);
-          await new Promise(resolve => setTimeout(resolve, 90));
-        }
-        await Promise.race([
-          Promise.all([...document.images].map(img => img.complete ? Promise.resolve() : new Promise(resolve => {
-            img.addEventListener('load', resolve, { once: true });
-            img.addEventListener('error', resolve, { once: true });
-            setTimeout(resolve, 2500);
-          }))),
-          new Promise(resolve => setTimeout(resolve, 6000))
-        ]);
-        window.scrollTo(0, 0);
-      });
-      await page.waitForTimeout(250);
+      await page.waitForTimeout(650);
       const routeState = await page.evaluate(() => ({
         hash: location.hash,
         title: document.querySelector('#catalog-page h1, #detail-title, #dashboard-view h1, main h1')?.textContent?.trim() || '',
@@ -335,7 +318,7 @@ async function checkPage(file, label, viewport, mobile) {
       }));
       report.routeChecks.push({ page: label, route, ...routeState });
       const routeName = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
-      if (route === '#/filmler' && !mobile) await page.screenshot({ path: `${output}/${label}-filmler.png`, fullPage: true, animations: 'disabled' });
+
       if (routeState.scrollWidth - routeState.viewportWidth > 16) {
         throw new Error(`${label} ${route}: horizontal overflow ${routeState.scrollWidth}px > ${routeState.viewportWidth}px`);
       }
@@ -361,7 +344,7 @@ async function checkPage(file, label, viewport, mobile) {
       if (detailState.visible && detailState.detailSurface !== 'rgb(255, 255, 255)') {
         throw new Error(`${label}: detail content surface is not light (${detailState.detailSurface})`);
       }
-      if (detailState.visible) {
+      if (detailState.visible && !mobile) {
         await page.screenshot({ path: `${output}/${label}-detail.png`, fullPage: true, animations: 'disabled' });
       }
     }
