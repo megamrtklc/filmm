@@ -1125,3 +1125,25 @@ html[data-theme="light"] #detail-page-view .detail-cast-person-copy .role,
 html[data-theme="light"] #detail-page-view .detail-cast-person small {
   color:#687283!important;
 }
+
+
+/* The active cast component uses perde-cast-* classes. */
+html[data-theme="light"] #detail-page-view .perde-cast-roster,
+html[data-theme="light"] #detail-page-view .perde-cast-header h2 {
+  color:#303642!important;
+}
+html[data-theme="light"] #detail-page-view .perde-cast-identity strong {
+  color:#303642!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #detail-page-view .perde-cast-identity small {
+  color:#687283!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #detail-page-view .perde-cast-number,
+html[data-theme="light"] #detail-page-view .perde-cast-navigation {
+  color:#7a8493!important;
+}
+html[data-theme="light"] #detail-page-view .perde-cast-entry {
+  color:#303642!important;
+}
