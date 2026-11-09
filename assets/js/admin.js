@@ -1015,6 +1015,7 @@
   const homepageRailLabels={featured:'Öne Çıkan Yapımlar',movies:'Yüksek Puanlı Filmler',series:'Öne Çıkan Diziler'};
   let homepageRails={};
   let homepageRailPickersReady=false;
+  const homepageRailReplaceIndex={featured:null,movies:null,series:null};
   function homepageRailDefaults(records=catalog){
     const score=item=>Number.parseFloat(item.rating)||0;
     const valid=records.filter(item=>item&&item.id!=null&&item.title&&item.image);
@@ -1064,7 +1065,7 @@
       list.innerHTML=rail.itemIds.map((id,index)=>{
         const item=catalog.find(entry=>String(entry.id)===id);if(!item)return '';
         const image=poster(item);
-        return '<article class="home-rail-item"><span class="home-rail-item-number">'+String(index+1).padStart(2,'0')+'</span>'+(image?'<img src="'+escapeHtml(image)+'" alt="" loading="lazy">':'<span class="home-rail-item-placeholder"><i class="fa-solid fa-film"></i></span>')+'<span class="home-rail-item-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+' · ★ '+escapeHtml(item.rating||'—')+'</small></span><span class="home-rail-item-actions"><button type="button" data-home-rail-up="'+key+':'+index+'" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-down="'+key+':'+index+'" '+(index===rail.itemIds.length-1?'disabled':'')+' aria-label="Aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button><button type="button" class="home-rail-remove" data-home-rail-remove="'+key+':'+index+'" aria-label="Kartı kaldır">Kaldır</button></span></article>';
+        return '<article class="home-rail-item"><img class="home-rail-item-bg" src="'+escapeHtml(image||'')+'" alt="" loading="lazy"><span class="home-rail-item-number">'+String(index+1).padStart(2,'0')+'</span><span class="home-rail-item-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+' · ★ '+escapeHtml(item.rating||'—')+'</small></span><span class="home-rail-item-order"><button type="button" data-home-rail-up="'+key+':'+index+'" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-down="'+key+':'+index+'" '+(index===rail.itemIds.length-1?'disabled':'')+' aria-label="Aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span><span class="home-rail-item-actions"><button type="button" class="home-rail-change" data-home-rail-change="'+key+':'+index+'"><i class="fa-solid fa-arrows-rotate"></i> Değiştir</button><button type="button" class="home-rail-remove" data-home-rail-remove="'+key+':'+index+'"><i class="fa-solid fa-trash"></i> Sil</button></span></article>';
       }).join('');
     });
   }
@@ -1074,10 +1075,13 @@
     const query=input.value.trim().toLocaleLowerCase('tr-TR');
     const allowed=catalog.filter(item=>key==='movies'?item.type==='movie':key==='series'?item.type==='tv':true);
     const matches=allowed.filter(item=>!query||String(item.title||'').toLocaleLowerCase('tr-TR').includes(query)||String(item.originalTitle||'').toLocaleLowerCase('tr-TR').includes(query)).slice(0,10);
-    host.innerHTML=matches.length?matches.map(item=>{
-      const selected=homepageRails[key].itemIds.includes(String(item.id));
-      return '<div class="home-rail-search-result"><span class="home-rail-search-result-type">'+(item.type==='tv'?'DİZİ':'FİLM')+'</span><span class="home-rail-search-result-title"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.year||'Yıl yok')+'</small></span>'+(selected?'<span class="home-rail-selected-label"><i class="fa-solid fa-check"></i> Seçildi</span>':'<button type="button" data-home-rail-pick="'+key+':'+escapeHtml(item.id)+'">Ekle</button>')+'</div>';
-    }).join(''):'<div class="home-rail-search-empty">'+(query?'Aramana uygun yapım bulunamadı.':'Bu rafta gösterilebilecek yapım bulunamadı.')+'</div>';
+    const replaceIndex=homepageRailReplaceIndex[key];
+    const modeNote=replaceIndex!==null?'<div class="home-rail-replace-note"><span>Seçili kartı değiştirmek için yeni yapımı seç.</span><button type="button" data-home-rail-cancel-replace="'+key+'">Vazgeç</button></div>':'';
+    host.innerHTML=modeNote+(matches.length?matches.map(item=>{
+      const id=String(item.id),selected=homepageRails[key].itemIds.includes(id),replaceable=replaceIndex!==null&&(!selected||homepageRails[key].itemIds[replaceIndex]===id);
+      const action=replaceIndex!==null?(replaceable?'<button type="button" data-home-rail-pick="'+key+':'+escapeHtml(id)+'">Değiştir</button>':'<span class="home-rail-selected-label">Bu rafta seçili</span>'):(selected?'<span class="home-rail-selected-label"><i class="fa-solid fa-check"></i> Seçildi</span>':'<button type="button" data-home-rail-pick="'+key+':'+escapeHtml(id)+'">Ekle</button>');
+      return '<div class="home-rail-search-result"><span class="home-rail-search-result-type">'+(item.type==='tv'?'DİZİ':'FİLM')+'</span><span class="home-rail-search-result-title"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.year||'Yıl yok')+'</small></span>'+action+'</div>';
+    }).join(''):'<div class="home-rail-search-empty">'+(query?'Aramana uygun yapım bulunamadı.':'Bu rafta gösterilebilecek yapım bulunamadı.')+'</div>');
   }
   function initHomepageRailsManager(){
     homepageRails=normalizeHomepageRails(homepageRails);
@@ -1091,23 +1095,36 @@
       homepageRailKeys.forEach(key=>{
         $('#home-rail-'+key+'-search').addEventListener('input',()=>renderHomepageRailSearch(key));
         $('#home-rail-'+key+'-results').addEventListener('click',event=>{
+          const cancel=event.target.closest('[data-home-rail-cancel-replace]');if(cancel){const targetKey=cancel.dataset.homeRailCancelReplace;homepageRailReplaceIndex[targetKey]=null;renderHomepageRailSearch(targetKey);return;}
           const button=event.target.closest('[data-home-rail-pick]');if(!button)return;
           const [targetKey,id]=button.dataset.homeRailPick.split(':');
           const rail=homepageRails[targetKey];if(!rail)return;
-          if(rail.itemIds.includes(id))return;
-          if(rail.itemIds.length>=15){toast('Bu rafta en fazla 15 kart olabilir.');return;}
-          rail.itemIds.push(id);renderHomepageRails();renderHomepageRailSearch(targetKey);
+          const replaceIndex=homepageRailReplaceIndex[targetKey];
+          if(replaceIndex!==null){
+            if(rail.itemIds.includes(id)&&rail.itemIds[replaceIndex]!==id)return;
+            rail.itemIds[replaceIndex]=id;homepageRailReplaceIndex[targetKey]=null;
+            $('#home-rail-'+targetKey+'-search').placeholder=targetKey==='movies'?'Film adı yaz…':targetKey==='series'?'Dizi adı yaz…':'Film veya dizi adı yaz…';
+          }else{
+            if(rail.itemIds.includes(id))return;
+            if(rail.itemIds.length>=15){toast('Bu rafta en fazla 15 kart olabilir.');return;}
+            rail.itemIds.push(id);
+          }
+          renderHomepageRails();renderHomepageRailSearch(targetKey);
         });
         $('#home-rail-'+key+'-title').addEventListener('input',event=>{homepageRails[key].title=event.target.value.slice(0,64);});
         $('#home-rail-'+key+'-active').addEventListener('change',event=>{homepageRails[key].active=event.target.checked;});
         $('#home-rail-'+key+'-display-count').addEventListener('change',event=>{homepageRails[key].displayCount=Math.min(15,Math.max(6,Number(event.target.value)||6));renderHomepageRails();});
         $('#home-rail-'+key+'-list').addEventListener('click',event=>{
           const button=event.target.closest('button');if(!button)return;
+          if(button.hasAttribute('data-home-rail-change')){
+            const [targetKey,indexText]=button.dataset.homeRailChange.split(':');const idx=Number(indexText);if(!homepageRails[targetKey]||!Number.isInteger(idx))return;
+            homepageRailReplaceIndex[targetKey]=idx;const input=$('#home-rail-'+targetKey+'-search');input.placeholder='Yeni yapım ara…';input.focus();renderHomepageRailSearch(targetKey);return;
+          }
           const action=['up','down','remove'].find(name=>button.hasAttribute('data-home-rail-'+name));if(!action)return;
           const [targetKey,indexText]=button.getAttribute('data-home-rail-'+action).split(':');
           const rail=homepageRails[targetKey],idx=Number(indexText);if(!rail||!Number.isInteger(idx))return;
-          if(action==='remove')rail.itemIds.splice(idx,1);
-          else{const target=idx+(action==='up'?-1:1);if(target<0||target>=rail.itemIds.length)return;[rail.itemIds[idx],rail.itemIds[target]]=[rail.itemIds[target],rail.itemIds[idx]];}
+          if(action==='remove'){rail.itemIds.splice(idx,1);if(homepageRailReplaceIndex[targetKey]===idx)homepageRailReplaceIndex[targetKey]=null;else if(homepageRailReplaceIndex[targetKey]>idx)homepageRailReplaceIndex[targetKey]--;}
+          else{const target=idx+(action==='up'?-1:1);if(target<0||target>=rail.itemIds.length)return;[rail.itemIds[idx],rail.itemIds[target]]=[rail.itemIds[target],rail.itemIds[idx]];if(homepageRailReplaceIndex[targetKey]===idx)homepageRailReplaceIndex[targetKey]=target;else if(homepageRailReplaceIndex[targetKey]===target)homepageRailReplaceIndex[targetKey]=idx;}
           renderHomepageRails();renderHomepageRailSearch(targetKey);
         });
       });
