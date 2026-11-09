@@ -9138,3 +9138,58 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-featured .featured-number-copy{padding-left:39px!important}
  #collection-featured .featured-number{font-size:42px!important}
 }
+
+
+/* PERDE — manşet genişliğiyle hizalı keşif şeridi: sol kompakt keşif, sağ geniş kişisel seçki */
+@media (min-width:821px){
+ #dashboard-view>.home-mood-continue-row{
+  display:grid!important;
+  grid-template-columns:minmax(310px,.78fr) minmax(0,1.22fr)!important;
+  align-items:stretch!important;
+  gap:20px!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  padding:22px clamp(22px,3.4vw,52px) 0!important;
+  box-sizing:border-box!important;
+ }
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+ #dashboard-view>.home-mood-continue-row>#collection-personalized{
+  align-self:stretch!important;
+  height:458px!important;
+  min-height:458px!important;
+  box-sizing:border-box!important;
+ }
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-gallery-shell,
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-discovery-result{
+  width:100%!important;
+  height:100%!important;
+  min-height:458px!important;
+  box-sizing:border-box!important;
+ }
+ #dashboard-view>.home-mood-continue-row>#collection-personalized{
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+ }
+ #dashboard-view>.home-mood-continue-row>#collection-personalized .personalized-row-rail{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  grid-template-rows:repeat(4,minmax(0,1fr))!important;
+  overflow:hidden!important;
+ }
+}
+@media (min-width:821px) and (max-width:1050px){
+ #dashboard-view>.home-mood-continue-row{
+  grid-template-columns:minmax(290px,.82fr) minmax(0,1.18fr)!important;
+  gap:14px!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+ }
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+ #dashboard-view>.home-mood-continue-row>#collection-personalized,
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-gallery-shell,
+ #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-discovery-result{
+  height:458px!important;min-height:458px!important;
+ }
+}
