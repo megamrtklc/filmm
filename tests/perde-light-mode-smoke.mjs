@@ -71,6 +71,39 @@ async function checkPage(file, label, viewport, mobile) {
       discoverySurfaceBackground: (() => {
         const node = document.querySelector('#daily-pick-section .mood-gallery-recommendation');
         return node ? getComputedStyle(node).backgroundColor : null;
+      })(),
+      layout: (() => {
+        const selectors = [
+          'body', '.site-header', '.main-nav', '.homepage-main',
+          '.home-feature-row', '#hero-section', '.hero-layout',
+          '.home-mood-continue-row', '#collection-featured',
+          '.collection-rail', '#catalog-page', '#detail-page-view',
+          '#actor-page-view', '.admin-shell', '.admin-sidebar',
+          '.admin-main', '.admin-topbar', '.admin-content'
+        ];
+        const properties = [
+          'display', 'position', 'boxSizing', 'width', 'height',
+          'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+          'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+          'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+          'gap', 'rowGap', 'columnGap', 'gridTemplateColumns',
+          'gridTemplateRows', 'flexDirection', 'alignItems',
+          'justifyContent', 'fontFamily', 'fontSize', 'lineHeight',
+          'letterSpacing', 'fontWeight', 'textAlign', 'whiteSpace',
+          'borderTopWidth', 'borderRightWidth', 'borderBottomWidth',
+          'borderLeftWidth', 'borderTopLeftRadius', 'borderTopRightRadius',
+          'borderBottomLeftRadius', 'borderBottomRightRadius'
+        ];
+        return selectors.map(selector => {
+          const node = document.querySelector(selector);
+          if (!node) return [selector, null];
+          const style = getComputedStyle(node);
+          const rect = node.getBoundingClientRect();
+          return [selector, {
+            rect: [rect.x, rect.y, rect.width, rect.height].map(Math.round),
+            style: Object.fromEntries(properties.map(property => [property, style[property]]))
+          }];
+        }).filter(([, value]) => value !== null);
       })()
     };
   });
@@ -110,13 +143,48 @@ async function checkPage(file, label, viewport, mobile) {
 
   const darkResult = await page.evaluate(() => {
     window.PerdeTheme.apply('dark');
+    const selectors = [
+      'body', '.site-header', '.main-nav', '.homepage-main',
+      '.home-feature-row', '#hero-section', '.hero-layout',
+      '.home-mood-continue-row', '#collection-featured',
+      '.collection-rail', '#catalog-page', '#detail-page-view',
+      '#actor-page-view', '.admin-shell', '.admin-sidebar',
+      '.admin-main', '.admin-topbar', '.admin-content'
+    ];
+    const properties = [
+      'display', 'position', 'boxSizing', 'width', 'height',
+      'minWidth', 'maxWidth', 'minHeight', 'maxHeight',
+      'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+      'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+      'gap', 'rowGap', 'columnGap', 'gridTemplateColumns',
+      'gridTemplateRows', 'flexDirection', 'alignItems',
+      'justifyContent', 'fontFamily', 'fontSize', 'lineHeight',
+      'letterSpacing', 'fontWeight', 'textAlign', 'whiteSpace',
+      'borderTopWidth', 'borderRightWidth', 'borderBottomWidth',
+      'borderLeftWidth', 'borderTopLeftRadius', 'borderTopRightRadius',
+      'borderBottomLeftRadius', 'borderBottomRightRadius'
+    ];
+    const layout = selectors.map(selector => {
+      const node = document.querySelector(selector);
+      if (!node) return [selector, null];
+      const style = getComputedStyle(node);
+      const rect = node.getBoundingClientRect();
+      return [selector, {
+        rect: [rect.x, rect.y, rect.width, rect.height].map(Math.round),
+        style: Object.fromEntries(properties.map(property => [property, style[property]]))
+      }];
+    }).filter(([, value]) => value !== null);
     return {
       dataTheme: document.documentElement.getAttribute('data-theme'),
-      darkClass: document.documentElement.classList.contains('dark')
+      darkClass: document.documentElement.classList.contains('dark'),
+      layout
     };
   });
   if (darkResult.dataTheme !== null) throw new Error(`${label}: dark switch left data-theme enabled`);
   if (file === 'index.html' && !darkResult.darkClass) throw new Error(`${label}: homepage dark class was not restored`);
+  if (JSON.stringify(state.layout) !== JSON.stringify(darkResult.layout)) {
+    throw new Error(`${label}: layout/typography changed when switching theme`);
+  }
 
   report.checks.push({
     page: label,
