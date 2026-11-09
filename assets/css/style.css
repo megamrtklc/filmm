@@ -11004,3 +11004,19 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-featured .featured-number-poster{width:calc(100% - 36px)!important;margin-left:36px!important}
  #collection-featured .featured-number{left:-28px!important;bottom:24px!important;font-size:clamp(104px,24vw,132px)!important}
 }
+
+
+/* TOP 10 sıra numarası: daha hafif tipografi, komşu afişe taşmayan yerleşim */
+#collection-featured .featured-number{
+ font-weight:500!important;
+ letter-spacing:-.075em!important;
+ -webkit-text-stroke:0!important;
+ text-shadow:0 3px 9px rgba(0,0,0,.72)!important;
+ left:-35px!important;
+}
+@media(max-width:900px){
+ #collection-featured .featured-number{font-weight:500!important;left:-29px!important}
+}
+@media(max-width:560px){
+ #collection-featured .featured-number{font-weight:500!important;left:-24px!important}
+}
