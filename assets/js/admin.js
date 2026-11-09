@@ -1031,7 +1031,7 @@
   function normalizeHomepageRails(saved,records=catalog){
     const defaults=homepageRailDefaults(records),validIds=new Set(records.map(item=>String(item.id))),normalized={};
     const savedOrder=Array.isArray(saved?.order)?saved.order.filter(key=>homepageRailOrderKeys.includes(key)):[];
-    normalized.order=[...new Set([...savedOrder,...homepageRailKeys])];
+    normalized.order=[...new Set([...savedOrder,...homepageRailOrderKeys])];
     homepageRailKeys.forEach(key=>{
       const source=saved&&saved[key]&&typeof saved[key]==='object'?saved[key]:null;
       let ids=source&&Array.isArray(source.itemIds)?source.itemIds.map(String).filter(id=>validIds.has(id)):defaults[key].itemIds;
