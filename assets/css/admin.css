@@ -969,3 +969,24 @@
 
 /* Homepage rail visibility and visible poster thumbnails */
 .home-rail-visibility-wrap{display:flex;align-items:center;gap:9px;flex:0 0 auto}.home-rail-visibility-wrap small{font-size:10px;color:#a9abb2;white-space:nowrap}.home-rail-visibility{border:1px solid rgba(218,178,99,.38);border-radius:7px;padding:7px 11px;background:rgba(218,178,99,.08);color:#e6c77e;font-size:11px;font-weight:800;cursor:pointer}.home-rail-visibility.is-published{color:#f0b0a7;border-color:rgba(223,133,133,.35);background:rgba(223,133,133,.08)}.home-rail-item{grid-template-columns:54px 26px minmax(0,1fr) auto}.home-rail-item-poster{grid-column:1;grid-row:1;width:48px;height:66px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.2);box-shadow:0 3px 12px rgba(0,0,0,.4)}.home-rail-item-number{grid-column:2;grid-row:1}.home-rail-item-copy{grid-column:3;grid-row:1}.home-rail-item-order{grid-column:4;grid-row:1}.home-rail-item-actions{grid-column:2/5;grid-row:2}@media(max-width:650px){.home-rail-manager-heading{flex-wrap:wrap}.home-rail-visibility-wrap{margin-left:auto}.home-rail-visibility-wrap small{display:none}.home-rail-item{grid-template-columns:44px 22px minmax(0,1fr) auto}.home-rail-item-poster{width:40px;height:56px}.home-rail-item-actions{grid-column:2/5}}
+
+/* Daha dinamik raf sıralaması ve kompakt katalog seçimi */
+.home-rail-order-list{gap:10px}
+.home-rail-order-item{position:relative;min-height:58px;padding:11px 13px;border-radius:12px;background:linear-gradient(110deg,rgba(216,173,85,.09),rgba(255,255,255,.025));transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease;cursor:grab}
+.home-rail-order-item:hover{transform:translateY(-2px);border-color:rgba(216,173,85,.42);box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.home-rail-order-item.is-dragging{opacity:.38;transform:scale(.985);cursor:grabbing}
+.home-rail-order-item.is-drop-target{border-color:var(--gold);background:rgba(216,173,85,.14);box-shadow:0 0 0 2px rgba(216,173,85,.12)}
+.home-rail-order-grip{display:grid;place-items:center;width:27px;height:32px;border-radius:7px;background:rgba(255,255,255,.055);color:#b99b60;cursor:grab}
+.home-rail-order-number{width:32px;height:32px;border-radius:9px;background:rgba(216,173,85,.16);font-size:13px}
+.home-rail-order-item>b{font-size:13px;letter-spacing:.01em}
+.home-rail-order-actions button{width:34px;height:34px;border-radius:9px;transition:background .18s ease,transform .18s ease}
+.home-rail-order-actions button:not(:disabled):hover{background:rgba(216,173,85,.2);transform:translateY(-1px)}
+.home-rail-controls{grid-template-columns:minmax(150px,.75fr) minmax(220px,1fr) minmax(220px,1fr);gap:12px}
+.home-rail-controls label{min-width:0}
+.home-rail-catalog-select{width:100%;height:41px;padding:0 11px;border:1px solid var(--line);border-radius:8px;background:#11151c;color:#f3f3f3;font-size:11px;min-width:0}
+.home-rail-catalog-select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(216,173,85,.09)}
+.home-rail-catalog-select:disabled{opacity:.55}
+.home-rail-search-results:empty{display:none}
+.home-rail-search-results[hidden]{display:none!important}
+@media(max-width:850px){.home-rail-controls{grid-template-columns:1fr 1fr}.home-rail-controls>label:first-child{grid-column:1/-1}}
+@media(max-width:650px){.home-rail-controls{grid-template-columns:1fr}.home-rail-controls>label:first-child{grid-column:auto}.home-rail-order-item{gap:8px;padding:9px}.home-rail-order-grip{width:24px}}
