@@ -1059,18 +1059,29 @@
       }).join('');
     });
   }
+  function renderHomepageRailSearch(key){
+    const input=$('#home-rail-'+key+'-search'),host=$('#home-rail-'+key+'-results');
+    if(!input||!host)return;
+    const query=input.value.trim().toLocaleLowerCase('tr-TR');
+    const allowed=catalog.filter(item=>key==='movies'?item.type==='movie':key==='series'?item.type==='tv':true);
+    const matches=allowed.filter(item=>!query||String(item.title||'').toLocaleLowerCase('tr-TR').includes(query)||String(item.originalTitle||'').toLocaleLowerCase('tr-TR').includes(query)).slice(0,10);
+    host.innerHTML=matches.length?matches.map(item=>{
+      const selected=homepageRails[key].itemIds.includes(String(item.id));
+      return '<div class="home-rail-search-result"><span class="home-rail-search-result-type">'+(item.type==='tv'?'DİZİ':'FİLM')+'</span><span class="home-rail-search-result-title"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.year||'Yıl yok')+'</small></span>'+(selected?'<span class="home-rail-selected-label"><i class="fa-solid fa-check"></i> Seçildi</span>':'<button type="button" data-home-rail-pick="'+key+':'+escapeHtml(item.id)+'">Ekle</button>')+'</div>';
+    }).join(''):'<div class="home-rail-search-empty">'+(query?'Aramana uygun yapım bulunamadı.':'Bu rafta gösterilebilecek yapım bulunamadı.')+'</div>';
+  }
   function initHomepageRailsManager(){
+    homepageRails=normalizeHomepageRails(homepageRails);
     if(!homepageRailPickersReady){
       homepageRailKeys.forEach(key=>{
-        const select=$('#home-rail-'+key+'-select');
-        select.innerHTML='<option value="">'+(key==='movies'?'Film':key==='series'?'Dizi':'Yapım')+' seç…</option>';
-        [...catalog].filter(item=>key==='movies'?item.type==='movie':key==='series'?item.type==='tv':true).sort((x,y)=>String(x.title||'').localeCompare(String(y.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
-        $('#home-rail-'+key+'-add').addEventListener('click',()=>{
-          const id=select.value;if(!id)return toast('Önce katalogdan bir yapım seç.');
-          const rail=homepageRails[key],item=catalog.find(entry=>String(entry.id)===id);if(!rail||!item)return;
-          if(rail.itemIds.includes(id))return toast('Bu yapım zaten listede.');
-          if(rail.itemIds.length>=15){toast('En fazla 15 kart ekleyebilirsin.');return;}
-          rail.itemIds.push(id);select.value='';renderHomepageRails();
+        $('#home-rail-'+key+'-search').addEventListener('input',()=>renderHomepageRailSearch(key));
+        $('#home-rail-'+key+'-results').addEventListener('click',event=>{
+          const button=event.target.closest('[data-home-rail-pick]');if(!button)return;
+          const [targetKey,id]=button.dataset.homeRailPick.split(':');
+          const rail=homepageRails[targetKey];if(!rail)return;
+          if(rail.itemIds.includes(id))return;
+          if(rail.itemIds.length>=15){toast('Bu rafta en fazla 15 kart olabilir.');return;}
+          rail.itemIds.push(id);renderHomepageRails();renderHomepageRailSearch(targetKey);
         });
         $('#home-rail-'+key+'-title').addEventListener('input',event=>{homepageRails[key].title=event.target.value.slice(0,64);});
         $('#home-rail-'+key+'-active').addEventListener('change',event=>{homepageRails[key].active=event.target.checked;});
@@ -1082,17 +1093,13 @@
           const rail=homepageRails[targetKey],idx=Number(indexText);if(!rail||!Number.isInteger(idx))return;
           if(action==='remove')rail.itemIds.splice(idx,1);
           else{const target=idx+(action==='up'?-1:1);if(target<0||target>=rail.itemIds.length)return;[rail.itemIds[idx],rail.itemIds[target]]=[rail.itemIds[target],rail.itemIds[idx]];}
-          renderHomepageRails();
+          renderHomepageRails();renderHomepageRailSearch(targetKey);
         });
       });
       homepageRailPickersReady=true;
-    }else{
-      homepageRailKeys.forEach(key=>{
-        const select=$('#home-rail-'+key+'-select');select.innerHTML='<option value="">'+(key==='movies'?'Film':key==='series'?'Dizi':'Yapım')+' seç…</option>';
-        [...catalog].filter(item=>key==='movies'?item.type==='movie':key==='series'?item.type==='tv':true).sort((x,y)=>String(x.title||'').localeCompare(String(y.title||''),'tr')).forEach(item=>select.add(new Option((item.type==='tv'?'Dizi':'Film')+' · '+item.title+' ('+(item.year||'—')+')',String(item.id))));
-      });
     }
-    homepageRails=normalizeHomepageRails(homepageRails);renderHomepageRails();
+    renderHomepageRails();
+    homepageRailKeys.forEach(renderHomepageRailSearch);
   }
   async function saveHomepageRails(){
     const button=$('#home-rails-save');
