@@ -330,9 +330,9 @@ async function checkPage(file, label, viewport, mobile) {
   }
 
   if (file === 'admin.html') {
-    if (mobile) await page.locator('#mobile-menu').click().catch(() => {});
     for (const button of await page.locator('.admin-nav [data-page]').all()) {
       const key = await button.getAttribute('data-page');
+      if (mobile) await page.locator('#mobile-menu').click();
       await button.click();
       await page.waitForTimeout(350);
       const active = await page.evaluate(() => ({
