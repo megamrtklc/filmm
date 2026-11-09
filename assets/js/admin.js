@@ -1014,22 +1014,22 @@
   const homepageRailKeys=['featured','movies','series'];
   let homepageRails={};
   let homepageRailPickersReady=false;
-  function homepageRailDefaults(){
+  function homepageRailDefaults(records=catalog){
     const score=item=>Number.parseFloat(item.rating)||0;
-    const valid=catalog.filter(item=>item&&item.id!=null&&item.title&&item.image);
+    const valid=records.filter(item=>item&&item.id!=null&&item.title&&item.image);
     return {
       featured:{title:'Öne Çıkan Yapımlar',active:true,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,5).map(item=>String(item.id))},
       movies:{title:'Yüksek Puanlı Filmler',active:true,itemIds:valid.filter(item=>item.type==='movie').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))},
       series:{title:'Öne Çıkan Diziler',active:true,itemIds:valid.filter(item=>item.type==='tv').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))}
     };
   }
-  function normalizeHomepageRails(saved){
-    const defaults=homepageRailDefaults(),validIds=new Set(catalog.map(item=>String(item.id))),normalized={};
+  function normalizeHomepageRails(saved,records=catalog){
+    const defaults=homepageRailDefaults(records),validIds=new Set(records.map(item=>String(item.id))),normalized={};
     homepageRailKeys.forEach(key=>{
       const source=saved&&saved[key]&&typeof saved[key]==='object'?saved[key]:null;
       let ids=source&&Array.isArray(source.itemIds)?source.itemIds.map(String).filter(id=>validIds.has(id)):defaults[key].itemIds;
-      if(key==='movies')ids=ids.filter(id=>catalog.find(item=>String(item.id)===id)?.type==='movie');
-      if(key==='series')ids=ids.filter(id=>catalog.find(item=>String(item.id)===id)?.type==='tv');
+      if(key==='movies')ids=ids.filter(id=>records.find(item=>String(item.id)===id)?.type==='movie');
+      if(key==='series')ids=ids.filter(id=>records.find(item=>String(item.id)===id)?.type==='tv');
       normalized[key]={title:String(source?.title||defaults[key].title).slice(0,64),active:source?source.active!==false:true,itemIds:[...new Set(ids)].slice(0,40)};
     });
     return normalized;
@@ -1784,7 +1784,7 @@
     const {parsed,safeCollections,safeConfig}=pendingArchiveRestore;
     try{
       if(!getGithubToken())throw new Error('GitHub bağlantısı bulunamadı. Veri Kaynakları bölümünden bağlantıyı kur.');
-      const before={app:'Perde',backupType:'archive-data',version:2,catalog,collections,homepageConfig:{version:2,settings:heroSettings,heroSlides},exportedAt:new Date().toISOString(),safetySnapshot:true};
+      const before={app:'Perde',backupType:'archive-data',version:2,catalog,collections,homepageConfig:{version:2,settings:heroSettings,heroSlides,homeRails:homepageRails},exportedAt:new Date().toISOString(),safetySnapshot:true};
       downloadJson('perde-geri-yukleme-oncesi-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json',before);
       hint.textContent='Güvenlik yedeği indirildi. GitHub dosyaları güncelleniyor…';
       const catalogCurrent=await githubCatalogRequest('GET');
@@ -1794,7 +1794,7 @@
       await githubCatalogRequest('PUT',{message:'Restore Perde catalog from archive backup',content:encodeGithubContent(JSON.stringify(parsed.catalog,null,2)+'\n'),sha:catalogCurrent.sha,branch:'main'});
       await githubCollectionsRequest('PUT',{message:'Restore Perde collections from archive backup',content:encodeGithubContent(JSON.stringify(safeCollections,null,2)+'\n'),sha:collectionsCurrent.sha,branch:'main'});
       await githubHeroConfigRequest('PUT',{message:'Restore Perde homepage settings from archive backup',content:encodeGithubContent(JSON.stringify(safeConfig,null,2)+'\n'),sha:heroCurrent.sha,branch:'main'});
-      catalog=parsed.catalog;collections=safeCollections;heroSettings=safeConfig.settings;heroSlides=safeConfig.heroSlides;
+      catalog=parsed.catalog;collections=safeCollections;heroSettings=safeConfig.settings;heroSlides=safeConfig.heroSlides;homepageRails=safeConfig.homeRails;
       renderOverview();initCatalogFilters();renderCatalog();renderCatalogHealth();renderWatchLinks();initHeroManager();initCollections();initDiary();
       hint.textContent='Tam arşiv başarıyla geri yüklendi. '+catalog.length+' yapım ve '+collections.length+' koleksiyon yayın ayarlarıyla birlikte kaydedildi.';
       toast('Tam arşiv geri yüklendi.');
@@ -1823,7 +1823,7 @@
         const id=String(item.id);if(ids.has(id))throw new Error('Yedekte yinelenen yapım kimliği bulundu: '+id);ids.add(id);
       }
       const safeCollections=parsed.collections.filter(item=>item&&typeof item==='object'&&String(item.id||'').trim()&&String(item.title||'').trim()).map(item=>({...item,items:Array.isArray(item.items)?item.items.map(String).filter(id=>ids.has(id)):[]}));
-      const safeConfig={version:2,updatedAt:new Date().toISOString(),settings:normalizeHeroSettings(parsed.homepageConfig.settings),heroSlides:parsed.homepageConfig.heroSlides.filter(slide=>slide&&ids.has(String(slide.id))).map(slide=>({id:String(slide.id),active:slide.active!==false,headline:String(slide.headline||''),description:String(slide.description||'')}))};
+      const safeConfig={version:2,updatedAt:new Date().toISOString(),settings:normalizeHeroSettings(parsed.homepageConfig.settings),heroSlides:parsed.homepageConfig.heroSlides.filter(slide=>slide&&ids.has(String(slide.id))).map(slide=>({id:String(slide.id),active:slide.active!==false,headline:String(slide.headline||''),description:String(slide.description||'')})),homeRails:normalizeHomepageRails(parsed.homepageConfig.homeRails,parsed.catalog)};
       if(!getGithubToken())throw new Error('Tam arşivi geri yüklemek için Veri Kaynakları bölümünden GitHub bağlantısını kurmalısın.');
       pendingArchiveRestore={parsed,safeCollections,safeConfig};
       showArchivePreview(parsed,safeCollections,safeConfig,file.name);
