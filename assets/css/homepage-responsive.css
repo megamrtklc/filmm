@@ -822,3 +822,64 @@ html.perde-tv-wide .site-header .header-search-shell .glass-search{
   width:100%!important;min-width:0!important;height:42px!important;
 }
 html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13px!important}
+
+
+/* PERDE MOBILE APP NAV — telefonda alt sabit gezinme */
+@media (max-width:760px){
+  body#theme-body{padding-bottom:calc(76px + env(safe-area-inset-bottom, 0px))!important}
+  .site-header{
+    position:absolute!important;top:0!important;left:0!important;right:0!important;
+    display:block!important;width:100%!important;height:70px!important;min-height:70px!important;
+    padding:0 13px!important;margin:0!important;box-sizing:border-box!important;
+    background:linear-gradient(180deg,rgba(5,6,9,.96),rgba(5,6,9,.78))!important;
+    border:0!important;z-index:70!important;
+  }
+  .site-header .header-topline{
+    display:flex!important;width:100%!important;max-width:none!important;min-height:70px!important;
+    height:70px!important;margin:0!important;gap:10px!important;border:0!important;
+    box-shadow:none!important;justify-content:space-between!important;
+  }
+  .site-header .header-brand{flex:0 0 auto!important;min-width:0!important}
+  .site-header .perde-brand-word{font-size:24px!important}
+  .site-header .header-actions{
+    display:flex!important;flex:1 1 auto!important;width:auto!important;max-width:none!important;
+    min-width:0!important;margin:0!important;gap:8px!important;justify-content:flex-end!important;
+  }
+  .site-header .header-search-shell{display:block!important;position:relative!important;flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:none!important}
+  .site-header .header-search-shell .glass-search{
+    display:flex!important;width:100%!important;max-width:none!important;min-width:0!important;
+    height:39px!important;padding:0 10px!important;gap:8px!important;border-radius:11px!important;
+    background:rgba(255,255,255,.085)!important;border:1px solid rgba(255,255,255,.13)!important;
+  }
+  .site-header .header-search-shell .glass-search input{
+    display:block!important;visibility:visible!important;width:100%!important;min-width:0!important;
+    flex:1 1 auto!important;font-size:13px!important;
+  }
+  .site-header .header-search-shell .search-category-picker,
+  .site-header .header-search-shell .search-category-divider{display:none!important}
+  .site-header .header-search-shell .glass-search>i{display:inline-block!important;flex:0 0 auto!important}
+  .site-header .user-trigger{width:38px!important;height:38px!important;min-width:38px!important;padding:0!important;border-radius:11px!important}
+  .site-header .main-nav{display:none!important}
+  .site-header .header-search-results{left:0!important;right:0!important;width:100%!important}
+  .mobile-bottom-nav{
+    position:fixed!important;z-index:999!important;left:0!important;right:0!important;bottom:0!important;
+    display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    min-height:64px!important;padding:7px 5px calc(7px + env(safe-area-inset-bottom, 0px))!important;
+    box-sizing:content-box!important;background:rgba(13,15,20,.97)!important;
+    border-top:1px solid rgba(255,255,255,.09)!important;
+    box-shadow:0 -9px 28px rgba(0,0,0,.28)!important;
+    backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;
+  }
+  .mobile-bottom-nav .mobile-nav-item{
+    display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    gap:4px!important;min-width:0!important;min-height:48px!important;padding:3px 1px!important;
+    color:#9298a5!important;text-decoration:none!important;border-radius:12px!important;
+    font-size:10px!important;font-weight:650!important;line-height:1.1!important;
+    -webkit-tap-highlight-color:transparent!important;transition:color .18s ease,background .18s ease!important;
+  }
+  .mobile-bottom-nav .mobile-nav-item i{font-size:18px!important;line-height:1!important}
+  .mobile-bottom-nav .mobile-nav-item.is-active{color:#e8c77f!important;background:rgba(211,174,111,.09)!important}
+  .mobile-bottom-nav .mobile-nav-item.is-active i{filter:drop-shadow(0 0 7px rgba(224,190,122,.22))}
+  .mobile-bottom-nav .mobile-nav-item:active{background:rgba(255,255,255,.08)!important}
+}
+@media (min-width:761px){.mobile-bottom-nav{display:none!important}}
