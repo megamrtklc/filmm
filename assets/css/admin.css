@@ -1295,3 +1295,32 @@ body.catalog-delete-open{overflow:hidden}
 #page-homeRails .home-rail-manager .home-rail-item-actions .home-rail-change:hover{
   background:rgba(var(--rail-accent-rgb),.16)!important;
 }
+
+
+/* PERDE — Anasayfa Rafları yapım seçici: kart sınırlarının üzerinde aç */
+#page-homeRails .home-rails-manager-grid{
+  position:relative!important;
+  overflow:visible!important;
+}
+#page-homeRails .home-rail-manager{
+  overflow:visible!important;
+  isolation:auto!important;
+  z-index:1;
+}
+#page-homeRails .home-rail-manager:has(.home-rail-picker-trigger.is-open){
+  z-index:80!important;
+}
+#page-homeRails .home-rail-manager .home-rail-controls{
+  position:relative!important;
+  z-index:5!important;
+  overflow:visible!important;
+}
+#page-homeRails .home-rail-visual-picker{
+  position:relative!important;
+  z-index:20!important;
+}
+#page-homeRails .home-rail-picker-menu{
+  z-index:9999!important;
+  max-height:min(360px,55vh)!important;
+  overscroll-behavior:contain!important;
+}
