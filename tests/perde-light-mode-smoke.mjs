@@ -72,6 +72,28 @@ async function checkPage(file, label, viewport, mobile) {
         const node = document.querySelector('#daily-pick-section .mood-gallery-recommendation');
         return node ? getComputedStyle(node).backgroundColor : null;
       })(),
+      controlSurfaces: (() => {
+        const fixture = document.createElement('div');
+        fixture.style.display = 'none';
+        fixture.innerHTML = `
+          <table class="admin-table"><thead><tr><th>Başlık</th></tr></thead><tbody><tr><td>İçerik</td></tr></tbody></table>
+          <select><option>Seçenek</option></select>
+          <div class="nav-menu">Menü</div>
+          <div class="search-category-menu">Arama</div>
+          <div class="mood-gallery-options">Ruh hali</div>
+          <div class="catalog-picker">Katalog</div>
+          <div class="modal-content">Pencere</div>
+        `;
+        document.body.appendChild(fixture);
+        const selectors = ['th', 'td', 'select', 'option', '.nav-menu', '.search-category-menu', '.mood-gallery-options', '.catalog-picker', '.modal-content'];
+        const values = Object.fromEntries(selectors.map(selector => {
+          const node = fixture.querySelector(selector);
+          const style = getComputedStyle(node);
+          return [selector, { background: style.backgroundColor, color: style.color, colorScheme: style.colorScheme }];
+        }));
+        fixture.remove();
+        return values;
+      })(),
       layout: (() => {
         const selectors = [
           'body', '.site-header', '.main-nav', '.homepage-main',
@@ -136,6 +158,20 @@ async function checkPage(file, label, viewport, mobile) {
   }
   if (file === 'index.html' && state.bodyPaddingLeft !== '0px') {
     throw new Error(`${label}: original horizontal Perde layout should not have a sidebar offset (${state.bodyPaddingLeft})`);
+  }
+  const surfaces = state.controlSurfaces;
+  if (surfaces['th'].background !== 'rgb(243, 244, 246)' ||
+      surfaces['td'].background !== 'rgb(255, 255, 255)') {
+    throw new Error(`${label}: table surfaces are not using the light palette`);
+  }
+  for (const selector of ['select', 'option', '.nav-menu', '.search-category-menu',
+    '.mood-gallery-options', '.catalog-picker', '.modal-content']) {
+    if (surfaces[selector].background !== 'rgb(255, 255, 255)') {
+      throw new Error(`${label}: ${selector} surface is not light (${surfaces[selector].background})`);
+    }
+  }
+  if (surfaces['select'].colorScheme !== 'light') {
+    throw new Error(`${label}: native form controls are not using light color-scheme`);
   }
 
   const safeName = label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
