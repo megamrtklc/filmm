@@ -655,3 +655,160 @@ html[data-theme="light"] .admin-content .pending,
 html[data-theme="light"] .admin-content .pending-text {
   color:#9a742e!important;
 }
+
+
+/* Admin: detailed tools, lists and secondary workspaces */
+html[data-theme="light"] .admin-content .feature-card,
+html[data-theme="light"] .admin-content .integration-card,
+html[data-theme="light"] .admin-content .watch-summary-grid>article,
+html[data-theme="light"] .admin-content .health-summary-card,
+html[data-theme="light"] .admin-content .history-summary-card,
+html[data-theme="light"] .admin-content .health-workspace,
+html[data-theme="light"] .admin-content .watchlink-workspace,
+html[data-theme="light"] .admin-content .diary-add-panel,
+html[data-theme="light"] .admin-content .diary-list-panel,
+html[data-theme="light"] .admin-content .diary-insight-panel,
+html[data-theme="light"] .admin-content .backup-restore-card,
+html[data-theme="light"] .admin-content .archive-restore-preview,
+html[data-theme="light"] .admin-content .auto-backup-status,
+html[data-theme="light"] .admin-content .hero-add-card,
+html[data-theme="light"] .admin-content .hero-copy-editor,
+html[data-theme="light"] .admin-content .hero-manager-tip,
+html[data-theme="light"] .admin-content .hero-manager-status,
+html[data-theme="light"] .admin-content .collection-list-item,
+html[data-theme="light"] .admin-content .collection-item-row,
+html[data-theme="light"] .admin-content .home-rail-item,
+html[data-theme="light"] .admin-content .home-rail-order-item,
+html[data-theme="light"] .admin-content .editor-draft-item,
+html[data-theme="light"] .admin-content .tmdb-result-item,
+html[data-theme="light"] .admin-content .health-issue-row,
+html[data-theme="light"] .admin-content .watchlink-row,
+html[data-theme="light"] .admin-content .history-row,
+html[data-theme="light"] .admin-content .editor-subtitle-item,
+html[data-theme="light"] .admin-content .archive-diff-stat {
+  background:#fff!important;
+  border-color:var(--pl-line)!important;
+  color:#454c58!important;
+}
+html[data-theme="light"] .admin-content .collection-list-item:hover,
+html[data-theme="light"] .admin-content .collection-list-item.selected,
+html[data-theme="light"] .admin-content .tmdb-result-item:hover,
+html[data-theme="light"] .admin-content .home-rail-order-item.is-drop-target {
+  background:#fff4f3!important;
+  border-color:#f0d5d4!important;
+}
+html[data-theme="light"] .admin-content .home-rail-item {
+  background:#fff!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+}
+html[data-theme="light"] .admin-content .home-rail-item::before,
+html[data-theme="light"] .admin-content .home-rail-item::after {
+  display:none!important;
+}
+html[data-theme="light"] .admin-content .home-rail-item-meta>span,
+html[data-theme="light"] .admin-content .home-rail-item-order button,
+html[data-theme="light"] .admin-content .home-rail-item-actions button,
+html[data-theme="light"] .admin-content .home-rail-picker-trigger,
+html[data-theme="light"] .admin-content .home-rail-picker-menu,
+html[data-theme="light"] .admin-content .catalog-picker-search,
+html[data-theme="light"] .admin-content .catalog-picker-filters button,
+html[data-theme="light"] .admin-content .hero-add-card select,
+html[data-theme="light"] .admin-content .hero-settings-grid select,
+html[data-theme="light"] .admin-content .hero-copy-editor input,
+html[data-theme="light"] .admin-content .hero-copy-editor textarea,
+html[data-theme="light"] .admin-content .collection-add-row select,
+html[data-theme="light"] .admin-content .collection-create-fields input,
+html[data-theme="light"] .admin-content .diary-add-controls select,
+html[data-theme="light"] .admin-content .diary-add-date input,
+html[data-theme="light"] .admin-content .diary-search-wrap input,
+html[data-theme="light"] .admin-content .diary-filter-search input,
+html[data-theme="light"] .admin-content .watchlink-toolbar select,
+html[data-theme="light"] .admin-content .tmdb-token-controls input {
+  background:#fff!important;
+  border-color:#dfe3e9!important;
+  color:#303642!important;
+}
+html[data-theme="light"] .admin-content .catalog-picker-filters button.active,
+html[data-theme="light"] .admin-content .health-filter-row button.active,
+html[data-theme="light"] .admin-content .diary-tabs button.active {
+  background:#fff0f1!important;
+  border-color:#f0c8c9!important;
+  color:#d94e59!important;
+}
+html[data-theme="light"] .admin-content .home-rail-picker-option:hover,
+html[data-theme="light"] .admin-content .catalog-picker-filters button:hover,
+html[data-theme="light"] .admin-content .health-filter-row button:hover,
+html[data-theme="light"] .admin-content .diary-tabs button:hover {
+  background:#f7f8fa!important;
+  color:#d94e59!important;
+}
+html[data-theme="light"] .admin-content .home-rail-picker-option,
+html[data-theme="light"] .admin-content .home-rail-picker-option span,
+html[data-theme="light"] .admin-content .home-rail-picker-option strong,
+html[data-theme="light"] .admin-content .collection-list-item *,
+html[data-theme="light"] .admin-content .collection-item-row *,
+html[data-theme="light"] .admin-content .home-rail-item *,
+html[data-theme="light"] .admin-content .editor-draft-item *,
+html[data-theme="light"] .admin-content .tmdb-result-item *,
+html[data-theme="light"] .admin-content .health-issue-row *,
+html[data-theme="light"] .admin-content .watchlink-row *,
+html[data-theme="light"] .admin-content .history-row * {
+  color:inherit;
+}
+html[data-theme="light"] .admin-content .collection-list-icon,
+html[data-theme="light"] .admin-content .auto-backup-status-icon,
+html[data-theme="light"] .admin-content .catalog-card-art,
+html[data-theme="light"] .admin-content .catalog-item-placeholder,
+html[data-theme="light"] .admin-content .tmdb-result-placeholder,
+html[data-theme="light"] .admin-content .catalog-picker-poster-placeholder,
+html[data-theme="light"] .admin-content .collection-item-placeholder,
+html[data-theme="light"] .admin-content .home-rail-item-placeholder {
+  background:#f1f3f6!important;
+  color:#89919d!important;
+}
+html[data-theme="light"] .admin-content .hero-manager-status {
+  background:#eff8f2!important;
+  border-color:#d9ecdf!important;
+  color:#397b59!important;
+}
+html[data-theme="light"] .admin-content .hero-manager-tip,
+html[data-theme="light"] .admin-content .archive-preview-warning,
+html[data-theme="light"] .admin-content .diary-insight-note {
+  background:#fff8e9!important;
+  border-color:#ead8b4!important;
+  color:#80632f!important;
+}
+html[data-theme="light"] .admin-content .auto-backup-status b,
+html[data-theme="light"] .admin-content .analytics-empty b,
+html[data-theme="light"] .admin-content .personal-genre-row>span,
+html[data-theme="light"] .admin-content .personal-rating-row>span,
+html[data-theme="light"] .admin-content .personal-type-legend b,
+html[data-theme="light"] .admin-content .diary-empty b,
+html[data-theme="light"] .admin-content .diary-toolbar h2 {
+  color:#303642!important;
+}
+html[data-theme="light"] .admin-content .diary-tabs,
+html[data-theme="light"] .admin-content .auto-backup-history,
+html[data-theme="light"] .admin-content .diary-insight-row {
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .admin-content .row-action {
+  background:#f3f5f8!important;
+  border-color:var(--pl-line)!important;
+  color:#68717e!important;
+}
+html[data-theme="light"] .admin-content .row-action-danger {
+  background:#fff1f0!important;
+  border-color:#f1d4d2!important;
+  color:#bd5550!important;
+}
+html[data-theme="light"] .admin-content .catalog-type-badge,
+html[data-theme="light"] .admin-content .catalog-warning-badge,
+html[data-theme="light"] .admin-content .tmdb-result-state {
+  background:#f1f3f6!important;
+  color:#68717e!important;
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .admin-content .catalog-rating-badge {
+  background:#f5c518!important;color:#262626!important;
+}
