@@ -95,6 +95,7 @@
   #detail-page-view { min-width:0!important; overflow-x:clip!important; }
   #detail-page-view .detail-main { min-width:0!important; padding-inline:12px!important; }
   #detail-page-view .detail-overlap {
+    display:grid!important;
     min-width:0!important;
     grid-template-columns:minmax(0,1fr)!important;
     gap:18px!important;
