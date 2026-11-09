@@ -1089,3 +1089,91 @@ html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-sec
   border-color:#dfe3e9!important;
   color:#626b78!important;
 }
+
+
+/* Current mood gallery markup: lighten the recommendation card and its controls. */
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-picker-trigger {
+  background:#f7f8fa!important;
+  border-color:#dfe3e9!important;
+  color:#586170!important;
+  box-shadow:none!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-picker-trigger:hover,
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-picker-trigger.is-open {
+  background:#fff!important;
+  border-color:#d5b77d!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-picker-symbol {
+  background:#f4ecdc!important;
+  color:#a77a31!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-picker-value {
+  color:#4c5563!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-picker-chevron {
+  color:#9b783f!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-options {
+  background:#fff!important;
+  border-color:var(--pl-line)!important;
+  box-shadow:0 16px 36px rgba(30,38,54,.14)!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-option {
+  background:#f8f9fb!important;
+  border-color:#e7e9ee!important;
+  color:#4f5866!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-option.is-selected {
+  background:#fff5e4!important;
+  border-color:#e8d3ad!important;
+  color:#8d682e!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-option-index {
+  color:#a77a31!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-recommendation {
+  background:#f8f9fb!important;
+  border:1px solid var(--pl-line)!important;
+  box-shadow:0 8px 22px rgba(30,38,54,.08)!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-recommendation-backdrop img {
+  opacity:.08!important;
+  filter:saturate(.2)!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-recommendation-backdrop span {
+  background:linear-gradient(90deg,rgba(248,249,251,.97),rgba(248,249,251,.92))!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-recommendation-copy {
+  text-shadow:none!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-result-label {
+  color:#a77a31!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-recommendation-copy h3 {
+  color:#303642!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-meta {
+  color:#68717e!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-description {
+  color:#737b88!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-rating {
+  background:#fff7e7!important;
+  border-color:#ead8b4!important;
+  color:#8d682e!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-rating b,
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-rating strong {
+  color:#5b4a2d!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-poster {
+  border-color:#fff!important;
+  box-shadow:0 8px 20px rgba(30,38,54,.16)!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-gallery-again {
+  background:#fff!important;
+  border-color:#dfe3e9!important;
+  color:#626b78!important;
+}
