@@ -10260,3 +10260,16 @@ body.detail-synopsis-open{overflow:hidden}
 #dashboard-view .home-mood-continue-row.hidden {
   display: none !important;
 }
+
+
+/* Manşet: metin ve arka plan için yumuşak sinematik geçiş */
+#hero-bg{transition:opacity .85s cubic-bezier(.22,.61,.36,1),transform 8s ease!important}
+#hero-section.is-changing #hero-bg{opacity:.18!important;transform:scale(1.045)}
+#hero-section .hero-copy.is-entering>*{opacity:0!important;transform:translate3d(0,14px,0);filter:blur(3px)}
+#hero-section .hero-copy>*{transition:opacity .72s cubic-bezier(.22,.61,.36,1),transform .72s cubic-bezier(.22,.61,.36,1),filter .72s cubic-bezier(.22,.61,.36,1)}
+#hero-section .hero-copy>*:nth-child(1){transition-delay:0ms}
+#hero-section .hero-copy>*:nth-child(2){transition-delay:55ms}
+#hero-section .hero-copy>*:nth-child(3){transition-delay:105ms}
+#hero-section .hero-copy>*:nth-child(4){transition-delay:155ms}
+#hero-section .hero-copy>*:nth-child(5){transition-delay:205ms}
+@media(prefers-reduced-motion:reduce){#hero-bg,#hero-section .hero-copy>*{transition:none!important}#hero-section .hero-copy.is-entering>*{opacity:1!important;transform:none;filter:none}}
