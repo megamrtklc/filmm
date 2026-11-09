@@ -46,7 +46,23 @@ async function checkPage(file, label, viewport, mobile) {
       main: rect(main),
       viewport: { width: innerWidth, height: innerHeight },
       scrollWidth: document.documentElement.scrollWidth,
-      themeController: typeof window.PerdeTheme
+      themeController: typeof window.PerdeTheme,
+      homepageMainBackground: getComputedStyle(document.querySelector('.homepage-main') || document.body).backgroundColor,
+      hero: (() => {
+        const hero = document.querySelector('#hero-section');
+        const title = document.querySelector('#hero-title');
+        const copy = document.querySelector('#hero-section .hero-copy');
+        return {
+          backgroundImage: hero ? getComputedStyle(hero).backgroundImage : null,
+          titleText: title?.textContent?.trim() || '',
+          titleOpacity: title ? getComputedStyle(title).opacity : null,
+          copyClass: copy?.className || ''
+        };
+      })(),
+      rankingNumberColor: (() => {
+        const node = document.querySelector('#collection-featured .featured-number');
+        return node ? getComputedStyle(node).color : null;
+      })()
     };
   });
 
@@ -57,6 +73,12 @@ async function checkPage(file, label, viewport, mobile) {
   }
   if (state.bodyBackground !== 'rgb(243, 244, 246)') {
     throw new Error(`${label}: unexpected light canvas color ${state.bodyBackground}`);
+  }
+  if (file === 'index.html' && state.homepageMainBackground !== 'rgb(243, 244, 246)') {
+    throw new Error(`${label}: homepage content canvas is not light (${state.homepageMainBackground})`);
+  }
+  if (file === 'index.html' && state.hero.titleText && state.hero.titleOpacity !== '1') {
+    throw new Error(`${label}: hero title is visually hidden (opacity ${state.hero.titleOpacity})`);
   }
   if (mobile && file === 'index.html' && state.bodyPaddingLeft !== '0px') {
     throw new Error(`${label}: mobile layout retained desktop sidebar offset (${state.bodyPaddingLeft})`);
