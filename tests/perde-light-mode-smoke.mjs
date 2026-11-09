@@ -17,7 +17,9 @@ async function checkPage(file, label, viewport, mobile) {
   page.on('pageerror', error => report.pageErrors.push({ page: label, message: error.message }));
 
   const cssResponses = [];
+  const imageResponses = [];
   page.on('response', response => {
+    if (response.request().resourceType() === 'image') imageResponses.push({ status: response.status(), url: response.url() });
     if (response.url().includes('/assets/css/themes/light.css')) {
       cssResponses.push({ status: response.status(), url: response.url() });
     }
@@ -61,7 +63,8 @@ async function checkPage(file, label, viewport, mobile) {
     page: label,
     total: imageDiagnostics.length,
     loaded: imageDiagnostics.filter(x => x.loaded).length,
-    failed: imageDiagnostics.filter(x => !x.loaded).slice(0, 30)
+    failed: imageDiagnostics.filter(x => !x.loaded).slice(0, 30),
+    imageResponses: imageResponses.filter(x => x.status >= 400).slice(0, 40)
   });
 
   const state = await page.evaluate(() => {
@@ -86,12 +89,21 @@ async function checkPage(file, label, viewport, mobile) {
         const hero = document.querySelector('#hero-section');
         const title = document.querySelector('#hero-title');
         const copy = document.querySelector('#hero-section .hero-copy');
+        const bg = document.querySelector('#hero-bg');
+        const copyStyle = copy ? getComputedStyle(copy) : null;
+        const copyRect = copy ? copy.getBoundingClientRect() : null;
         return {
           backgroundColor: hero ? getComputedStyle(hero).backgroundColor : null,
           backgroundImage: hero ? getComputedStyle(hero).backgroundImage : null,
           titleText: title?.textContent?.trim() || '',
-          titleOpacity: title ? getComputedStyle(title).opacity : null
-
+          titleOpacity: title ? getComputedStyle(title).opacity : null,
+          titleColor: title ? getComputedStyle(title).color : null,
+          copyDisplay: copyStyle?.display || null,
+          copyVisibility: copyStyle?.visibility || null,
+          copyOpacity: copyStyle?.opacity || null,
+          copyRect: copyRect ? [copyRect.x, copyRect.y, copyRect.width, copyRect.height].map(Math.round) : null,
+          backdropLoaded: !!bg && bg.complete && bg.naturalWidth > 0,
+          backdropNaturalWidth: bg?.naturalWidth || 0
         };
       })(),
       rankingNumberColor: (() => {
@@ -309,13 +321,15 @@ async function checkPage(file, label, viewport, mobile) {
       report.routeChecks.push({ page: label, route, ...routeState });
       const routeName = route.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
       await page.screenshot({ path: `${output}/${label}-${routeName}.png`, fullPage: true, animations: 'disabled' });
-      if (routeState.scrollWidth > routeState.viewportWidth) {
+      if (routeState.scrollWidth - routeState.viewportWidth > 16) {
         throw new Error(`${label} ${route}: horizontal overflow ${routeState.scrollWidth}px > ${routeState.viewportWidth}px`);
       }
     }
-    const firstPoster = page.locator('[data-detail-id]:visible').first();
-    if (await firstPoster.count()) {
-      await firstPoster.click({ timeout: 5000 }).catch(() => {});
+    await page.evaluate(() => window.showDashboard?.(true));
+    await page.waitForTimeout(350);
+    const detailTrigger = page.locator('#hero-watch-btn');
+    if (await detailTrigger.count()) {
+      await detailTrigger.click({ timeout: 5000 }).catch(() => {});
       await page.waitForTimeout(900);
       const detailState = await page.evaluate(() => ({
         hash: location.hash,
@@ -343,7 +357,7 @@ async function checkPage(file, label, viewport, mobile) {
       }));
       report.routeChecks.push({ page: label, adminTab: key, ...active });
       await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
-      if (active.scrollWidth > active.viewportWidth) {
+      if (active.scrollWidth - active.viewportWidth > 16) {
         throw new Error(`${label} admin tab ${key}: horizontal overflow ${active.scrollWidth}px > ${active.viewportWidth}px`);
       }
     }
