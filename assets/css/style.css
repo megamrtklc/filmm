@@ -10016,3 +10016,24 @@ body.detail-synopsis-open{overflow:hidden}
     inset-inline:auto 9px!important;
   }
 }
+
+
+/* MANŞET KONU METNİ — dört satırda sabitle */
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;
+  line-clamp:4!important;
+  min-height:5.6em!important;
+  max-height:5.6em!important;
+  overflow:hidden!important;
+  line-height:1.4!important;
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    -webkit-line-clamp:4!important;
+    line-clamp:4!important;
+    min-height:5.6em!important;
+    max-height:5.6em!important;
+  }
+}
