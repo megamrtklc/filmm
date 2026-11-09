@@ -575,7 +575,7 @@ function renderHomeCollections() {
         if(!personalizedRail)return;
         personalizedRail.classList.add('personalized-row-rail');
         personalizedRail.innerHTML=selection.length?selection.map((item,index)=>{
-            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\s+/g,' ').trim();
             const shortOverview=overview.length>150?overview.slice(0,147).trimEnd()+'…':overview;
             const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
             const title=escapeCountryHtml(item.title);
