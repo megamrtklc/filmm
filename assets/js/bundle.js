@@ -574,7 +574,7 @@ function renderHomeCollections() {
         personalizedRail.classList.remove('personalized-row-rail');
         personalizedRail.classList.add('personalized-editorial-rail');
         const makeCard=(item,index,featured)=>{
-            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\s+/g,' ').trim();
             const synopsis=overview||'Arşivinden keşfedilmeyi bekleyen bir yapım.';
             const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
             const meta=[item.year||'',genre].filter(Boolean).join(' · ');
