@@ -11600,3 +11600,69 @@ body.detail-synopsis-open{overflow:hidden}
   letter-spacing:-.035em!important;
   gap:clamp(5px,1.8cqi,11px)!important;
 }
+
+
+
+/* PERDE — Keşfet ve kişisel seçki: Editörün Seçkileri ile aynı editoryal kart dili
+   İçerik, seçim mantığı ve afiş rayları korunur; yalnızca dış kart sunumu eşitlenir. */
+#dashboard-view #daily-pick-section .mood-gallery-shell,
+#dashboard-view #collection-personalized{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  border:1px solid rgba(205,169,101,.18)!important;
+  border-radius:15px!important;
+  background:
+    radial-gradient(ellipse at 78% 0%,rgba(167,133,85,.10),transparent 42%),
+    linear-gradient(118deg,rgba(18,20,25,.96),rgba(11,13,17,.94) 55%,rgba(19,20,24,.96))!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-shell:before,
+#dashboard-view #collection-personalized:before{
+  content:"";
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:.17;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 44px,rgba(255,255,255,.018) 45px,transparent 46px),
+    linear-gradient(180deg,rgba(255,255,255,.035),transparent 34%,rgba(0,0,0,.15));
+}
+#dashboard-view #daily-pick-section .mood-gallery-shell:after,
+#dashboard-view #collection-personalized:after{
+  content:"";
+  position:absolute;left:3%;right:3%;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(211,174,111,.5),rgba(255,255,255,.12),transparent);
+}
+#dashboard-view #daily-pick-section .mood-gallery-shell{
+  padding:clamp(16px,2.1vw,25px)!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-heading{
+  position:relative;z-index:1;
+  margin-bottom:16px!important;
+  padding-bottom:13px!important;
+  border-bottom:1px solid rgba(255,255,255,.085)!important;
+}
+#dashboard-view #collection-personalized{
+  padding:clamp(16px,2.1vw,25px)!important;
+}
+#dashboard-view #collection-personalized .collection-heading{
+  position:relative;z-index:1;
+  margin:0 0 13px!important;
+  padding:0 0 13px!important;
+  border-bottom:1px solid rgba(255,255,255,.085)!important;
+}
+#dashboard-view #collection-personalized .collection-rail{
+  position:relative;z-index:1;
+}
+@media(max-width:820px){
+  #dashboard-view #daily-pick-section .mood-gallery-shell,
+  #dashboard-view #collection-personalized{
+    border-radius:12px!important;
+    padding:15px 12px!important;
+  }
+  #dashboard-view #daily-pick-section .mood-gallery-heading,
+  #dashboard-view #collection-personalized .collection-heading{
+    padding-bottom:10px!important;
+    margin-bottom:11px!important;
+  }
+}
