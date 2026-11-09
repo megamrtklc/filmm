@@ -10849,3 +10849,11 @@ body.detail-synopsis-open{overflow:hidden}
 @media(max-width:820px){
  #collection-featured .featured-number{left:-39px!important;bottom:38px!important;font-size:clamp(100px,24vw,130px)!important;color:rgba(218,220,224,.76)!important}
 }
+
+
+/* TOP 10: tek haneli, tamamen okunur sıralama numaraları */
+#collection-featured .featured-number-card{min-width:0!important}
+#collection-featured .featured-number{left:-34px!important;bottom:42px!important;font-size:clamp(105px,10vw,142px)!important;letter-spacing:-.075em!important;white-space:nowrap!important;z-index:1!important;color:rgba(218,220,224,.78)!important}
+#collection-featured .featured-number-poster{width:calc(100% - 32px)!important;margin-left:32px!important;z-index:2!important}
+#collection-featured .featured-number-copy{padding-left:32px!important}
+@media(max-width:820px){#collection-featured .featured-number{left:-29px!important;bottom:38px!important;font-size:clamp(96px,23vw,122px)!important}#collection-featured .featured-number-poster{width:calc(100% - 28px)!important;margin-left:28px!important}#collection-featured .featured-number-copy{padding-left:28px!important}}
