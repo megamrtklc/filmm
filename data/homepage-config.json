@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T14:10:50.889Z",
+  "updatedAt": "2026-11-09T14:22:50.331Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -90,7 +90,7 @@
     ],
     "featured": {
       "title": "Editörün Seçtikleri",
-      "active": false,
+      "active": true,
       "displayCount": 10,
       "itemIds": [
         "archive-48",
