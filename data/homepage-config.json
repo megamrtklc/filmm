@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T11:21:33.345Z",
+  "updatedAt": "2026-11-09T11:24:40.856Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -91,18 +91,19 @@
     "featured": {
       "title": "Editörün Seçtikleri",
       "active": true,
-      "displayCount": 5,
+      "displayCount": 6,
       "itemIds": [
         "archive-5",
-        "archive-7",
         "archive-4",
+        "archive-7",
+        "archive-8",
         "archive-2",
-        "archive-8"
+        "archive-1"
       ]
     },
     "movies": {
       "title": "Yüksek Puanlı Filmler",
-      "active": true,
+      "active": false,
       "displayCount": 6,
       "itemIds": [
         "archive-7",
@@ -115,7 +116,7 @@
     },
     "series": {
       "title": "Öne Çıkan Diziler",
-      "active": true,
+      "active": false,
       "displayCount": 6,
       "itemIds": [
         "archive-8",
