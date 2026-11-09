@@ -11491,3 +11491,57 @@ body.detail-synopsis-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   #media-grid .movie-card,#media-grid .movie-card img{transition:none!important}
 }
+
+
+/* Ana sayfa keşif ve kişisel seçki kartları — gereksiz etiketler kaldırıldı, boşluklar dengelendi */
+#dashboard-view #daily-pick-section .mood-gallery-heading{
+  align-items:center!important;
+  gap:16px!important;
+  margin-bottom:16px!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-heading-copy{
+  min-width:0!important;
+  flex:1 1 auto!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-heading-copy h2{
+  margin:0!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-heading-copy p{
+  margin-top:7px!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-controls{
+  align-items:center!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-select-wrap{
+  gap:0!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-select-wrap>span,
+#dashboard-view #daily-pick-section .mood-gallery-eyebrow{
+  display:none!important;
+}
+#dashboard-view #daily-pick-section .mood-gallery-picker-trigger{
+  min-height:42px!important;
+}
+#collection-personalized .collection-heading{
+  align-items:center!important;
+  justify-content:flex-start!important;
+  margin:0 0 10px!important;
+  padding:0 0 10px!important;
+  min-height:0!important;
+}
+#collection-personalized .collection-heading>div{
+  flex:1 1 auto!important;
+  min-width:0!important;
+}
+#collection-personalized .collection-eyebrow,
+#collection-personalized .personalized-refresh{
+  display:none!important;
+}
+#collection-personalized .collection-heading h2{
+  margin:0!important;
+}
+@media(max-width:760px){
+  #dashboard-view #daily-pick-section .mood-gallery-heading{gap:10px!important;margin-bottom:12px!important}
+  #dashboard-view #daily-pick-section .mood-gallery-picker-trigger{min-height:40px!important}
+  #collection-personalized .collection-heading{margin-bottom:9px!important;padding-bottom:9px!important}
+}
