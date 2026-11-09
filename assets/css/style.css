@@ -10187,3 +10187,22 @@ body.detail-synopsis-open{overflow:hidden}
     max-width:min(860px,calc(100vw - 220px))!important;
   }
 }
+
+
+/* MANŞET KONU METNİ — 7. afişin bitiş hizasına kadar genişlet */
+@media(min-width:768px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    width:min(1080px,calc(100vw - 220px))!important;
+    max-width:min(1080px,calc(100vw - 220px))!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    width:100%!important;
+    max-width:1080px!important;
+  }
+}
+@media(min-width:768px) and (max-width:1100px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    width:min(900px,calc(100vw - 180px))!important;
+    max-width:min(900px,calc(100vw - 180px))!important;
+  }
+}
