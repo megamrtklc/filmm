@@ -8,6 +8,8 @@
 
   const STORAGE_KEY = 'perde_theme_preference_v1';
   const LIGHT_STYLESHEET = 'assets/css/themes/light.css';
+  const rootInitiallyHadDarkClass = document.documentElement.classList.contains('dark');
+  const originalThemeColor = document.querySelector('meta[name="theme-color"]')?.getAttribute('content') || '#0b0c10';
 
   function ensureLightStylesheet() {
     let link = document.getElementById('perde-light-theme-css');
@@ -28,12 +30,14 @@
     if (next === 'light') {
       ensureLightStylesheet();
       root.setAttribute('data-theme', 'light');
+      if (rootInitiallyHadDarkClass) root.classList.remove('dark');
     } else {
       root.removeAttribute('data-theme');
+      if (rootInitiallyHadDarkClass) root.classList.add('dark');
     }
 
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', next === 'light' ? '#f4f5f7' : '#0b0c10');
+    if (meta) meta.setAttribute('content', next === 'light' ? '#f4f5f7' : originalThemeColor);
 
     if (persist) {
       try { localStorage.setItem(STORAGE_KEY, next); } catch (_) {}
