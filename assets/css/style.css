@@ -9611,3 +9611,69 @@ body.detail-synopsis-open{overflow:hidden}
     margin-top:3px!important;
   }
 }
+
+
+/* PERDE MANŞET DÜZELTME — afişleri konu metninin önüne al ve tam görünür yap */
+#dashboard-view .home-feature-row #hero-section.hero-section{
+  min-height:600px!important;
+  overflow:hidden!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-layout{
+  min-height:600px!important;
+  grid-template-rows:52px minmax(0,1fr) 180px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy{
+  position:relative!important;
+  z-index:2!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+  position:relative!important;
+  grid-row:3!important;
+  z-index:20!important;
+  align-self:stretch!important;
+  min-height:180px!important;
+  overflow:visible!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+  position:relative!important;
+  z-index:21!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  align-items:flex-end!important;
+  padding-top:12px!important;
+  padding-bottom:14px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+  position:relative!important;
+  z-index:22!important;
+  flex-shrink:0!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-arrows{
+  z-index:24!important;
+}
+@media(max-width:820px){
+  #dashboard-view .home-feature-row #hero-section.hero-section{
+    min-height:550px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-layout{
+    min-height:550px!important;
+    grid-template-rows:48px minmax(0,1fr) 150px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+    min-height:150px!important;
+  }
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section.hero-section{
+    min-height:530px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-layout{
+    min-height:530px!important;
+    grid-template-rows:48px minmax(0,1fr) 140px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+    min-height:140px!important;
+  }
+}
