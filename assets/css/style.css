@@ -11045,3 +11045,18 @@ body.detail-synopsis-open{overflow:hidden}
 .perde-preview-volume-range{width:88px;accent-color:#facc15;cursor:pointer}
 .perde-preview-volume-value{font-size:11px;min-width:27px;color:#e5e7eb;font-variant-numeric:tabular-nums}
 @media(max-width:600px){.perde-preview-volume{right:8px;bottom:8px;padding:7px 9px}.perde-preview-volume-range{width:72px}}
+
+
+/* Fragman ses kontrolü: YouTube reklam atlama alanından uzağa taşı */
+.perde-preview-volume{
+  top:12px!important;
+  right:12px!important;
+  bottom:auto!important;
+}
+@media(max-width:600px){
+  .perde-preview-volume{
+    top:8px!important;
+    right:8px!important;
+    bottom:auto!important;
+  }
+}
