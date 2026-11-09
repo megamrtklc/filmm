@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T15:24:13.652Z",
+  "updatedAt": "2026-11-09T21:15:30.756Z",
   "settings": {
     "desktopCount": 10,
-    "mobileCount": 4,
+    "mobileCount": 6,
     "interval": 6,
     "autoplay": true,
     "pauseOnHover": true
@@ -81,67 +81,5 @@
       "headline": "",
       "description": ""
     }
-  ],
-  "homeRails": {
-    "order": [
-      "featured",
-      "movies",
-      "series"
-    ],
-    "featured": {
-      "title": "En çok izlenenler",
-      "active": true,
-      "displayCount": 10,
-      "itemIds": [
-        "archive-48",
-        "archive-59",
-        "archive-34",
-        "archive-47",
-        "archive-23",
-        "archive-3",
-        "archive-49",
-        "archive-12",
-        "archive-25",
-        "archive-32"
-      ]
-    },
-    "movies": {
-      "title": "En çok izlenenler",
-      "active": false,
-      "displayCount": 6,
-      "itemIds": [
-        "archive-12",
-        "archive-10",
-        "archive-3",
-        "archive-13",
-        "archive-7",
-        "archive-11"
-      ]
-    },
-    "series": {
-      "title": "Öne Çıkan Diziler",
-      "active": false,
-      "displayCount": 6,
-      "itemIds": [
-        "archive-23",
-        "archive-8",
-        "archive-4",
-        "archive-21",
-        "archive-25",
-        "archive-17"
-      ]
-    },
-    "personalized": {
-      "title": "Editörün seçtikleri",
-      "active": true,
-      "displayCount": 5,
-      "itemIds": [
-        "archive-42",
-        "archive-60",
-        "archive-47",
-        "archive-41",
-        "archive-15"
-      ]
-    }
-  }
+  ]
 }
