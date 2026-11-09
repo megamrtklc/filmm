@@ -97,12 +97,19 @@ async function checkPage(file, label, viewport, mobile) {
         const bg = document.querySelector('#hero-bg');
         const copyStyle = copy ? getComputedStyle(copy) : null;
         const copyRect = copy ? copy.getBoundingClientRect() : null;
+        const titleStyle = title ? getComputedStyle(title) : null;
+        const titleRect = title ? title.getBoundingClientRect() : null;
         return {
           backgroundColor: hero ? getComputedStyle(hero).backgroundColor : null,
           backgroundImage: hero ? getComputedStyle(hero).backgroundImage : null,
           titleText: title?.textContent?.trim() || '',
-          titleOpacity: title ? getComputedStyle(title).opacity : null,
-          titleColor: title ? getComputedStyle(title).color : null,
+          titleOpacity: titleStyle?.opacity || null,
+          titleColor: titleStyle?.color || null,
+          titleDisplay: titleStyle?.display || null,
+          titleVisibility: titleStyle?.visibility || null,
+          titleFilter: titleStyle?.filter || null,
+          titleTransform: titleStyle?.transform || null,
+          titleRect: titleRect ? [titleRect.x, titleRect.y, titleRect.width, titleRect.height].map(Math.round) : null,
           copyDisplay: copyStyle?.display || null,
           copyVisibility: copyStyle?.visibility || null,
           copyOpacity: copyStyle?.opacity || null,
