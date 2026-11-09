@@ -55,44 +55,9 @@ async function checkPage(file, label, viewport, mobile) {
         return {
           backgroundColor: hero ? getComputedStyle(hero).backgroundColor : null,
           backgroundImage: hero ? getComputedStyle(hero).backgroundImage : null,
-          inlineStyle: hero?.getAttribute('style') || '',
           titleText: title?.textContent?.trim() || '',
-          titleOpacity: title ? getComputedStyle(title).opacity : null,
-          copyClass: copy?.className || '',
-          selectorDiagnostics: (() => {
-            const selectors = [
-              'html[data-theme="light"] #hero-section',
-              'html[data-theme="light"] body#theme-body #hero-section',
-              '#hero-section'
-            ];
-            return selectors.map(selector => {
-              let matches = false;
-              try { matches = hero ? hero.matches(selector) : false; } catch (_) {}
-              return { selector, matches, count: document.querySelectorAll(selector).length };
-            });
-          })(),
-          matchingBackgroundRules: (() => {
-            const found = [];
-            for (const sheet of Array.from(document.styleSheets)) {
-              let rules;
-              try { rules = Array.from(sheet.cssRules); } catch (_) { continue; }
-              for (const rule of rules) {
-                if (!rule.selectorText || !rule.selectorText.includes('hero-section')) continue;
-                try {
-                  if (hero.matches(rule.selectorText)) found.push({
-                    href: sheet.href || 'inline',
-                    selector: rule.selectorText,
-                    background: rule.style.background,
-                    backgroundColor: rule.style.backgroundColor,
-                    backgroundImage: rule.style.backgroundImage,
-                    backgroundColorPriority: rule.style.getPropertyPriority('background-color'),
-                    backgroundPriority: rule.style.getPropertyPriority('background')
-                  });
-                } catch (_) {}
-              }
-            }
-            return found;
-          })()
+          titleOpacity: title ? getComputedStyle(title).opacity : null
+
         };
       })(),
       rankingNumberColor: (() => {
