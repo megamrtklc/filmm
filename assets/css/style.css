@@ -11754,3 +11754,40 @@ body.detail-synopsis-open{overflow:hidden}
   }
   .site-header .header-search-shell #search-input{font-size:12px!important}
 }
+
+
+/* PERDE — Manşet gezinme okları: afiş şeridinden manşetin kenarlarına taşındı */
+#dashboard-view .home-feature-row #hero-section > .hero-arrows{
+  position:absolute!important;z-index:30!important;top:50%!important;
+  left:clamp(14px,2.2vw,32px)!important;right:clamp(14px,2.2vw,32px)!important;
+  bottom:auto!important;transform:translateY(-50%)!important;
+  display:flex!important;flex-direction:row!important;align-items:center!important;
+  justify-content:space-between!important;gap:12px!important;padding:0!important;
+  pointer-events:none!important;background:none!important;border:0!important;box-shadow:none!important;
+}
+#dashboard-view .home-feature-row #hero-section > .hero-arrows .hero-arrow{
+  display:grid!important;place-items:center!important;flex:0 0 42px!important;
+  width:42px!important;height:42px!important;min-width:42px!important;
+  border:1px solid rgba(255,255,255,.28)!important;border-radius:50%!important;
+  color:#fff!important;background:rgba(8,10,15,.58)!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.09)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(130%)!important;
+  backdrop-filter:blur(12px) saturate(130%)!important;pointer-events:auto!important;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease!important;
+}
+#dashboard-view .home-feature-row #hero-section > .hero-arrows .hero-arrow:hover{
+  color:#fff!important;background:rgba(200,16,46,.9)!important;
+  border-color:rgba(255,255,255,.48)!important;
+  box-shadow:0 7px 22px rgba(0,0,0,.3),0 0 18px rgba(200,16,46,.2)!important;
+  transform:scale(1.06)!important;
+}
+#dashboard-view .home-feature-row #hero-section > .hero-arrows .hero-arrow:active{transform:scale(.95)!important}
+@media(max-width:1100px){
+  #dashboard-view .home-feature-row #hero-section > .hero-arrows{left:12px!important;right:12px!important}
+  #dashboard-view .home-feature-row #hero-section > .hero-arrows .hero-arrow{
+    flex-basis:36px!important;width:36px!important;height:36px!important;min-width:36px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #dashboard-view .home-feature-row #hero-section > .hero-arrows .hero-arrow{transition:none!important}
+}
