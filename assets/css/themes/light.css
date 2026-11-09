@@ -944,3 +944,81 @@ html[data-theme="light"] #hero-section .hero-copy.is-entering>* {
   transform:none!important;
   filter:none!important;
 }
+
+
+/* Light editorial treatment for the ranking rail and discovery feature. */
+html[data-theme="light"] #collection-featured {
+  background-color:#fff!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:17px!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+  padding:18px 20px 12px!important;
+}
+html[data-theme="light"] #collection-featured:before,
+html[data-theme="light"] #collection-featured:after {
+  display:none!important;
+  opacity:0!important;
+}
+html[data-theme="light"] #collection-featured .collection-heading h2 {
+  color:#303642!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #collection-featured .collection-heading {
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] #collection-featured .featured-number {
+  color:rgba(100,110,125,.48)!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-result {
+  background:#fff!important;
+  background-image:none!important;
+  border:1px solid var(--pl-line)!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-backdrop {
+  opacity:.10!important;
+  filter:saturate(.25)!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-overlay {
+  background:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.88))!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-eyebrow {
+  color:#a77a31!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-heading h2,
+html[data-theme="light"] #daily-pick-section .mood-discovery-copy h3 {
+  color:#303642!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-heading p,
+html[data-theme="light"] #daily-pick-section .mood-discovery-meta,
+html[data-theme="light"] #daily-pick-section .mood-discovery-description {
+  color:#737b88!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-category-select,
+html[data-theme="light"] #daily-pick-section .mood-category-trigger {
+  background:#f7f8fa!important;
+  border-color:#dfe3e9!important;
+  color:#5f6876!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-category-select select,
+html[data-theme="light"] #daily-pick-section .mood-category-trigger select {
+  color:#303642!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-category-select option {
+  background:#fff!important;
+  color:#303642!important;
+}
+html[data-theme="light"] #daily-pick-section .mood-discovery-again {
+  background:#fff!important;
+  border-color:#dfe3e9!important;
+  color:#626b78!important;
+}
+html[data-theme="light"] body#theme-body #hero-section {
+  background-color:#fff!important;
+  background-image:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
+}
+html[data-theme="light"] body#theme-body #hero-section .hero-vignette {
+  background-color:transparent!important;
+  background-image:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 35%,rgba(255,255,255,.92) 100%)!important;
+}
