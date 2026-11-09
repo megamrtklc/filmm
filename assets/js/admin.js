@@ -1021,7 +1021,7 @@
     const valid=records.filter(item=>item&&item.id!=null&&item.title&&item.image);
     return {
       order:[...homepageRailKeys],
-      featured:{title:'Öne Çıkan Yapımlar',active:true,displayCount:6,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,6).map(item=>String(item.id))},
+      featured:{title:'Öne Çıkan Yapımlar',active:true,displayCount:5,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,5).map(item=>String(item.id))},
       movies:{title:'Yüksek Puanlı Filmler',active:true,displayCount:12,itemIds:valid.filter(item=>item.type==='movie').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))},
       series:{title:'Öne Çıkan Diziler',active:true,displayCount:12,itemIds:valid.filter(item=>item.type==='tv').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))}
     };
@@ -1035,9 +1035,10 @@
       let ids=source&&Array.isArray(source.itemIds)?source.itemIds.map(String).filter(id=>validIds.has(id)):defaults[key].itemIds;
       if(key==='movies')ids=ids.filter(id=>records.find(item=>String(item.id)===id)?.type==='movie');
       if(key==='series')ids=ids.filter(id=>records.find(item=>String(item.id)===id)?.type==='tv');
-      const unique=[...new Set(ids)].slice(0,15);
-      const requested=Number(source?.displayCount)||Math.min(12,Math.max(6,unique.length));
-      normalized[key]={title:String(source?.title||defaults[key].title).slice(0,64),active:source?source.active!==false:true,displayCount:Math.min(15,Math.max(6,requested)),itemIds:unique};
+      const maxItems=key==='featured'?5:15,minDisplay=key==='featured'?1:6;
+      const unique=[...new Set(ids)].slice(0,maxItems);
+      const requested=Number(source?.displayCount)||(key==='featured'?5:Math.min(12,Math.max(6,unique.length)));
+      normalized[key]={title:String(source?.title||defaults[key].title).slice(0,64),active:source?source.active!==false:true,displayCount:Math.min(maxItems,Math.max(minDisplay,requested)),itemIds:unique};
     });
     return normalized;
   }
@@ -1051,21 +1052,24 @@
     homepageRailKeys.forEach(key=>{
       const rail=homepageRails[key],list=$('#home-rail-'+key+'-list');if(!list)return;
       $('#home-rail-'+key+'-title').value=rail.title;
-      $('#home-rail-'+key+'-active').checked=rail.active;
+      const visibility=$('#home-rail-'+key+'-visibility');if(visibility){visibility.textContent=rail.active?'Gizle':'Yayınla';visibility.classList.toggle('is-published',rail.active);visibility.setAttribute('aria-pressed',String(rail.active));}
+      const status=$('#home-rail-'+key+'-visibility-status');if(status)status.textContent=rail.active?'Anasayfada yayında':'Anasayfada gizli';
       $('#home-rail-'+key+'-display-count').value=String(rail.displayCount);
-      $('#home-rail-'+key+'-count').textContent=rail.itemIds.length+' / 15 kart';
+      const maxItems=key==='featured'?5:15;
+      $('#home-rail-'+key+'-count').textContent=rail.itemIds.length+' / '+maxItems+' kart';
       const warning=$('#home-rail-'+key+'-warning');
-      if(rail.itemIds.length<6)warning.textContent='En az 6 yapım eklemelisin. Şu anda '+rail.itemIds.length+' yapım seçili.';
-      else if(rail.itemIds.length>15)warning.textContent='En fazla 15 yapım ekleyebilirsin.';
-      else if(rail.itemIds.length<rail.displayCount)warning.textContent='Gösterilecek kart sayısı '+rail.displayCount+'. Bu sayıya ulaşmak için '+(rail.displayCount-rail.itemIds.length)+' yapım daha ekle.';
+      if(key==='featured'&&!rail.itemIds.length&&rail.active)warning.textContent='Yayınlamak için en az 1 yapım eklemelisin.';
+      else if(key!=='featured'&&rail.itemIds.length<6&&rail.active)warning.textContent='Yayınlamak için en az 6 yapım eklemelisin. Şu anda '+rail.itemIds.length+' yapım seçili.';
+      else if(rail.itemIds.length>maxItems)warning.textContent='En fazla '+maxItems+' yapım ekleyebilirsin.';
+      else if(rail.active&&rail.itemIds.length<rail.displayCount)warning.textContent='Gösterilecek kart sayısı '+rail.displayCount+'. Bu sayıya ulaşmak için '+(rail.displayCount-rail.itemIds.length)+' yapım daha ekle.';
       else warning.textContent='';
       warning.classList.toggle('is-warning',!!warning.textContent);
-      const add=$('#home-rail-'+key+'-add');if(add)add.disabled=rail.itemIds.length>=15;
+      const add=$('#home-rail-'+key+'-add');if(add)add.disabled=rail.itemIds.length>=(key==='featured'?5:15);
       if(!rail.itemIds.length){list.innerHTML='<div class="home-rail-empty">Henüz yapım eklenmedi.</div>';return;}
       list.innerHTML=rail.itemIds.map((id,index)=>{
         const item=catalog.find(entry=>String(entry.id)===id);if(!item)return '';
         const image=poster(item);
-        return '<article class="home-rail-item"><img class="home-rail-item-bg" src="'+escapeHtml(image||'')+'" alt="" loading="lazy"><span class="home-rail-item-number">'+String(index+1).padStart(2,'0')+'</span><span class="home-rail-item-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+' · ★ '+escapeHtml(item.rating||'—')+'</small></span><span class="home-rail-item-order"><button type="button" data-home-rail-up="'+key+':'+index+'" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-down="'+key+':'+index+'" '+(index===rail.itemIds.length-1?'disabled':'')+' aria-label="Aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span><span class="home-rail-item-actions"><button type="button" class="home-rail-change" data-home-rail-change="'+key+':'+index+'"><i class="fa-solid fa-arrows-rotate"></i> Değiştir</button><button type="button" class="home-rail-remove" data-home-rail-remove="'+key+':'+index+'"><i class="fa-solid fa-trash"></i> Sil</button></span></article>';
+        return '<article class="home-rail-item"><img class="home-rail-item-bg" src="'+escapeHtml(image||'')+'" alt="" loading="lazy"><img class="home-rail-item-poster" src="'+escapeHtml(image||'')+'" alt="'+escapeHtml(item.title)+' afişi" loading="lazy"><span class="home-rail-item-number">'+String(index+1).padStart(2,'0')+'</span><span class="home-rail-item-copy"><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'Dizi':'Film')+' · '+escapeHtml(item.year||'—')+' · ★ '+escapeHtml(item.rating||'—')+'</small></span><span class="home-rail-item-order"><button type="button" data-home-rail-up="'+key+':'+index+'" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-down="'+key+':'+index+'" '+(index===rail.itemIds.length-1?'disabled':'')+' aria-label="Aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span><span class="home-rail-item-actions"><button type="button" class="home-rail-change" data-home-rail-change="'+key+':'+index+'"><i class="fa-solid fa-arrows-rotate"></i> Değiştir</button><button type="button" class="home-rail-remove" data-home-rail-remove="'+key+':'+index+'"><i class="fa-solid fa-trash"></i> Sil</button></span></article>';
       }).join('');
     });
   }
@@ -1106,14 +1110,14 @@
             $('#home-rail-'+targetKey+'-search').placeholder=targetKey==='movies'?'Film adı yaz…':targetKey==='series'?'Dizi adı yaz…':'Film veya dizi adı yaz…';
           }else{
             if(rail.itemIds.includes(id))return;
-            if(rail.itemIds.length>=15){toast('Bu rafta en fazla 15 kart olabilir.');return;}
+            if(rail.itemIds.length>=(targetKey==='featured'?5:15)){toast('Bu rafta en fazla '+(targetKey==='featured'?5:15)+' kart olabilir.');return;}
             rail.itemIds.push(id);
           }
           renderHomepageRails();renderHomepageRailSearch(targetKey);
         });
         $('#home-rail-'+key+'-title').addEventListener('input',event=>{homepageRails[key].title=event.target.value.slice(0,64);});
-        $('#home-rail-'+key+'-active').addEventListener('change',event=>{homepageRails[key].active=event.target.checked;});
-        $('#home-rail-'+key+'-display-count').addEventListener('change',event=>{homepageRails[key].displayCount=Math.min(15,Math.max(6,Number(event.target.value)||6));renderHomepageRails();});
+        $('#home-rail-'+key+'-visibility').addEventListener('click',()=>{homepageRails[key].active=!homepageRails[key].active;renderHomepageRails();});
+        $('#home-rail-'+key+'-display-count').addEventListener('change',event=>{const min=key==='featured'?1:6,max=key==='featured'?5:15;homepageRails[key].displayCount=Math.min(max,Math.max(min,Number(event.target.value)||min));renderHomepageRails();});
         $('#home-rail-'+key+'-list').addEventListener('click',event=>{
           const button=event.target.closest('button');if(!button)return;
           if(button.hasAttribute('data-home-rail-change')){
@@ -1135,8 +1139,8 @@
   }
   async function saveHomepageRails(){
     const button=$('#home-rails-save');
-    const invalid=homepageRailKeys.filter(key=>homepageRails[key].itemIds.length<6||homepageRails[key].itemIds.length>15||homepageRails[key].itemIds.length<homepageRails[key].displayCount);
-    if(invalid.length){toast('Yayınlamak için her vitrinde en az 6 kart ve seçilen kart sayısı kadar yapım olmalı.');return;}
+    const invalid=homepageRailKeys.filter(key=>homepageRails[key].active&&(key==='featured'?homepageRails[key].itemIds.length<1||homepageRails[key].itemIds.length>5||homepageRails[key].itemIds.length<homepageRails[key].displayCount:homepageRails[key].itemIds.length<6||homepageRails[key].itemIds.length>15||homepageRails[key].itemIds.length<homepageRails[key].displayCount));
+    if(invalid.length){toast('Yayında olan raflarda seçilen kart sayısını karşılayacak kadar yapım olmalı. Gizli raflar yayın kontrolüne dahil edilmez.');return;}
     if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
     button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor…';
     $('#home-rails-save-status').textContent='GitHub deposuna kaydediliyor…';
