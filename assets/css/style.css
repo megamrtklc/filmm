@@ -4889,14 +4889,10 @@ body.detail-synopsis-open{overflow:hidden}
 .collection-rail{grid-auto-columns:minmax(132px,14.5%);gap:15px;padding-bottom:12px}
 #daily-pick-section.mood-discovery-hero{max-width:none;width:100%;margin:34px 0 8px}
 #daily-pick-section .mood-discovery-result{min-height:320px;border-radius:16px}
-.live-tv-section{padding-top:4px}
-.live-tv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.live-tv-grid>div{min-height:76px;padding:14px 16px!important;border-radius:12px!important;background:rgba(20,22,29,.88)!important;box-shadow:none!important}
-.live-tv-grid>div:hover{transform:translateY(-2px)!important}
 @media(max-width:900px){
  .continue-watching-rail{grid-auto-columns:minmax(220px,42%)}
  .collection-rail{grid-auto-columns:20%}
- .live-tv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+
 }
 @media(max-width:640px){
  #dashboard-view .home-feature-row #hero-section.hero-section{height:690px!important;min-height:690px!important;padding:112px 20px 180px}
@@ -4911,8 +4907,7 @@ body.detail-synopsis-open{overflow:hidden}
  .collection-rail{grid-auto-columns:38%;gap:11px}
  #daily-pick-section.mood-discovery-hero{margin:26px 0 0}
  #daily-pick-section .mood-discovery-result{min-height:360px}
- .live-tv-grid{grid-template-columns:1fr 1fr;gap:9px}
- .live-tv-grid>div{padding:11px!important;min-height:70px}
+
 }
 @media(prefers-reduced-motion:reduce){.continue-card,.continue-card-bg{transition:none!important}}
 
