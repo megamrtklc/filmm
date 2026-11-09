@@ -118,7 +118,7 @@ html[data-theme="light"] #hero-section {
   background:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
   box-shadow:var(--pl-shadow)!important;
 }html[data-theme="light"] #hero-section>.absolute.inset-0 {}html[data-theme="light"] #hero-bg {}html[data-theme="light"] .hero-vignette {
-  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.93) 24%,rgba(255,255,255,.45) 72%,rgba(255,255,255,.12) 100%)!important;
+  background:linear-gradient(90deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.74) 34%,rgba(255,255,255,.42) 72%,rgba(255,255,255,.24) 100%)!important;
 }html[data-theme="light"] .hero-layout {}html[data-theme="light"] .hero-kicker {
   color:#9a7a4c!important;
   background:#fbf5e9!important;
@@ -809,7 +809,7 @@ html[data-theme="light"] .continue-watching-section {
 }html[data-theme="light"] #hero-section {
   background:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
 }html[data-theme="light"] #hero-section>.absolute.inset-0 {}html[data-theme="light"] #hero-section .hero-vignette {
-  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 35%,rgba(255,255,255,.92) 100%)!important;
+  background:linear-gradient(90deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.72) 55%,rgba(255,255,255,.38) 100%)!important;
 }html[data-theme="light"] #hero-section .hero-copy {
   background:transparent!important;
   box-shadow:none!important;
@@ -862,14 +862,14 @@ html[data-theme="light"] #daily-pick-section .mood-category-trigger select {
   background-image:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
 }html[data-theme="light"] body#theme-body #hero-section .hero-vignette {
   background-color:transparent!important;
-  background-image:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 35%,rgba(255,255,255,.92) 100%)!important;
+  background-image:linear-gradient(90deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.72) 55%,rgba(255,255,255,.38) 100%)!important;
 }
 html[data-theme="light"] #dashboard-view .home-feature-row #hero-section.hero-section {
   background-color:#fff!important;
   background-image:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
   border-color:var(--pl-line)!important;
 }html[data-theme="light"] #dashboard-view .home-feature-row #hero-section>.absolute.inset-0 {}html[data-theme="light"] #dashboard-view .home-feature-row #hero-section .hero-vignette {
-  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 42%,rgba(255,255,255,.90) 100%)!important;
+  background:linear-gradient(90deg,rgba(255,255,255,.86) 0%,rgba(255,255,255,.70) 58%,rgba(255,255,255,.36) 100%)!important;
 }html[data-theme="light"] #dashboard-view .home-feature-row #hero-section .hero-copy {
   background:transparent!important;
   box-shadow:none!important;
