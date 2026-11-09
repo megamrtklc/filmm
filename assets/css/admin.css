@@ -1043,3 +1043,17 @@
 /* Keep featured rail guidance beside its description without overflow */
 .home-rail-heading-copy{min-width:0;flex:1}.home-rail-featured-description{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;max-width:100%}.home-rail-info-inline{display:inline-flex;align-items:center;max-width:100%;padding:4px 8px;border:1px solid rgba(218,178,99,.2);border-radius:5px;background:rgba(218,178,99,.055);color:#c7c1b4;font-size:11px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
 @media(max-width:650px){.home-rail-featured-description{align-items:flex-start;gap:5px}.home-rail-info-inline{font-size:10px;padding:4px 7px}}
+
+
+/* Kaldır ve Değiştir aksiyonlarını seçili kartlarda kesin görünür tut */
+.home-rail-item{grid-template-columns:30px 76px minmax(0,1fr) 64px!important;grid-template-rows:minmax(66px,auto) 36px!important;}
+.home-rail-item-bg{position:absolute!important;inset:0!important;z-index:-2!important;pointer-events:none!important;}
+.home-rail-item-number,.home-rail-item-poster,.home-rail-item-copy,.home-rail-item-order,.home-rail-item-actions{position:relative!important;z-index:1!important;}
+.home-rail-item-number{grid-column:1!important;grid-row:1!important;}
+.home-rail-item-poster{grid-column:2!important;grid-row:1!important;}
+.home-rail-item-copy{grid-column:3!important;grid-row:1!important;min-width:0!important;}
+.home-rail-item-order{grid-column:4!important;grid-row:1!important;display:flex!important;}
+.home-rail-item-actions{grid-column:3/5!important;grid-row:2!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;visibility:visible!important;opacity:1!important;}
+.home-rail-item-actions button,.home-rail-item-actions .home-rail-remove{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:auto!important;min-width:82px!important;height:31px!important;padding:0 12px!important;visibility:visible!important;opacity:1!important;white-space:nowrap!important;}
+.home-rail-item-actions .home-rail-remove{color:#ffd0ca!important;background:rgba(115,35,35,.58)!important;border:1px solid rgba(245,135,125,.68)!important;}
+@media(max-width:650px){.home-rail-item{grid-template-columns:22px 62px minmax(0,1fr) 56px!important;grid-template-rows:minmax(56px,auto) 34px!important;}.home-rail-item-poster{width:54px!important;height:72px!important;}.home-rail-item-actions{grid-column:3/5!important;grid-row:2!important;}.home-rail-item-actions button,.home-rail-item-actions .home-rail-remove{min-width:76px!important;height:29px!important;padding:0 9px!important;}}
