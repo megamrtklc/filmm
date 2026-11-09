@@ -11033,3 +11033,7 @@ body.detail-synopsis-open{overflow:hidden}
 .perde-preview-watch:hover{transform:scale(1.07);background:#ffe04a}
 @media(max-width:600px){.perde-hover-preview{width:min(360px,calc(100vw - 20px))!important;left:10px!important;top:auto!important;bottom:12px!important}.perde-preview-copy{padding:14px 15px 16px}.perde-preview-title{font-size:17px}.perde-preview-desc{font-size:12px;-webkit-line-clamp:2}}
 @media(prefers-reduced-motion:reduce){.perde-hover-preview{transition:none}}
+
+/* Hover önizleme: İzle aksiyonu metinli buton */
+.perde-preview-watch{width:auto;min-width:88px;height:42px;padding:0 15px;border-radius:999px;font-size:13px;gap:8px}
+.perde-preview-watch span{display:inline}
