@@ -631,11 +631,14 @@ function renderHomeCollections() {
     fill('top-series-rail', series);
     [['featured-rail','öne çıkan yapımlarda'],['personalized-rail','sana özel seçkilerde'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
         const rail=document.getElementById(railId),heading=rail?.previousElementSibling;
-        if(!rail||!heading||heading.querySelector('.rail-controls'))return;
+        if(!rail||!heading)return;
         const controls=document.createElement('div');controls.className='rail-controls';
-        controls.innerHTML='<button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Öncekiler" title="Öncekiler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonrakiler" title="Sonrakiler"><i class="fa-solid fa-chevron-right"></i></button>';
+        controls.innerHTML='<button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Önceki afişler" title="Önceki afişler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonraki afişler" title="Sonraki afişler"><i class="fa-solid fa-chevron-right"></i></button>';
         controls.setAttribute('aria-label',label+' kaydırma kontrolleri');
-        heading.appendChild(controls);
+        if(railId==='featured-rail'){
+            const stage=document.createElement('div');stage.className='featured-number-stage';
+            rail.parentNode.insertBefore(stage,rail);stage.appendChild(rail);stage.appendChild(controls);
+        }else if(!heading.querySelector('.rail-controls'))heading.appendChild(controls);
     });
     document.getElementById('collection-movies').hidden = movies.length === 0;
     document.getElementById('collection-series').hidden = series.length === 0;
