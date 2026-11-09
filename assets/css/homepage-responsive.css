@@ -749,3 +749,12 @@ html.perde-touch-compact .site-header .header-search-shell .glass-search{
 html.perde-touch-compact .site-header .header-search-shell .search-category{
   width:82px!important;max-width:82px!important;font-size:10px!important;
 }
+
+
+/* Ana sayfa kartları: katalog rotalarında JS hidden durumuna kesin olarak uy. */
+#dashboard-view > .home-mood-continue-row[hidden],
+#dashboard-view > .home-mood-continue-row.hidden,
+html.perde-touch-compact #dashboard-view > .home-mood-continue-row[hidden],
+html.perde-touch-compact #dashboard-view > .home-mood-continue-row.hidden {
+  display: none !important;
+}
