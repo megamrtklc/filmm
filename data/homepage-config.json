@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T11:43:27.146Z",
+  "updatedAt": "2026-11-09T12:19:54.386Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -91,20 +91,23 @@
     "featured": {
       "title": "Editörün Seçtikleri",
       "active": true,
-      "displayCount": 7,
+      "displayCount": 10,
       "itemIds": [
+        "archive-48",
         "archive-59",
-        "archive-5",
-        "archive-4",
-        "archive-7",
-        "archive-8",
-        "archive-2",
-        "archive-1"
+        "archive-34",
+        "archive-47",
+        "archive-23",
+        "archive-3",
+        "archive-49",
+        "archive-12",
+        "archive-25",
+        "archive-32"
       ]
     },
     "movies": {
       "title": "Popüler içerikler",
-      "active": false,
+      "active": true,
       "displayCount": 6,
       "itemIds": [
         "archive-12",
@@ -117,7 +120,7 @@
     },
     "series": {
       "title": "Öne Çıkan Diziler",
-      "active": false,
+      "active": true,
       "displayCount": 6,
       "itemIds": [
         "archive-23",
