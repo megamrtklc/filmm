@@ -1029,17 +1029,17 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 /* Mobile hero compact layout + trailer CTA (phone only). */
 @media screen and (max-width:767px){
   #dashboard-view .home-feature-row > section#mobile-hero-section.mobile-hero-section{
-    height:min(690px,calc(100svh - 140px))!important;
-    min-height:560px!important;
-    max-height:690px!important;
+    height:min(520px,calc(100svh - 220px))!important;
+    min-height:490px!important;
+    max-height:520px!important;
   }
-  #mobile-hero-section .mobile-hero-topline{top:76px!important}
-  #mobile-hero-section .mobile-hero-content{padding-top:215px!important}
+  #mobile-hero-section .mobile-hero-topline{top:62px!important}
+  #mobile-hero-section .mobile-hero-content{padding-top:168px!important}
   #mobile-hero-section .mobile-hero-ratings{margin-bottom:8px!important}
   #mobile-hero-section .mobile-hero-meta{margin-top:9px!important}
   #mobile-hero-section #mobile-hero-desc{margin-top:9px!important}
   #mobile-hero-section .mobile-hero-actions{margin-top:12px!important}
-  #mobile-hero-section .mobile-hero-controls{margin-top:12px!important;padding-top:9px!important}
+  #mobile-hero-section .mobile-hero-controls{margin-top:9px!important;padding-top:7px!important}
   #mobile-hero-section #mobile-hero-trailer-btn{
     flex:0 0 auto!important;
     border:1px solid rgba(255,255,255,.3)!important;
@@ -1050,10 +1050,10 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 }
 @media screen and (max-width:380px){
   #dashboard-view .home-feature-row > section#mobile-hero-section.mobile-hero-section{
-    height:min(650px,calc(100svh - 140px))!important;
-    min-height:530px!important;
-    max-height:650px!important;
+    height:min(490px,calc(100svh - 220px))!important;
+    min-height:465px!important;
+    max-height:490px!important;
   }
-  #mobile-hero-section .mobile-hero-topline{top:70px!important}
-  #mobile-hero-section .mobile-hero-content{padding-top:190px!important}
+  #mobile-hero-section .mobile-hero-topline{top:56px!important}
+  #mobile-hero-section .mobile-hero-content{padding-top:150px!important}
 }
