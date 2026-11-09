@@ -9719,3 +9719,63 @@ body.detail-synopsis-open{overflow:hidden}
     margin-top:1px!important;
   }
 }
+
+
+/* MANŞET AFİŞLERİ — ölçüyü ve aralıkları dengeli biçimde artır */
+#dashboard-view .home-feature-row #hero-section .hero-layout{
+  grid-template-rows:52px minmax(0,1fr) 194px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+  min-height:194px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+  gap:19px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+  flex:0 0 104px!important;
+  width:104px!important;
+  min-width:104px!important;
+  height:156px!important;
+}
+@media(max-width:820px){
+  #dashboard-view .home-feature-row #hero-section .hero-layout{
+    grid-template-rows:48px minmax(0,1fr) 166px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+    min-height:166px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+    gap:15px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+    flex:0 0 88px!important;
+    width:88px!important;
+    min-width:88px!important;
+    height:132px!important;
+  }
+}
+@media(max-width:767px){
+  #dashboard-view .home-feature-row #hero-section .hero-layout{
+    grid-template-rows:48px minmax(0,1fr) 150px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone{
+    min-height:150px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumbnails{
+    gap:13px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+    flex:0 0 78px!important;
+    width:78px!important;
+    min-width:78px!important;
+    height:117px!important;
+  }
+}
+@media(max-width:380px){
+  #dashboard-view .home-feature-row #hero-section .hero-poster-zone .hero-thumb{
+    flex:0 0 72px!important;
+    width:72px!important;
+    min-width:72px!important;
+    height:108px!important;
+  }
+}
