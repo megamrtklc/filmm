@@ -1034,3 +1034,7 @@
 .home-rail-item-actions button{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:82px!important;height:32px!important;padding:0 12px!important;font-size:11px!important;line-height:1!important;white-space:nowrap!important}
 .home-rail-item-actions .home-rail-remove{color:#ffd0ca!important;background:rgba(115,35,35,.48)!important;border:1px solid rgba(245,135,125,.58)!important}
 @media(max-width:650px){.home-rail-item{grid-template-columns:22px 62px minmax(0,1fr) 32px!important}.home-rail-item-actions{grid-column:3/5!important;grid-row:2!important}.home-rail-item-actions button{min-width:76px!important;height:30px!important}}
+
+
+/* Featured homepage rail selection guidance */
+.home-rail-info{margin:8px 0 0;padding:10px 12px;border:1px solid rgba(218,178,99,.18);border-left:3px solid #c9a45e;border-radius:6px;background:rgba(218,178,99,.055);color:#c7c1b4;font-size:12px;line-height:1.55}
