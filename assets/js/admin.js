@@ -1069,7 +1069,7 @@
       list.innerHTML=rail.itemIds.map((id,index)=>{
         const item=catalog.find(entry=>String(entry.id)===id);if(!item)return '';
         const image=poster(item);
-        return '<article class="home-rail-item"><img class="home-rail-item-bg" src="'+escapeHtml(image||'')+'" alt="" loading="lazy"><span class="home-rail-item-number">'+String(index+1).padStart(2,'0')+'</span><img class="home-rail-item-poster" src="'+escapeHtml(image||'')+'" alt="'+escapeHtml(item.title)+' afişi" loading="lazy"><span class="home-rail-item-copy"><b>'+escapeHtml(item.title)+'</b><span class="home-rail-item-meta"><em>'+(item.type==='tv'?'DİZİ':'FİLM')+'</em><span>'+escapeHtml(item.year||'Yıl bilgisi yok')+'</span><span class="home-rail-item-rating">★ '+escapeHtml(item.rating||'—')+'</span></span></span><span class="home-rail-item-order"><button type="button" data-home-rail-up="'+key+':'+index+'" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-down="'+key+':'+index+'" '+(index===rail.itemIds.length-1?'disabled':'')+' aria-label="Aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span><span class="home-rail-item-actions"><button type="button" class="home-rail-change" data-home-rail-change="'+key+':'+index+'"><i class="fa-solid fa-arrows-rotate"></i> Değiştir</button><button type="button" class="home-rail-remove" data-home-rail-remove="'+key+':'+index+'"><i class="fa-solid fa-trash"></i> Sil</button></span></article>';
+        return '<article class="home-rail-item"><img class="home-rail-item-bg" src="'+escapeHtml(image||'')+'" alt="" loading="lazy"><span class="home-rail-item-number">'+String(index+1).padStart(2,'0')+'</span><img class="home-rail-item-poster" src="'+escapeHtml(image||'')+'" alt="'+escapeHtml(item.title)+' afişi" loading="lazy"><span class="home-rail-item-copy"><b>'+escapeHtml(item.title)+'</b><span class="home-rail-item-meta"><em>'+(item.type==='tv'?'DİZİ':'FİLM')+'</em><span>'+escapeHtml(item.year||'Yıl bilgisi yok')+'</span><span class="home-rail-item-rating">★ '+escapeHtml(item.rating||'—')+'</span></span></span><span class="home-rail-item-order"><button type="button" data-home-rail-up="'+key+':'+index+'" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-down="'+key+':'+index+'" '+(index===rail.itemIds.length-1?'disabled':'')+' aria-label="Aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span><span class="home-rail-item-actions"><button type="button" class="home-rail-change" data-home-rail-change="'+key+':'+index+'"><i class="fa-solid fa-arrows-rotate"></i> Değiştir</button><button type="button" class="home-rail-remove" data-home-rail-remove="'+key+':'+index+'"><i class="fa-solid fa-trash"></i> Kaldır</button></span></article>';
       }).join('');
     });
   }
@@ -1080,15 +1080,24 @@
     const allowed=catalog.filter(item=>key==='movies'?item.type==='movie':key==='series'?item.type==='tv':true);
     const matches=allowed.filter(item=>!query||String(item.title||'').toLocaleLowerCase('tr-TR').includes(query)||String(item.originalTitle||'').toLocaleLowerCase('tr-TR').includes(query));
     const selectedIds=homepageRails[key].itemIds;
-    select.innerHTML='<option value="">Katalogdan yapım seç…</option>'+matches.map(item=>{
-      const id=String(item.id),selected=selectedIds.includes(id);
-      return '<option value="'+escapeHtml(id)+'">'+escapeHtml(item.title)+' — '+(item.type==='tv'?'Dizi':'Film')+(selected?' · Seçili':'')+'</option>';
-    }).join('');
+    select.innerHTML='<option value="">Katalogdan yapım seç…</option>'+matches.map(item=>'<option value="'+escapeHtml(String(item.id))+'">'+escapeHtml(item.title)+' — '+(item.type==='tv'?'Dizi':'Film')+'</option>').join('');
+    const wrap=select.parentElement;
+    let picker=wrap.querySelector('.home-rail-visual-picker');
+    if(!picker){picker=document.createElement('div');picker.className='home-rail-visual-picker';picker.innerHTML='<button type="button" class="home-rail-picker-trigger"><span>＋</span> Yapım seç <i class="fa-solid fa-chevron-down"></i></button><div class="home-rail-picker-menu" hidden></div>';select.insertAdjacentElement('afterend',picker);}
+    select.hidden=true;
+    const trigger=picker.querySelector('.home-rail-picker-trigger'),menu=picker.querySelector('.home-rail-picker-menu');
+    trigger.disabled=!matches.length;
+    trigger.innerHTML='<span>＋</span> Yapım seç <i class="fa-solid fa-chevron-down"></i>';
+    menu.innerHTML=matches.slice(0,60).map(item=>{const id=String(item.id),image=poster(item),chosen=selectedIds.includes(id);return '<button type="button" class="home-rail-picker-option'+(chosen?' is-selected':'')+'" data-home-rail-pick="'+key+':'+escapeHtml(id)+'">'+(image?'<img src="'+image+'" alt="" loading="lazy">':'<span class="home-rail-picker-placeholder"><i class="fa-solid fa-film"></i></span>')+'<span><b>'+escapeHtml(item.title)+'</b><small>'+(item.type==='tv'?'DİZİ':'FİLM')+' · IMDb '+escapeHtml(item.rating||'—')+'</small></span>'+(chosen?'<em>Seçili</em>':'')+'</button>';}).join('')||'<div class="home-rail-picker-empty">Eşleşen yapım bulunamadı.</div>';
     const replaceIndex=homepageRailReplaceIndex[key];
-    host.innerHTML=replaceIndex!==null?'<div class="home-rail-replace-note"><span>Seçili kartı değiştirmek için açılır menüden yeni yapımı seç.</span><button type="button" data-home-rail-cancel-replace="'+key+'">Vazgeç</button></div>':'';
-    host.hidden=replaceIndex===null;
+    host.innerHTML=replaceIndex!==null?'<div class="home-rail-replace-note"><span>Seçili kartı değiştirmek için arama sonuçlarından yeni yapımı seç.</span><button type="button" data-home-rail-cancel-replace="'+key+'">Vazgeç</button></div>':'';
+    if(query){host.innerHTML+=matches.slice(0,30).map(item=>{const id=String(item.id),image=poster(item),chosen=selectedIds.includes(id);return '<article class="home-rail-search-result">'+(image?'<img src="'+image+'" alt="" loading="lazy">':'<span class="home-rail-picker-placeholder"><i class="fa-solid fa-film"></i></span>')+'<span class="home-rail-search-result-title"><b>'+escapeHtml(item.title)+'</b><small>IMDb '+escapeHtml(item.rating||'—')+'</small></span><em class="home-rail-search-result-type">'+(item.type==='tv'?'DİZİ':'FİLM')+'</em><button type="button" data-home-rail-pick="'+key+':'+escapeHtml(id)+'" '+(chosen?'disabled':'')+'>'+(chosen?'Seçili':'Ekle')+'</button></article>';}).join('')+(matches.length>30?'<small class="home-rail-search-more">İlk 30 sonuç gösteriliyor.</small>':'');}
+    host.hidden=!query&&replaceIndex===null;
     select.disabled=!matches.length;
     select.setAttribute('aria-label',key==='movies'?'Film seç':key==='series'?'Dizi seç':'Film veya dizi seç');
+    trigger.onclick=()=>{menu.hidden=!menu.hidden;trigger.classList.toggle('is-open',!menu.hidden);};
+    menu.querySelectorAll('[data-home-rail-pick]').forEach(button=>button.addEventListener('click',()=>{if(button.disabled)return;const id=button.dataset.homeRailPick.split(':').slice(1).join(':');select.value=id;select.dispatchEvent(new Event('change',{bubbles:true}));menu.hidden=true;trigger.classList.remove('is-open');}));
+
   }
   function initHomepageRailsManager(){
     homepageRails=normalizeHomepageRails(homepageRails);
