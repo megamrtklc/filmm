@@ -98,6 +98,14 @@ async function checkPage(file, label, viewport, mobile) {
       rankingNumberColor: (() => {
         const node = document.querySelector('#collection-featured .featured-number');
         return node ? getComputedStyle(node).color : null;
+      })(),
+      rankingSurfaceBackground: (() => {
+        const node = document.querySelector('#collection-featured');
+        return node ? getComputedStyle(node).backgroundColor : null;
+      })(),
+      discoverySurfaceBackground: (() => {
+        const node = document.querySelector('#daily-pick-section .mood-discovery-result');
+        return node ? getComputedStyle(node).backgroundColor : null;
       })()
     };
   });
@@ -112,6 +120,15 @@ async function checkPage(file, label, viewport, mobile) {
   }
   if (file === 'index.html' && state.homepageMainBackground !== 'rgb(243, 244, 246)') {
     throw new Error(`${label}: homepage content canvas is not light (${state.homepageMainBackground})`);
+  }
+  if (file === 'index.html' && state.hero.backgroundColor !== 'rgb(255, 255, 255)') {
+    throw new Error(`${label}: hero surface is not light (${state.hero.backgroundColor})`);
+  }
+  if (file === 'index.html' && state.rankingSurfaceBackground !== 'rgb(255, 255, 255)') {
+    throw new Error(`${label}: ranking rail is not light (${state.rankingSurfaceBackground})`);
+  }
+  if (file === 'index.html' && state.discoverySurfaceBackground !== 'rgb(255, 255, 255)') {
+    throw new Error(`${label}: discovery card is not light (${state.discoverySurfaceBackground})`);
   }
   if (file === 'index.html' && state.hero.titleText && state.hero.titleOpacity !== '1') {
     throw new Error(`${label}: hero title is visually hidden (opacity ${state.hero.titleOpacity})`);
