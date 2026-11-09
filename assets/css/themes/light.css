@@ -16,6 +16,17 @@ html[data-theme="light"] {
   --pl-gold:#d7a64b;
   --pl-shadow:0 14px 38px rgba(30,38,54,.075);
   --pl-shadow-soft:0 5px 18px rgba(30,38,54,.055);
+  /* Map the admin panel's existing design tokens onto the light palette. */
+  --bg:#f3f4f6;
+  --sidebar:#ffffff;
+  --surface:#ffffff;
+  --surface-2:#f8f9fb;
+  --line:#e7e9ee;
+  --text:#242832;
+  --muted:#858b97;
+  --gold:#c7953e;
+  --gold-bright:#b7832d;
+  --gold-soft:rgba(215,166,75,.13);
   background:var(--pl-bg);
 }
 html[data-theme="light"] body#theme-body{
@@ -451,3 +462,73 @@ html[data-theme="light"] .admin-body{background:var(--pl-bg)!important}
 html[data-theme="light"] .admin-sidebar .sidebar-caption{color:#a2a8b2!important}
 html[data-theme="light"] .admin-topbar{border-bottom:1px solid var(--pl-line)!important}
 html[data-theme="light"] .admin-content .page-view{color:var(--pl-ink)!important}
+
+
+/* Admin components use the original admin.css tokens; these overrides keep
+   every management screen legible without changing its structure or behavior. */
+html[data-theme="light"] .admin-topbar{background:#fff!important;border-color:var(--pl-line)!important}
+html[data-theme="light"] .admin-brand,
+html[data-theme="light"] .admin-brand b,
+html[data-theme="light"] .breadcrumbs b,
+html[data-theme="light"] .admin-footer b{color:#303642!important}
+html[data-theme="light"] .admin-sidebar .nav-item{color:#68707d!important}
+html[data-theme="light"] .admin-sidebar .nav-item i{color:#9aa1ac!important}
+html[data-theme="light"] .admin-sidebar .nav-item:hover{background:#f6f7f9!important;color:#303642!important}
+html[data-theme="light"] .admin-sidebar .nav-item.active{background:#fff0f1!important;color:var(--pl-accent)!important;box-shadow:inset 2px 0 var(--pl-accent)!important}
+html[data-theme="light"] .admin-sidebar .nav-item.active i{color:var(--pl-accent)!important}
+html[data-theme="light"] .admin-sidebar .sidebar-status,
+html[data-theme="light"] .admin-sidebar .back-to-site{border-color:var(--pl-line)!important;color:#68707d!important}
+html[data-theme="light"] .admin-content .stat-card,
+html[data-theme="light"] .admin-content .surface-card,
+html[data-theme="light"] .admin-content .catalog-summary-strip,
+html[data-theme="light"] .admin-content .collection-summary-strip,
+html[data-theme="light"] .admin-content .catalog-toolbar,
+html[data-theme="light"] .admin-content .catalog-poster-grid,
+html[data-theme="light"] .admin-content .collection-library,
+html[data-theme="light"] .admin-content .collection-editor,
+html[data-theme="light"] .admin-content .hero-stage-card,
+html[data-theme="light"] .admin-content .hero-slides-card,
+html[data-theme="light"] .admin-content .hero-settings-editor,
+html[data-theme="light"] .admin-content .catalog-analytics-stats,
+html[data-theme="light"] .admin-content .catalog-analytics-grid{
+  background:#fff!important;border-color:var(--pl-line)!important;color:var(--pl-ink)!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+}
+html[data-theme="light"] .admin-content .recent-row,
+html[data-theme="light"] .admin-content .quick-action,
+html[data-theme="light"] .admin-content .setting-row,
+html[data-theme="light"] .admin-content .collection-list>li,
+html[data-theme="light"] .admin-content .catalog-table tr{border-color:var(--pl-line)!important}
+html[data-theme="light"] .admin-content .quick-action{color:#454c58!important}
+html[data-theme="light"] .admin-content .stat-label,
+html[data-theme="light"] .admin-content .stat-card small,
+html[data-theme="light"] .admin-content .recent-meta small,
+html[data-theme="light"] .admin-content .section-title-row p,
+html[data-theme="light"] .admin-content .card-heading p{color:#858b97!important}
+html[data-theme="light"] .admin-content input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] .admin-content select,
+html[data-theme="light"] .admin-content textarea,
+html[data-theme="light"] .admin-content .admin-search{
+  background:#fff!important;border:1px solid #dfe3e9!important;color:#303642!important;
+}
+html[data-theme="light"] .admin-content input::placeholder,
+html[data-theme="light"] .admin-content textarea::placeholder{color:#a0a6b0!important}
+html[data-theme="light"] .admin-content .catalog-picker,
+html[data-theme="light"] .admin-content .catalog-picker-results,
+html[data-theme="light"] .admin-content .collection-preview,
+html[data-theme="light"] .admin-content .hero-live-preview{background:#f8f9fb!important;border-color:var(--pl-line)!important;color:#454c58!important}
+html[data-theme="light"] .admin-content .catalog-table th,
+html[data-theme="light"] .admin-content .catalog-table td{border-color:var(--pl-line)!important}
+html[data-theme="light"] .admin-content .catalog-table th{background:#f6f7f9!important;color:#68707d!important}
+html[data-theme="light"] .admin-content .catalog-table td{color:#454c58!important}
+html[data-theme="light"] .admin-content .catalog-toolbar button,
+html[data-theme="light"] .admin-content .catalog-pagination button{border-color:var(--pl-line)!important}
+html[data-theme="light"] .admin-content .mobile-menu,
+html[data-theme="light"] .admin-content .icon-button{background:#fff!important;border-color:var(--pl-line)!important;color:#68707d!important}
+html[data-theme="light"] .admin-footer{background:#fff!important;border-color:var(--pl-line)!important;color:#858b97!important}
+@media(max-width:900px){
+  html[data-theme="light"] .admin-main{margin-left:0!important}
+  html[data-theme="light"] .admin-content{padding:24px 18px 36px!important}
+  html[data-theme="light"] .admin-topbar{padding:0 18px!important}
+  html[data-theme="light"] .admin-footer{padding:14px 18px!important;gap:10px!important;flex-wrap:wrap!important}
+}
