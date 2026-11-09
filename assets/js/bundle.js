@@ -574,20 +574,21 @@ function renderHomeCollections() {
         const selection=shuffleItems(personalized).slice(0,4);
         if(!personalizedRail)return;
         personalizedRail.classList.add('personalized-row-rail');
-        personalizedRail.innerHTML=selection.length?selection.map(item=>{
-            const overview=String(item.tmdbOverview||item.desc||'').replace(/\s+/g,' ').trim();
-            const shortOverview=overview.length>105?overview.slice(0,102).trimEnd()+'…':overview;
+        personalizedRail.innerHTML=selection.length?selection.map((item,index)=>{
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
             const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
+            const meta=[item.year||'',genre].filter(Boolean).join(' · ');
             return `
-            <article class="personalized-row-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
-                <div class="personalized-row-poster"><img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="lazy" decoding="async"></div>
-                <div class="personalized-row-copy">
-                    <div class="personalized-row-topline"><span>${item.type==='tv'?'DİZİ':'FİLM'}</span><b><i class="fa-solid fa-star" aria-hidden="true"></i> IMDb ${escapeCountryHtml(item.rating||'—')}</b></div>
+            <article class="personalized-tile-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
+                <img class="personalized-tile-image" src="${escapeCountryHtml(item.image)}" alt="" loading="lazy" decoding="async">
+                <span class="personalized-tile-shade" aria-hidden="true"></span>
+                <span class="personalized-tile-index">0${index+1}</span>
+                <span class="personalized-tile-rating"><i class="fa-solid fa-star" aria-hidden="true"></i> ${escapeCountryHtml(item.rating||'—')}</span>
+                <div class="personalized-tile-content">
+                    <span class="personalized-tile-type">${item.type==='tv'?'DİZİ':'FİLM'} ${meta?' · '+escapeCountryHtml(meta):''}</span>
                     <h3>${escapeCountryHtml(item.title)}</h3>
-                    <p>${escapeCountryHtml([item.year||'',genre].filter(Boolean).join(' · '))}</p>
-                    ${shortOverview?'<small class="personalized-row-summary">'+escapeCountryHtml(shortOverview)+'</small>':''}
+                    <span class="personalized-tile-hint">${overview?'Senin keşif listen':'Detayları keşfet'} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
                 </div>
-                <i class="fa-solid fa-chevron-right personalized-row-arrow" aria-hidden="true"></i>
             </article>`;
         }).join(''):'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
     };
