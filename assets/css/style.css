@@ -11222,3 +11222,95 @@ body.detail-synopsis-open{overflow:hidden}
   #collection-featured .collection-heading{padding-bottom:9px!important}
   #collection-featured .featured-number-rail{padding-top:10px!important;padding-bottom:10px!important}
 }
+
+
+/* PERDE — Öne Çıkan Yapımlar / Streamingbar esintili editoryal vitrin
+   Sıralama numaralarının ölçüsü, konumu, katmanı ve davranışı özellikle korunur. */
+#collection-featured{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  padding:clamp(20px,2.5vw,32px) clamp(16px,2.2vw,28px) 18px!important;
+  border:1px solid rgba(205,169,101,.13)!important;
+  border-radius:15px!important;
+  background:
+    radial-gradient(ellipse at 78% 0%,rgba(167,133,85,.10),transparent 42%),
+    linear-gradient(118deg,rgba(18,20,25,.96),rgba(11,13,17,.93) 55%,rgba(19,20,24,.96))!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#collection-featured:before{
+  content:"";
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:.23;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 44px,rgba(255,255,255,.018) 45px,transparent 46px),
+    linear-gradient(180deg,rgba(255,255,255,.035),transparent 34%,rgba(0,0,0,.15));
+}
+#collection-featured:after{
+  content:"";
+  position:absolute;left:3%;right:3%;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(211,174,111,.5),rgba(255,255,255,.12),transparent);
+}
+#collection-featured .collection-heading{
+  position:relative;z-index:3;
+  display:flex!important;align-items:flex-end!important;justify-content:space-between!important;
+  gap:18px!important;margin:0 0 8px!important;padding:0 0 17px!important;
+  border-bottom:1px solid rgba(255,255,255,.085)!important;
+}
+#collection-featured .collection-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  margin:0 0 8px!important;
+  color:#c9a66b!important;font-size:10px!important;font-weight:800!important;
+  letter-spacing:.24em!important;text-transform:uppercase!important;
+}
+#collection-featured .collection-eyebrow:before{
+  content:"";display:inline-block;width:27px;height:1px;
+  background:linear-gradient(90deg,#d9b477,rgba(217,180,119,.15));
+}
+#collection-featured .collection-heading h2{
+  margin:0!important;color:#f1eee8!important;
+  font-family:'Cinzel',Georgia,serif!important;
+  font-size:clamp(23px,3vw,36px)!important;font-weight:700!important;
+  line-height:1.12!important;letter-spacing:-.025em!important;
+  text-shadow:0 2px 18px rgba(0,0,0,.45)!important;
+}
+#collection-featured .featured-number-stage{
+  position:relative;z-index:2;
+}
+#collection-featured .featured-number-rail{
+  padding-top:17px!important;padding-bottom:18px!important;
+}
+#collection-featured .featured-number-card{
+  transition:transform .28s cubic-bezier(.2,.7,.2,1),filter .28s ease!important;
+}
+#collection-featured .featured-number-card:hover{
+  filter:brightness(1.06);
+}
+#collection-featured .featured-number-poster{
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:8px!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.32)!important;
+  overflow:hidden!important;
+  transition:border-color .25s ease,box-shadow .25s ease!important;
+}
+#collection-featured .featured-number-card:hover .featured-number-poster{
+  border-color:rgba(211,174,111,.48)!important;
+  box-shadow:0 17px 34px rgba(0,0,0,.42),0 0 0 1px rgba(211,174,111,.08)!important;
+}
+#collection-featured .featured-number-poster img{
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .3s ease!important;
+}
+#collection-featured .featured-number-card:hover .featured-number-poster img{
+  transform:scale(1.035);
+}
+@media(max-width:820px){
+  #collection-featured{padding:17px 12px 13px!important;border-radius:12px!important}
+  #collection-featured .collection-heading{padding-bottom:12px!important}
+  #collection-featured .collection-heading h2{font-size:clamp(21px,5vw,28px)!important}
+  #collection-featured .featured-number-rail{padding-top:13px!important;padding-bottom:14px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #collection-featured .featured-number-card,
+  #collection-featured .featured-number-poster,
+  #collection-featured .featured-number-poster img{transition:none!important}
+}
