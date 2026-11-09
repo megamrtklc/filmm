@@ -80,6 +80,56 @@
     if (Math.abs((saved.duration || 0) - video.duration) > Math.max(120, video.duration * 0.08)) return null;
     return saved;
   }
+  function installPlaybackChoiceStyles() {
+    if (document.getElementById('perde-playback-choice-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'perde-playback-choice-styles';
+    style.textContent = `
+      .perde-playback-choice {
+        position:absolute; inset:0; z-index:30; display:grid; place-items:center;
+        padding:clamp(16px,4vw,30px); background:rgba(4,6,10,.78);
+        -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+      }
+      .perde-playback-choice[hidden] { display:none!important; }
+      .perde-playback-choice-card {
+        width:min(460px,100%); padding:clamp(22px,4vw,34px);
+        border:1px solid rgba(255,255,255,.14); border-radius:18px;
+        background:linear-gradient(145deg,#20252e,#0e1118);
+        color:#f7f8fa; text-align:center;
+        box-shadow:0 24px 70px rgba(0,0,0,.48);
+      }
+      .perde-playback-choice-kicker {
+        display:block; margin-bottom:10px; color:#e2b65d;
+        font-size:10px; font-weight:800; letter-spacing:.2em;
+      }
+      .perde-playback-choice-card h3 {
+        margin:0 0 8px; color:#fff; font-size:clamp(20px,3vw,26px);
+        font-weight:800; letter-spacing:-.03em;
+      }
+      .perde-playback-choice-progress {
+        margin:0 0 22px; color:#aeb6c2; font-size:12px; line-height:1.55;
+      }
+      .perde-playback-choice-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+      .perde-playback-choice-actions button {
+        display:flex; align-items:center; justify-content:center; gap:8px;
+        min-height:46px; padding:10px 12px; border:1px solid rgba(255,255,255,.16);
+        border-radius:10px; background:rgba(255,255,255,.07); color:#f3f4f6;
+        font:600 12px/1.25 inherit; cursor:pointer; transition:background .18s,border-color .18s,transform .18s;
+      }
+      .perde-playback-choice-actions button:hover { transform:translateY(-1px); background:rgba(255,255,255,.12); }
+      .perde-playback-choice-actions .perde-playback-continue {
+        border-color:#d8ad55; background:#d8ad55; color:#17191e;
+      }
+      .perde-playback-choice-actions .perde-playback-continue:hover { background:#e5bd6b; }
+      .perde-playback-choice-actions button:disabled { opacity:.42; cursor:not-allowed; transform:none; }
+      @media(max-width:560px) {
+        .perde-playback-choice-actions { grid-template-columns:1fr; }
+        .perde-playback-choice-card { padding:22px 18px; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function ensureChoiceOverlay() {
     if (choiceOverlay) return choiceOverlay;
     const stage = $('player-stage');
