@@ -10037,3 +10037,29 @@ body.detail-synopsis-open{overflow:hidden}
     max-height:5.6em!important;
   }
 }
+
+
+/* MANŞET KONU METNİ — kontrastı ve satır okunurluğunu artır */
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+  color:rgba(255,255,255,.94)!important;
+  font-size:clamp(14px,1.08vw,15.5px)!important;
+  font-weight:450!important;
+  line-height:1.55!important;
+  letter-spacing:.008em!important;
+  max-width:640px!important;
+  min-height:6.2em!important;
+  max-height:6.2em!important;
+  text-shadow:0 2px 5px rgba(0,0,0,.96),0 0 16px rgba(0,0,0,.72)!important;
+  -webkit-line-clamp:4!important;
+  line-clamp:4!important;
+}
+@media(max-width:767px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    font-size:14px!important;
+    line-height:1.5!important;
+    letter-spacing:.005em!important;
+    min-height:6em!important;
+    max-height:6em!important;
+    max-width:100%!important;
+  }
+}
