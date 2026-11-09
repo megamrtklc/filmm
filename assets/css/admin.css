@@ -1156,3 +1156,34 @@
 #page-collections .collection-list-copy small{font-size:9px}
 @media(max-width:900px){#page-collections .collection-manager-layout{grid-template-columns:minmax(0,1fr)}#page-collections .collection-preview-panel{grid-column:auto}#page-collections .collection-preview-rail{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:560px){#page-collections .collection-summary-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}#page-collections .collection-summary-strip>div{gap:7px;padding:9px 7px}#page-collections .collection-summary-strip small{font-size:7px;letter-spacing:.04em}#page-collections .collection-summary-strip b{font-size:16px}#page-collections .collection-summary-strip .catalog-summary-icon{width:25px;height:25px;min-width:25px}#page-collections .collection-preview-rail{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* Film ve Diziler: düzenle/sil işlemleri */
+.catalog-card-actions,.catalog-table-actions{display:flex;align-items:center;gap:7px;min-width:0}
+.catalog-card-actions{margin-top:10px}
+.catalog-card-actions button,.catalog-table-actions button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:31px;padding:0 10px;border-radius:7px;font:700 10px 'DM Sans',sans-serif;white-space:nowrap;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.catalog-edit-button{border:1px solid rgba(196,164,99,.36);background:rgba(196,164,99,.09);color:#e6c987}
+.catalog-edit-button:hover{background:rgba(196,164,99,.18);border-color:rgba(220,184,111,.65);transform:translateY(-1px)}
+.catalog-delete-button{border:1px solid rgba(220,105,105,.3);background:rgba(170,65,65,.09);color:#e5a0a0}
+.catalog-delete-button:hover{background:rgba(170,65,65,.2);border-color:rgba(220,105,105,.58);transform:translateY(-1px)}
+.catalog-card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.catalog-card-copy{min-width:0}
+.catalog-card-copy .catalog-card-actions{width:100%}
+.catalog-card-copy .catalog-card-actions button{flex:1}
+.catalog-table-actions{justify-content:flex-end}
+.catalog-delete-modal{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,6,10,.78);backdrop-filter:blur(8px)}
+.catalog-delete-modal[hidden]{display:none}
+.catalog-delete-dialog{width:min(100%,430px);padding:27px 25px 22px;border:1px solid rgba(204,169,101,.34);border-radius:14px;background:linear-gradient(145deg,#20232a,#14171d);box-shadow:0 24px 80px rgba(0,0,0,.58);text-align:center;animation:catalogDeleteIn .2s ease-out}
+@keyframes catalogDeleteIn{from{opacity:0;transform:translateY(9px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.catalog-delete-icon{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 14px;border:1px solid rgba(221,111,103,.28);border-radius:13px;background:rgba(171,65,65,.13);color:#e6a09a;font-size:19px}
+.catalog-delete-dialog h2{margin:0 0 14px;color:#f2d49a;font-size:19px;font-weight:850;line-height:1.35;text-shadow:0 2px 15px rgba(211,166,89,.18)}
+.catalog-delete-message{margin:0 0 7px;color:#aeb4bf;font-size:12px}
+.catalog-delete-name{display:block;overflow-wrap:anywhere;margin:0 auto 22px;color:#f4f1e9;font-size:15px;font-weight:750}
+.catalog-delete-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
+.catalog-delete-actions button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:39px;padding:0 17px;border-radius:8px;font:750 11px 'DM Sans',sans-serif;cursor:pointer}
+.catalog-delete-confirm{border:1px solid #a84e4e;background:linear-gradient(135deg,#a94747,#783333);color:#fff}
+.catalog-delete-confirm:hover{filter:brightness(1.12)}
+.catalog-delete-cancel{border:1px solid rgba(190,196,207,.2);background:rgba(255,255,255,.045);color:#d2d6de}
+.catalog-delete-cancel:hover{background:rgba(255,255,255,.09)}
+body.catalog-delete-open{overflow:hidden}
+@media(max-width:560px){.catalog-delete-dialog{padding:23px 17px 19px}.catalog-delete-dialog h2{font-size:17px}.catalog-card-actions button,.catalog-table-actions button{padding:0 8px;font-size:9px}}
