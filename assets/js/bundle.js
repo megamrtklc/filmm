@@ -566,32 +566,36 @@ function renderHomeCollections() {
     const renderPersonalizedSelection=()=>{
         const moviePool=shuffleItems(valid.filter(item=>item.type==='movie'));
         const seriesPool=shuffleItems(valid.filter(item=>item.type==='tv'));
-        const personalized=[];
-        // Mümkün olduğunda iki film + iki dizi; eksik tür varsa diğer türle tamamla.
-        personalized.push(...moviePool.slice(0,2),...seriesPool.slice(0,2));
+        const personalized=[...moviePool.slice(0,2),...seriesPool.slice(0,2)];
         const selectedIds=new Set(personalized.map(item=>String(item.id)));
-        personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,4-personalized.length));
-        const selection=shuffleItems(personalized).slice(0,4);
+        personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,5-personalized.length));
+        const selection=shuffleItems(personalized).slice(0,5);
         if(!personalizedRail)return;
         personalizedRail.classList.remove('personalized-row-rail');
-        personalizedRail.classList.add('personalized-tile-rail');
-        personalizedRail.innerHTML=selection.length?selection.map((item,index)=>{
-            const overview=String(item.tmdbOverview||item.desc||'').replace(/\s+/g,' ').trim();
+        personalizedRail.classList.add('personalized-editorial-rail');
+        const makeCard=(item,index,featured)=>{
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
+            const synopsis=overview||'Arşivinden keşfedilmeyi bekleyen bir yapım.';
             const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
             const meta=[item.year||'',genre].filter(Boolean).join(' · ');
             return `
-            <article class="personalized-tile-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
-                <img class="personalized-tile-image" src="${escapeCountryHtml(item.image)}" alt="" loading="lazy" decoding="async">
-                <span class="personalized-tile-shade" aria-hidden="true"></span>
-                <span class="personalized-tile-index">0${index+1}</span>
-                <span class="personalized-tile-rating"><i class="fa-solid fa-star" aria-hidden="true"></i> ${escapeCountryHtml(item.rating||'—')}</span>
-                <div class="personalized-tile-content">
-                    <span class="personalized-tile-type">${item.type==='tv'?'DİZİ':'FİLM'} ${meta?' · '+escapeCountryHtml(meta):''}</span>
+            <article class="personalized-editorial-card ${featured?'is-featured':'is-supporting'}" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
+                <img class="personalized-editorial-image" src="${escapeCountryHtml(item.image)}" alt="" loading="lazy" decoding="async">
+                <span class="personalized-editorial-shade" aria-hidden="true"></span>
+                <span class="personalized-editorial-index">0${index+1}</span>
+                <span class="personalized-editorial-rating"><i class="fa-solid fa-star" aria-hidden="true"></i> ${escapeCountryHtml(item.rating||'—')}</span>
+                <div class="personalized-editorial-content">
+                    <span class="personalized-editorial-type">${item.type==='tv'?'DİZİ':'FİLM'} ${meta?' · '+escapeCountryHtml(meta):''}</span>
                     <h3>${escapeCountryHtml(item.title)}</h3>
-                    <span class="personalized-tile-hint">${overview?'Senin keşif listen':'Detayları keşfet'} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
+                    <p class="personalized-editorial-synopsis">${escapeCountryHtml(synopsis)}</p>
                 </div>
             </article>`;
-        }).join(''):'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
+        };
+        personalizedRail.innerHTML=selection.length?`
+            ${makeCard(selection[0],0,true)}
+            <div class="personalized-editorial-support">
+                ${selection.slice(1).map((item,index)=>makeCard(item,index+1,false)).join('')}
+            </div>`:'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
     };
     renderPersonalizedSelection();
     const refreshPicksButton=document.getElementById('personalized-refresh');
