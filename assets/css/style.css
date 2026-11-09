@@ -10168,3 +10168,22 @@ body.detail-synopsis-open{overflow:hidden}
     max-width:900px!important;
   }
 }
+
+
+/* MANŞET KONU METNİ — genişliği afiş şeridinin 6. afiş hizasına yaklaştır */
+@media(min-width:768px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    width:min(980px,calc(100vw - 300px))!important;
+    max-width:min(980px,calc(100vw - 300px))!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    width:100%!important;
+    max-width:980px!important;
+  }
+}
+@media(min-width:768px) and (max-width:1100px){
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    width:min(860px,calc(100vw - 220px))!important;
+    max-width:min(860px,calc(100vw - 220px))!important;
+  }
+}
