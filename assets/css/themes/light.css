@@ -1177,3 +1177,33 @@ html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-sec
   border-color:#dfe3e9!important;
   color:#626b78!important;
 }
+
+
+/* Improve headline copy legibility without changing the existing hero layout. */
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-meta {
+  color:#626c7a!important;
+  font-size:11px!important;
+  text-shadow:none!important;
+  filter:none!important;
+  opacity:1!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-desc {
+  width:100%!important;
+  max-width:560px!important;
+  color:#596474!important;
+  font-size:13px!important;
+  line-height:1.65!important;
+  text-shadow:none!important;
+  filter:none!important;
+  opacity:1!important;
+}
+@media(max-width:560px) {
+  html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-meta {
+    font-size:10px!important;
+  }
+  html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-desc {
+    max-width:100%!important;
+    font-size:12px!important;
+    line-height:1.5!important;
+  }
+}
