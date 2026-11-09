@@ -175,3 +175,31 @@
 @media(prefers-reduced-motion:reduce){
   #dashboard-view .hero-thumb,#dashboard-view .collection-card{transition:none!important}
 }
+
+/* JS ile saptanan dokunmatik masaüstü-site görünümü için güvenli fallback */
+html.perde-touch-compact .site-header{
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  justify-content:center!important;gap:7px!important;height:auto!important;min-height:98px!important;
+  padding:10px 20px 8px!important;
+}
+html.perde-touch-compact .site-header .header-topline{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:14px!important;width:100%!important;min-width:0!important;
+}
+html.perde-touch-compact .site-header .main-nav{
+  display:flex!important;flex:0 1 auto!important;width:100%!important;min-width:0!important;
+  max-width:100%!important;justify-content:flex-start!important;overflow-x:auto!important;
+  overflow-y:hidden!important;scrollbar-width:none!important;
+}
+html.perde-touch-compact #dashboard-view .home-feature-row #hero-section.hero-section{min-height:660px!important}
+html.perde-touch-compact #dashboard-view .home-feature-row #hero-section .hero-layout{
+  min-height:660px!important;grid-template-rows:48px minmax(210px,1fr) 142px!important;
+  padding:128px 24px 12px!important;
+}
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:16px!important;
+}
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#collection-personalized{
+  width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+}
