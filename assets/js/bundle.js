@@ -614,8 +614,7 @@ function renderHomeCollections() {
                 <div class="personalized-editorial-content">
                     <span class="personalized-editorial-type">${item.type==='tv'?'DİZİ':'FİLM'} ${meta?' · '+escapeCountryHtml(meta):''}</span>
                     <h3>${escapeCountryHtml(item.title)}</h3>
-                    <p class="personalized-editorial-synopsis">${escapeCountryHtml(synopsis)}</p>
-                    ${featured?"":`<button type="button" class="personalized-editorial-watch" data-detail-id="${escapeCountryHtml(item.id)}"><i class="fa-solid fa-play" aria-hidden="true"></i><span>İzle</span></button>`}
+                    ${featured?`<p class="personalized-editorial-synopsis">${escapeCountryHtml(synopsis)}</p>`:""}
                 </div>
             </article>`;
         };
