@@ -10978,3 +10978,29 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-featured .featured-number-poster{width:calc(100% - 23px)!important;margin-left:23px!important}
  #collection-featured .featured-number{left:-21px!important;bottom:25px!important;font-size:clamp(88px,21vw,116px)!important}
 }
+
+
+/* TOP 10 son ölçek ayarı: daha kompakt afiş, daha iri ve net sıra numarası */
+#collection-featured .featured-number-poster{
+ width:calc(100% - 56px)!important;
+ margin-left:56px!important;
+}
+#collection-featured .featured-number{
+ left:-43px!important;
+ bottom:31px!important;
+ font-size:clamp(150px,12vw,184px)!important;
+ line-height:.72!important;
+ color:rgba(248,249,251,.98)!important;
+ font-weight:950!important;
+ letter-spacing:-.11em!important;
+ -webkit-text-stroke:1.5px rgba(255,255,255,.3)!important;
+ text-shadow:0 4px 12px rgba(0,0,0,.72),0 0 3px rgba(255,255,255,.35)!important;
+}
+@media(max-width:900px){
+ #collection-featured .featured-number-poster{width:calc(100% - 44px)!important;margin-left:44px!important}
+ #collection-featured .featured-number{left:-34px!important;bottom:29px!important;font-size:clamp(124px,17vw,154px)!important}
+}
+@media(max-width:560px){
+ #collection-featured .featured-number-poster{width:calc(100% - 36px)!important;margin-left:36px!important}
+ #collection-featured .featured-number{left:-28px!important;bottom:24px!important;font-size:clamp(104px,24vw,132px)!important}
+}
