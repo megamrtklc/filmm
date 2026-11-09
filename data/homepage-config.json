@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T12:19:54.386Z",
+  "updatedAt": "2026-11-09T12:22:41.506Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -107,7 +107,7 @@
     },
     "movies": {
       "title": "Popüler içerikler",
-      "active": true,
+      "active": false,
       "displayCount": 6,
       "itemIds": [
         "archive-12",
@@ -120,7 +120,7 @@
     },
     "series": {
       "title": "Öne Çıkan Diziler",
-      "active": true,
+      "active": false,
       "displayCount": 6,
       "itemIds": [
         "archive-23",
