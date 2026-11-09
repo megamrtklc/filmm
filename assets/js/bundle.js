@@ -584,24 +584,16 @@ function renderHomeCollections() {
     }
     const savedItems=valid.filter(item=>favorites.some(id=>String(id)===String(item.id)));
     const favoriteGenres=[...new Set(savedItems.flatMap(item=>[...(item.genre||'').split('/'),...(item.category||'').split('/')]).map(value=>value.trim().toLocaleLowerCase('tr-TR')).filter(Boolean))];
-    const shuffleItems=items=>{
-        const copy=[...items];
-        for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
-        return copy;
-    };
     const personalizedRail=document.getElementById('personalized-rail');
     const renderPersonalizedSelection=()=>{
-        const moviePool=shuffleItems(valid.filter(item=>item.type==='movie'));
-        const seriesPool=shuffleItems(valid.filter(item=>item.type==='tv'));
-        const personalized=[...moviePool.slice(0,2),...seriesPool.slice(0,2)];
-        const selectedIds=new Set(personalized.map(item=>String(item.id)));
-        personalized.push(...shuffleItems(valid.filter(item=>!selectedIds.has(String(item.id)))).slice(0,5-personalized.length));
+        // Bu raf yalnızca yönetim panelinde kaydedilen seçimleri, kayıt sırasıyla gösterir.
+        // Otomatik/random öneri üretimi yoktur; sayfa yenilendiğinde liste değişmez.
         const savedPersonalized=window.perdeHomepageRails?.personalized;
-        const selection=savedPersonalized&&Array.isArray(savedPersonalized.itemIds)
+        const selection=Array.isArray(savedPersonalized?.itemIds)
             ? savedPersonalized.itemIds.map(id=>valid.find(item=>String(item.id)===String(id))).filter(Boolean).slice(0,5)
-            : shuffleItems(personalized).slice(0,5);
+            : [];
         const personalizedSection=document.getElementById('collection-personalized');
-        if(personalizedSection){personalizedSection.hidden=!!savedPersonalized&&savedPersonalized.active===false;const heading=personalizedSection.querySelector('.collection-heading h2');if(heading&&savedPersonalized?.title)heading.textContent=savedPersonalized.title;}
+        if(personalizedSection){personalizedSection.hidden=savedPersonalized?.active===false;const heading=personalizedSection.querySelector('.collection-heading h2');if(heading&&savedPersonalized?.title)heading.textContent=savedPersonalized.title;}
         if(!personalizedRail)return;
         personalizedRail.classList.remove('personalized-row-rail');
         personalizedRail.classList.add('personalized-editorial-rail');
@@ -630,8 +622,6 @@ function renderHomeCollections() {
             </div>`:'<p class="text-sm text-slate-500">Henüz önerilecek yapım yok.</p>';
     };
     renderPersonalizedSelection();
-    const refreshPicksButton=document.getElementById('personalized-refresh');
-    if(refreshPicksButton)refreshPicksButton.onclick=renderPersonalizedSelection;
     fill('top-movies-rail', movies);
     fill('top-series-rail', series);
     [['featured-rail','öne çıkan yapımlarda'],['personalized-rail','sana özel seçkilerde'],['top-movies-rail','yüksek puanlı filmlerde'],['top-series-rail','öne çıkan dizilerde']].forEach(([railId,label])=>{
@@ -2743,7 +2733,7 @@ let mediaDatabase = [];
 heroPresentationById = {};
                 let savedHeroConfig = null;
                 try {
-                    const configResponse = await fetch(new URL('./data/homepage-config.json?v=20261107-home-hero-v1', document.baseURI).href,{cache:'no-store',credentials:'omit'});
+                    const configResponse = await fetch(new URL('./data/homepage-config.json?v=20261109-personalized-rail-v1', document.baseURI).href,{cache:'no-store',credentials:'omit'});
                     if (configResponse.ok) savedHeroConfig = await configResponse.json();
                 } catch (configError) { console.warn('Manşet ayarları yüklenemedi; varsayılan vitrin kullanılacak.',configError); }
                 window.perdeHomepageRails=savedHeroConfig?.homeRails||null;
