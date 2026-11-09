@@ -922,3 +922,17 @@
 .home-rails-save-row>div{display:grid;gap:5px}.home-rails-save-row b{font-size:13px;color:#f2e7d0}.home-rails-save-row small{font-size:11px;color:#9da1aa}
 @media(max-width:1100px){.home-rails-manager-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.home-rail-manager{padding:16px}.home-rail-add{grid-template-columns:1fr}.home-rail-add>.gold-button{width:100%}.home-rails-save-row{align-items:stretch;flex-direction:column}.home-rails-save-row>.gold-button{width:100%}.home-rail-item{grid-template-columns:22px 36px minmax(0,1fr) auto;gap:7px}.home-rail-item>img,.home-rail-item-placeholder{width:36px;height:49px}.home-rail-item-actions{gap:2px}.home-rail-item-actions button{width:24px;height:26px}}
+
+/* Sade anasayfa raf yöneticisi */
+.home-rails-simple-note{display:flex;align-items:center;gap:11px;padding:13px 16px;margin-bottom:18px;border:1px solid rgba(216,173,85,.18);border-radius:9px;background:rgba(216,173,85,.045);color:#c9cbd0;font-size:12px}
+.home-rails-simple-note i{color:var(--gold);font-size:15px}
+.home-rail-controls{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:10px}
+.home-rail-controls label{display:grid;gap:7px;color:#aeb4be;font-size:10px;font-weight:700}
+.home-rail-controls select{width:100%;height:41px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#11151c;color:#f3f3f3;font-size:11px;min-width:0}
+.home-rail-controls>.gold-button{height:41px}
+.home-rail-warning{display:none;margin:10px 0 0;padding:9px 11px;border-radius:7px;background:rgba(223,133,133,.09);color:#f0a6a0;font-size:11px}
+.home-rail-warning.is-warning{display:block}
+.home-rail-item-actions .home-rail-remove{width:auto;min-width:53px;padding:0 8px;color:#e5a09a;border-color:rgba(223,133,133,.25);font-size:10px}
+.home-rail-item-actions .home-rail-remove:hover{background:rgba(223,133,133,.12)}
+.home-rail-controls>.gold-button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media(max-width:650px){.home-rail-controls{grid-template-columns:1fr 1fr}.home-rail-controls>.gold-button{grid-column:1/-1;width:100%}}
