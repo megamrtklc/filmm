@@ -1022,3 +1022,70 @@ html[data-theme="light"] body#theme-body #hero-section .hero-vignette {
   background-color:transparent!important;
   background-image:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 35%,rgba(255,255,255,.92) 100%)!important;
 }
+
+
+/* Higher-specificity homepage overrides: the original cinematic rules use
+   multiple IDs and !important, so the light layer must explicitly out-rank them. */
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section.hero-section {
+  background-color:#fff!important;
+  background-image:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section>.absolute.inset-0 {
+  opacity:.08!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section .hero-vignette {
+  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 42%,rgba(255,255,255,.90) 100%)!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section .hero-copy {
+  background:transparent!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-title {
+  color:#303642!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-meta {
+  color:#7e8794!important;
+}
+html[data-theme="light"] #dashboard-view .home-feature-row #hero-section #hero-desc {
+  color:#68717e!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-result {
+  background:#fff!important;
+  background-image:none!important;
+  border:1px solid var(--pl-line)!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+  color:var(--pl-ink)!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-backdrop {
+  opacity:.08!important;
+  filter:saturate(.2)!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-overlay {
+  background:linear-gradient(90deg,rgba(255,255,255,.97),rgba(255,255,255,.91))!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-heading h2,
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-copy h3 {
+  color:#303642!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-heading p,
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-meta,
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-description {
+  color:#737b88!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-category-select,
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-category-trigger {
+  background:#f7f8fa!important;
+  border-color:#dfe3e9!important;
+  color:#5f6876!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-category-select select {
+  color:#303642!important;
+}
+html[data-theme="light"] #dashboard-view .home-mood-continue-row #daily-pick-section .mood-discovery-again {
+  background:#fff!important;
+  border-color:#dfe3e9!important;
+  color:#626b78!important;
+}
