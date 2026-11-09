@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-home-rails-card-edit-v1">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-home-rails-five-publish-v1">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -293,21 +293,21 @@
           <section class="surface-card home-rail-order-card"><div class="home-rail-order-heading"><div><span class="eyebrow">ANASAYFA YERLEŞİMİ</span><h2>Raf sıralaması</h2><p>Yukarıdaki raf anasayfada daha önce görünür.</p></div><i class="fa-solid fa-arrow-down-short-wide"></i></div><div id="home-rail-order-list" class="home-rail-order-list"></div></section>
           <div class="home-rails-manager-grid">
             <section class="surface-card home-rail-manager" data-home-rail="featured">
-              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 01</span><h2>Öne Çıkan Yapımlar</h2><p>Film ve diziler birlikte gösterilir.</p></div><label class="home-rail-active"><input id="home-rail-featured-active" type="checkbox" checked><span>Yayında</span></label></div>
+              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 01</span><h2>Öne Çıkan Yapımlar</h2><p>Film ve diziler birlikte gösterilir.</p></div><div class="home-rail-visibility-wrap"><small id="home-rail-featured-visibility-status">Anasayfada yayında</small><button type="button" class="home-rail-visibility is-published" id="home-rail-featured-visibility" aria-pressed="true">Gizle</button></div></div>
               <label class="hero-field-label" for="home-rail-featured-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-featured-title" maxlength="64" value="Öne Çıkan Yapımlar">
               <div class="home-rail-controls">
-                <label>Gösterilecek kart sayısı<select id="home-rail-featured-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select></label>
+                <label>Gösterilecek kart sayısı<select id="home-rail-featured-display-count"><option value="1">1 kart</option><option value="2">2 kart</option><option value="3">3 kart</option><option value="4">4 kart</option><option value="5" selected>5 kart</option></select></label>
                 <label class="home-rail-search-label">Katalogda ara
                   <input type="search" id="home-rail-featured-search" class="home-rail-search" placeholder="Film veya dizi adı yaz…" autocomplete="off">
                 </label>
               </div>
               <div class="home-rail-search-results" id="home-rail-featured-results" aria-live="polite"></div>
               <p class="home-rail-warning" id="home-rail-featured-warning" role="status"></p>
-              <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-featured-count">0 / 15</span></div>
+              <div class="home-rail-list-heading"><b>Seçili kartlar</b><span id="home-rail-featured-count">0 / 5</span></div>
               <div class="home-rail-items" id="home-rail-featured-list"></div>
             </section>
             <section class="surface-card home-rail-manager" data-home-rail="movies">
-              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 02</span><h2>Yüksek Puanlı Filmler</h2><p>Aramada yalnızca filmler gösterilir.</p></div><label class="home-rail-active"><input id="home-rail-movies-active" type="checkbox" checked><span>Yayında</span></label></div>
+              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 02</span><h2>Yüksek Puanlı Filmler</h2><p>Aramada yalnızca filmler gösterilir.</p></div><div class="home-rail-visibility-wrap"><small id="home-rail-movies-visibility-status">Anasayfada yayında</small><button type="button" class="home-rail-visibility is-published" id="home-rail-movies-visibility" aria-pressed="true">Gizle</button></div></div>
               <label class="hero-field-label" for="home-rail-movies-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-movies-title" maxlength="64" value="Yüksek Puanlı Filmler">
               <div class="home-rail-controls">
                 <label>Gösterilecek kart sayısı<select id="home-rail-movies-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select></label>
@@ -321,7 +321,7 @@
               <div class="home-rail-items" id="home-rail-movies-list"></div>
             </section>
             <section class="surface-card home-rail-manager" data-home-rail="series">
-              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 03</span><h2>Öne Çıkan Diziler</h2><p>Aramada yalnızca diziler gösterilir.</p></div><label class="home-rail-active"><input id="home-rail-series-active" type="checkbox" checked><span>Yayında</span></label></div>
+              <div class="home-rail-manager-heading"><div><span class="eyebrow">VİTRİN 03</span><h2>Öne Çıkan Diziler</h2><p>Aramada yalnızca diziler gösterilir.</p></div><div class="home-rail-visibility-wrap"><small id="home-rail-series-visibility-status">Anasayfada yayında</small><button type="button" class="home-rail-visibility is-published" id="home-rail-series-visibility" aria-pressed="true">Gizle</button></div></div>
               <label class="hero-field-label" for="home-rail-series-title">Bölüm başlığı</label><input class="home-rail-title-input" id="home-rail-series-title" maxlength="64" value="Öne Çıkan Diziler">
               <div class="home-rail-controls">
                 <label>Gösterilecek kart sayısı<select id="home-rail-series-display-count"><option value="6" selected>6 kart</option><option value="7">7 kart</option><option value="8">8 kart</option><option value="9">9 kart</option><option value="10">10 kart</option><option value="11">11 kart</option><option value="12">12 kart</option><option value="13">13 kart</option><option value="14">14 kart</option><option value="15">15 kart</option></select></label>
@@ -555,6 +555,6 @@
     </main>
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/admin.js?v=20261109-home-rails-nullfix-v2"></script>
+  <script src="assets/js/admin.js?v=20261109-home-rails-five-publish-v1"></script>
 </body>
 </html>
