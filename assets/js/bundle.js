@@ -686,7 +686,7 @@ document.addEventListener('error', function(event) {
 // Katalog listeleme, arama ve filtreleme
 let currentMediaGridItems = null;
 let currentMediaGridPage = 1;
-const MEDIA_GRID_PAGE_SIZE = 12;
+const MEDIA_GRID_PAGE_SIZE = 16;
 
 function renderMediaGrid(items) {
     const container = document.getElementById('media-grid');
