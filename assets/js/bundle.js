@@ -555,6 +555,11 @@ function renderHomeCollections() {
     const movies=byIds('movies');
     const series=byIds('series');
     const sectionIds={featured:'collection-featured',movies:'collection-movies',series:'collection-series'};
+    const railOrder=Array.isArray(configured?.order)?configured.order.filter(key=>Object.prototype.hasOwnProperty.call(sectionIds,key)):[];
+    const orderedRailKeys=[...new Set([...railOrder,...Object.keys(sectionIds)])];
+    const homeCollections=document.getElementById('home-collections');
+    const customRails=document.getElementById('custom-collection-rails');
+    if(homeCollections&&customRails)orderedRailKeys.forEach(key=>{const section=document.getElementById(sectionIds[key]);if(section)section.before(customRails);});
     Object.entries(sectionIds).forEach(([key,id])=>{
         const section=document.getElementById(id),heading=section?.querySelector('.collection-heading h2');
         if(section){section.hidden=!sectionData[key].active;if(heading)heading.textContent=sectionData[key].title;}
