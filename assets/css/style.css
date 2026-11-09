@@ -9523,3 +9523,65 @@ body.detail-synopsis-open{overflow:hidden}
     gap:11px!important;
   }
 }
+
+
+/* MANŞET — yapım metinlerinin dikey başlangıcını sabitle */
+#dashboard-view .home-feature-row #hero-section .hero-layout{
+  grid-template-rows:52px minmax(0,1fr) 148px!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy{
+  align-self:start!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+  padding-top:8px!important;
+  padding-bottom:0!important;
+  transform:none!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-title{
+  min-height:2.12em!important;
+  max-height:2.12em!important;
+  line-height:1.06!important;
+  overflow:hidden!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{
+  min-height:24px!important;
+  max-height:42px!important;
+  overflow:hidden!important;
+}
+#dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+  min-height:4.5em!important;
+  max-height:4.5em!important;
+  overflow:hidden!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:3!important;
+  line-height:1.5!important;
+}
+@media(max-width:820px){
+  #dashboard-view .home-feature-row #hero-section .hero-layout{
+    grid-template-rows:48px minmax(0,1fr) 137px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy{
+    align-self:start!important;
+    padding-top:6px!important;
+    transform:none!important;
+  }
+}
+@media(max-width:560px){
+  #dashboard-view .home-feature-row #hero-section .hero-layout{
+    grid-template-rows:48px minmax(0,1fr) 124px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-title{
+    min-height:2.12em!important;max-height:2.12em!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-meta{
+    min-height:22px!important;max-height:36px!important;
+  }
+  #dashboard-view .home-feature-row #hero-section .hero-copy #hero-desc{
+    min-height:4.5em!important;max-height:4.5em!important;
+  }
+}
