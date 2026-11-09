@@ -532,3 +532,126 @@ html[data-theme="light"] .admin-footer{background:#fff!important;border-color:va
   html[data-theme="light"] .admin-topbar{padding:0 18px!important}
   html[data-theme="light"] .admin-footer{padding:14px 18px!important;gap:10px!important;flex-wrap:wrap!important}
 }
+
+
+/* Admin: remaining dashboard/editor surfaces */
+html[data-theme="light"] .admin-content .welcome-banner,
+html[data-theme="light"] .admin-content .quick-card,
+html[data-theme="light"] .admin-content .insight-card,
+html[data-theme="light"] .admin-content .archive-balance-card,
+html[data-theme="light"] .admin-content .genre-card,
+html[data-theme="light"] .admin-content .system-card,
+html[data-theme="light"] .admin-content .system-item,
+html[data-theme="light"] .admin-content .tmdb-search-card,
+html[data-theme="light"] .admin-content .editor-preview-card,
+html[data-theme="light"] .admin-content .editor-drafts-card,
+html[data-theme="light"] .admin-content .collection-create-form,
+html[data-theme="light"] .admin-content .collection-editor,
+html[data-theme="light"] .admin-content .collection-preview-panel,
+html[data-theme="light"] .admin-content .home-rail-manager,
+html[data-theme="light"] .admin-content .home-rail-order-card,
+html[data-theme="light"] .admin-content .hero-manager-main,
+html[data-theme="light"] .admin-content .hero-stage-card,
+html[data-theme="light"] .admin-content .hero-slides-card,
+html[data-theme="light"] .admin-content .hero-settings-editor,
+html[data-theme="light"] .admin-content .table-card,
+html[data-theme="light"] .admin-content .table-scroll,
+html[data-theme="light"] .admin-content .catalog-picker-selected,
+html[data-theme="light"] .admin-content .catalog-picker-native,
+html[data-theme="light"] .admin-content .subtitle-online-results,
+html[data-theme="light"] .admin-content .platform-picker-options {
+  background:#fff!important;
+  border-color:var(--pl-line)!important;
+  color:var(--pl-ink)!important;
+  box-shadow:var(--pl-shadow-soft);
+}
+html[data-theme="light"] .admin-content .welcome-banner {
+  background:linear-gradient(112deg,#fff 0%,#f5f6f8 58%,#f2eee6 100%)!important;
+}
+html[data-theme="light"] .admin-content .welcome-banner:after {
+  background:linear-gradient(90deg,transparent 48%,rgba(218,190,139,.12) 100%)!important;
+}
+html[data-theme="light"] .admin-content .welcome-copy h2,
+html[data-theme="light"] .admin-content .page-heading,
+html[data-theme="light"] .admin-content .collection-editor-title,
+html[data-theme="light"] .admin-content .collection-items-heading,
+html[data-theme="light"] .admin-content .home-rail-manager-heading,
+html[data-theme="light"] .admin-content .hero-live-copy,
+html[data-theme="light"] .admin-content .editor-preview-copy {
+  color:var(--pl-ink)!important;
+}
+html[data-theme="light"] .admin-content .welcome-copy p,
+html[data-theme="light"] .admin-content .eyebrow,
+html[data-theme="light"] .admin-content .heading-date,
+html[data-theme="light"] .admin-content .field-help,
+html[data-theme="light"] .admin-content .insight-kicker,
+html[data-theme="light"] .admin-content .balance-legend,
+html[data-theme="light"] .admin-content .status-text,
+html[data-theme="light"] .admin-content .collection-step-heading,
+html[data-theme="light"] .admin-content .collection-order-hint,
+html[data-theme="light"] .admin-content .home-rail-heading-copy,
+html[data-theme="light"] .admin-content .home-rail-featured-description,
+html[data-theme="light"] .admin-content .home-rail-info-inline {
+  color:var(--pl-muted)!important;
+}
+html[data-theme="light"] .admin-content .stat-icon,
+html[data-theme="light"] .admin-content .insight-kicker,
+html[data-theme="light"] .admin-content .system-icon,
+html[data-theme="light"] .admin-content .catalog-summary-icon {
+  background:#f4f0e8!important;
+  color:#a77a31!important;
+}
+html[data-theme="light"] .admin-content .editor-poster-preview,
+html[data-theme="light"] .admin-content .welcome-art,
+html[data-theme="light"] .admin-content .overview-donut {
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .admin-content .editor-fields-grid .editor-field,
+html[data-theme="light"] .admin-content .collection-create-fields,
+html[data-theme="light"] .admin-content .subtitle-upload-grid,
+html[data-theme="light"] .admin-content .home-rail-controls,
+html[data-theme="light"] .admin-content .catalog-toolbar-rich,
+html[data-theme="light"] .admin-content .catalog-toolbar-bottom,
+html[data-theme="light"] .admin-content .catalog-bulk-toolbar,
+html[data-theme="light"] .admin-content .editor-form-actions,
+html[data-theme="light"] .admin-content .home-rails-save-row {
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .admin-content .text-button,
+html[data-theme="light"] .admin-content .catalog-picker-hint,
+html[data-theme="light"] .admin-content .collection-workflow-note,
+html[data-theme="light"] .admin-content .info-note {
+  color:#68717e!important;
+}
+html[data-theme="light"] .admin-content .catalog-picker-results,
+html[data-theme="light"] .admin-content .home-rail-search-results,
+html[data-theme="light"] .admin-content .tmdb-search-results,
+html[data-theme="light"] .admin-content .subtitle-online-results,
+html[data-theme="light"] .admin-content .editor-draft-list,
+html[data-theme="light"] .admin-content .collection-items-list {
+  background:#f8f9fb!important;
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .admin-content .catalog-picker-results *,
+html[data-theme="light"] .admin-content .home-rail-search-results *,
+html[data-theme="light"] .admin-content .tmdb-search-results *,
+html[data-theme="light"] .admin-content .subtitle-online-results *,
+html[data-theme="light"] .admin-content .editor-draft-list *,
+html[data-theme="light"] .admin-content .collection-items-list * {
+  border-color:var(--pl-line);
+}
+html[data-theme="light"] .admin-content .warning,
+html[data-theme="light"] .admin-content .home-rail-warning {
+  color:#93651e!important;
+  background:#fff8e9!important;
+  border-color:#ead8b4!important;
+}
+html[data-theme="light"] .admin-content .good,
+html[data-theme="light"] .admin-content .good-text,
+html[data-theme="light"] .admin-content .is-published {
+  color:#397b59!important;
+}
+html[data-theme="light"] .admin-content .pending,
+html[data-theme="light"] .admin-content .pending-text {
+  color:#9a742e!important;
+}
