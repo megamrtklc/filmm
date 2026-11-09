@@ -853,3 +853,94 @@ html[data-theme="light"] .admin-content .editor-subtitle-item button {
 html[data-theme="light"] .admin-content .editor-subtitle-item input {
   accent-color:#c7953e;
 }
+
+
+/* Homepage completion pass: carry the light canvas through every editorial rail. */
+html[data-theme="light"] #dashboard-view,
+html[data-theme="light"] .home-feature-row,
+html[data-theme="light"] .home-mood-continue-row,
+html[data-theme="light"] .homepage-main,
+html[data-theme="light"] .home-collections,
+html[data-theme="light"] .collection-section,
+html[data-theme="light"] .continue-watching-section {
+  background:var(--pl-bg)!important;
+  color:var(--pl-ink)!important;
+}
+html[data-theme="light"] .homepage-main {
+  border:0!important;
+}
+html[data-theme="light"] .collection-heading {
+  border-color:var(--pl-line)!important;
+}
+html[data-theme="light"] .collection-poster-wrap {
+  background:#e9ecf1!important;
+  border-color:#fff!important;
+  box-shadow:0 8px 20px rgba(30,38,54,.10)!important;
+}
+html[data-theme="light"] .collection-card-copy .collection-original-title {
+  color:#858b97!important;
+}
+html[data-theme="light"] #collection-featured .featured-number-rail {
+  scrollbar-color:#cbd1da transparent!important;
+}
+html[data-theme="light"] #collection-featured .featured-number {
+  color:rgba(100,110,125,.48)!important;
+  -webkit-text-stroke:0!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #collection-featured .featured-number-poster {
+  border-color:#fff!important;
+  box-shadow:5px 7px 0 rgba(255,255,255,.95),0 12px 25px rgba(30,38,54,.14)!important;
+}
+html[data-theme="light"] #collection-featured .featured-number-copy h3 {
+  color:#303642!important;
+}
+html[data-theme="light"] #collection-featured .featured-number-copy p {
+  color:#858b97!important;
+}
+html[data-theme="light"] #collection-featured .featured-number-stage>.rail-controls button {
+  background:#fff!important;
+  border-color:#dfe3e9!important;
+  color:#68717e!important;
+  box-shadow:0 5px 16px rgba(30,38,54,.10)!important;
+}
+html[data-theme="light"] #collection-featured .featured-number-stage>.rail-controls button:hover {
+  background:#c7953e!important;
+  border-color:#c7953e!important;
+  color:#fff!important;
+}
+html[data-theme="light"] .continue-card {
+  border-color:var(--pl-line)!important;
+  box-shadow:var(--pl-shadow-soft)!important;
+}
+html[data-theme="light"] .continue-card:after {
+  background:linear-gradient(0deg,rgba(20,25,34,.88),rgba(20,25,34,.30) 68%,rgba(20,25,34,.06))!important;
+}
+html[data-theme="light"] .continue-card-type {
+  color:#f2d18b!important;
+}
+html[data-theme="light"] .continue-card-copy h3 {
+  color:#fff!important;
+}
+html[data-theme="light"] .continue-card-meta {
+  color:#e0e4eb!important;
+}
+html[data-theme="light"] #hero-section {
+  background:linear-gradient(115deg,#fff 0%,#fff 44%,#f7f8fa 100%)!important;
+}
+html[data-theme="light"] #hero-section>.absolute.inset-0 {
+  opacity:.12!important;
+}
+html[data-theme="light"] #hero-section .hero-vignette {
+  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.98) 35%,rgba(255,255,255,.92) 100%)!important;
+}
+html[data-theme="light"] #hero-section .hero-copy {
+  background:transparent!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+html[data-theme="light"] #hero-section .hero-copy.is-entering>* {
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+}
