@@ -1251,3 +1251,47 @@ body.catalog-delete-open{overflow:hidden}
   #page-homeRails .home-rail-manager{border-top-width:3px!important}
   #page-homeRails .home-rail-manager::before{width:125px;height:125px;top:-50px;right:-42px}
 }
+
+
+/* Seçili yapım kartları, ait oldukları rafın renk kimliğini taşır */
+#page-homeRails .home-rail-manager .home-rail-item{
+  border-color:rgba(var(--rail-accent-rgb),.34)!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.16),inset 3px 0 0 rgba(var(--rail-accent-rgb),.68);
+}
+#page-homeRails .home-rail-manager .home-rail-item::after{
+  content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+  background:linear-gradient(110deg,rgba(var(--rail-accent-rgb),.095),transparent 54%);
+}
+#page-homeRails .home-rail-manager .home-rail-item-number{
+  color:var(--rail-accent)!important;
+  text-shadow:0 0 12px rgba(var(--rail-accent-rgb),.3);
+}
+#page-homeRails .home-rail-manager .home-rail-item-poster{
+  border-color:rgba(var(--rail-accent-rgb),.52)!important;
+  box-shadow:0 4px 16px rgba(0,0,0,.4),0 0 0 1px rgba(var(--rail-accent-rgb),.12);
+}
+#page-homeRails .home-rail-manager .home-rail-item-copy b{
+  text-decoration-color:rgba(var(--rail-accent-rgb),.55);
+  text-underline-offset:3px;
+}
+#page-homeRails .home-rail-manager .home-rail-item-meta em{
+  color:var(--rail-accent)!important;
+  border-color:rgba(var(--rail-accent-rgb),.3)!important;
+  background:rgba(var(--rail-accent-rgb),.09)!important;
+}
+#page-homeRails .home-rail-manager .home-rail-item-order button{
+  border-color:rgba(var(--rail-accent-rgb),.27)!important;
+}
+#page-homeRails .home-rail-manager .home-rail-item-order button:hover:not(:disabled){
+  color:var(--rail-accent)!important;
+  border-color:rgba(var(--rail-accent-rgb),.65)!important;
+  background:rgba(var(--rail-accent-rgb),.12)!important;
+}
+#page-homeRails .home-rail-manager .home-rail-item-actions .home-rail-change{
+  color:var(--rail-accent)!important;
+  border-color:rgba(var(--rail-accent-rgb),.38)!important;
+  background:rgba(var(--rail-accent-rgb),.08)!important;
+}
+#page-homeRails .home-rail-manager .home-rail-item-actions .home-rail-change:hover{
+  background:rgba(var(--rail-accent-rgb),.16)!important;
+}
