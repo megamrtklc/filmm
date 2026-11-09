@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T11:24:40.856Z",
+  "updatedAt": "2026-11-09T11:30:12.414Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -89,10 +89,11 @@
       "series"
     ],
     "featured": {
-      "title": "Editörün Seçtikleri",
+      "title": "Murat",
       "active": true,
-      "displayCount": 6,
+      "displayCount": 7,
       "itemIds": [
+        "archive-59",
         "archive-5",
         "archive-4",
         "archive-7",
