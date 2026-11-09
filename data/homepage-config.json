@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T11:30:12.414Z",
+  "updatedAt": "2026-11-09T11:43:27.146Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -89,7 +89,7 @@
       "series"
     ],
     "featured": {
-      "title": "Murat",
+      "title": "Editörün Seçtikleri",
       "active": true,
       "displayCount": 7,
       "itemIds": [
@@ -103,15 +103,15 @@
       ]
     },
     "movies": {
-      "title": "Yüksek Puanlı Filmler",
+      "title": "Popüler içerikler",
       "active": false,
       "displayCount": 6,
       "itemIds": [
-        "archive-7",
         "archive-12",
         "archive-10",
         "archive-3",
         "archive-13",
+        "archive-7",
         "archive-11"
       ]
     },
@@ -120,11 +120,11 @@
       "active": false,
       "displayCount": 6,
       "itemIds": [
-        "archive-8",
         "archive-23",
+        "archive-8",
+        "archive-4",
         "archive-21",
         "archive-25",
-        "archive-4",
         "archive-17"
       ]
     }
