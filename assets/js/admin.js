@@ -1012,12 +1012,14 @@
   }
 
   const homepageRailKeys=['featured','movies','series'];
+  const homepageRailLabels={featured:'Öne Çıkan Yapımlar',movies:'Yüksek Puanlı Filmler',series:'Öne Çıkan Diziler'};
   let homepageRails={};
   let homepageRailPickersReady=false;
   function homepageRailDefaults(records=catalog){
     const score=item=>Number.parseFloat(item.rating)||0;
     const valid=records.filter(item=>item&&item.id!=null&&item.title&&item.image);
     return {
+      order:[...homepageRailKeys],
       featured:{title:'Öne Çıkan Yapımlar',active:true,displayCount:6,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,6).map(item=>String(item.id))},
       movies:{title:'Yüksek Puanlı Filmler',active:true,displayCount:12,itemIds:valid.filter(item=>item.type==='movie').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))},
       series:{title:'Öne Çıkan Diziler',active:true,displayCount:12,itemIds:valid.filter(item=>item.type==='tv').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))}
@@ -1025,6 +1027,8 @@
   }
   function normalizeHomepageRails(saved,records=catalog){
     const defaults=homepageRailDefaults(records),validIds=new Set(records.map(item=>String(item.id))),normalized={};
+    const savedOrder=Array.isArray(saved?.order)?saved.order.filter(key=>homepageRailKeys.includes(key)):[];
+    normalized.order=[...new Set([...savedOrder,...homepageRailKeys])];
     homepageRailKeys.forEach(key=>{
       const source=saved&&saved[key]&&typeof saved[key]==='object'?saved[key]:null;
       let ids=source&&Array.isArray(source.itemIds)?source.itemIds.map(String).filter(id=>validIds.has(id)):defaults[key].itemIds;
@@ -1036,8 +1040,13 @@
     });
     return normalized;
   }
+  function renderHomepageRailOrder(){
+    const host=$('#home-rail-order-list');if(!host)return;
+    host.innerHTML=homepageRails.order.map((key,index)=>'<div class="home-rail-order-item"><span class="home-rail-order-number">'+String(index+1).padStart(2,'0')+'</span><b>'+escapeHtml(homepageRailLabels[key])+'</b><span class="home-rail-order-actions"><button type="button" data-home-rail-order-up="'+key+'" '+(index===0?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-order-down="'+key+'" '+(index===homepageRails.order.length-1?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span></div>').join('');
+  }
   function renderHomepageRails(){
     if(!homepageRails||!homepageRails.featured)return;
+    renderHomepageRailOrder();
     homepageRailKeys.forEach(key=>{
       const rail=homepageRails[key],list=$('#home-rail-'+key+'-list');if(!list)return;
       $('#home-rail-'+key+'-title').value=rail.title;
@@ -1073,6 +1082,12 @@
   function initHomepageRailsManager(){
     homepageRails=normalizeHomepageRails(homepageRails);
     if(!homepageRailPickersReady){
+      $('#home-rail-order-list').addEventListener('click',event=>{
+        const button=event.target.closest('[data-home-rail-order-up],[data-home-rail-order-down]');if(!button)return;
+        const key=button.dataset.homeRailOrderUp||button.dataset.homeRailOrderDown;const index=homepageRails.order.indexOf(key);if(index<0)return;
+        const target=index+(button.hasAttribute('data-home-rail-order-up')?-1:1);if(target<0||target>=homepageRails.order.length)return;
+        [homepageRails.order[index],homepageRails.order[target]]=[homepageRails.order[target],homepageRails.order[index]];renderHomepageRailOrder();
+      });
       homepageRailKeys.forEach(key=>{
         $('#home-rail-'+key+'-search').addEventListener('input',()=>renderHomepageRailSearch(key));
         $('#home-rail-'+key+'-results').addEventListener('click',event=>{
