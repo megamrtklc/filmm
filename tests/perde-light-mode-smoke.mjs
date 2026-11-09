@@ -127,7 +127,7 @@ async function checkPage(file, label, viewport, mobile) {
   if (file === 'index.html' && state.rankingSurfaceBackground !== 'rgb(255, 255, 255)') {
     throw new Error(`${label}: ranking rail is not light (${state.rankingSurfaceBackground})`);
   }
-  if (file === 'index.html' && state.discoverySurfaceBackground !== 'rgb(255, 255, 255)') {
+  if (file === 'index.html' && state.discoverySurfaceBackground !== 'rgb(248, 249, 251)') {
     throw new Error(`${label}: mood recommendation card is not light (${state.discoverySurfaceBackground})`);
   }
   if (file === 'index.html' && state.hero.titleText && state.hero.titleOpacity !== '1') {
