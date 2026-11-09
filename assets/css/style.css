@@ -10946,3 +10946,35 @@ body.detail-synopsis-open{overflow:hidden}
  #collection-featured .featured-number{left:-18px!important;bottom:30px!important;font-size:clamp(68px,17vw,94px)!important}
  #collection-featured .featured-number-poster{width:calc(100% - 18px)!important;margin-left:18px!important}
 }
+
+
+/* TOP 10 ince ayar — daha küçük afiş, daha güçlü sıralama, ferah aralık */
+#collection-featured .featured-number-rail{
+ gap:clamp(22px,2.6vw,34px)!important;
+ grid-auto-columns:calc((100% - 4 * clamp(22px,2.6vw,34px))/5)!important;
+}
+#collection-featured .featured-number-poster{
+ width:calc(100% - 34px)!important;
+ margin-left:34px!important;
+}
+#collection-featured .featured-number{
+ left:-31px!important;
+ bottom:34px!important;
+ font-size:clamp(112px,10.2vw,158px)!important;
+ font-weight:950!important;
+ color:rgba(245,246,248,.96)!important;
+ letter-spacing:-.105em!important;
+ line-height:.74!important;
+ text-shadow:0 3px 10px rgba(0,0,0,.58),0 0 2px rgba(255,255,255,.3)!important;
+ -webkit-text-stroke:1.2px rgba(255,255,255,.22)!important;
+}
+@media(max-width:900px){
+ #collection-featured .featured-number-rail{gap:22px!important;grid-auto-columns:calc((100% - 44px)/3)!important}
+ #collection-featured .featured-number-poster{width:calc(100% - 28px)!important;margin-left:28px!important}
+ #collection-featured .featured-number{left:-26px!important;bottom:30px!important;font-size:clamp(100px,15vw,138px)!important}
+}
+@media(max-width:560px){
+ #collection-featured .featured-number-rail{gap:16px!important;grid-auto-columns:calc((100% - 16px)/2)!important}
+ #collection-featured .featured-number-poster{width:calc(100% - 23px)!important;margin-left:23px!important}
+ #collection-featured .featured-number{left:-21px!important;bottom:25px!important;font-size:clamp(88px,21vw,116px)!important}
+}
