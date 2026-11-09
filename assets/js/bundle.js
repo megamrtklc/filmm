@@ -587,7 +587,7 @@ function renderHomeCollections() {
                 <div class="personalized-editorial-content">
                     <span class="personalized-editorial-type">${item.type==='tv'?'DİZİ':'FİLM'} ${meta?' · '+escapeCountryHtml(meta):''}</span>
                     <h3>${escapeCountryHtml(item.title)}</h3>
-                    <p class="personalized-editorial-synopsis">${escapeCountryHtml(synopsis)}</p>
+                    ${featured?`<p class="personalized-editorial-synopsis">${escapeCountryHtml(synopsis)}</p>`:""}
                 </div>
             </article>`;
         };
