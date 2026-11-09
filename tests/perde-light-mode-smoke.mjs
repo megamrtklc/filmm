@@ -101,8 +101,8 @@ async function checkPage(file, label, viewport, mobile) {
   if (mobile && file === 'index.html' && state.bodyPaddingLeft !== '0px') {
     throw new Error(`${label}: mobile layout retained desktop sidebar offset (${state.bodyPaddingLeft})`);
   }
-  if (!mobile && file === 'index.html' && state.bodyPaddingLeft !== '246px') {
-    throw new Error(`${label}: desktop sidebar offset changed (${state.bodyPaddingLeft})`);
+  if (file === 'index.html' && state.bodyPaddingLeft !== '0px') {
+    throw new Error(`${label}: original horizontal Perde layout should not have a sidebar offset (${state.bodyPaddingLeft})`);
   }
 
   const safeName = label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
