@@ -40,7 +40,8 @@ async function checkPage(file, label, viewport, mobile) {
   // Trigger native lazy-loading before taking full-page screenshots.
   await page.evaluate(async () => {
     const step = Math.max(400, Math.floor(innerHeight * 0.75));
-    for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+    const maxScroll = document.documentElement.scrollHeight;
+    for (let y = 0; y < maxScroll; y += step) {
       window.scrollTo(0, y);
       await new Promise(resolve => setTimeout(resolve, 110));
     }
