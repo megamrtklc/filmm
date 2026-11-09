@@ -774,23 +774,6 @@ function renderMediaGridPagination(from, to, totalPages) {
     }));
 }
 
-        function renderLiveTv() {
-            const container = document.getElementById('live-tv-grid');
-            container.innerHTML = liveTvChannels.map(ch => `
-                <div onclick="launchPlayer('${ch.name}')" class="bg-slate-900/80 p-4 rounded-2xl border border-white/10 hover:border-brand-yellow/60 cursor-pointer flex items-center justify-between shadow-lg hover:scale-105 transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-brand-red/20 text-brand-red flex items-center justify-center font-bold text-base">
-                            <i class="fa-solid ${ch.icon}"></i>
-                        </div>
-                        <div>
-                            <h5 class="text-xs font-bold text-white">${ch.name}</h5>
-                            <span class="text-[10px] text-slate-400">${ch.tag}</span>
-                        </div>
-                    </div>
-                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 live-dot"></span>
-                </div>
-            `).join('');
-        }
 let activeCatalogGenre = 'all';
         let activeCatalogType = 'all';
         let activeCatalogQuery = '';
@@ -1189,7 +1172,6 @@ function renderFilteredCatalog() {
             updatePageContext(title);
             document.getElementById('hero-section').classList.add('hidden');
             document.getElementById('home-collections').classList.add('hidden');
-            const live = document.getElementById('live-tv-section'); if (live) live.classList.add('hidden');
             document.getElementById('catalog-page').classList.remove('hidden');
             document.getElementById('catalog-heading').innerText = title;
             window.scrollTo({top:0,behavior:history.state?.ny7ScrollY!=null?'auto':'smooth'});
@@ -1419,7 +1401,6 @@ function showDashboard(update=true){
  const context=document.getElementById('page-context-card');if(context)context.hidden=true;
  document.getElementById('hero-section').classList.remove('hidden');
  document.getElementById('home-collections').classList.remove('hidden');
- const live=document.getElementById('live-tv-section');if(live)live.classList.remove('hidden');
  const catalog=document.getElementById('catalog-page');if(catalog)catalog.classList.add('hidden');
  document.getElementById('detail-related').classList.add('hidden');
  if(update&&location.hash!=='#/anasayfa')history.pushState(null,'','#/anasayfa');
@@ -2335,15 +2316,6 @@ document.addEventListener('keydown', function(event) {
 });
 
 
-// Oynatıcı arayüzü kontrolleri
-function launchPlayer(title) {
-            const item = mediaDatabase.find(m => m.title === title) || { title: title, image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80' };
-            document.getElementById('player-media-title').innerText = item.title;
-            document.getElementById('player-poster').src = item.image;
-            document.getElementById('player-modal').classList.remove('hidden');
-            document.getElementById('player-modal').classList.add('flex');
-        }
-
         const NY7_PLAYER_STORAGE_KEY='ny7_player_sources_v1';
 let activePlayerMediaId=null;
 let activePlayerObjectUrl=null;
@@ -2584,13 +2556,6 @@ document.getElementById('player-video')?.addEventListener('error',()=>setPlayerE
 let mediaDatabase = [];
 ;
 
-        const liveTvChannels = [
-            { name: 'Disney Channel', icon: 'fa-tv', tag: 'Çocuk 24/7' },
-            { name: 'HBO HD Live', icon: 'fa-film', tag: 'Sinema Kuşağı' },
-            { name: 'ESPN Sports', icon: 'fa-trophy', tag: 'Canlı Maç Yayını' },
-            { name: 'Discovery HD', icon: 'fa-earth-americas', tag: 'Belgesel' }
-        ];
-
         let heroItems = [];
         let heroAllItems = [];
         let heroPresentationById = {};
@@ -2704,7 +2669,6 @@ heroPresentationById = {};
                     if (moodResult) moodResult.innerHTML = '<div class="mood-discovery-empty">Keşif önerisi şu anda hazırlanamadı.</div>';
                 }
                 renderMediaGrid();
-                renderLiveTv();
                 window.dispatchEvent(new Event('perde:catalog-ready'));
                 renderHeaderSearchResults(headerSearchInput?.value||'');
                 loadOriginalTitles();
