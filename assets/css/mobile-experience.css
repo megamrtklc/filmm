@@ -1,0 +1,242 @@
+/* PERDE — mobile experience polish
+   Strictly phone-sized viewports and short-landscape touch phones only.
+   Desktop browsers, tablet desktop-mode and TV layouts are intentionally excluded. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
+  html { scroll-padding-top: 76px; }
+  body#theme-body { -webkit-text-size-adjust:100%; overscroll-behavior-x:none; }
+  button, a, select, input { -webkit-tap-highlight-color:transparent; }
+  button, .mobile-nav-item, .genre-pill { touch-action:manipulation; }
+
+  /* Bottom navigation: clear active state, reliable tap area and safe-area spacing. */
+  .mobile-bottom-nav { min-height:59px!important; }
+  .mobile-bottom-nav .mobile-nav-item { min-height:48px!important; }
+  .mobile-bottom-nav .mobile-nav-item:focus-visible,
+  .mobile-category-option:focus-visible {
+    outline:2px solid rgba(250,204,21,.9)!important;
+    outline-offset:2px!important;
+  }
+
+  /* Homepage rails: native horizontal swipe with stable card snapping. */
+  #dashboard-view .collection-rail,
+  #dashboard-view .saved-collection-rail,
+  #detail-related-rail,
+  #hero-thumbnails-rail {
+    scroll-snap-type:x proximity!important;
+    scroll-padding-inline:12px!important;
+    overscroll-behavior-x:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  #dashboard-view .collection-rail > *,
+  #dashboard-view .saved-collection-rail > *,
+  #detail-related-rail > *,
+  #hero-thumbnails-rail > * { scroll-snap-align:start; }
+  #dashboard-view .collection-heading { min-width:0!important; }
+  #dashboard-view .collection-heading h2 {
+    font-size:clamp(16px,4.5vw,20px)!important;
+    line-height:1.2!important;
+  }
+  #dashboard-view .collection-section { margin-bottom:24px!important; }
+  #dashboard-view .collection-rail { padding-bottom:8px!important; }
+  #dashboard-view .movie-card,
+  #dashboard-view .collection-card { transform:none!important; }
+  #dashboard-view .movie-card:active,
+  #dashboard-view .collection-card:active { transform:scale(.975)!important; }
+
+  /* Mobile search: keep suggestion panel inside the viewport and scrollable. */
+  .site-header .header-search-shell { position:relative!important; }
+  .site-header .header-search-results {
+    position:absolute!important;
+    top:calc(100% + 8px)!important;
+    left:0!important;
+    right:0!important;
+    width:auto!important;
+    max-width:calc(100vw - 24px)!important;
+    max-height:min(62dvh,460px)!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important;
+    z-index:1400!important;
+    border:1px solid rgba(255,255,255,.13)!important;
+    border-radius:15px!important;
+    background:rgba(17,19,27,.98)!important;
+    box-shadow:0 18px 44px rgba(0,0,0,.48)!important;
+    -webkit-backdrop-filter:blur(18px)!important;
+    backdrop-filter:blur(18px)!important;
+  }
+
+  /* Discover/catalog: filters stay reachable without squeezing the poster grid. */
+  #catalog-page { min-width:0!important; padding-inline:12px!important; }
+  #catalog-page .catalog-genre-scroller {
+    max-width:100%!important;
+    margin-inline:-2px!important;
+    padding:3px 2px 12px!important;
+    scroll-snap-type:x proximity!important;
+    overscroll-behavior-x:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  #catalog-page .genre-pill { min-height:36px!important; }
+  #catalog-page .catalog-type-filter {
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    align-self:stretch!important;
+  }
+  #catalog-page .catalog-type-filter button {
+    min-width:0!important;
+    padding:8px 5px!important;
+    white-space:nowrap!important;
+  }
+  #catalog-page #media-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  #catalog-page #section-title { font-size:18px!important; line-height:1.25!important; }
+
+  /* Film detail: stacked content, full-width action targets and contained cast rails. */
+  #detail-page-view { min-width:0!important; overflow-x:clip!important; }
+  #detail-page-view .detail-main { min-width:0!important; padding-inline:12px!important; }
+  #detail-page-view .detail-overlap {
+    min-width:0!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:18px!important;
+  }
+  #detail-page-view .detail-poster-column {
+    width:min(48vw,190px)!important;
+    max-width:190px!important;
+    margin-inline:auto!important;
+  }
+  #detail-page-view .detail-copy { min-width:0!important; width:100%!important; }
+  #detail-page-view #detail-title {
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+    font-size:clamp(25px,7vw,34px)!important;
+    line-height:1.08!important;
+  }
+  #detail-page-view .detail-subline { flex-wrap:wrap!important; row-gap:6px!important; }
+  #detail-page-view .detail-score-row { flex-wrap:wrap!important; gap:10px!important; }
+  #detail-page-view .detail-score-actions { margin-left:auto!important; }
+  #detail-page-view .detail-score-actions .detail-icon-btn {
+    width:42px!important; height:42px!important; min-width:42px!important;
+  }
+  #detail-page-view .detail-poster-trailer,
+  #detail-page-view .detail-poster-watch {
+    width:100%!important; min-height:42px!important;
+    justify-content:center!important;
+  }
+  #detail-page-view .detail-credits,
+  #detail-page-view .detail-episodes,
+  #detail-page-view .detail-personal-info,
+  #detail-page-view .detail-related,
+  #detail-page-view .detail-series-dashboard {
+    min-width:0!important; max-width:100%!important;
+    margin-inline:0!important;
+  }
+  #detail-page-view #detail-related-rail { grid-auto-columns:min(42vw,150px)!important; }
+
+  /* Series redesign and episode tracking: one readable column on phones. */
+  #detail-series-layout { min-width:0!important; overflow-x:clip!important; }
+  #detail-series-layout .series-redesign-hero-inner {
+    display:grid!important; grid-template-columns:minmax(0,1fr)!important;
+    justify-items:center!important; gap:16px!important;
+  }
+  #detail-series-layout .series-redesign-poster-slot {
+    width:min(46vw,180px)!important; max-width:180px!important;
+  }
+  #detail-series-layout .series-redesign-copy-slot { min-width:0!important; width:100%!important; }
+  #detail-series-layout .series-redesign-content { min-width:0!important; padding-inline:12px!important; }
+  #detail-series-layout [id*="episodes"],
+  #detail-series-layout [class*="episode"] { min-width:0!important; max-width:100%!important; }
+
+  /* Player: prioritize video, then compact touch controls; remove desktop side column. */
+  #player-modal.ny7-player-modal {
+    position:fixed!important; inset:0!important;
+    width:100vw!important; height:100dvh!important; max-height:100dvh!important;
+    overflow-y:auto!important; overscroll-behavior:contain!important;
+    padding-bottom:env(safe-area-inset-bottom,0px)!important;
+  }
+  #player-modal .ny7-player-header {
+    min-height:54px!important; padding:7px 10px!important; gap:8px!important;
+  }
+  #player-modal .ny7-player-heading { min-width:0!important; }
+  #player-modal .ny7-player-heading h2 {
+    overflow:hidden!important; text-overflow:ellipsis!important; white-space:nowrap!important;
+    font-size:14px!important;
+  }
+  #player-modal .ny7-player-live-label,
+  #player-modal .ny7-player-intro,
+  #player-modal .ny7-player-side,
+  #player-modal .ny7-player-shortcuts { display:none!important; }
+  #player-modal .ny7-player-layout {
+    display:flex!important; flex-direction:column!important;
+    width:100%!important; max-width:none!important; gap:12px!important;
+    padding:8px 0 16px!important;
+  }
+  #player-modal .ny7-player-main-column { width:100%!important; min-width:0!important; }
+  #player-modal .ny7-player-stage {
+    width:100%!important; max-width:none!important;
+    aspect-ratio:16/9!important; min-height:0!important; height:auto!important;
+    border-radius:0!important;
+  }
+  #player-modal #player-video { width:100%!important; height:100%!important; object-fit:contain!important; }
+  #player-modal .ny7-player-controls { padding:8px 10px!important; }
+  #player-modal .ny7-player-control-row {
+    display:flex!important; flex-wrap:wrap!important; align-items:center!important;
+    gap:7px!important;
+  }
+  #player-modal .ny7-player-control-left,
+  #player-modal .ny7-player-control-right {
+    display:flex!important; align-items:center!important; flex-wrap:wrap!important;
+    gap:6px!important; min-width:0!important;
+  }
+  #player-modal .ny7-player-control-left { flex:1 1 100%!important; }
+  #player-modal .ny7-player-control-right { flex:1 1 100%!important; justify-content:space-between!important; }
+  #player-modal .ny7-control-button { min-width:36px!important; min-height:36px!important; }
+  #player-modal .ny7-player-volume { width:64px!important; }
+  #player-modal .ny7-player-time { font-size:10px!important; }
+  #player-modal .ny7-player-control-right select {
+    min-width:0!important; max-width:31%!important; min-height:36px!important;
+    font-size:11px!important;
+  }
+  #player-modal .ny7-player-underbar {
+    display:flex!important; flex-direction:column!important; align-items:flex-start!important;
+    gap:8px!important; padding:10px 12px!important;
+  }
+  #player-modal .ny7-player-statline { flex-wrap:wrap!important; gap:10px!important; }
+
+  /* Actor profile and trailer dialog fit narrow screens. */
+  #actor-page-view { min-width:0!important; overflow-x:clip!important; }
+  #actor-page-view .actor-intro { display:flex!important; flex-direction:column!important; align-items:center!important; }
+  #actor-page-view .actor-intro-copy { min-width:0!important; width:100%!important; }
+  #actor-page-view .actor-facts { grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+  #actor-page-view .actor-filmography-grid { grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+  #trailer-popup .trailer-popup-card {
+    width:calc(100vw - 18px)!important; max-width:none!important;
+    max-height:calc(100dvh - 18px)!important; overflow-y:auto!important;
+    padding:12px!important;
+  }
+  #trailer-popup .trailer-popup-content {
+    display:flex!important; flex-direction:column!important; gap:12px!important;
+  }
+  #trailer-popup .trailer-popup-info {
+    display:grid!important; grid-template-columns:72px minmax(0,1fr)!important;
+    gap:8px 12px!important;
+  }
+  #trailer-popup .trailer-popup-video-column { min-width:0!important; }
+}
+
+@media screen and (max-width:380px) {
+  #catalog-page #media-grid { gap:9px!important; }
+  #detail-page-view .detail-main { padding-inline:10px!important; }
+  #player-modal .ny7-player-control-right select { max-width:29%!important; }
+}
+
+@media screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
+  #player-modal .ny7-player-layout { padding-top:0!important; }
+  #player-modal .ny7-player-stage { max-height:calc(100dvh - 112px)!important; }
+  #player-modal .ny7-player-header { min-height:46px!important; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .mobile-bottom-nav *,
+  #dashboard-view .collection-rail *,
+  #detail-page-view * { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
