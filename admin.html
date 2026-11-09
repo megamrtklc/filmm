@@ -10,6 +10,20 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="assets/css/admin.css?v=20261109-collection-clarity-v4">
+  <script>
+      (function(){
+        try {
+          if (localStorage.getItem('perde_theme_preference_v1') === 'light') {
+            document.documentElement.setAttribute('data-theme','light');
+            var link=document.createElement('link');
+            link.id='perde-light-theme-css';
+            link.rel='stylesheet';
+            link.href='assets/css/themes/light.css';
+            document.head.appendChild(link);
+          }
+        } catch (_) {}
+      })();
+    </script>
 </head>
 <body class="admin-body">
   <div class="admin-shell">
