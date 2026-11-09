@@ -156,7 +156,7 @@ function fitHeroTitleToWidth() {
                 { icon: 'fa-calendar-days', value: String(item.tmdbReleaseDate || '').slice(0,4) || item.year },
                 { icon: item.type === 'tv' ? 'fa-tv' : 'fa-film', value: item.type === 'tv' ? 'Dizi' : 'Film' },
                 { icon: 'fa-clock', value: runtime },
-                { icon: 'fa-tags', value: item.tmdbGenres || item.category }
+                { icon: 'fa-tags', value: String(item.tmdbGenres || item.category || '').split(/\\s*\\/\\s*|\\s*,\\s*/).map(genre => genre.trim().replace(/\\s*&\\s*Macera/gi, '').replace(/\\s+ve\\s+Macera/gi, '')).filter(Boolean).slice(0, 3).join(' • ') }
             ].filter(entry => entry.value !== undefined && entry.value !== null && String(entry.value).trim() !== '');
             metaItems.forEach((entry, index) => {
                 if (index) {
