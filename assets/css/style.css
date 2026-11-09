@@ -11006,17 +11006,17 @@ body.detail-synopsis-open{overflow:hidden}
 }
 
 
-/* TOP 10 sıra numarası: daha hafif tipografi, komşu afişe taşmayan yerleşim */
+/* TOP 10 sıra numarası: daha hafif tipografi ve afişe biraz daha yakın konum */
 #collection-featured .featured-number{
  font-weight:500!important;
  letter-spacing:-.075em!important;
  -webkit-text-stroke:0!important;
  text-shadow:0 3px 9px rgba(0,0,0,.72)!important;
- left:-35px!important;
+ left:-25px!important;
 }
 @media(max-width:900px){
- #collection-featured .featured-number{font-weight:500!important;left:-29px!important}
+ #collection-featured .featured-number{font-weight:500!important;left:-20px!important}
 }
 @media(max-width:560px){
- #collection-featured .featured-number{font-weight:500!important;left:-24px!important}
+ #collection-featured .featured-number{font-weight:500!important;left:-17px!important}
 }
