@@ -601,7 +601,7 @@ function renderHomeCollections() {
             ? savedPersonalized.itemIds.map(id=>valid.find(item=>String(item.id)===String(id))).filter(Boolean).slice(0,5)
             : shuffleItems(personalized).slice(0,5);
         const personalizedSection=document.getElementById('collection-personalized');
-        if(personalizedSection)personalizedSection.hidden=!!savedPersonalized&&savedPersonalized.active===false;
+        if(personalizedSection){personalizedSection.hidden=!!savedPersonalized&&savedPersonalized.active===false;const heading=personalizedSection.querySelector('.collection-heading h2');if(heading&&savedPersonalized?.title)heading.textContent=savedPersonalized.title;}
         if(!personalizedRail)return;
         personalizedRail.classList.remove('personalized-row-rail');
         personalizedRail.classList.add('personalized-editorial-rail');
