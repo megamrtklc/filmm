@@ -125,7 +125,7 @@
 }
 
 /* Gerçek dar ekranlar: yatay taşmayı engelle, poster raylarını yatay kaydır. */
-@media (max-width:767px){
+@media (max-width:767px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #dashboard-view{overflow-x:clip!important}
   #dashboard-view .home-feature-row #hero-section.hero-section{width:100%!important;max-width:100%!important}
   #dashboard-view .home-feature-row #hero-section .hero-layout{
@@ -825,7 +825,7 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 
 
 /* PERDE MOBILE APP NAV — telefonda alt sabit gezinme */
-@media (max-width:760px){
+@media (max-width:760px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   body#theme-body{padding-bottom:calc(76px + env(safe-area-inset-bottom, 0px))!important}
   .site-header{
     position:absolute!important;top:0!important;left:0!important;right:0!important;
@@ -882,11 +882,11 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
   .mobile-bottom-nav .mobile-nav-item.is-active i{filter:drop-shadow(0 0 7px rgba(224,190,122,.22))}
   .mobile-bottom-nav .mobile-nav-item:active{background:rgba(255,255,255,.08)!important}
 }
-@media (min-width:761px){.mobile-bottom-nav{display:none!important}}
+@media (min-width:761px){html:not(.perde-phone-device) .mobile-bottom-nav{display:none!important}}
 
 
 /* Mobile nav polish: softer glass surface and gentle selection motion */
-@media (max-width:760px){
+@media (max-width:760px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Compact-touch rules above can re-enable the desktop nav; keep it hidden on phones. */
   html.perde-touch-compact .site-header .main-nav,
   html.perde-touch-compact .site-header nav.main-nav,
@@ -942,7 +942,7 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 /* PERDE — Telefonlara özel bağımsız sinematik manşet.
    Tablet (768px+) ve masaüstü mevcut manşeti kullanmaya devam eder. */
 .mobile-hero-section{display:none}
-@media screen and (max-width:767px){
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #dashboard-view .home-feature-row #hero-section{display:none!important}
   #dashboard-view .home-feature-row #mobile-hero-section{
     position:relative!important;display:flex!important;flex-direction:column!important;
@@ -1000,7 +1000,7 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 
 /* Mobile hero replacement — explicit direct-child selectors to defeat
    legacy hero display rules without affecting tablet/desktop breakpoints. */
-@media screen and (max-width:767px){
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #dashboard-view .home-feature-row > section#hero-section.hero-section{
     display:none!important;
     visibility:hidden!important;
@@ -1027,7 +1027,7 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 
 
 /* Mobile hero compact layout + trailer CTA (phone only). */
-@media screen and (max-width:767px){
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #dashboard-view .home-feature-row > section#mobile-hero-section.mobile-hero-section{
     height:min(520px,calc(100svh - 220px))!important;
     min-height:490px!important;
@@ -1060,7 +1060,7 @@ html.perde-tv-wide .site-header .header-search-shell #search-input{font-size:13p
 
 
 /* PERDE — phone hero: top labels higher, artwork lifted slightly */
-@media screen and (max-width:767px){
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #mobile-hero-section .mobile-hero-topline{
     top:18px!important;
   }
