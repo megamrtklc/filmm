@@ -165,6 +165,28 @@ function fitHeroTitleToWidth() {
                 meta.appendChild(part);
             });
             document.getElementById('hero-desc').innerText = heroPresentation.description || item.tmdbOverview || item.desc || '';
+            // Aynı seçili yapımın telefon manşetine yansıması; masaüstü manşeti bağımsız kalır.
+            const mobileHero = document.getElementById('mobile-hero-section');
+            if (mobileHero) {
+                const mobileBg = document.getElementById('mobile-hero-bg');
+                if (mobileBg) { mobileBg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image; mobileBg.alt = item.title; }
+                mobileHero.classList.add('is-changing');
+                window.setTimeout(() => mobileHero.classList.remove('is-changing'), 420);
+                const mobileType = document.getElementById('mobile-hero-type');
+                if (mobileType) mobileType.innerHTML = item.type === 'tv' ? '<i class="fa-solid fa-tv" aria-hidden="true"></i> DİZİ' : '<i class="fa-solid fa-film" aria-hidden="true"></i> FİLM';
+                const mobileTitle = document.getElementById('mobile-hero-title');
+                if (mobileTitle) mobileTitle.textContent = heroPresentation.headline || item.title;
+                const mobileOriginal = document.getElementById('mobile-hero-original-title');
+                if (mobileOriginal) { mobileOriginal.textContent = item.originalTitle || ''; mobileOriginal.hidden = !item.originalTitle; }
+                const mobileRatings = document.getElementById('mobile-hero-ratings');
+                if (mobileRatings) mobileRatings.innerHTML = ratings.innerHTML;
+                const mobileMeta = document.getElementById('mobile-hero-meta');
+                if (mobileMeta) mobileMeta.innerHTML = meta.innerHTML;
+                const mobileDesc = document.getElementById('mobile-hero-desc');
+                if (mobileDesc) mobileDesc.textContent = heroPresentation.description || item.tmdbOverview || item.desc || '';
+                const mobileCounter = document.getElementById('mobile-hero-counter');
+                if (mobileCounter) mobileCounter.textContent = String(Math.max(0, heroIndex) + 1).padStart(2, '0') + ' / ' + String(Math.max(1, heroItems.length)).padStart(2, '0');
+            }
             if (heroCopy) {
                 requestAnimationFrame(() => window.setTimeout(() => heroCopy.classList.remove('is-entering'), 45));
             }
@@ -303,6 +325,26 @@ function fitHeroTitleToWidth() {
         }
         // Ok tıklamalarını belge seviyesinde yakala: DOM yeniden çizilse de olay bağlantısı kaybolmaz.
         window.stepHero = stepHero;
+        if (!window.__mobileHeroControlsBound) {
+            document.addEventListener('click', event => {
+                const button = event.target.closest('#mobile-hero-section [data-mobile-hero-direction]');
+                if (!button) return;
+                event.preventDefault();
+                stepHero(Number(button.dataset.mobileHeroDirection));
+            });
+            const mobileHero = document.getElementById('mobile-hero-section');
+            if (mobileHero) {
+                let touchStartX = 0, touchStartY = 0;
+                mobileHero.addEventListener('touchstart', event => {
+                    const touch = event.changedTouches[0]; touchStartX = touch.clientX; touchStartY = touch.clientY;
+                }, {passive:true});
+                mobileHero.addEventListener('touchend', event => {
+                    const touch = event.changedTouches[0], dx = touch.clientX - touchStartX, dy = touch.clientY - touchStartY;
+                    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.25) stepHero(dx < 0 ? 1 : -1);
+                }, {passive:true});
+            }
+            window.__mobileHeroControlsBound = true;
+        }
         if (!window.__heroArrowDelegationBound) {
             document.addEventListener('click', event => {
                 const button = event.target.closest('#hero-section [data-hero-direction]');
