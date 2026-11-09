@@ -203,3 +203,162 @@ html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#daily-pick-sec
 html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#collection-personalized{
   width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
 }
+
+
+/* GERİ BİLDİRİM DÜZELTMESİ — dar masaüstü-site görünümünde tek satır header */
+@media (min-width:768px) and (max-width:1100px){
+  .site-header{
+    display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+    align-items:center!important;justify-content:space-between!important;
+    width:100%!important;height:78px!important;min-height:78px!important;
+    padding:0 14px!important;gap:9px!important;
+  }
+  .site-header .header-topline{display:contents!important}
+  .site-header .header-brand{order:0!important;flex:0 0 auto!important}
+  .site-header .main-nav{
+    order:1!important;display:flex!important;flex:1 1 auto!important;
+    width:auto!important;min-width:0!important;max-width:none!important;
+    height:100%!important;min-height:0!important;justify-content:flex-start!important;
+    align-items:center!important;gap:8px!important;overflow-x:auto!important;
+    overflow-y:hidden!important;padding:0 2px!important;white-space:nowrap!important;
+    scrollbar-width:none!important;
+  }
+  .site-header .main-nav::-webkit-scrollbar{display:none!important}
+  .site-header .main-nav>a,.site-header .main-nav .nav-trigger{
+    flex:0 0 auto!important;white-space:nowrap!important;font-size:10px!important;
+    gap:4px!important;
+  }
+  .site-header .main-nav>a i{display:none!important}
+  .site-header .header-actions{
+    order:2!important;display:flex!important;flex:0 1 175px!important;
+    width:auto!important;min-width:0!important;max-width:175px!important;
+    margin:0!important;gap:7px!important;justify-content:flex-end!important;
+  }
+  .site-header .header-search-shell{flex:1 1 auto!important;min-width:0!important}
+  .site-header .glass-search{width:135px!important;max-width:100%!important;min-width:0!important}
+  .site-header .user-dropdown{flex:0 0 auto!important}
+
+  /* İki ana kart aynı satırda; içerideki editoryal kolaj da kendi ızgarasını korur. */
+  #dashboard-view>.home-mood-continue-row{
+    display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-auto-flow:row!important;align-items:stretch!important;
+    gap:14px!important;padding:18px 18px 0!important;
+  }
+  #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+  #dashboard-view>.home-mood-continue-row>#collection-personalized{
+    display:block!important;position:relative!important;
+    width:auto!important;min-width:0!important;max-width:none!important;
+    height:458px!important;min-height:458px!important;max-height:458px!important;
+    margin:0!important;align-self:stretch!important;overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-gallery-shell{
+    height:100%!important;min-height:0!important;max-height:none!important;
+    display:flex!important;flex-direction:column!important;
+  }
+  #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-discovery-result{
+    flex:1 1 auto!important;height:auto!important;min-height:0!important;max-height:none!important;
+  }
+  #dashboard-view #collection-personalized .collection-heading{flex:0 0 auto!important}
+  #dashboard-view #collection-personalized .personalized-editorial-rail{
+    display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-rows:minmax(0,1fr)!important;align-items:stretch!important;
+    width:100%!important;height:calc(100% - 48px)!important;min-height:0!important;
+    gap:8px!important;overflow:hidden!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-rail>.personalized-editorial-card.is-featured{
+    display:block!important;width:auto!important;min-width:0!important;
+    height:100%!important;min-height:0!important;flex:none!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-rail>.personalized-editorial-support{
+    display:grid!important;position:relative!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    width:auto!important;height:100%!important;min-width:0!important;min-height:0!important;
+    flex:none!important;gap:7px!important;overflow:hidden!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-support>.personalized-editorial-card.is-supporting{
+    display:block!important;position:relative!important;
+    width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-card .personalized-editorial-content{
+    left:0!important;right:0!important;bottom:0!important;min-width:0!important;
+    padding:8px!important;overflow:hidden!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-card .personalized-editorial-content h3{
+    font-size:clamp(10px,1vw,13px)!important;line-height:1.18!important;
+    overflow-wrap:anywhere!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-card.is-supporting .personalized-editorial-synopsis{
+    display:none!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-card.is-supporting .personalized-editorial-type{
+    font-size:8px!important;white-space:normal!important;line-height:1.15!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-card.is-featured .personalized-editorial-content h3{
+    font-size:clamp(13px,1.35vw,18px)!important;
+  }
+  #dashboard-view #collection-personalized .personalized-editorial-card.is-featured .personalized-editorial-synopsis{
+    display:-webkit-box!important;font-size:9px!important;line-height:1.3!important;
+  }
+  #dashboard-view .homepage-main{padding-inline:18px!important}
+}
+
+/* Dokunmatik masaüstü-site modu aynı düzeni viewport sınıfı üzerinden de garanti eder. */
+html.perde-touch-compact .site-header{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:space-between!important;
+  width:100%!important;height:78px!important;min-height:78px!important;
+  padding:0 14px!important;gap:9px!important;
+}
+html.perde-touch-compact .site-header .header-topline{display:contents!important}
+html.perde-touch-compact .site-header .header-brand{order:0!important;flex:0 0 auto!important}
+html.perde-touch-compact .site-header .main-nav{
+  order:1!important;display:flex!important;flex:1 1 auto!important;
+  width:auto!important;min-width:0!important;max-width:none!important;
+  height:100%!important;justify-content:flex-start!important;align-items:center!important;
+  gap:8px!important;overflow-x:auto!important;overflow-y:hidden!important;
+  padding:0 2px!important;white-space:nowrap!important;scrollbar-width:none!important;
+}
+html.perde-touch-compact .site-header .main-nav>a,
+html.perde-touch-compact .site-header .main-nav .nav-trigger{
+  flex:0 0 auto!important;white-space:nowrap!important;font-size:10px!important;gap:4px!important;
+}
+html.perde-touch-compact .site-header .main-nav>a i{display:none!important}
+html.perde-touch-compact .site-header .header-actions{
+  order:2!important;display:flex!important;flex:0 1 175px!important;
+  width:auto!important;min-width:0!important;max-width:175px!important;margin:0!important;
+}
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  align-items:stretch!important;gap:14px!important;padding:18px!important;
+}
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#daily-pick-section,
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#collection-personalized{
+  display:block!important;width:auto!important;min-width:0!important;max-width:none!important;
+  height:458px!important;min-height:458px!important;max-height:458px!important;
+  margin:0!important;overflow:hidden!important;
+}
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-gallery-shell{
+  display:flex!important;flex-direction:column!important;height:100%!important;min-height:0!important;
+}
+html.perde-touch-compact #dashboard-view>.home-mood-continue-row>#daily-pick-section .mood-discovery-result{
+  flex:1 1 auto!important;height:auto!important;min-height:0!important;
+}
+html.perde-touch-compact #dashboard-view #collection-personalized .personalized-editorial-rail{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;height:calc(100% - 48px)!important;
+  min-height:0!important;gap:8px!important;overflow:hidden!important;
+}
+html.perde-touch-compact #dashboard-view #collection-personalized .personalized-editorial-rail>.personalized-editorial-card.is-featured,
+html.perde-touch-compact #dashboard-view #collection-personalized .personalized-editorial-rail>.personalized-editorial-support{
+  height:100%!important;min-height:0!important;overflow:hidden!important;
+}
+html.perde-touch-compact #dashboard-view #collection-personalized .personalized-editorial-rail>.personalized-editorial-support{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;gap:7px!important;
+}
+html.perde-touch-compact #dashboard-view #collection-personalized .personalized-editorial-card.is-supporting .personalized-editorial-synopsis{display:none!important}
+html.perde-touch-compact #dashboard-view #collection-personalized .personalized-editorial-card .personalized-editorial-content h3{
+  font-size:clamp(10px,1vw,13px)!important;line-height:1.18!important;overflow-wrap:anywhere!important;
+}
