@@ -574,18 +574,36 @@ function renderHomeCollections() {
         const selection=shuffleItems(personalized).slice(0,4);
         if(!personalizedRail)return;
         personalizedRail.classList.add('personalized-row-rail');
-        personalizedRail.innerHTML=selection.length?selection.map(item=>{
-            const overview=String(item.tmdbOverview||item.desc||'').replace(/\s+/g,' ').trim();
-            const shortOverview=overview.length>105?overview.slice(0,102).trimEnd()+'…':overview;
+        personalizedRail.innerHTML=selection.length?selection.map((item,index)=>{
+            const overview=String(item.tmdbOverview||item.desc||'').replace(/\\s+/g,' ').trim();
+            const shortOverview=overview.length>150?overview.slice(0,147).trimEnd()+'…':overview;
             const genre=String(item.genre||item.tmdbGenres||item.category||'').split('/')[0].trim();
+            const title=escapeCountryHtml(item.title);
+            const image=escapeCountryHtml(item.image);
+            const meta=escapeCountryHtml([item.year||'',genre].filter(Boolean).join(' · '));
+            const type=item.type==='tv'?'DİZİ':'FİLM';
+            const rating=escapeCountryHtml(item.rating||'—');
+            if(index===0)return `
+            <article class="personalized-row-card personalized-featured-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${title} detayını aç">
+                <img class="personalized-featured-backdrop" src="${image}" alt="" loading="eager" decoding="async">
+                <span class="personalized-featured-shade" aria-hidden="true"></span>
+                <div class="personalized-featured-content">
+                    <div class="personalized-featured-topline"><span><i class="fa-solid fa-sparkles" aria-hidden="true"></i> BUGÜNÜN ÖNERİSİ</span><b><i class="fa-solid fa-star" aria-hidden="true"></i> ${rating}</b></div>
+                    <div class="personalized-featured-copy">
+                        <span class="personalized-featured-type">${type} ${meta?' · '+meta:''}</span>
+                        <h3>${title}</h3>
+                        ${shortOverview?'<p>'+escapeCountryHtml(shortOverview)+'</p>':''}
+                    </div>
+                    <span class="personalized-featured-open">Detayları keşfet <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </article>`;
             return `
-            <article class="personalized-row-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
-                <div class="personalized-row-poster"><img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="lazy" decoding="async"></div>
+            <article class="personalized-row-card personalized-alternative-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${title} detayını aç">
+                <div class="personalized-row-poster"><img src="${image}" alt="${title}" loading="lazy" decoding="async"></div>
                 <div class="personalized-row-copy">
-                    <div class="personalized-row-topline"><span>${item.type==='tv'?'DİZİ':'FİLM'}</span><b><i class="fa-solid fa-star" aria-hidden="true"></i> IMDb ${escapeCountryHtml(item.rating||'—')}</b></div>
-                    <h3>${escapeCountryHtml(item.title)}</h3>
-                    <p>${escapeCountryHtml([item.year||'',genre].filter(Boolean).join(' · '))}</p>
-                    ${shortOverview?'<small class="personalized-row-summary">'+escapeCountryHtml(shortOverview)+'</small>':''}
+                    <div class="personalized-row-topline"><span>${type}</span><b><i class="fa-solid fa-star" aria-hidden="true"></i> ${rating}</b></div>
+                    <h3>${title}</h3>
+                    <p>${meta}</p>
                 </div>
                 <i class="fa-solid fa-chevron-right personalized-row-arrow" aria-hidden="true"></i>
             </article>`;
