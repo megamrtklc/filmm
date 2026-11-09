@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f2efe7">
+  <meta name="theme-color" content="#0b0d11">
   <title>Yönetim Merkezi | Perde</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-theme-switch-v6">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20261109-collection-clarity-v4">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
@@ -50,7 +50,6 @@
         <button class="icon-button mobile-menu" id="mobile-menu" type="button" aria-label="Sol menüyü daralt" aria-expanded="true" title="Sol menüyü daralt"><i class="fa-solid fa-bars"></i></button>
         <div class="breadcrumbs"><span>Perde</span><i class="fa-solid fa-chevron-right"></i><b id="breadcrumb-current">Genel Bakış</b></div>
         <div class="topbar-actions">
-          <button type="button" class="theme-switcher admin-theme-switcher" data-theme-toggle aria-label="Koyu temaya geç" title="Görünümü değiştir"><i class="fa-solid fa-moon" aria-hidden="true"></i><span class="theme-switcher-label">Koyu tema</span></button>
           <span class="preview-pill"><i class="fa-regular fa-eye"></i> Yayın yönetimi</span>
           <a class="icon-button" href="index.html#/anasayfa" title="Siteyi görüntüle" aria-label="Siteyi görüntüle"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
           <div class="admin-avatar">P</div>
@@ -589,8 +588,5 @@
   </div>
   <div class="toast" id="admin-toast" role="status" aria-live="polite"></div>
   <script src="assets/js/admin.js?v=20261109-catalog-delete-edit-v1"></script>
-<script>
-(function(){const key="perde-theme";const body=document.body;const button=document.querySelector("[data-theme-toggle]");if(!button)return;function apply(theme){body.dataset.theme=theme;const dark=theme==="dark";button.innerHTML=dark?'<i class="fa-solid fa-sun" aria-hidden="true"></i><span class="theme-switcher-label">Açık tema</span>':'<i class="fa-solid fa-moon" aria-hidden="true"></i><span class="theme-switcher-label">Koyu tema</span>';button.setAttribute("aria-label",dark?"Açık temaya geç":"Koyu temaya geç");button.title=dark?"Açık temaya geç":"Koyu temaya geç";}let saved="light";try{saved=localStorage.getItem(key)||"light";}catch(e){}apply(saved);button.addEventListener("click",function(){const next=body.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem(key,next);}catch(e){}apply(next);});})();
-</script>
 </body>
 </html>
