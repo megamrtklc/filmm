@@ -2330,10 +2330,22 @@ document.addEventListener('keydown', function(event) {
         panel.className='perde-hover-preview';
         panel.setAttribute('role','dialog');
         panel.setAttribute('aria-label','Yapım önizlemesi');
-        panel.innerHTML='<div class="perde-preview-media"><img class="perde-preview-poster" alt=""><div class="perde-preview-player"></div></div><div class="perde-preview-copy"><div class="perde-preview-title-row"><div><h3 class="perde-preview-title"></h3><p class="perde-preview-meta"></p></div><button type="button" class="perde-preview-watch"><i class="fa-solid fa-play"></i><span>İzle</span></button></div><p class="perde-preview-desc"></p></div>';
+        panel.innerHTML='<div class="perde-preview-media"><img class="perde-preview-poster" alt=""><div class="perde-preview-player"></div><div class="perde-preview-volume"><i class="fa-solid fa-volume-high"></i><input class="perde-preview-volume-range" type="range" min="0" max="100" value="30" aria-label="Fragman ses düzeyi"><span class="perde-preview-volume-value">30%</span></div></div><div class="perde-preview-copy"><div class="perde-preview-title-row"><div><h3 class="perde-preview-title"></h3><p class="perde-preview-meta"></p></div><button type="button" class="perde-preview-watch"><i class="fa-solid fa-play"></i><span>İzle</span></button></div><p class="perde-preview-desc"></p></div>';
         document.body.appendChild(panel);
         panel.addEventListener('pointerenter',()=>{clearTimeout(closeTimer);});
         panel.addEventListener('pointerleave',scheduleClose);
+        const volumeRange=panel.querySelector('.perde-preview-volume-range');
+        volumeRange.addEventListener('input',()=>{
+            const value=Number(volumeRange.value);
+            panel.querySelector('.perde-preview-volume-value').textContent=value+'%';
+            const icon=panel.querySelector('.perde-preview-volume i');
+            icon.className='fa-solid '+(value===0?'fa-volume-xmark':value<50?'fa-volume-low':'fa-volume-high');
+            const frame=panel.querySelector('.perde-preview-player iframe');
+            if(frame){
+                frame.contentWindow.postMessage(JSON.stringify({event:'command',func:value===0?'mute':'unMute',args:[]}), '*');
+                if(value>0)frame.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[value]}), '*');
+            }
+        });
         panel.querySelector('.perde-preview-watch').addEventListener('click',event=>{
             event.preventDefault();event.stopPropagation();
             const id=activeId;hidePreview();if(id)openDetailPage(id);
@@ -2372,7 +2384,12 @@ document.addEventListener('keydown', function(event) {
         if(trailerId)playTimer=setTimeout(()=>{
             if(activeId!==String(item.id)||!box.classList.contains('is-visible'))return;
             poster.style.display='none';
-            player.innerHTML='<iframe title="'+String(item.title||'').replace(/[<>&"]/g,'')+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+trailerId+'?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+            player.innerHTML='<iframe title="'+String(item.title||'').replace(/[<>&"]/g,'')+' fragmanı" src="https://www.youtube-nocookie.com/embed/'+trailerId+'?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+            const frame=player.querySelector('iframe');
+            const volume=Number(box.querySelector('.perde-preview-volume-range').value)||30;
+            frame.addEventListener('load',()=>{
+                frame.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[volume]}),'*');
+            },{once:true});
         },2000);
     }
     document.addEventListener('pointerover',event=>{
