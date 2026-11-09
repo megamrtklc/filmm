@@ -114,7 +114,7 @@
         display:flex; align-items:center; justify-content:center; gap:8px;
         min-height:46px; padding:10px 12px; border:1px solid rgba(255,255,255,.16);
         border-radius:10px; background:rgba(255,255,255,.07); color:#f3f4f6;
-        font:600 12px/1.25 inherit; cursor:pointer; transition:background .18s,border-color .18s,transform .18s;
+        font-family:inherit; font-size:12px; font-weight:600; line-height:1.25; cursor:pointer; transition:background .18s,border-color .18s,transform .18s;
       }
       .perde-playback-choice-actions button:hover { transform:translateY(-1px); background:rgba(255,255,255,.12); }
       .perde-playback-choice-actions .perde-playback-continue {
