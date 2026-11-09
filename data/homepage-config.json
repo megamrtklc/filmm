@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-09T14:01:25.635Z",
+  "updatedAt": "2026-11-09T14:08:15.571Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 4,
@@ -136,11 +136,11 @@
       "active": true,
       "displayCount": 5,
       "itemIds": [
-        "archive-26",
-        "archive-103",
-        "archive-124",
-        "archive-99",
-        "archive-125"
+        "archive-42",
+        "archive-60",
+        "archive-47",
+        "archive-41",
+        "archive-15"
       ]
     }
   }
