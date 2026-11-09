@@ -380,7 +380,7 @@ async function checkPage(file, label, viewport, mobile) {
         viewportWidth: innerWidth
       }));
       report.routeChecks.push({ page: label, adminTab: key, ...active });
-      if (!mobile && ['catalog', 'homeRails', 'editor'].includes(key)) {
+      if (!mobile && key === 'catalog') {
         await page.screenshot({ path: `${output}/${label}-${key}.png`, fullPage: true, animations: 'disabled' });
       }
       if (active.scrollWidth - active.viewportWidth > 16) {
