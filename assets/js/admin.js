@@ -1264,7 +1264,7 @@
     $('#collection-total').textContent=collections.length.toLocaleString('tr-TR');
     $('#collection-item-total').textContent=collections.reduce((sum,item)=>sum+item.items.length,0).toLocaleString('tr-TR');
     $('#collection-active-total').textContent=collections.filter(item=>item.active).length.toLocaleString('tr-TR');
-    $('#collection-list').innerHTML=collections.map(item=>'<button type="button" class="collection-list-item'+(item.id===activeCollectionId?' selected':'')+'" data-collection-select="'+escapeHtml(item.id)+'"><span class="collection-list-icon"><i class="fa-solid fa-layer-group"></i></span><span class="collection-list-copy"><b>'+escapeHtml(item.title)+'</b><small>'+item.items.length+' yapım · '+(item.active?'Görünür':'Gizli')+'</small></span><i class="fa-solid fa-chevron-right"></i></button>').join('')||'<div class="collection-editor-empty">Henüz koleksiyon yok.</div>';
+    $('#collection-list').innerHTML=collections.map((item,index)=>'<button type="button" class="collection-list-item'+(item.id===activeCollectionId?' selected':'')+'" data-collection-select="'+escapeHtml(item.id)+'"><span class="collection-list-icon"><i class="fa-solid fa-layer-group"></i></span><span class="collection-list-copy"><b>'+escapeHtml(item.title)+'</b><small>'+item.items.length+' yapım · '+(item.active?'Yayında':'Gizli')+' · '+(index+1)+'. sıra</small></span><i class="fa-solid fa-chevron-right"></i></button>').join('')||'<div class="collection-editor-empty">Henüz koleksiyon yok.</div>';
     renderCollectionEditor();
     renderCatalogPicker('collection-catalog-picker');
   }
@@ -1278,6 +1278,10 @@
     }
     $('#collection-editor-name').textContent=item.title;
     $('#collection-editor-description').textContent=item.description||'Özel koleksiyon rafı.';
+    $('#collection-rename-input').value=item.title;
+    const orderSelect=$('#collection-home-order');
+    orderSelect.innerHTML=collections.map((entry,index)=>'<option value="'+index+'">'+(index+1)+'. sırada</option>').join('');
+    orderSelect.value=String(collections.findIndex(entry=>entry.id===item.id));
     $('#collection-visibility').innerHTML=item.active?'<i class="fa-solid fa-eye"></i> Yayında':'<i class="fa-solid fa-eye-slash"></i> Gizli';
     $('#collection-visibility').classList.toggle('is-muted',!item.active);
     $('#collection-items-count').textContent=item.items.length+' yapım';
@@ -1327,6 +1331,44 @@
     }
     renderCollections();
     try { await persistCollections(); } catch(error) { toast('Değişiklik kaydedilemedi: '+error.message); }
+  }
+  async function renameCollection() {
+    const item=selectedCollection(), input=$('#collection-rename-input');
+    if(!item)return;
+    const title=input.value.trim();
+    if(!title)return toast('Raf adı boş bırakılamaz.');
+    if(collections.some(entry=>entry.id!==item.id&&entry.title.toLocaleLowerCase('tr-TR')===title.toLocaleLowerCase('tr-TR')))return toast('Bu isimde başka bir raf zaten var.');
+    if(title===item.title)return toast('Raf adı değişmedi.');
+    if(!getGithubToken())return toast('Önce GitHub kayıt bağlantısını kur.');
+    const previous=item.title; item.title=title; renderCollections();
+    try { await persistCollections(); toast('Raf adı güncellendi.'); }
+    catch(error) { item.title=previous; renderCollections(); toast('Raf adı kaydedilemedi: '+error.message); }
+  }
+  async function deleteCollection() {
+    const item=selectedCollection();
+    if(!item)return;
+    if(!getGithubToken())return toast('Önce GitHub kayıt bağlantısını kur.');
+    if(!window.confirm('“'+item.title+'” rafı ve rafın içindeki '+item.items.length+' yapım koleksiyon kaydından silinsin mi? Katalogdaki yapımlar silinmez.'))return;
+    const previous=[...collections], previousId=activeCollectionId;
+    const index=collections.findIndex(entry=>entry.id===item.id);
+    collections.splice(index,1);
+    activeCollectionId=collections[Math.min(index,collections.length-1)]?.id||'';
+    renderCollections();
+    try { await persistCollections(); toast('Koleksiyon rafı silindi.'); }
+    catch(error) { collections=previous; activeCollectionId=previousId; renderCollections(); toast('Raf silinemedi: '+error.message); }
+  }
+  async function changeCollectionHomeOrder() {
+    const item=selectedCollection();
+    if(!item)return;
+    if(!getGithubToken())return toast('Önce GitHub kayıt bağlantısını kur.');
+    const oldIndex=collections.findIndex(entry=>entry.id===item.id);
+    const newIndex=Number($('#collection-home-order').value);
+    if(!Number.isInteger(newIndex)||newIndex===oldIndex)return;
+    const previous=[...collections];
+    collections.splice(oldIndex,1); collections.splice(Math.max(0,Math.min(newIndex,collections.length)),0,item);
+    renderCollections();
+    try { await persistCollections(); toast('Ana sayfa raf sırası güncellendi.'); }
+    catch(error) { collections=previous; renderCollections(); toast('Sıralama kaydedilemedi: '+error.message); }
   }
   async function addCollectionItem() {
     const item=selectedCollection();
@@ -1689,6 +1731,10 @@
   $('#collection-add-item').addEventListener('click',addCollectionItem);
   $('#collection-visibility').addEventListener('click',toggleCollectionVisibility);
   $('#collection-create-form').addEventListener('submit',createCollection);
+  $('#collection-rename-save').addEventListener('click',renameCollection);
+  $('#collection-delete').addEventListener('click',deleteCollection);
+  $('#collection-rename-input').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();renameCollection();}});
+  $('#collection-home-order').addEventListener('change',changeCollectionHomeOrder);
   $('#diary-tabs').addEventListener('click',handleDiaryClick);
   $('#diary-entry-list').addEventListener('click',handleDiaryClick);
   $('#diary-entry-list').addEventListener('change',handleDiaryChange);
