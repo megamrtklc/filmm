@@ -10830,3 +10830,22 @@ body.detail-synopsis-open{overflow:hidden}
 #collection-featured .featured-number-poster .collection-rating{display:none!important}
 @media(max-width:820px){#collection-featured .featured-number-rail{grid-auto-columns:clamp(150px,43vw,190px)!important;gap:38px!important;padding-left:8px!important}#collection-featured .featured-number{left:-34px!important;bottom:39px!important;font-size:clamp(94px,23vw,124px)!important;color:rgba(205,208,214,.38)!important}#collection-featured .featured-number-copy{padding-left:3px!important}}
 @media(max-width:380px){#collection-featured .featured-number-rail{grid-auto-columns:43vw!important;gap:34px!important}}
+
+
+/* TOP 10 referansına sadık: numaralar afiş arkasında, yüksek kontrast */
+#collection-featured .featured-number{
+ color:rgba(218,220,224,.76)!important;
+ opacity:1!important;
+ font-size:clamp(116px,10.5vw,154px)!important;
+ font-weight:950!important;
+ left:-51px!important;
+ bottom:40px!important;
+ line-height:.76!important;
+ letter-spacing:-.105em!important;
+ text-shadow:0 2px 3px rgba(0,0,0,.12)!important;
+}
+#collection-featured .featured-number-poster{z-index:2!important}
+#collection-featured .featured-number{z-index:1!important}
+@media(max-width:820px){
+ #collection-featured .featured-number{left:-39px!important;bottom:38px!important;font-size:clamp(100px,24vw,130px)!important;color:rgba(218,220,224,.76)!important}
+}
