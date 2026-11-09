@@ -10857,3 +10857,25 @@ body.detail-synopsis-open{overflow:hidden}
 #collection-featured .featured-number-poster{width:calc(100% - 32px)!important;margin-left:32px!important;z-index:2!important}
 #collection-featured .featured-number-copy{padding-left:32px!important}
 @media(max-width:820px){#collection-featured .featured-number{left:-29px!important;bottom:38px!important;font-size:clamp(96px,23vw,122px)!important}#collection-featured .featured-number-poster{width:calc(100% - 28px)!important;margin-left:28px!important}#collection-featured .featured-number-copy{padding-left:28px!important}}
+
+
+/* TOP 10 — referans yerleşimi: rakam kart içinde, afiş rakamın önünde */
+#collection-featured .featured-number-card{position:relative!important;overflow:visible!important;isolation:isolate!important}
+#collection-featured .featured-number{
+ position:absolute!important;display:block!important;left:0!important;right:auto!important;
+ top:auto!important;bottom:42px!important;transform:none!important;
+ z-index:1!important;color:rgba(218,220,224,.82)!important;opacity:1!important;
+ font-family:Arial,Helvetica,sans-serif!important;font-size:clamp(118px,10vw,150px)!important;
+ font-weight:900!important;line-height:.78!important;letter-spacing:-.085em!important;
+ white-space:nowrap!important;text-shadow:0 2px 4px rgba(0,0,0,.18)!important;
+}
+#collection-featured .featured-number-poster{
+ position:relative!important;z-index:2!important;width:calc(100% - 38px)!important;
+ margin-left:38px!important;aspect-ratio:2/3!important;
+}
+#collection-featured .featured-number-copy{position:relative!important;z-index:2!important;padding-left:38px!important}
+@media(max-width:820px){
+ #collection-featured .featured-number{left:0!important;bottom:39px!important;font-size:clamp(105px,24vw,132px)!important}
+ #collection-featured .featured-number-poster{width:calc(100% - 32px)!important;margin-left:32px!important}
+ #collection-featured .featured-number-copy{padding-left:32px!important}
+}
