@@ -55,3 +55,89 @@
 .series-diary h3{font-size:16px}
 @media(max-width:850px){.series-diary-layout{grid-template-columns:1fr;gap:18px}.series-diary{grid-row:auto}.series-episode-row{grid-template-columns:160px minmax(0,1fr)}}
 @media(max-width:560px){.series-watch-system{margin-top:28px;padding-bottom:32px}.series-guide-heading{gap:12px}.series-guide-heading h2{font-size:25px}.series-guide-heading p{font-size:11px}.series-guide-count{font-size:9px;padding:6px 8px}.series-episode-row{grid-template-columns:112px minmax(0,1fr);gap:10px;padding:8px}.series-episode-image{height:94px}.series-episode-copy h3{font-size:12px;margin:4px 0}.series-episode-copy p{font-size:9px;-webkit-line-clamp:2}.series-episode-meta{font-size:7px;gap:5px}.series-episode-actions{gap:5px;margin-top:7px}.series-episode-actions button{padding:6px 7px;font-size:8px}.series-season-progress{padding:12px}.series-season-progress-foot{font-size:9px}}
+
+
+/* COMPLETE SERIES GUIDE ART DIRECTION */
+#series-watch-system{--sg-gold:#d8b56b;--sg-ink:#090b10;--sg-muted:#9299a6;max-width:1480px;margin:58px auto 0;padding:0 0 64px}
+#series-watch-system .series-guide-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:0 0 30px;padding:0 0 22px;border-bottom:1px solid rgba(255,255,255,.1)}
+#series-watch-system .series-guide-eyebrow,#series-watch-system .series-section-kicker{display:block;color:var(--sg-gold);font-size:9px;font-weight:900;letter-spacing:.22em}
+#series-watch-system .series-guide-heading h2{margin:8px 0 5px;color:#fff;font-size:clamp(30px,3.5vw,43px);font-weight:850;letter-spacing:-.055em;line-height:1}
+#series-watch-system .series-guide-heading p{margin:10px 0 0;color:#a2a8b2;font-size:13px;letter-spacing:.005em}
+#series-watch-system .series-guide-count{padding:9px 13px;border:1px solid rgba(216,181,107,.22);border-radius:5px;background:rgba(216,181,107,.07);color:#e6cf9f;font-size:10px;font-weight:800;letter-spacing:.06em}
+#series-watch-system .series-season-stage{margin-bottom:34px}
+#series-watch-system .series-season-stage-head,#series-watch-system .series-episode-library-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px}
+#series-watch-system .series-season-stage-head h3,#series-watch-system .series-episode-library-head h3{margin:5px 0 0;color:#f4f4f5;font-size:22px;font-weight:800;letter-spacing:-.035em}
+#series-watch-system .series-season-total{color:#858d9a;font-size:10px;font-weight:750}
+#series-watch-system .series-season-toolbar{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin:0 0 15px}
+#series-watch-system .series-season-tile{position:relative;isolation:isolate;display:flex;align-items:flex-end;min-height:126px;overflow:hidden;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:9px;background:#191c23;background-image:linear-gradient(180deg,rgba(8,10,15,.12),rgba(8,10,15,.92)),var(--season-art);background-position:center;background-size:cover;text-align:left;cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s}
+#series-watch-system .series-season-tile:before{position:absolute;z-index:-1;inset:0;content:"";background:radial-gradient(circle at 80% 10%,rgba(216,181,107,.17),transparent 55%)}
+#series-watch-system .series-season-tile:hover{transform:translateY(-3px);border-color:rgba(216,181,107,.48)}
+#series-watch-system .series-season-tile.is-active{border-color:var(--sg-gold);box-shadow:0 0 0 1px rgba(216,181,107,.35),0 12px 32px rgba(0,0,0,.24)}
+#series-watch-system .series-season-tile-content{display:grid;gap:3px;width:100%}
+#series-watch-system .series-season-tile-content small{color:#c4b18b;font-size:8px;font-weight:900;letter-spacing:.18em}
+#series-watch-system .series-season-tile-content strong{color:#fff;font-size:29px;font-weight:900;line-height:1;letter-spacing:-.06em}
+#series-watch-system .series-season-tile-content em{color:#c1c5cc;font-size:9px;font-style:normal}
+#series-watch-system .series-season-tile-progress{height:3px;margin-top:5px;overflow:hidden;border-radius:4px;background:rgba(255,255,255,.2)}
+#series-watch-system .series-season-tile-progress b{display:block;height:100%;background:var(--sg-gold)}
+#series-watch-system .series-season-tile-check{position:absolute;top:9px;right:10px;color:#f0d18d;font-size:11px}
+#series-watch-system .series-season-progress{display:grid;grid-template-columns:124px minmax(0,1fr) minmax(170px,.65fr);align-items:center;gap:22px;min-height:158px;margin:0;padding:21px 24px;border:1px solid rgba(216,181,107,.2);border-radius:11px;background:radial-gradient(ellipse at 0% 100%,rgba(216,181,107,.13),transparent 42%),linear-gradient(110deg,#191b21,#11141b 65%,#17191e);box-shadow:0 18px 45px rgba(0,0,0,.17)}
+#series-watch-system .series-progress-orbit{display:grid;place-items:center;width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--sg-gold) var(--progress,0%),rgba(255,255,255,.1) 0);position:relative}
+#series-watch-system .series-progress-orbit:before{position:absolute;inset:5px;border-radius:50%;background:#17191f;content:""}
+#series-watch-system .series-progress-orbit>div{position:relative;z-index:1;display:grid;justify-items:center;gap:1px}
+#series-watch-system .series-progress-orbit strong{color:#f5e5c1;font-size:25px;line-height:1}
+#series-watch-system .series-progress-orbit strong small{font-size:12px}
+#series-watch-system .series-progress-orbit span{color:#8f96a1;font-size:7px;font-weight:900;letter-spacing:.12em}
+#series-watch-system .series-progress-details h4{margin:5px 0;color:#fff;font-size:21px;font-weight:850;letter-spacing:-.035em}
+#series-watch-system .series-progress-details p{margin:0;color:#a2a8b2;font-size:11px;line-height:1.5}
+#series-watch-system .series-progress-line{height:4px;margin:13px 0 8px;overflow:hidden;border-radius:9px;background:rgba(255,255,255,.1)}
+#series-watch-system .series-progress-line i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#9f793a,#f1d99f);transition:width .3s}
+#series-watch-system .series-progress-meta{display:flex;gap:18px;color:#8f96a1;font-size:9px}
+#series-watch-system .series-progress-meta b{color:#e4d0a6}
+#series-watch-system .series-progress-next{display:grid;align-content:center;gap:5px;min-height:105px;padding-left:21px;border-left:1px solid rgba(255,255,255,.1)}
+#series-watch-system .series-progress-next>span{color:#d4b779;font-size:8px;font-weight:900;letter-spacing:.16em}
+#series-watch-system .series-progress-next strong{color:#f5f5f5;font-size:14px;line-height:1.3}
+#series-watch-system .series-progress-next small{color:#939aa6;font-size:9px}
+#series-watch-system .series-progress-next button{justify-self:start;margin-top:5px;padding:8px 12px;border:0;border-radius:5px;background:var(--sg-gold);color:#171717;font-size:9px;font-weight:900;cursor:pointer}
+#series-watch-system .series-season-complete{color:#b8e2c4!important}
+#series-watch-system .series-episode-library{margin-top:34px}
+#series-watch-system .series-episode-library-head{margin-bottom:17px}
+#series-watch-system .series-episode-filter{display:flex;gap:5px;margin:0;padding:4px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:rgba(255,255,255,.025)}
+#series-watch-system .series-episode-filter button{padding:8px 12px;border:0;border-radius:5px;background:transparent;color:#969daa;font-size:9px;font-weight:850;white-space:nowrap}
+#series-watch-system .series-episode-filter button.is-active{background:rgba(216,181,107,.16);color:#efd69e;box-shadow:inset 0 0 0 1px rgba(216,181,107,.18)}
+#series-watch-system .series-episodes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+#series-watch-system .series-episode-card{min-width:0;overflow:hidden;border:1px solid rgba(255,255,255,.085);border-radius:10px;background:linear-gradient(145deg,#1a1d24,#111319);transition:transform .25s,border-color .25s,box-shadow .25s}
+#series-watch-system .series-episode-card:hover{transform:translateY(-3px);border-color:rgba(216,181,107,.32);box-shadow:0 14px 35px rgba(0,0,0,.22)}
+#series-watch-system .series-episode-art{position:relative;aspect-ratio:16/8.2;overflow:hidden;background:linear-gradient(135deg,#292d36,#111319)}
+#series-watch-system .series-episode-art:after{position:absolute;inset:35% 0 0;content:"";background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
+#series-watch-system .series-episode-art>img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+#series-watch-system .series-episode-card:hover .series-episode-art>img{transform:scale(1.045)}
+#series-watch-system .series-episode-art-empty{display:grid;place-items:center;width:100%;height:100%;color:rgba(216,181,107,.5);font-size:30px}
+#series-watch-system .series-episode-index,#series-watch-system .series-episode-runtime,#series-watch-system .series-episode-watched-flag{position:absolute;z-index:2;bottom:12px;color:#fff;font-size:8px;font-weight:900;letter-spacing:.12em;text-shadow:0 1px 6px #000}
+#series-watch-system .series-episode-index{left:14px}
+#series-watch-system .series-episode-runtime{right:14px}
+#series-watch-system .series-episode-play{position:absolute;z-index:3;top:50%;left:50%;display:grid;place-items:center;width:43px;height:43px;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.65);border-radius:50%;background:rgba(10,12,17,.55);color:#fff;font-size:13px;backdrop-filter:blur(8px);cursor:pointer;transition:background .2s,color .2s,transform .2s}
+#series-watch-system .series-episode-play:hover{transform:translate(-50%,-50%) scale(1.1);background:var(--sg-gold);color:#111}
+#series-watch-system .series-episode-watched-flag{top:12px;right:12px;bottom:auto;padding:6px 8px;border-radius:4px;background:rgba(9,16,12,.8);color:#b8e2c4;text-shadow:none}
+#series-watch-system .series-episode-card-copy{padding:14px 16px 15px}
+#series-watch-system .series-episode-card-meta{display:flex;justify-content:space-between;gap:8px;color:#8e96a3;font-size:8px;font-weight:850;letter-spacing:.1em}
+#series-watch-system .series-episode-card-meta span:first-child{color:#d4b779}
+#series-watch-system .series-episode-card-copy h4{margin:8px 0 6px;color:#f4f4f5;font-size:15px;font-weight:850;letter-spacing:-.02em}
+#series-watch-system .series-episode-card-copy p{display:-webkit-box;min-height:34px;margin:0;color:#a0a6b0;font-size:10px;line-height:1.65;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#series-watch-system .series-episode-mark{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:7px 9px;border:1px solid rgba(255,255,255,.12);border-radius:5px;background:rgba(255,255,255,.035);color:#aeb4bf;font-size:8px;font-weight:850;cursor:pointer}
+#series-watch-system .series-episode-mark.is-watched{border-color:rgba(100,190,130,.24);background:rgba(100,190,130,.07);color:#a7e4bd}
+#series-watch-system .series-empty-new{grid-column:1/-1;display:grid;justify-items:center;gap:8px;padding:48px 20px;border:1px dashed rgba(255,255,255,.13);border-radius:10px;color:#9299a6}
+#series-watch-system .series-empty-new>i{color:var(--sg-gold);font-size:25px}
+#series-watch-system .series-empty-new strong{color:#e7e8eb;font-size:14px}
+#series-watch-system .series-empty-new span{font-size:10px}
+#series-watch-system .series-diary-bottom{position:static;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:30px;margin-top:38px;padding:23px 25px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:linear-gradient(110deg,rgba(216,181,107,.08),rgba(255,255,255,.025) 55%,rgba(255,255,255,.015))}
+#series-watch-system .series-diary-intro h3{margin:7px 0;color:#f4f4f5;font-size:19px;font-weight:850}
+#series-watch-system .series-diary-intro>p{margin:0;color:#9ba2ad;font-size:10px;line-height:1.6}
+#series-watch-system .series-diary-bottom #series-diary-summary{margin-top:17px}
+#series-watch-system .series-diary-fields{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:13px}
+#series-watch-system .series-diary-note{grid-column:1/-1}
+#series-watch-system .series-diary-bottom .series-field-label{display:block;margin:0 0 6px;color:#aeb4bf;font-size:9px;font-weight:850}
+#series-watch-system .series-diary-bottom select,#series-watch-system .series-diary-bottom textarea{width:100%;border:1px solid rgba(255,255,255,.12);border-radius:6px;background:#11141a;color:#e8e9ec;padding:10px;font-size:10px}
+#series-watch-system .series-diary-bottom textarea{min-height:72px;resize:vertical}
+#series-watch-system .series-diary-bottom .series-save-note{display:inline-flex;align-items:center;gap:9px;width:auto;margin-top:8px;padding:9px 13px;border-radius:5px;background:var(--sg-gold);color:#171717;font-size:9px}
+@media(max-width:900px){#series-watch-system .series-season-progress{grid-template-columns:100px minmax(0,1fr)}#series-watch-system .series-progress-next{grid-column:1/-1;grid-template-columns:1fr auto auto;align-items:center;min-height:0;padding:13px 0 0;border-top:1px solid rgba(255,255,255,.1);border-left:0}#series-watch-system .series-progress-next>span{grid-column:1/-1}#series-watch-system .series-progress-next button{margin:0}#series-watch-system .series-diary-bottom{grid-template-columns:1fr}}
+@media(max-width:620px){#series-watch-system{margin-top:34px;padding-bottom:40px}#series-watch-system .series-guide-heading{align-items:flex-start;flex-direction:column;margin-bottom:22px}#series-watch-system .series-guide-heading h2{font-size:32px}#series-watch-system .series-season-toolbar{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}#series-watch-system .series-season-tile{min-height:104px;padding:9px}#series-watch-system .series-season-tile-content strong{font-size:24px}#series-watch-system .series-season-progress{grid-template-columns:74px minmax(0,1fr);gap:13px;padding:15px}#series-watch-system .series-progress-orbit{width:70px;height:70px}#series-watch-system .series-progress-orbit strong{font-size:20px}#series-watch-system .series-progress-details h4{font-size:18px}#series-watch-system .series-progress-details p{font-size:9px}#series-watch-system .series-progress-next{grid-template-columns:1fr auto;gap:5px}#series-watch-system .series-progress-next>span{grid-column:1/-1}#series-watch-system .series-progress-next strong{font-size:12px}#series-watch-system .series-episode-library-head{align-items:flex-start;flex-direction:column}#series-watch-system .series-episodes{grid-template-columns:1fr;gap:12px}#series-watch-system .series-episode-art{aspect-ratio:16/8.5}#series-watch-system .series-episode-card-copy{padding:12px}#series-watch-system .series-episode-card-copy h4{font-size:14px}#series-watch-system .series-diary-bottom{padding:17px;gap:20px}#series-watch-system .series-diary-fields{grid-template-columns:1fr 1fr;gap:10px}}
