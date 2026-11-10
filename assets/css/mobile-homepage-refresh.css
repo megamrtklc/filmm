@@ -407,3 +407,33 @@
   html:not(.perde-mobile-refresh-active) #dashboard-view #collection-popular,
   html:not(.perde-mobile-refresh-active) #dashboard-view #collection-newest{display:none!important}
 }
+
+
+/* Mobile polish: keep poster labels clear of IMDb ratings and unify the page canvas. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active body#theme-body{
+    background:#111d2c!important;
+    color:#D9E5F2!important;
+  }
+  html.perde-mobile-refresh-active body#theme-body .homepage-main{
+    background:linear-gradient(180deg,#182333 0%,#142132 48%,#111d2c 100%)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view .mobile-home-poster-card .collection-poster-wrap{
+    background:#26374B!important;
+    box-shadow:0 7px 18px rgba(0,0,0,.22)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view .mobile-home-poster-badge{
+    top:7px!important;
+    right:7px!important;
+    left:auto!important;
+    z-index:3!important;
+    max-width:calc(100% - 14px)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view .mobile-home-poster-card .collection-rating{
+    top:7px!important;
+    right:auto!important;
+    bottom:auto!important;
+    left:7px!important;
+    z-index:3!important;
+  }
+}
