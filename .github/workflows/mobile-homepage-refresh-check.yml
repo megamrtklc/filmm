@@ -86,6 +86,9 @@ jobs:
           for (const char of css) { if (char === '{') depth++; if (char === '}') depth--; assert.ok(depth >= 0, 'Unexpected CSS closing brace'); }
           assert.equal(depth, 0, 'CSS braces are unbalanced');
           assert.ok(css.includes('html.perde-mobile-refresh-active'), 'Mobile CSS activation gate missing');
+          assert.match(css, /mobile-home-poster-badge[\\s\\S]*?right:7px!important/, 'Poster badge must sit on the right');
+          assert.match(css, /mobile-home-poster-card \\.collection-rating[\\s\\S]*?left:7px!important/, 'IMDb rating must remain on the left');
+          assert.match(css, /background:#111d2c!important/, 'Mobile Midnight Blue page background missing');
           assert.ok(css.includes('personalized-editorial-support .personalized-editorial-card:nth-child(n+3)'), 'Mobile editorial supporting posters must be limited to two');
           assert.ok(css.includes('grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)'), 'Mobile editorial lead/support layout missing');
           assert.ok(css.includes('#182333') && css.includes('#26374B') && css.includes('#40536A') && css.includes('#D9E5F2') && css.includes('#72A7D8'), 'Approved Midnight Blue palette missing');
