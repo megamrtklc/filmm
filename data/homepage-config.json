@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-10T16:26:35.003Z",
+  "updatedAt": "2026-11-10T16:27:50.158Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 6,
@@ -11,6 +11,12 @@
   "heroSlides": [
     {
       "id": "perde-mwawc4g1",
+      "active": true,
+      "headline": "",
+      "description": ""
+    },
+    {
+      "id": "perde-mwawheyh",
       "active": true,
       "headline": "",
       "description": ""
