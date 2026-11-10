@@ -59,7 +59,7 @@ jobs:
           const css = fs.readFileSync('assets/css/mobile-homepage-refresh.css', 'utf8');
           const js = fs.readFileSync('assets/js/mobile-homepage-refresh.js', 'utf8');
           const responsive = fs.readFileSync('assets/js/responsive-mode.js', 'utf8');
-          assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-mobile-refresh-v7/, 'Mobile CSS cache version missing');
+          assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-mobile-refresh-v8/, 'Mobile CSS cache version missing');
           assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v5/, 'Mobile JS cache version missing');
           assert.match(html, /id="mobile-drawer" role="dialog"/, 'Drawer dialog semantics missing');
           assert.match(html, /id="collection-popular"/, 'Popular mobile home rail missing');
