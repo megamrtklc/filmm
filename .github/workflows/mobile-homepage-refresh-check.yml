@@ -31,6 +31,22 @@ jobs:
           node --check assets/js/mobile-homepage-refresh.js
           node --check assets/js/mobile-bottom-nav.js
           node --check assets/js/responsive-mode.js
+      - name: Install Chromium for browser checks
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run browser emulation checks
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/perde-http.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/mobile-homepage-refresh-browser.mjs
+
       - name: Validate mobile refresh integration
         run: |
           node <<'NODE'
