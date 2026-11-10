@@ -201,8 +201,9 @@
     if (legacyEpisodes) legacyEpisodes.hidden = item.type === 'tv';
     if (item.type !== 'tv') return;
     const entry = getEntry(item);
-    $('series-status').value = entry.status || 'watching';
-                renderDiarySummary(item);
+    const statusControl = $('series-status');
+    if (statusControl) statusControl.value = entry.status || 'watching';
+    renderDiarySummary(item);
     $('series-episodes').innerHTML = '<div class="series-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Sezon ve bölümler getiriliyor…</div>';
 
     try {
