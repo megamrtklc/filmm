@@ -130,8 +130,8 @@
         <a href="#/diziler"><i class="fa-solid fa-tv"></i>Diziler</a>
         <a href="#/kesfet"><i class="fa-solid fa-compass"></i>Keşfet</a>
         <a href="#/listem"><i class="fa-solid fa-bookmark"></i>İzleme Listem</a>
-        <button type="button" onclick="showProfileNotice()"><i class="fa-regular fa-user"></i>Profilim</button>
-        <button type="button" onclick="showSettingsNotice()"><i class="fa-solid fa-gear"></i>Ayarlar</button>
+        <button type="button" onclick="toggleHeaderMenu('user-menu')"><i class="fa-regular fa-user"></i>Profilim</button>
+        <button type="button" onclick="toggleHeaderMenu('user-menu')"><i class="fa-solid fa-gear"></i>Ayarlar ve hesap</button>
         <div class="drawer-divider"></div>
         <a href="#/kategoriler"><i class="fa-solid fa-layer-group"></i>Kategoriler</a>
         <a href="#/fragmanlar"><i class="fa-solid fa-circle-play"></i>Fragmanlar</a>
@@ -143,7 +143,7 @@
         <a href="#/filmler" class="mobile-nav-item" data-mobile-route="filmler" aria-label="Filmler"><i class="fa-solid fa-film" aria-hidden="true"></i><span>Filmler</span></a>
         <a href="#/kesfet" class="mobile-nav-item" data-mobile-route="kesfet" aria-label="Keşfet"><i class="fa-solid fa-compass" aria-hidden="true"></i><span>Keşfet</span></a>
         <a href="#/listem" class="mobile-nav-item" data-mobile-route="listem" aria-label="Listem"><i class="fa-solid fa-bookmark" aria-hidden="true"></i><span>Listem</span></a>
-        <button type="button" class="mobile-nav-item" aria-label="Profil" onclick="showProfileNotice()"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Profil</span></button>
+        <button type="button" class="mobile-nav-item" aria-label="Profil" onclick="toggleHeaderMenu('user-menu')"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Profil</span></button>
     </nav>
 
         <div class="mobile-category-panel" id="mobile-category-panel" hidden aria-label="Film ve dizi kategorileri">
