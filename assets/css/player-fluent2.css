@@ -676,28 +676,29 @@
   #player-modal .ny7-player-main-column {
     position: relative;
     isolation: isolate;
+    overflow: visible;
   }
   #player-modal .ny7-player-main-column::before {
     content: "";
     position: absolute;
-    z-index: -1;
-    top: -22px;
-    right: -24px;
-    left: -24px;
-    aspect-ratio: 16 / 9;
-    border-radius: 28px;
+    z-index: 0;
+    top: -24px;
+    right: -28px;
+    bottom: 58px;
+    left: -28px;
+    border-radius: 30px;
     pointer-events: none;
     opacity: 0;
-    filter: blur(34px) saturate(1.2);
+    filter: blur(42px) saturate(1.35);
     background:
-      radial-gradient(ellipse at 4% 8%, var(--ambilight-one, transparent) 0%, transparent 48%),
-      radial-gradient(ellipse at 96% 8%, var(--ambilight-two, transparent) 0%, transparent 48%),
-      radial-gradient(ellipse at 5% 94%, var(--ambilight-three, transparent) 0%, transparent 48%),
-      radial-gradient(ellipse at 96% 94%, var(--ambilight-four, transparent) 0%, transparent 48%);
-    transition: opacity .45s ease, filter .45s ease;
+      radial-gradient(ellipse at 3% 5%, var(--ambilight-one, transparent) 0%, transparent 54%),
+      radial-gradient(ellipse at 97% 5%, var(--ambilight-two, transparent) 0%, transparent 54%),
+      radial-gradient(ellipse at 3% 95%, var(--ambilight-three, transparent) 0%, transparent 54%),
+      radial-gradient(ellipse at 97% 95%, var(--ambilight-four, transparent) 0%, transparent 54%);
+    transition: opacity .5s ease, filter .5s ease;
   }
   #player-modal .ny7-player-main-column[data-ambilight="ready"]::before {
-    opacity: .78;
+    opacity: .96;
   }
   #player-modal .ny7-player-stage {
     position: relative;

@@ -120,7 +120,8 @@
   }
 
   function refresh() {
-    const source = poster.currentSrc || poster.src || '';
+    const declaredSource = poster.getAttribute('src') || '';
+    const source = poster.currentSrc || declaredSource;
     if (!source || source === lastSource) return;
     lastSource = source;
     const id = ++requestId;
