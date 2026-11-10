@@ -1,5 +1,7 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+fs.mkdirSync('artifacts', { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
 const baseURL = process.env.PERDE_TEST_URL || 'http://127.0.0.1:4173/';
@@ -39,6 +41,7 @@ try {
     isMobile: true, hasTouch: true
   }, true);
 
+  await phone.page.screenshot({ path: 'artifacts/phone-portrait.png' });
   const trigger = phone.page.locator('[data-mobile-drawer-open]').first();
   await trigger.waitFor({ state: 'visible' });
   await trigger.click();
@@ -60,11 +63,15 @@ try {
     isMobile: true, hasTouch: true
   }, true);
 
+  await phoneLandscape.page.screenshot({ path: 'artifacts/phone-landscape.png' });
+
   const desktopMode = await loadAndCheck('phone with desktop site requested', {
     viewport: { width: 980, height: 844 },
     screen: { width: 390, height: 844 },
     isMobile: true, hasTouch: true
   }, false);
+
+  await desktopMode.page.screenshot({ path: 'artifacts/phone-desktop-site-mode.png' });
 
   const tablet = await loadAndCheck('tablet touch viewport', {
     viewport: { width: 1024, height: 1366 },
@@ -79,11 +86,14 @@ try {
     userAgent: 'Mozilla/5.0 (SMART-TV; Linux; Tizen 6.5) AppleWebKit/537.36 TV Safari/537.36'
   }, false);
   assert.equal(tv.state.tv, true);
+  await tv.page.screenshot({ path: 'artifacts/smart-tv.png' });
 
   const desktop = await loadAndCheck('desktop browser', {
     viewport: { width: 1440, height: 900 },
     screen: { width: 1440, height: 900 }
   }, false);
+
+  await desktop.page.screenshot({ path: 'artifacts/desktop.png' });
 
   console.log('Browser checks passed: phone portrait, phone landscape, drawer open/close, desktop-site mode, tablet, smart TV, desktop.');
   await Promise.all([phone.context.close(), phoneLandscape.context.close(), desktopMode.context.close(), tablet.context.close(), tv.context.close(), desktop.context.close()]);
