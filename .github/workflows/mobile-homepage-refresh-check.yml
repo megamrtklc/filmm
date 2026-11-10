@@ -28,6 +28,7 @@ jobs:
           node-version: 20
       - name: Check JavaScript syntax
         run: |
+          node --check assets/js/bundle.js
           node --check assets/js/mobile-homepage-refresh.js
           node --check assets/js/mobile-bottom-nav.js
           node --check assets/js/responsive-mode.js
@@ -59,6 +60,11 @@ jobs:
           assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-mobile-refresh-v5/, 'Mobile CSS cache version missing');
           assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v5/, 'Mobile JS cache version missing');
           assert.match(html, /id="mobile-drawer" role="dialog"/, 'Drawer dialog semantics missing');
+          assert.match(html, /id="collection-popular"/, 'Popular mobile home rail missing');
+          assert.match(html, /id="collection-newest"/, 'Newest mobile home rail missing');
+          assert.match(html, /data-mobile-filter="movie"/, 'Mobile home rail movie filter missing');
+          assert.match(html, /data-mobile-filter="tv"/, 'Mobile home rail series filter missing');
+          assert.match(html, /bundle\.js\?v=20261110-mobile-home-rails-v2/, 'Mobile home rail script cache version missing');
           assert.match(html, /onclick="showProfileNotice\(\)"/, 'Profile action missing');
           assert.match(html, /onclick="showSettingsNotice\(\)"/, 'Settings action missing');
           assert.match(js, /perde-phone-device/, 'Physical phone class gate missing');
