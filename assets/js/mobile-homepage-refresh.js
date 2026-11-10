@@ -5,7 +5,7 @@
  var header=document.querySelector('.site-header'), dock=document.querySelector('.mobile-bottom-nav');
  var drawer=document.getElementById('mobile-drawer'), backdrop=document.getElementById('mobile-drawer-backdrop');
  function menuTrigger(){return document.querySelector('[data-mobile-drawer-open]');}
- var lastY=window.scrollY||0, ticking=false, hidden=false, lastFocus=null;
+ var lastY=window.scrollY||0, ticking=false, hidden=false, lastFocus=null, previousBodyOverflow='';
  function phone(){var root=document.documentElement;var screenWidth=window.screen&&window.screen.width||0;var viewportWidth=Math.max(window.innerWidth||0,root.clientWidth||0);var desktopRequested=screenWidth>0&&viewportWidth>screenWidth+48;return mq.matches && root.classList.contains('perde-phone-device') && !desktopRequested && !root.classList.contains('perde-touch-compact') && !root.classList.contains('perde-tv-wide');}
  function syncMode(){document.documentElement.classList.toggle('perde-mobile-refresh-active',phone());if(!phone()){chrome(false);close();}}
  function chrome(hide){if(!phone()||!header||!dock)return;hidden=hide;header.classList.toggle('is-scroll-hidden',hide);dock.classList.toggle('is-scroll-hidden',hide);}
@@ -16,12 +16,11 @@
   drawer.classList.remove('is-open');backdrop.classList.remove('is-open');
   drawer.setAttribute('aria-hidden','true');drawer.removeAttribute('aria-modal');
   var trigger=menuTrigger();if(trigger)trigger.setAttribute('aria-expanded','false');
-  document.body.style.overflow='';
-  if(wasOpen&&lastFocus&&typeof lastFocus.focus==='function')lastFocus.focus();
+  if(wasOpen){document.body.style.overflow=previousBodyOverflow;if(lastFocus&&typeof lastFocus.focus==='function')lastFocus.focus();}
  }
  function open(){
   if(!phone()||!drawer||!backdrop)return;
-  chrome(false);lastFocus=document.activeElement;
+  chrome(false);lastFocus=document.activeElement;previousBodyOverflow=document.body.style.overflow;
   drawer.classList.add('is-open');backdrop.classList.add('is-open');
   drawer.setAttribute('aria-hidden','false');drawer.setAttribute('aria-modal','true');
   var trigger=menuTrigger();if(trigger)trigger.setAttribute('aria-expanded','true');
