@@ -440,3 +440,22 @@
   #player-modal *::before,
   #player-modal *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+@media screen and (min-width: 1024px) and (max-width: 1240px) {
+  #player-modal .ny7-player-control-row { flex-wrap: wrap; }
+  #player-modal .ny7-player-control-right {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+}
+@media screen and (min-width: 1024px) {
+  #player-modal .ny7-player-select:focus-visible,
+  #player-modal #player-speed:focus-visible,
+  #player-modal .ny7-player-settings select:focus-visible,
+  #player-modal .ny7-player-settings input:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
