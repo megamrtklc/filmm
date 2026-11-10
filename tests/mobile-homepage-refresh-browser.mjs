@@ -119,6 +119,18 @@ try {
     );
   });
   assert.equal(mobileSectionOrder, true, 'phone: homepage sections should follow Popular → Continue → Newest → discovery order');
+  const discoveryLayout = await phone.page.evaluate(() => {
+    const explore = document.querySelector('#daily-pick-section');
+    const personalized = document.querySelector('#collection-personalized');
+    if (!explore || !personalized) return null;
+    const a = explore.getBoundingClientRect();
+    const b = personalized.getBoundingClientRect();
+    return { explore: { x:a.x, y:a.y, width:a.width, height:a.height }, personalized: { x:b.x, y:b.y, width:b.width, height:b.height } };
+  });
+  assert.ok(discoveryLayout, 'phone: discovery cards should exist');
+  assert.ok(discoveryLayout.personalized.y >= discoveryLayout.explore.y + discoveryLayout.explore.height - 1, 'phone: personalized card must be below the Explore card, not beside it');
+  assert.ok(Math.abs(discoveryLayout.personalized.width - discoveryLayout.explore.width) <= 2, 'phone: discovery cards should use the same full width');
+
   const trigger = phone.page.locator('[data-mobile-drawer-open]').first();
   await trigger.waitFor({ state: 'visible' });
   await trigger.click();
