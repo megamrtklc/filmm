@@ -32,7 +32,7 @@
   html.perde-mobile-refresh-active .mobile-drawer-links i{width:19px;color:#e7bd55;text-align:center}
   html.perde-mobile-refresh-active .mobile-drawer-links .drawer-divider{height:1px;min-height:1px;margin:10px 2px;border:0;background:rgba(255,255,255,.1)}
 }
-@media (min-width:768px){.mobile-drawer-backdrop,.mobile-drawer,.mobile-header-menu-trigger{display:none!important}}
+@media (min-width:768px){html:not(.perde-mobile-refresh-active) .mobile-drawer-backdrop,html:not(.perde-mobile-refresh-active) .mobile-drawer,html:not(.perde-mobile-refresh-active) .mobile-header-menu-trigger{display:none!important}}
 
 
 /* Mobile catalogue rails: three cinematic posters in the viewport. */
