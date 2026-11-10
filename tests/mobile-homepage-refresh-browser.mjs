@@ -43,6 +43,24 @@ try {
   }, true);
 
   assert.equal(await phone.page.locator('.mobile-bottom-nav').isVisible(), true, 'phone portrait: bottom navigation should be visible');
+  const touchTargets = [
+    ['menu trigger', phone.page.locator('[data-mobile-drawer-open]').first()],
+    ['profile button', phone.page.locator('.site-header .user-trigger').first()],
+    ['search input', phone.page.locator('.site-header #search-input')],
+    ['drawer close', phone.page.locator('.mobile-drawer-close')]
+  ];
+  for (const [name, locator] of touchTargets) {
+    const box = await locator.boundingBox();
+    assert.ok(box && box.width >= 44 && box.height >= 44, 'phone: ' + name + ' touch target must be at least 44x44 CSS px');
+  }
+  await phone.page.emulateMedia({ reducedMotion: 'reduce' });
+  const touchMenuTrigger = phone.page.locator('[data-mobile-drawer-open]').first();
+  await touchMenuTrigger.waitFor({ state: 'visible' });
+  await touchMenuTrigger.click();
+  const reducedMotionDuration = await phone.page.locator('#mobile-drawer').evaluate(el => getComputedStyle(el).transitionDuration);
+  assert.ok(reducedMotionDuration.split(',').every(value => parseFloat(value) <= 0.001), 'reduced motion: drawer transition should be effectively disabled');
+  await phone.page.keyboard.press('Escape');
+  await phone.page.emulateMedia({ reducedMotion: 'no-preference' });
   await phone.page.screenshot({ path: 'artifacts/phone-portrait.png' });
 
   // Verify the approved mobile homepage rails render, scroll horizontally, and filter correctly.
