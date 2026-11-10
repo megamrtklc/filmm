@@ -91,6 +91,8 @@ try {
     userAgent: 'Mozilla/5.0 (SMART-TV; Linux; Tizen 6.5) AppleWebKit/537.36 TV Safari/537.36'
   }, false);
   assert.equal(tv.state.tv, true);
+  const tvHeroBox = await tv.page.locator('#dashboard-view .home-feature-row #hero-section').boundingBox();
+  assert.ok(tvHeroBox && tvHeroBox.width >= 1800, 'smart TV: homepage hero must use the full desktop canvas');
   await tv.page.screenshot({ path: 'artifacts/smart-tv.png' });
 
   const desktop = await loadAndCheck('desktop browser', {
