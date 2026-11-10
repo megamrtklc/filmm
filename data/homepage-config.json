@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-10T16:27:50.158Z",
+  "updatedAt": "2026-11-10T18:00:35.640Z",
   "settings": {
     "desktopCount": 10,
     "mobileCount": 6,
@@ -93,5 +93,74 @@
       "headline": "",
       "description": ""
     }
-  ]
+  ],
+  "homeRails": {
+    "order": [
+      "featured",
+      "movies",
+      "series"
+    ],
+    "featured": {
+      "title": "Murat",
+      "active": true,
+      "displayCount": 5,
+      "itemIds": [
+        "archive-26",
+        "archive-103",
+        "archive-124",
+        "archive-99",
+        "archive-125"
+      ]
+    },
+    "movies": {
+      "title": "KILIÇ",
+      "active": true,
+      "displayCount": 12,
+      "itemIds": [
+        "archive-124",
+        "archive-99",
+        "archive-125",
+        "archive-110",
+        "archive-27",
+        "archive-49",
+        "archive-57",
+        "archive-112",
+        "archive-106",
+        "perde-mw5zzv1n",
+        "archive-50",
+        "archive-59"
+      ]
+    },
+    "series": {
+      "title": "Diziler04",
+      "active": true,
+      "displayCount": 12,
+      "itemIds": [
+        "archive-26",
+        "archive-103",
+        "archive-25",
+        "archive-30",
+        "archive-102",
+        "archive-21",
+        "archive-78",
+        "archive-83",
+        "archive-29",
+        "archive-33",
+        "archive-79",
+        "archive-85"
+      ]
+    },
+    "personalized": {
+      "title": "Senin İçin Seçtiklerimiz",
+      "active": true,
+      "displayCount": 5,
+      "itemIds": [
+        "archive-26",
+        "archive-103",
+        "archive-124",
+        "archive-99",
+        "archive-125"
+      ]
+    }
+  }
 }
