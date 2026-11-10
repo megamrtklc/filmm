@@ -54,8 +54,9 @@ try {
     assert.ok(box && box.width >= 44 && box.height >= 44, 'phone: ' + name + ' touch target must be at least 44x44 CSS px');
   }
   await phone.page.emulateMedia({ reducedMotion: 'reduce' });
-  await trigger.waitFor({ state: 'visible' });
-  await trigger.click();
+  const touchMenuTrigger = phone.page.locator('[data-mobile-drawer-open]').first();
+  await touchMenuTrigger.waitFor({ state: 'visible' });
+  await touchMenuTrigger.click();
   const reducedMotionDuration = await phone.page.locator('#mobile-drawer').evaluate(el => getComputedStyle(el).transitionDuration);
   assert.ok(reducedMotionDuration.split(',').every(value => parseFloat(value) <= 0.001), 'reduced motion: drawer transition should be effectively disabled');
   await phone.page.keyboard.press('Escape');
