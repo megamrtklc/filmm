@@ -150,3 +150,97 @@
     overscroll-behavior-x:contain!important;
   }
 }
+
+
+/* Approved mobile editorial composition: one lead poster + two supporting posters.
+   Preserve the existing mobile hero, desktop layout and the ranking numerals. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized{
+    background:linear-gradient(145deg,#26374B,#182333 82%)!important;
+    border:0!important;
+    border-radius:14px!important;
+    box-shadow:0 7px 18px rgba(0,0,0,.18)!important;
+    color:#D9E5F2!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .collection-heading{
+    border:0!important;
+    padding:0 0 8px!important;
+    margin:0 0 9px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .collection-heading h2{
+    color:#D9E5F2!important;
+    font-size:15px!important;
+    font-weight:750!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-rail{
+    display:grid!important;
+    grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;
+    grid-template-rows:minmax(190px,1fr)!important;
+    gap:8px!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card.is-featured{
+    height:100%!important;
+    min-height:190px!important;
+    border:0!important;
+    border-radius:9px!important;
+    box-shadow:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-support{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card.is-supporting{
+    display:block!important;
+    height:100%!important;
+    min-height:0!important;
+    border:0!important;
+    border-radius:9px!important;
+    box-shadow:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-support .personalized-editorial-card:nth-child(n+3){
+    display:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-content h3{
+    color:#D9E5F2!important;
+    font-size:11px!important;
+    line-height:1.2!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-type{
+    color:#72A7D8!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-rating{
+    color:#D9E5F2!important;
+    background:rgba(24,35,51,.82)!important;
+    border:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured{
+    background:linear-gradient(145deg,#26374B,#182333 82%)!important;
+    border:0!important;
+    border-radius:14px!important;
+    box-shadow:0 7px 18px rgba(0,0,0,.18)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-heading h2{
+    color:#D9E5F2!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-eyebrow{
+    color:#72A7D8!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card{
+    background:#26374B!important;
+    border:0!important;
+    border-radius:9px!important;
+    box-shadow:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy h3{
+    color:#D9E5F2!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy p{
+    color:#9FB4CB!important;
+  }
+}
