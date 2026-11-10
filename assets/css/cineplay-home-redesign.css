@@ -1,0 +1,302 @@
+/* PERDE — Cineplay-inspired homepage rebuilt as a standalone visual system.
+   New visual layer; existing catalog data, routes and playback actions remain untouched. */
+#dashboard-view{
+  --cp-bg:#111110;--cp-panel:#1b1b1a;--cp-panel-2:#242322;--cp-text:#f2f0eb;
+  --cp-muted:#a7a5a0;--cp-soft:#777773;--cp-line:rgba(235,231,222,.12);
+  --cp-accent:#fa373f;--cp-sand:#d8915f;--cp-blue:#8dafba;--cp-gold:#f0d581;
+  background:var(--cp-bg)!important;color:var(--cp-text)!important;
+  font-family:Inter,Arial,sans-serif!important;gap:0!important;
+}
+#dashboard-view *{box-sizing:border-box}
+#dashboard-view .home-feature-row,
+#dashboard-view .home-mood-continue-row,
+#dashboard-view .homepage-main{width:100%;min-width:0;max-width:100%}
+
+/* Header: compact, flat and independent from the hero artwork. */
+body#theme-body>.site-header,.site-header{
+  position:relative!important;inset:auto!important;z-index:120!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:28px!important;width:100%!important;height:68px!important;min-height:68px!important;
+  padding:0 clamp(20px,4vw,64px)!important;margin:0!important;
+  background:#171716!important;border:0!important;border-bottom:1px solid var(--cp-line)!important;
+  border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;
+}
+.site-header .header-topline{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:22px!important;flex:1 1 auto!important;min-width:0!important}
+.site-header .perde-brand-word{font-size:23px!important;font-weight:850!important;letter-spacing:-1.1px!important;color:#f5f2eb!important}
+.site-header .perde-brand-word span{color:var(--cp-accent)!important}
+.site-header .perde-brand-symbol{color:var(--cp-accent)!important}
+.site-header .header-actions{display:flex!important;align-items:center!important;gap:14px!important}
+.site-header .glass-search,.site-header .search-wrap{height:36px!important;min-height:36px!important;border:1px solid var(--cp-line)!important;border-radius:4px!important;background:#20201f!important;box-shadow:none!important}
+.site-header .glass-search>i{color:var(--cp-muted)!important}
+.site-header #search-input{font-size:11px!important;color:var(--cp-text)!important}
+.site-header .user-trigger{border:1px solid var(--cp-line)!important;border-radius:50%!important;box-shadow:none!important}
+.site-header .main-nav{display:flex!important;align-items:center!important;justify-content:center!important;gap:clamp(16px,2.3vw,34px)!important;order:0!important;flex:0 1 auto!important;width:auto!important;min-width:0!important;padding:0!important;overflow:visible!important}
+.site-header .main-nav a,.site-header .main-nav .nav-trigger{font-size:11px!important;font-weight:600!important;color:#c5c2bb!important;white-space:nowrap!important;transition:color .2s ease!important}
+.site-header .main-nav a:hover,.site-header .main-nav .nav-trigger:hover,.site-header .main-nav a.active{color:#fff!important}
+.site-header .main-nav a:after{display:none!important}
+
+/* Spotlight stage: muted full-bleed backdrop, one poster and one clear information column. */
+#dashboard-view .home-feature-row{
+  display:block!important;padding:0!important;margin:0!important;background:#111110!important;
+}
+#dashboard-view #hero-section.hero-section{
+  position:relative!important;display:block!important;width:100%!important;
+  height:clamp(430px,48vw,570px)!important;min-height:0!important;max-height:570px!important;
+  padding:0!important;margin:0!important;overflow:hidden!important;border:0!important;border-radius:0!important;
+  background:#171716!important;isolation:isolate!important;
+}
+#dashboard-view #hero-section>.absolute.inset-0{position:absolute!important;inset:0!important;z-index:-2!important;overflow:hidden!important}
+#dashboard-view #hero-section #hero-bg{
+  width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 35%!important;
+  opacity:.34!important;filter:blur(2px) saturate(.62)!important;transform:scale(1.045)!important;
+}
+#dashboard-view #hero-section .hero-vignette{
+  position:absolute!important;inset:0!important;z-index:0!important;
+  background:linear-gradient(90deg,rgba(17,17,16,.94),rgba(17,17,16,.68) 48%,rgba(17,17,16,.88)),
+    linear-gradient(0deg,#111110 0%,rgba(17,17,16,.08) 52%,rgba(17,17,16,.3) 100%)!important;
+}
+#dashboard-view #hero-section .hero-layout{
+  position:relative!important;z-index:2!important;display:grid!important;
+  grid-template-columns:190px minmax(0,660px)!important;grid-template-rows:58px 1fr!important;
+  align-items:center!important;justify-content:center!important;column-gap:38px!important;
+  width:min(100% - 64px,970px)!important;height:100%!important;min-height:0!important;
+  margin:0 auto!important;padding:28px 0 34px!important;
+}
+#dashboard-view #hero-section .hero-topbar{
+  grid-column:1/-1!important;grid-row:1!important;display:flex!important;align-items:center!important;
+  justify-content:space-between!important;gap:18px!important;width:100%!important;margin:0!important;
+}
+#dashboard-view #hero-section .hero-kicker{
+  color:#d8bca9!important;font-size:9px!important;letter-spacing:.18em!important;font-weight:800!important;
+}
+#dashboard-view #hero-section .hero-actions{display:flex!important;align-items:center!important;gap:8px!important}
+#dashboard-view #hero-section .hero-ratings{display:flex!important;gap:6px!important}
+#dashboard-view #hero-section .hero-rating-badge{border-radius:3px!important;padding:5px 8px!important;background:rgba(0,0,0,.3)!important;border:1px solid var(--cp-line)!important}
+#dashboard-view #hero-section .hero-rating-badge.imdb b{color:var(--cp-gold)!important}
+#dashboard-view #hero-section .hero-actions button{
+  min-height:34px!important;padding:0 13px!important;border-radius:3px!important;
+  font-size:10px!important;font-weight:750!important;letter-spacing:.01em!important;
+  background:#242423!important;border:1px solid var(--cp-line)!important;color:#f4f1eb!important;
+  box-shadow:none!important;transition:background .2s ease,border-color .2s ease!important;
+}
+#dashboard-view #hero-section #hero-watch-btn{background:var(--cp-accent)!important;border-color:var(--cp-accent)!important;color:white!important}
+#dashboard-view #hero-section .hero-actions button:hover{background:#373533!important}
+#dashboard-view #hero-section .hero-copy{
+  grid-column:2!important;grid-row:2!important;align-self:center!important;
+  width:100%!important;max-width:660px!important;margin:0!important;padding:0!important;
+}
+#dashboard-view #hero-section .hero-copy h1{
+  max-width:100%!important;margin:0 0 13px!important;color:#f5f2ec!important;
+  font-size:clamp(30px,4.2vw,54px)!important;font-weight:800!important;line-height:1.02!important;
+  letter-spacing:-.045em!important;text-transform:uppercase!important;text-shadow:none!important;
+}
+#dashboard-view #hero-section #hero-meta{
+  display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:7px!important;
+  margin:0 0 14px!important;color:#c1bdb5!important;font-size:10px!important;line-height:1.5!important;
+}
+#dashboard-view #hero-section #hero-meta .hero-meta-separator{color:#77736e!important}
+#dashboard-view #hero-section #hero-meta .hero-meta-item{display:inline-flex!important;align-items:center!important;gap:5px!important}
+#dashboard-view #hero-section #hero-meta .hero-meta-item i{color:var(--cp-sand)!important}
+#dashboard-view #hero-section #hero-desc{
+  max-width:570px!important;margin:0!important;color:#c0bdb7!important;
+  font-size:12px!important;line-height:1.75!important;font-weight:400!important;
+  display:-webkit-box!important;-webkit-line-clamp:4!important;-webkit-box-orient:vertical!important;overflow:hidden!important;
+}
+#dashboard-view #hero-section .hero-poster-zone{
+  grid-column:1!important;grid-row:2!important;position:relative!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;width:190px!important;height:100%!important;
+  min-height:0!important;overflow:visible!important;
+}
+#dashboard-view #hero-section .hero-thumbnails{
+  position:relative!important;inset:auto!important;display:flex!important;align-items:center!important;
+  justify-content:center!important;width:100%!important;height:100%!important;max-height:300px!important;
+  padding:0!important;margin:0!important;overflow:visible!important;gap:0!important;
+  scroll-snap-type:none!important;background:transparent!important;
+}
+#dashboard-view #hero-section .hero-thumb{
+  display:none!important;position:relative!important;flex:0 0 174px!important;width:174px!important;
+  height:260px!important;min-width:174px!important;max-width:174px!important;
+  border:1px solid rgba(255,255,255,.22)!important;border-radius:3px!important;
+  background:#242322!important;opacity:1!important;transform:none!important;box-shadow:0 22px 55px rgba(0,0,0,.42)!important;
+}
+#dashboard-view #hero-section .hero-thumb.active{display:block!important}
+#dashboard-view #hero-section .hero-thumb img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+#dashboard-view #hero-section .hero-thumb:after{background:linear-gradient(0deg,rgba(0,0,0,.62),transparent 35%)!important}
+#dashboard-view #hero-section .hero-thumb span{font-size:10px!important;left:10px!important;right:10px!important;bottom:10px!important}
+#dashboard-view #hero-section .hero-thumb.active:before{display:none!important}
+#dashboard-view #hero-section .hero-arrows{
+  position:absolute!important;top:50%!important;left:-20px!important;right:-20px!important;bottom:auto!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  transform:translateY(-50%)!important;pointer-events:none!important;
+}
+#dashboard-view #hero-section .hero-arrow{
+  display:grid!important;place-items:center!important;width:34px!important;height:34px!important;
+  border-radius:50%!important;border:1px solid rgba(255,255,255,.28)!important;
+  background:rgba(25,25,24,.82)!important;color:#eee!important;pointer-events:auto!important;
+}
+#dashboard-view #hero-section .hero-arrow:hover{background:var(--cp-accent)!important;border-color:var(--cp-accent)!important}
+
+/* Mobile-only duplicate spotlight is intentionally disabled; the same hero adapts responsively. */
+#dashboard-view #mobile-hero-section{display:none!important}
+
+/* Lower content: clean poster shelves and generous breathing room. */
+#dashboard-view .home-mood-continue-row{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:22px!important;align-items:stretch!important;padding:26px clamp(20px,4vw,64px) 0!important;
+  background:#111110!important;
+}
+#dashboard-view #daily-pick-section.mood-discovery-hero{width:100%!important;max-width:none!important;margin:0!important}
+#dashboard-view #daily-pick-section .mood-discovery-result{
+  min-height:230px!important;height:100%!important;border:1px solid var(--cp-line)!important;
+  border-radius:4px!important;background:#1b1b1a!important;box-shadow:none!important;
+}
+#dashboard-view #collection-personalized{margin:0!important;min-width:0!important}
+#dashboard-view .homepage-main{
+  display:flex!important;flex-direction:column!important;gap:34px!important;
+  padding:30px clamp(20px,4vw,64px) 58px!important;margin:0!important;
+  background:#111110!important;
+}
+#dashboard-view .homepage-section-heading,#dashboard-view .collection-heading{
+  display:flex!important;align-items:flex-end!important;justify-content:space-between!important;
+  gap:16px!important;margin:0 0 14px!important;padding:0!important;
+}
+#dashboard-view .homepage-section-heading h2,#dashboard-view .collection-heading h2{
+  color:#f1eee8!important;font-size:19px!important;font-weight:750!important;
+  line-height:1.2!important;letter-spacing:-.025em!important;
+}
+#dashboard-view .homepage-section-heading p:not(.homepage-eyebrow){color:var(--cp-muted)!important;font-size:10px!important}
+#dashboard-view .homepage-eyebrow,#dashboard-view .collection-eyebrow{
+  color:#b98e73!important;font-size:8px!important;font-weight:800!important;letter-spacing:.2em!important;
+  margin:0 0 6px!important;
+}
+#dashboard-view .collection-section{min-width:0!important;margin:0!important;padding:0!important}
+#dashboard-view .collection-rail,#dashboard-view .saved-collection-rail,
+#dashboard-view .featured-number-rail,#dashboard-view .continue-watching-rail{
+  display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;
+  gap:14px!important;width:100%!important;min-width:0!important;max-width:100%!important;
+  overflow-x:auto!important;overflow-y:hidden!important;padding:3px 2px 14px!important;
+  scroll-snap-type:x mandatory!important;scrollbar-width:thin!important;
+  scrollbar-color:rgba(216,145,95,.42) transparent!important;overscroll-behavior-x:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+#dashboard-view .collection-rail>*,
+#dashboard-view .saved-collection-rail>*,
+#dashboard-view .featured-number-rail>*{
+  flex:0 0 clamp(126px,13.2vw,174px)!important;width:clamp(126px,13.2vw,174px)!important;
+  min-width:0!important;scroll-snap-align:start!important;
+}
+#dashboard-view .collection-rail .movie-card,
+#dashboard-view .collection-rail .media-card{
+  border:0!important;border-radius:3px!important;background:transparent!important;box-shadow:none!important;
+}
+#dashboard-view .collection-rail img{border-radius:3px!important}
+#dashboard-view .featured-number-card{display:flex!important;flex-direction:column!important;gap:7px!important}
+#dashboard-view .featured-number{color:rgba(216,145,95,.3)!important}
+#dashboard-view .featured-number-poster{border-radius:3px!important;box-shadow:none!important}
+#dashboard-view .featured-number-copy{padding:7px 0 0!important}
+#dashboard-view .featured-number-copy h3{color:#f0eee8!important;font-size:11px!important;font-weight:700!important}
+#dashboard-view .featured-number-copy p{color:#99958e!important;font-size:9px!important}
+#dashboard-view .continue-watching-section[hidden]{display:none!important}
+#dashboard-view .continue-card{
+  display:flex!important;flex:0 0 clamp(130px,13.5vw,174px)!important;width:clamp(130px,13.5vw,174px)!important;
+  min-width:0!important;min-height:0!important;flex-direction:column!important;align-items:stretch!important;
+  overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;transform:none!important;
+}
+#dashboard-view .continue-card-bg{
+  position:relative!important;inset:auto!important;z-index:0!important;display:block!important;
+  width:100%!important;height:auto!important;aspect-ratio:2/3!important;object-fit:cover!important;
+  opacity:1!important;border-radius:3px!important;transition:filter .2s ease!important;
+}
+#dashboard-view .continue-card:hover .continue-card-bg{transform:none!important;filter:brightness(1.12)!important}
+#dashboard-view .continue-card:after{display:none!important}
+#dashboard-view .continue-card-copy{position:relative!important;width:100%!important;padding:8px 0 0!important}
+#dashboard-view .continue-card-type{font-size:8px!important;color:var(--cp-sand)!important}
+#dashboard-view .continue-card-copy h3{font-size:11px!important;font-weight:700!important;color:#f1eee8!important;margin:4px 0!important}
+#dashboard-view .continue-card-meta{font-size:9px!important;color:#99958e!important}
+#dashboard-view .continue-progress{height:3px!important;margin-top:8px!important;background:#393735!important}
+#dashboard-view .continue-progress i{background:var(--cp-accent)!important}
+#dashboard-view .continue-card-action{font-size:9px!important;color:#e6c7b2!important;margin-top:7px!important}
+#dashboard-view .collection-section .collection-rail::-webkit-scrollbar,
+#dashboard-view .continue-watching-rail::-webkit-scrollbar{height:5px}
+#dashboard-view .collection-section .collection-rail::-webkit-scrollbar-thumb,
+#dashboard-view .continue-watching-rail::-webkit-scrollbar-thumb{background:rgba(216,145,95,.35);border-radius:10px}
+
+/* Touch layouts: preserve the same Cineplay composition, with horizontal-only poster shelves. */
+@media (max-width:767px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view .home-feature-row{padding:0!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section.hero-section{
+    height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-layout{
+    width:100%!important;grid-template-columns:112px minmax(0,1fr)!important;
+    grid-template-rows:42px auto!important;column-gap:16px!important;row-gap:14px!important;
+    padding:20px 17px 24px!important;height:auto!important;min-height:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-topbar{grid-row:1!important;gap:8px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-kicker{font-size:8px!important;letter-spacing:.12em!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-actions{gap:5px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-rating-badge{padding:4px 5px!important;font-size:8px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-actions button{min-height:30px!important;padding:0 8px!important;font-size:8px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-copy{
+    grid-column:2!important;grid-row:2!important;align-self:center!important;width:100%!important;margin:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-copy h1{font-size:clamp(21px,6vw,30px)!important;margin-bottom:8px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section #hero-meta{font-size:8px!important;gap:5px!important;margin-bottom:8px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section #hero-desc{font-size:9px!important;line-height:1.55!important;-webkit-line-clamp:4!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-poster-zone{
+    grid-column:1!important;grid-row:2!important;width:112px!important;height:auto!important;min-height:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-thumbnails{height:auto!important;max-height:none!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-thumb{
+    flex-basis:104px!important;width:104px!important;min-width:104px!important;height:156px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-arrows{left:-5px!important;right:-5px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-arrow{width:27px!important;height:27px!important;font-size:10px!important}
+  html.perde-mobile-refresh-active #dashboard-view .home-mood-continue-row{
+    display:flex!important;flex-direction:column!important;gap:18px!important;padding:20px 16px 0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #daily-pick-section .mood-discovery-result{min-height:190px!important}
+  html.perde-mobile-refresh-active #dashboard-view .homepage-main{gap:27px!important;padding:24px 16px 48px!important}
+  html.perde-mobile-refresh-active #dashboard-view .homepage-section-heading h2,
+  html.perde-mobile-refresh-active #dashboard-view .collection-heading h2{font-size:16px!important}
+  html.perde-mobile-refresh-active #dashboard-view .collection-rail,
+  html.perde-mobile-refresh-active #dashboard-view .saved-collection-rail,
+  html.perde-mobile-refresh-active #dashboard-view .featured-number-rail,
+  html.perde-mobile-refresh-active #dashboard-view .continue-watching-rail{
+    display:flex!important;flex-flow:row nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;
+    gap:11px!important;padding:2px 1px 12px!important;scroll-snap-type:x mandatory!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view .collection-rail>*,
+  html.perde-mobile-refresh-active #dashboard-view .saved-collection-rail>*,
+  html.perde-mobile-refresh-active #dashboard-view .featured-number-rail>*,
+  html.perde-mobile-refresh-active #dashboard-view .continue-card{
+    flex:0 0 38vw!important;width:38vw!important;min-width:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view .continue-card{min-height:0!important}
+}
+@media (max-width:390px){
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-layout{grid-template-columns:96px minmax(0,1fr)!important;column-gap:12px!important;padding-inline:13px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-poster-zone{width:96px!important}
+  html.perde-mobile-refresh-active #dashboard-view #hero-section .hero-thumb{flex-basis:90px!important;width:90px!important;min-width:90px!important;height:135px!important}
+  html.perde-mobile-refresh-active #dashboard-view .collection-rail>*,
+  html.perde-mobile-refresh-active #dashboard-view .featured-number-rail>*,
+  html.perde-mobile-refresh-active #dashboard-view .continue-card{flex-basis:41vw!important;width:41vw!important}
+}
+@media (prefers-reduced-motion:reduce){
+  #dashboard-view *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+
+/* Homepage flow order mirrors the reference: spotlight, continue shelf, then discovery rows. */
+#dashboard-view .home-feature-row{order:1!important}
+#dashboard-view .homepage-main{order:2!important}
+#dashboard-view .home-mood-continue-row{order:3!important}
+#dashboard-view #continue-watching-section{order:-1!important}
+#dashboard-view #collection-popular{order:0!important}
+@media (max-width:767px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active .site-header{position:sticky!important;top:0!important;height:auto!important;min-height:62px!important}
+  html.perde-mobile-refresh-active .site-header .main-nav{display:none!important}
+  html.perde-mobile-refresh-active .site-header .header-topline{width:100%!important}
+  html.perde-mobile-refresh-active #dashboard-view .homepage-main{order:2!important}
+  html.perde-mobile-refresh-active #dashboard-view .home-mood-continue-row{order:3!important}
+}
