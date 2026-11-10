@@ -497,3 +497,77 @@
   #player-modal *::before,
   #player-modal *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* Explicit desktop placement: video left, production card right. */
+@media screen and (min-width: 1024px) {
+  #player-modal .ny7-player-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 3fr) minmax(300px, 1fr) !important;
+    align-items: start !important;
+  }
+  #player-modal .ny7-player-main-column {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  #player-modal .ny7-player-side {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+  #player-modal .ny7-player-side-card:not(.ny7-player-media-card) {
+    display: none !important;
+  }
+  #player-modal .ny7-player-media-card {
+    display: block !important;
+    width: 100% !important;
+  }
+  #player-modal .ny7-player-seek-preview {
+    position: absolute;
+    z-index: 20;
+    left: 0;
+    bottom: 100%;
+    display: none;
+    width: 176px;
+    padding: 6px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px;
+    background: rgba(18,18,18,.98);
+    box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+  #player-modal .ny7-player-seek-preview.is-visible { display: block; }
+  #player-modal .ny7-player-seek-preview img,
+  #player-modal .ny7-player-seek-preview canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #050505;
+  }
+  #player-modal .ny7-player-seek-preview-time {
+    display: block;
+    padding: 5px 2px 1px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 650;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  #player-modal .ny7-player-controls { position: absolute; }
+  #player-modal .ny7-player-seek { position: relative; }
+}
+@media screen and (min-width: 1024px) and (max-width: 1240px) {
+  #player-modal .ny7-player-layout {
+    grid-template-columns: minmax(0, 2.5fr) minmax(270px, 1fr) !important;
+  }
+}
