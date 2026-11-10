@@ -579,6 +579,40 @@ function renderHomeCollections() {
         rail.innerHTML = items.length ? items.map(card).join('') : '<p class="text-sm text-slate-500">Bu koleksiyonda henüz içerik yok.</p>';
     };
     const valid = mediaDatabase.filter(item => item.image && item.title);
+    const mobileHomeRailData = {
+        popular: [...valid].sort((a,b)=>score(b)-score(a)).slice(0,24),
+        newest: [...valid].reverse().slice(0,24)
+    };
+    const mobileRailCard = (item,badge) => `
+        <article class="collection-card mobile-home-poster-card" data-detail-id="${escapeCountryHtml(item.id)}" tabindex="0" role="button" aria-label="${escapeCountryHtml(item.title)} detayını aç">
+            <div class="collection-poster-wrap">
+                <img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="lazy" decoding="async">
+                <span class="mobile-home-poster-badge">${badge}</span>
+                <span class="collection-rating">IMDb ${escapeCountryHtml(item.rating || '—')}</span>
+            </div>
+            <div class="collection-card-copy"><h3>${escapeCountryHtml(item.title)}</h3><p>${escapeCountryHtml(item.year || '')} <span>•</span> ${item.type === 'tv' ? 'Dizi' : 'Film'}</p></div>
+        </article>`;
+    const renderMobileHomeRail = (key,type='all') => {
+        const rail=document.getElementById(key==='popular'?'popular-home-rail':'newest-home-rail');
+        if(!rail)return;
+        const items=(mobileHomeRailData[key]||[]).filter(item=>type==='all'||item.type===type).slice(0,12);
+        rail.innerHTML=items.length?items.map(item=>mobileRailCard(item,key==='popular'?'Popüler':'Yeni')).join(''):'<p class="text-sm text-slate-500">Bu kategoride henüz yapım yok.</p>';
+        const section=rail.closest('.mobile-home-rail-section');
+        section?.querySelectorAll('[data-mobile-filter]').forEach(button=>{
+            button.onclick=()=>renderMobileHomeRail(key,button.dataset.mobileFilter);
+            const active=button.dataset.mobileFilter===type;
+            button.setAttribute('aria-pressed',String(active));
+            button.classList.toggle('is-active',active);
+        });
+    };
+    window.filterMobileHomeRail=(key,type)=>renderMobileHomeRail(key,type);
+    renderMobileHomeRail('popular');
+    renderMobileHomeRail('newest');
+    if(document.documentElement.classList.contains('perde-mobile-refresh-active')){
+        const moodRow=document.querySelector('.home-mood-continue-row');
+        const newestSection=document.getElementById('collection-newest');
+        if(moodRow&&newestSection)newestSection.after(moodRow);
+    }
     const defaults = {
         featured:{title:'Öne Çıkan Yapımlar',active:true,itemIds:[...valid].sort((a,b)=>score(b)-score(a)).slice(0,10).map(item=>String(item.id))},
         movies:{title:'Yüksek Puanlı Filmler',active:true,itemIds:valid.filter(item=>item.type==='movie').sort((a,b)=>score(b)-score(a)).slice(0,12).map(item=>String(item.id))},

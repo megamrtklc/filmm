@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
     <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261110-mobile-hero-title-ellipsis-v1">
     <link rel="stylesheet" href="assets/css/mobile-navigation.css?v=20261110-phone-landscape-v3">
-    <link rel="stylesheet" href="assets/css/mobile-homepage-refresh.css?v=20261110-mobile-refresh-v4">
+    <link rel="stylesheet" href="assets/css/mobile-homepage-refresh.css?v=20261110-mobile-refresh-v7">
     
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
@@ -257,11 +257,36 @@
 
         <!-- ANASAYFA İÇERİKLERİ -->
         <main class="homepage-main space-y-10">
+            <section id="collection-popular" class="collection-section mobile-home-rail-section" aria-label="Popüler yapımlar">
+                <div class="collection-heading mobile-home-rail-heading">
+                    <div><p class="collection-eyebrow">ŞİMDİ İZLENENLER</p><h2>Popüler Yapımlar</h2></div>
+                    <button class="mobile-home-view-all" type="button" onclick="switchTab('all')">Tümünü Gör <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="mobile-home-rail-filters" role="group" aria-label="Popüler yapım türü">
+                    <button type="button" data-mobile-rail="popular" data-mobile-filter="all" aria-pressed="true">Tümü</button>
+                    <button type="button" data-mobile-rail="popular" data-mobile-filter="movie" aria-pressed="false">Filmler</button>
+                    <button type="button" data-mobile-rail="popular" data-mobile-filter="tv" aria-pressed="false">Diziler</button>
+                </div>
+                <div id="popular-home-rail" class="collection-rail mobile-home-poster-rail"></div>
+            </section>
             <section id="continue-watching-section" class="continue-watching-section" aria-label="İzlemeye devam et" hidden>
                 <div class="homepage-section-heading">
                     <div><p class="homepage-eyebrow">KALDIĞIN YERDEN</p><h2>İzlemeye Devam Et</h2><p>Yarım kalan film ve dizilerin burada.</p></div>
                 </div>
                 <div id="continue-watching-rail" class="continue-watching-rail"></div>
+            </section>
+
+            <section id="collection-newest" class="collection-section mobile-home-rail-section" aria-label="Yeni eklenenler">
+                <div class="collection-heading mobile-home-rail-heading">
+                    <div><p class="collection-eyebrow">PERDE ARŞİVİ</p><h2>Yeni Eklenenler</h2></div>
+                    <button class="mobile-home-view-all" type="button" onclick="switchTab('all')">Tümünü Gör <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="mobile-home-rail-filters" role="group" aria-label="Yeni eklenen yapım türü">
+                    <button type="button" data-mobile-rail="newest" data-mobile-filter="all" aria-pressed="true">Tümü</button>
+                    <button type="button" data-mobile-rail="newest" data-mobile-filter="movie" aria-pressed="false">Filmler</button>
+                    <button type="button" data-mobile-rail="newest" data-mobile-filter="tv" aria-pressed="false">Diziler</button>
+                </div>
+                <div id="newest-home-rail" class="collection-rail mobile-home-poster-rail"></div>
             </section>
 
             <!-- ANA SAYFA KOLEKSİYONLARI -->
@@ -537,7 +562,7 @@
 <script src="assets/js/mobile-bottom-nav.js?v=20261109-mobile-nav-v1"></script>
     <script src="assets/js/responsive-mode.js?v=20261110-phone-landscape-v2"></script>
     <script src="assets/js/mobile-homepage-refresh.js?v=20261110-mobile-refresh-v5"></script>
-    <script src="assets/js/bundle.js?v=20261110-mobile-hero-title-ellipsis-v1"></script>
+    <script src="assets/js/bundle.js?v=20261110-mobile-home-rails-v2"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
