@@ -141,3 +141,20 @@
 #series-watch-system .series-diary-bottom .series-save-note{display:inline-flex;align-items:center;gap:9px;width:auto;margin-top:8px;padding:9px 13px;border-radius:5px;background:var(--sg-gold);color:#171717;font-size:9px}
 @media(max-width:900px){#series-watch-system .series-season-progress{grid-template-columns:100px minmax(0,1fr)}#series-watch-system .series-progress-next{grid-column:1/-1;grid-template-columns:1fr auto auto;align-items:center;min-height:0;padding:13px 0 0;border-top:1px solid rgba(255,255,255,.1);border-left:0}#series-watch-system .series-progress-next>span{grid-column:1/-1}#series-watch-system .series-progress-next button{margin:0}#series-watch-system .series-diary-bottom{grid-template-columns:1fr}}
 @media(max-width:620px){#series-watch-system{margin-top:34px;padding-bottom:40px}#series-watch-system .series-guide-heading{align-items:flex-start;flex-direction:column;margin-bottom:22px}#series-watch-system .series-guide-heading h2{font-size:32px}#series-watch-system .series-season-toolbar{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}#series-watch-system .series-season-tile{min-height:104px;padding:9px}#series-watch-system .series-season-tile-content strong{font-size:24px}#series-watch-system .series-season-progress{grid-template-columns:74px minmax(0,1fr);gap:13px;padding:15px}#series-watch-system .series-progress-orbit{width:70px;height:70px}#series-watch-system .series-progress-orbit strong{font-size:20px}#series-watch-system .series-progress-details h4{font-size:18px}#series-watch-system .series-progress-details p{font-size:9px}#series-watch-system .series-progress-next{grid-template-columns:1fr auto;gap:5px}#series-watch-system .series-progress-next>span{grid-column:1/-1}#series-watch-system .series-progress-next strong{font-size:12px}#series-watch-system .series-episode-library-head{align-items:flex-start;flex-direction:column}#series-watch-system .series-episodes{grid-template-columns:1fr;gap:12px}#series-watch-system .series-episode-art{aspect-ratio:16/8.5}#series-watch-system .series-episode-card-copy{padding:12px}#series-watch-system .series-episode-card-copy h4{font-size:14px}#series-watch-system .series-diary-bottom{padding:17px;gap:20px}#series-watch-system .series-diary-fields{grid-template-columns:1fr 1fr;gap:10px}}
+
+
+/* Mount the series guide inside the active cinematic series-detail layout. */
+#detail-series-layout #series-episodes-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+#detail-series-layout #series-watch-system {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 28px;
+}
+#detail-series-layout #detail-episodes[hidden] {
+  display: none !important;
+}
