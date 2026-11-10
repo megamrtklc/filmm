@@ -387,3 +387,12 @@ html.perde-desktop-site-requested .mobile-bottom-nav {
 #dashboard-view[data-home-active="false"] #collection-newest {
   display: none !important;
 }
+
+
+/* On mobile/tablet catalog routes, render only the route context and catalog.
+   Homepage rails are siblings of the catalog inside .homepage-main. */
+@media screen and (max-width: 1024px) {
+  html:not(.perde-desktop-site-requested) #dashboard-view[data-home-active="false"] .homepage-main > :not(#page-context-card):not(#catalog-page) {
+    display: none !important;
+  }
+}
