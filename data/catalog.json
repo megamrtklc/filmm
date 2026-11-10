@@ -17204,5 +17204,131 @@
     "id": "perde-mwawc4g1",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Olası Aşklar",
+    "originalTitle": "가능한 사랑",
+    "year": 2026,
+    "category": "Dram",
+    "genre": "Dram",
+    "rating": "7.4",
+    "duration": "166 dk",
+    "country": "South Korea, United States of America",
+    "director": "Lee Chang-dong",
+    "tmdbId": 1483525,
+    "desc": "İşsiz kalan bir adamla karısının yolları bir belgesel yönetmeni ve onun eşiyle kesişince gizli kalmış tutkularıyla yüz yüze gelirler.",
+    "image": "https://image.tmdb.org/t/p/w500/7UAzxqezg5yvZyK3k62wOAzg0Zs.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/k0BY5D4Ya6NHhsvNYMmaabpvUtS.jpg",
+    "imdbId": "tt37803364",
+    "watchUrl": "",
+    "awards": "",
+    "platform": [],
+    "personalNote": "",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Jeon Do-yeon",
+      "Sul Kyung-gu",
+      "Zo İn-sung",
+      "Cho Yeo-jeong",
+      "Jo Yu-ri",
+      "Choi Min",
+      "Jeong Seop",
+      "Kang Chang-gwon",
+      "Jeon Woon-jong",
+      "Lee Ju-hwan",
+      "Lee Hye-rin",
+      "Lee Ji-yoon"
+    ],
+    "tmdbCast": [
+      {
+        "id": 20737,
+        "name": "Jeon Do-yeon",
+        "character": "Mi-ok",
+        "profile": "https://image.tmdb.org/t/p/w185/ev2tT7ZbReE06rZy7SX0Mv8evZ7.jpg",
+        "order": 0
+      },
+      {
+        "id": 85008,
+        "name": "Sul Kyung-gu",
+        "character": "Ho-seok",
+        "profile": "https://image.tmdb.org/t/p/w185/teD7AMzfNl4qhQO2b6MAWwLtPVn.jpg",
+        "order": 1
+      },
+      {
+        "id": 127564,
+        "name": "Zo İn-sung",
+        "character": "Sang-woo",
+        "profile": "https://image.tmdb.org/t/p/w185/69gbyFI0ET0l0dyjKChlx1Zx269.jpg",
+        "order": 2
+      },
+      {
+        "id": 556435,
+        "name": "Cho Yeo-jeong",
+        "character": "Ye-ji",
+        "profile": "https://image.tmdb.org/t/p/w185/5MgWM8pkUiYkj9MEaEpO0Ir1FD9.jpg",
+        "order": 3
+      },
+      {
+        "id": 2359937,
+        "name": "Jo Yu-ri",
+        "character": "Young Mi-ok",
+        "profile": "https://image.tmdb.org/t/p/w185/4GwoDQFPwpaKldOTpGrIJUzBa9h.jpg",
+        "order": 4
+      },
+      {
+        "id": 6498027,
+        "name": "Choi Min",
+        "character": "Young Ho-seok",
+        "profile": "",
+        "order": 5
+      },
+      {
+        "id": 6498023,
+        "name": "Jeong Seop",
+        "character": "Cheol",
+        "profile": "https://image.tmdb.org/t/p/w185/vMbZObKiMc2am3OOFWAlxlPHnpn.jpg",
+        "order": 6
+      },
+      {
+        "id": 6591471,
+        "name": "Kang Chang-gwon",
+        "character": "Min-sik",
+        "profile": "",
+        "order": 7
+      },
+      {
+        "id": 2771569,
+        "name": "Jeon Woon-jong",
+        "character": "Jeong-dae",
+        "profile": "https://image.tmdb.org/t/p/w185/3Ex4iON29UAHgy0BCTS2NukxAnl.jpg",
+        "order": 8
+      },
+      {
+        "id": 2495433,
+        "name": "Lee Ju-hwan",
+        "character": "Director of Photography",
+        "profile": "",
+        "order": 9
+      },
+      {
+        "id": 2772084,
+        "name": "Lee Hye-rin",
+        "character": "Producer",
+        "profile": "",
+        "order": 10
+      },
+      {
+        "id": 4236742,
+        "name": "Lee Ji-yoon",
+        "character": "Assistant director",
+        "profile": "",
+        "order": 11
+      }
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mwawheyh",
+    "seasons": null,
+    "episodes": null
   }
 ]
