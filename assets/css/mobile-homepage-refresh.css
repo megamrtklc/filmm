@@ -309,7 +309,7 @@
   }
   html.perde-mobile-refresh-active #dashboard-view .mobile-home-rail-filters button.is-active{
     border-color:rgba(114,167,216,.48)!important;
-    background:rgba(64,83,106,.56)!important;
+    background:#40536A!important;
     color:#D9E5F2!important;
   }
   html.perde-mobile-refresh-active #dashboard-view .mobile-home-poster-rail{
