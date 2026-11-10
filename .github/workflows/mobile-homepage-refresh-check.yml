@@ -60,7 +60,7 @@ jobs:
           const js = fs.readFileSync('assets/js/mobile-homepage-refresh.js', 'utf8');
           const responsive = fs.readFileSync('assets/js/responsive-mode.js', 'utf8');
           assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-mobile-refresh-v12/, 'Mobile CSS cache version missing');
-          assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v5/, 'Mobile JS cache version missing');
+          assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v6/, 'Mobile JS cache version missing');
           assert.match(html, /id="mobile-drawer" role="dialog"/, 'Drawer dialog semantics missing');
           assert.match(html, /id="collection-popular"/, 'Popular mobile home rail missing');
           assert.match(html, /id="collection-newest"/, 'Newest mobile home rail missing');
@@ -75,6 +75,8 @@ jobs:
           assert.match(js, /desktopRequested/, 'Desktop-site mode guard missing');
           assert.match(js, /e\.key==='Tab'/, 'Drawer keyboard focus handling missing');
           assert.match(js, /previousBodyOverflow/, 'Previous body scroll state is not preserved');
+          assert.match(js, /data-mobile-categories-toggle/, 'Mobile category accordion click handling missing');
+          assert.match(html, /id="mobile-category-panel"/, 'Mobile category panel missing');
           assert.match(responsive, /perde-phone-device/, 'Responsive phone detection missing');
           assert.match(responsive, /perde-desktop-site-requested/, 'Phone desktop-site mode class missing');
           const mobileNav = fs.readFileSync('assets/css/mobile-navigation.css', 'utf8');
