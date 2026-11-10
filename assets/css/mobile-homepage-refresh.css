@@ -32,3 +32,17 @@
   .mobile-drawer-links .drawer-divider{height:1px;min-height:1px;margin:10px 2px;border:0;background:rgba(255,255,255,.1)}
 }
 @media (min-width:768px){.mobile-drawer-backdrop,.mobile-drawer,.mobile-header-menu-trigger{display:none!important}}
+
+
+/* Mobile catalogue rails: three cinematic posters in the viewport. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  #dashboard-view .collection-rail{grid-auto-columns:31.5%!important;gap:10px!important;padding-right:12px!important;scroll-padding-inline:12px!important}
+  #dashboard-view .collection-card{min-width:0!important}
+  #dashboard-view .collection-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-bottom:12px!important}
+  #dashboard-view .collection-heading h2,#dashboard-view .homepage-section-heading h2{font-size:17px!important;line-height:1.25!important;letter-spacing:-.25px!important;font-weight:750!important}
+  #dashboard-view .collection-heading .collection-eyebrow,#dashboard-view .homepage-section-heading .homepage-eyebrow{display:none!important}
+  #dashboard-view .collection-heading p:not(.collection-eyebrow),#dashboard-view .homepage-section-heading p:not(.homepage-eyebrow){display:none!important}
+  #dashboard-view .collection-section{margin-bottom:25px!important}
+  #dashboard-view .collection-rail{scrollbar-width:none!important}
+  #dashboard-view .collection-rail::-webkit-scrollbar{display:none!important}
+}
