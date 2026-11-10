@@ -518,3 +518,83 @@ html.perde-tv-wide #dashboard-view .home-feature-row #hero-section.hero-section{
     max-width:none!important;
   }
 }
+
+
+/* Simplified personalized picks on phones only.
+   Keep the same saved recommendations and interactions; simplify the visual layout. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized{
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    color:var(--pm-text)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .collection-heading{
+    margin:0 0 10px!important;
+    padding:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .collection-heading h2{
+    color:var(--pm-text)!important;
+    font-size:16px!important;
+    font-weight:760!important;
+    letter-spacing:-.02em!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-rail{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-rows:auto!important;
+    gap:9px!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-support{
+    display:contents!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card,
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card.is-featured,
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card.is-supporting{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:2/3!important;
+    border:0!important;
+    border-radius:9px!important;
+    background:#202936!important;
+    box-shadow:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card:nth-child(n+4){
+    display:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-image{
+    object-position:center center!important;
+    filter:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-shade{
+    background:linear-gradient(180deg,rgba(5,7,11,.08) 35%,rgba(5,7,11,.82) 100%)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-index{
+    top:7px!important;left:7px!important;font-size:8px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-rating{
+    top:6px!important;right:6px!important;padding:3px 5px!important;
+    border:0!important;border-radius:5px!important;font-size:8px!important;
+    background:rgba(8,10,14,.72)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-content,
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-card.is-featured .personalized-editorial-content{
+    padding:8px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-type{
+    color:#d8c18c!important;font-size:7px!important;letter-spacing:.06em!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-content h3{
+    margin-top:3px!important;font-size:10px!important;line-height:1.2!important;
+    -webkit-line-clamp:2!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-synopsis{
+    display:none!important;
+  }
+}
