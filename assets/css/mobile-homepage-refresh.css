@@ -97,3 +97,56 @@
     font-size:10px!important;
   }
 }
+
+
+/* Streamingbar / Editorial Content Grid — mobile adaptation.
+   The five selected posters and horizontal navigation stay data-driven.
+   Ranking-number rules are intentionally not overridden here. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured{
+    position:relative!important;
+    isolation:isolate!important;
+    padding:15px 12px 12px!important;
+    overflow:hidden!important;
+    border:1px solid rgba(218,185,119,.17)!important;
+    border-radius:18px!important;
+    background:
+      linear-gradient(145deg,rgba(25,30,40,.96),rgba(10,14,22,.98) 72%),
+      #10141d!important;
+    box-shadow:0 14px 32px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    inset:0 0 auto;
+    height:5px;
+    opacity:.42;
+    background:repeating-linear-gradient(90deg,rgba(222,190,125,.65) 0 7px,transparent 7px 15px);
+    pointer-events:none;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-heading{
+    margin:0 0 11px!important;
+    padding:0 1px 10px!important;
+    border-bottom:1px solid rgba(220,190,130,.16)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-heading h2{
+    font-family:"Cinzel",Georgia,serif!important;
+    font-size:16px!important;
+    letter-spacing:.015em!important;
+    color:#f2e6cc!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-eyebrow{
+    display:block!important;
+    margin-bottom:4px!important;
+    color:#d8b875!important;
+    font-size:8px!important;
+    letter-spacing:.2em!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-rail{
+    gap:12px!important;
+    padding:8px 2px 12px!important;
+    scroll-snap-type:x mandatory!important;
+    overscroll-behavior-x:contain!important;
+  }
+}
