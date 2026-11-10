@@ -211,7 +211,7 @@
     $('series-diary-summary').innerHTML = '';
     renderDiarySummary(item);
     $('series-episodes').innerHTML = '<div class="series-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Sezon ve bölümler getiriliyor…</div>';
-    $('series-guide-count').textContent = 'Bölüm bilgileri yükleniyor';
+
     try {
       episodeRows = await loadEpisodes(item);
       if (activeItem !== item) return;
