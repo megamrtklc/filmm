@@ -133,9 +133,13 @@
         <button type="button" onclick="toggleHeaderMenu('user-menu')"><i class="fa-regular fa-user"></i>Profilim</button>
         <button type="button" onclick="toggleHeaderMenu('user-menu')"><i class="fa-solid fa-gear"></i>Ayarlar ve hesap</button>
         <div class="drawer-divider"></div>
-        <a href="#/kategoriler"><i class="fa-solid fa-layer-group"></i>Kategoriler</a>
-        <a href="#/fragmanlar"><i class="fa-solid fa-circle-play"></i>Fragmanlar</a>
-        <a href="#/istatistikler"><i class="fa-solid fa-chart-simple"></i>İstatistikler</a>
+        <div class="drawer-divider"></div>
+        <button type="button" onclick="filterGenre('Aksiyon')"><i class="fa-solid fa-bolt"></i>Aksiyon</button>
+        <button type="button" onclick="filterGenre('Bilim Kurgu')"><i class="fa-solid fa-robot"></i>Bilim Kurgu</button>
+        <button type="button" onclick="filterGenre('Drama')"><i class="fa-solid fa-masks-theater"></i>Drama</button>
+        <button type="button" onclick="filterGenre('Gerilim')"><i class="fa-solid fa-eye"></i>Gerilim</button>
+        <button type="button" onclick="filterGenre('Fantastik')"><i class="fa-solid fa-wand-magic-sparkles"></i>Fantastik</button>
+        <button type="button" onclick="filterGenre('Suç')"><i class="fa-solid fa-user-secret"></i>Suç</button>
       </nav>
     </aside>
     <nav class="mobile-bottom-nav" aria-label="Mobil ana gezinme">
