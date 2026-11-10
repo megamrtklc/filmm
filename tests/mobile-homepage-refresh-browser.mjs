@@ -25,6 +25,7 @@ async function loadAndCheck(name, options, expectedActive) {
   await page.waitForTimeout(1200);
   const state = await page.evaluate(() => ({
     active: document.documentElement.classList.contains('perde-mobile-refresh-active'),
+    desktopSiteRequested: document.documentElement.classList.contains('perde-desktop-site-requested'),
     phone: document.documentElement.classList.contains('perde-phone-device'),
     tablet: document.documentElement.classList.contains('perde-touch-compact'),
     tv: document.documentElement.classList.contains('perde-tv-wide')
@@ -41,6 +42,7 @@ try {
     isMobile: true, hasTouch: true
   }, true);
 
+  assert.equal(await phone.page.locator('.mobile-bottom-nav').isVisible(), true, 'phone portrait: bottom navigation should be visible');
   await phone.page.screenshot({ path: 'artifacts/phone-portrait.png' });
   const trigger = phone.page.locator('[data-mobile-drawer-open]').first();
   await trigger.waitFor({ state: 'visible' });
@@ -63,6 +65,7 @@ try {
     isMobile: true, hasTouch: true
   }, true);
 
+  assert.equal(await phoneLandscape.page.locator('.mobile-bottom-nav').isVisible(), true, 'phone landscape: bottom navigation should be visible');
   await phoneLandscape.page.screenshot({ path: 'artifacts/phone-landscape.png' });
 
   const desktopMode = await loadAndCheck('phone with desktop site requested', {
@@ -71,6 +74,8 @@ try {
     isMobile: true, hasTouch: true
   }, false);
 
+  assert.equal(desktopMode.state.desktopSiteRequested, true, 'desktop-site mode class should be active');
+  assert.equal(await desktopMode.page.locator('.mobile-bottom-nav').isVisible(), false, 'desktop-site mode: mobile bottom navigation must be hidden');
   await desktopMode.page.screenshot({ path: 'artifacts/phone-desktop-site-mode.png' });
 
   const tablet = await loadAndCheck('tablet touch viewport', {
