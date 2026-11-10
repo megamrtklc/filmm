@@ -17078,5 +17078,131 @@
     "id": "perde-mw71eehr",
     "seasons": null,
     "episodes": null
+  },
+  {
+    "title": "Mazisi Olmayan Adam",
+    "originalTitle": "아저씨",
+    "year": 2010,
+    "category": "Aksiyon / Gerilim / Suç",
+    "genre": "Aksiyon",
+    "rating": "7.7",
+    "duration": "119 dk",
+    "country": "South Korea",
+    "director": "Lee Jeong-beom",
+    "tmdbId": 51608,
+    "desc": "Annesi uyuşturucu bağımlısı olan küçük kız So-mi, eski bir mahkum (ve eski bir ajan) olan ve bir rehinci dükkanında yalnız yaşayan Tae-sik’in çevresinde dönüp durmakta, annesinden ve çevresinden göremediği ilgiyi ondan almaya çalışmaktadır.  Annesi uyuşturucu çalınca mafya tarafından öldürülür. Kendisi de organ kaçakçısı mafya tarafından kaçırılınca Tae-sik mafya ile savaşmaya başlar. Onları takip ederken organ mafyasının elinde olan ameliyat edilmeyi bekleyen çocukları bulur ve So-mi'nin ölmüş olabileceğini düşünür.",
+    "image": "https://image.tmdb.org/t/p/w500/14QbjXp8m3LN9l1U4SoBWy441kr.jpg",
+    "backdrop": "https://image.tmdb.org/t/p/w1280/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg",
+    "imdbId": "tt1527788",
+    "watchUrl": "",
+    "awards": "",
+    "platform": [],
+    "personalNote": "",
+    "type": "movie",
+    "subtitles": [],
+    "cast": [
+      "Won Bin",
+      "Kim Sae-ron",
+      "Kim Tae-hun",
+      "Kim Hie-won",
+      "Kim Seung-oh",
+      "Lee Jong-pil",
+      "Thanayong Wongtrakul",
+      "Kim Hyo-seo",
+      "Song Young-chang",
+      "Baek Su-ryeon",
+      "Nam Kyung-eup",
+      "Jeong Do-won"
+    ],
+    "tmdbCast": [
+      {
+        "id": 70336,
+        "name": "Won Bin",
+        "character": "Cha Tae-sik",
+        "profile": "https://image.tmdb.org/t/p/w185/v5lzKZjvNrbgYnr3vw8cKZVNyTA.jpg",
+        "order": 0
+      },
+      {
+        "id": 144591,
+        "name": "Kim Sae-ron",
+        "character": "Jeong So-mi",
+        "profile": "https://image.tmdb.org/t/p/w185/jPWTS9hyezN2jqTeWFN3iUxszHc.jpg",
+        "order": 1
+      },
+      {
+        "id": 552067,
+        "name": "Kim Tae-hun",
+        "character": "Kim Chi-gon",
+        "profile": "https://image.tmdb.org/t/p/w185/8mTd6HpLDFK2cwiWhoyZO78A5n1.jpg",
+        "order": 2
+      },
+      {
+        "id": 550683,
+        "name": "Kim Hie-won",
+        "character": "Man-seok",
+        "profile": "https://image.tmdb.org/t/p/w185/sDCxskfmmNidOjV2LwsWh9dAVbN.jpg",
+        "order": 3
+      },
+      {
+        "id": 147505,
+        "name": "Kim Seung-oh",
+        "character": "Jong-seok",
+        "profile": "https://image.tmdb.org/t/p/w185/bvwsF0l3f2qs19GCUyHtAqGDL5P.jpg",
+        "order": 4
+      },
+      {
+        "id": 1075354,
+        "name": "Lee Jong-pil",
+        "character": "Detective No",
+        "profile": "https://image.tmdb.org/t/p/w185/cQuh4ry7h7WJDyBJEjyHo1Nd0m.jpg",
+        "order": 5
+      },
+      {
+        "id": 1041679,
+        "name": "Thanayong Wongtrakul",
+        "character": "Ramrowan",
+        "profile": "",
+        "order": 6
+      },
+      {
+        "id": 144954,
+        "name": "Kim Hyo-seo",
+        "character": "Hyo-jeong",
+        "profile": "https://image.tmdb.org/t/p/w185/yfvun7dhG1T33qXPCbWVY3hx90b.jpg",
+        "order": 7
+      },
+      {
+        "id": 88298,
+        "name": "Song Young-chang",
+        "character": "Oh Myung-gyu",
+        "profile": "https://image.tmdb.org/t/p/w185/gcidJKlJtyr7mAlI3ffMRxBj0qG.jpg",
+        "order": 8
+      },
+      {
+        "id": 1190219,
+        "name": "Baek Su-ryeon",
+        "character": "Bookstore Lady",
+        "profile": "https://image.tmdb.org/t/p/w185/u9ZUUaN5HxJt62oDtzqLpshjRAa.jpg",
+        "order": 9
+      },
+      {
+        "id": 1045484,
+        "name": "Nam Kyung-eup",
+        "character": "Section Chief",
+        "profile": "https://image.tmdb.org/t/p/w185/nRtczBC0z29d5k4VQBvpv6E6drH.jpg",
+        "order": 10
+      },
+      {
+        "id": 1344158,
+        "name": "Jeong Do-won",
+        "character": "Detective Park",
+        "profile": "https://image.tmdb.org/t/p/w185/rhtDzCPE2FEBVvMIoeVihvu0VHi.jpg",
+        "order": 11
+      }
+    ],
+    "themeColor": "#101014",
+    "id": "perde-mwawc4g1",
+    "seasons": null,
+    "episodes": null
   }
 ]
