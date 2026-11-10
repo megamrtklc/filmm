@@ -56,3 +56,44 @@
   html.perde-mobile-refresh-active .site-header .header-topline{gap:8px!important}
   html.perde-mobile-refresh-active .site-header .perde-brand-word{white-space:nowrap!important}
 }
+
+
+/* Approved mobile editorial treatment for the featured selection.
+   Keep the ranking numeral's position, size, appearance and behavior untouched. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card{
+    position:relative!important;
+    isolation:isolate!important;
+    padding:9px 9px 13px!important;
+    border:1px solid rgba(222,190,125,.16)!important;
+    border-radius:15px!important;
+    background:linear-gradient(155deg,rgba(35,42,54,.76),rgba(13,18,28,.94) 72%)!important;
+    box-shadow:0 9px 24px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card::after{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    inset:0;
+    border-radius:inherit;
+    background:radial-gradient(ellipse at 78% 4%,rgba(210,174,103,.11),transparent 56%);
+    pointer-events:none;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-poster{
+    border-color:rgba(255,255,255,.13)!important;
+    box-shadow:0 10px 24px rgba(0,0,0,.34)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy{
+    padding-top:11px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy h3{
+    color:#f5f2eb!important;
+    font-size:12px!important;
+    font-weight:800!important;
+    line-height:1.3!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy p{
+    color:#aeb6c4!important;
+    font-size:10px!important;
+  }
+}
