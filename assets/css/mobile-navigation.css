@@ -379,3 +379,11 @@ html.perde-desktop-site-requested .mobile-bottom-nav {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+
+/* Catalog routes must not leave the homepage rails visible above the catalog. */
+#dashboard-view[data-home-active="false"] #collection-popular,
+#dashboard-view[data-home-active="false"] #continue-watching-section,
+#dashboard-view[data-home-active="false"] #collection-newest {
+  display: none !important;
+}
