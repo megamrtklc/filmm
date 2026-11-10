@@ -501,3 +501,20 @@ html.perde-tv-wide #dashboard-view .home-feature-row #hero-section.hero-section{
     transition-duration:0.01ms!important;
   }
 }
+
+
+/* Keep the mobile discovery cards in a clear vertical stack. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view .home-mood-continue-row{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    align-items:stretch!important;
+    gap:14px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view .home-mood-continue-row #daily-pick-section,
+  html.perde-mobile-refresh-active #dashboard-view .home-mood-continue-row #collection-personalized{
+    grid-column:1/-1!important;
+    width:100%!important;
+    max-width:none!important;
+  }
+}
