@@ -78,6 +78,21 @@ try {
   assert.ok(newestMovieLabels.length > 0 && newestMovieLabels.every(label => label.includes('Film')), 'newest movie filter should show films only');
   await newestSection.locator('[data-mobile-filter="all"]').click();
 
+  // Poster cards must open the matching detail view by touch/click and keyboard activation.
+  const firstPopularCard = popularRail.locator('.mobile-home-poster-card').first();
+  const firstCardId = await firstPopularCard.getAttribute('data-detail-id');
+  assert.ok(firstCardId, 'phone: poster card must expose its media id');
+  await firstPopularCard.click();
+  const detailView = phone.page.locator('#detail-page-view');
+  await detailView.waitFor({ state: 'visible' });
+  assert.equal(await phone.page.locator('#dashboard-view').isVisible(), false, 'phone: poster click should open detail view');
+  await phone.page.evaluate(() => showDashboard(false));
+  await popularRail.locator('.mobile-home-poster-card').first().focus();
+  await phone.page.keyboard.press('Enter');
+  await detailView.waitFor({ state: 'visible' });
+  assert.equal(await phone.page.locator('#dashboard-view').isVisible(), false, 'phone: Enter should open focused poster detail');
+  await phone.page.evaluate(() => showDashboard(false));
+
   const mobileSectionOrder = await phone.page.evaluate(() => {
     const ids = ['collection-popular', 'continue-watching-section', 'collection-newest', 'daily-pick-section'];
     const nodes = ids.map(id => document.getElementById(id));
