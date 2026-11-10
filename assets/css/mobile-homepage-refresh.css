@@ -601,3 +601,123 @@ html.perde-tv-wide #dashboard-view .home-feature-row #hero-section.hero-section{
   html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-poster {width:calc(100% - 30px)!important;margin-left:30px!important}
   html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy h3 {font-size:12px!important}
 }
+
+
+/* PERDE — Editor's Picks mobile horizontal showcase v1 */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured {
+    overflow:hidden!important;
+    padding:16px 0 13px 13px!important;
+    border:1px solid rgba(226,185,105,.2)!important;
+    border-radius:20px!important;
+    background:
+      radial-gradient(ellipse at 0% 0%,rgba(185,37,48,.2),transparent 48%),
+      radial-gradient(ellipse at 100% 100%,rgba(201,145,55,.09),transparent 45%),
+      linear-gradient(145deg,#171923 0%,#0c1019 76%)!important;
+    box-shadow:0 16px 38px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.055)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-heading {
+    margin:0 13px 12px 0!important;padding:0 0 11px!important;
+    border-bottom:1px solid rgba(226,185,105,.2)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-eyebrow {
+    display:block!important;margin:0 0 4px!important;color:#e6b95f!important;
+    font-size:9px!important;font-weight:850!important;letter-spacing:.22em!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .collection-heading h2 {
+    color:#fff8eb!important;font-size:20px!important;font-weight:900!important;
+    line-height:1.12!important;letter-spacing:-.045em!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-rail {
+    display:flex!important;flex-direction:row!important;align-items:stretch!important;
+    gap:12px!important;width:100%!important;margin:0!important;padding:3px 14px 10px 0!important;
+    overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain!important;
+    -webkit-overflow-scrolling:touch!important;scroll-snap-type:x mandatory!important;
+    scrollbar-width:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-rail::-webkit-scrollbar {
+    display:none!important;width:0!important;height:0!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card {
+    position:relative!important;isolation:isolate!important;display:grid!important;
+    flex:0 0 88%!important;width:88%!important;max-width:350px!important;min-width:0!important;
+    min-height:178px!important;grid-template-columns:29px minmax(88px,34%) minmax(0,1fr)!important;
+    grid-template-rows:1fr!important;align-items:center!important;gap:9px!important;
+    margin:0!important;padding:11px!important;overflow:hidden!important;
+    border:1px solid rgba(226,185,105,.24)!important;border-radius:17px!important;
+    background:
+      radial-gradient(ellipse at 0% 100%,rgba(190,42,48,.2),transparent 58%),
+      linear-gradient(125deg,rgba(38,39,48,.98),rgba(13,17,26,.99) 68%)!important;
+    box-shadow:0 11px 25px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.07)!important;
+    scroll-snap-align:start!important;scroll-snap-stop:always!important;
+    transform:none!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card::before {
+    content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+    background:linear-gradient(110deg,rgba(255,255,255,.045),transparent 42%,rgba(225,177,91,.045));
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card:first-child {
+    border-color:rgba(246,190,91,.65)!important;
+    box-shadow:0 0 0 1px rgba(246,190,91,.12),0 12px 30px rgba(0,0,0,.4),0 0 24px rgba(204,143,55,.13)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number {
+    position:relative!important;inset:auto!important;grid-column:1!important;grid-row:1!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    width:auto!important;height:auto!important;margin:0!important;padding:0!important;
+    color:#e9c477!important;font-size:clamp(27px,8vw,39px)!important;font-weight:950!important;
+    line-height:1!important;font-style:italic!important;text-shadow:0 2px 12px rgba(232,177,81,.24)!important;
+    transform:none!important;opacity:1!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-poster {
+    position:relative!important;grid-column:2!important;grid-row:1!important;
+    display:block!important;width:100%!important;max-width:none!important;min-width:0!important;
+    height:auto!important;aspect-ratio:2/3!important;margin:0!important;padding:0!important;
+    overflow:hidden!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px!important;
+    background:#080b11!important;box-shadow:0 8px 20px rgba(0,0,0,.42)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-poster img {
+    display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-poster .collection-rating {
+    position:absolute!important;top:5px!important;right:5px!important;left:auto!important;bottom:auto!important;
+    z-index:3!important;padding:4px 6px!important;border:1px solid rgba(255,255,255,.2)!important;
+    border-radius:7px!important;background:rgba(7,10,16,.82)!important;color:#f6d47e!important;
+    font-size:9px!important;font-weight:850!important;line-height:1.1!important;
+    -webkit-backdrop-filter:blur(8px)!important;backdrop-filter:blur(8px)!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy {
+    position:relative!important;inset:auto!important;grid-column:3!important;grid-row:1!important;
+    display:flex!important;flex-direction:column!important;justify-content:center!important;align-self:stretch!important;
+    width:auto!important;min-width:0!important;height:auto!important;margin:0!important;padding:2px 0!important;
+    overflow:hidden!important;border:0!important;border-radius:0!important;background:none!important;
+    text-align:left!important;pointer-events:none!important;visibility:visible!important;opacity:1!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy h3 {
+    display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;
+    overflow:hidden!important;margin:0 0 5px!important;color:#fff!important;
+    font-size:clamp(13px,3.7vw,16px)!important;font-weight:900!important;line-height:1.2!important;
+    letter-spacing:-.035em!important;white-space:normal!important;overflow-wrap:anywhere!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy .collection-original-title {
+    display:block!important;margin:0 0 7px!important;color:rgba(233,226,214,.58)!important;
+    font-size:9px!important;line-height:1.2!important;white-space:normal!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy p {
+    display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:4px!important;
+    margin:0!important;color:rgba(232,235,241,.78)!important;font-size:9px!important;
+    font-weight:700!important;line-height:1.35!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy p span {
+    color:#d9ad60!important;padding:0!important;
+  }
+}
+@media screen and (max-width:380px) {
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-card {
+    flex-basis:90%!important;width:90%!important;grid-template-columns:25px minmax(78px,33%) minmax(0,1fr)!important;
+    gap:7px!important;padding:9px!important;min-height:164px!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number {font-size:28px!important}
+}
+@media (prefers-reduced-motion:reduce) {
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-rail {scroll-behavior:auto!important}
+}
