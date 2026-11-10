@@ -437,3 +437,25 @@
     z-index:3!important;
   }
 }
+
+
+/* Keep the mobile personalized rail balanced when no editor selection is configured. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active #dashboard-view #collection-personalized .personalized-editorial-rail>p{
+    grid-column:1/-1!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:0!important;
+    min-height:190px!important;
+    margin:0!important;
+    padding:16px 12px!important;
+    border:1px dashed rgba(114,167,216,.42)!important;
+    border-radius:9px!important;
+    background:rgba(17,29,44,.38)!important;
+    color:#D9E5F2!important;
+    font-size:11px!important;
+    line-height:1.55!important;
+    text-align:center!important;
+  }
+}
