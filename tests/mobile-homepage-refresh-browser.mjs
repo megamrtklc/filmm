@@ -136,6 +136,10 @@ try {
   assert.equal(await phone.page.locator('#dashboard-view').isVisible(), true, 'home: dashboard should be restored');
   assert.equal(await phone.page.locator('#catalog-page').isVisible(), false, 'home: catalog view should be hidden');
 
+  // Establish a known history entry before testing browser Back from the drawer.
+  await nav.locator('[data-mobile-route="listem"]').click();
+  await phone.page.waitForFunction(() => location.hash.toLowerCase() === '#/listem');
+
   // Drawer route links must close the drawer and navigate to their intended destinations.
   await trigger.click();
   await drawer.locator('a[href="#/diziler"]').click();
