@@ -554,6 +554,7 @@
     border-radius: 4px;
     background: #050505;
   }
+  #player-modal .ny7-player-seek-preview canvas[hidden] { display: none !important; }
   #player-modal .ny7-player-seek-preview-time {
     display: block;
     padding: 5px 2px 1px;
