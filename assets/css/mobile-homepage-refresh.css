@@ -566,8 +566,14 @@ html.perde-tv-wide #dashboard-view .home-feature-row #hero-section.hero-section{
     display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;
   }
   html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy {
+    display:block!important;visibility:visible!important;opacity:1!important;
     grid-column:2!important;grid-row:1!important;align-self:center!important;min-width:0!important;width:100%!important;
     margin:0!important;padding:0!important;text-align:left!important;
+  }
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy h3,
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy p,
+  html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy .collection-original-title {
+    visibility:visible!important;opacity:1!important;
   }
   html.perde-mobile-refresh-active #dashboard-view #collection-featured .featured-number-copy h3 {
     display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;overflow:hidden!important;
