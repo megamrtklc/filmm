@@ -588,7 +588,7 @@ function renderHomeCollections() {
             <div class="collection-poster-wrap">
                 <img src="${escapeCountryHtml(item.image)}" alt="${escapeCountryHtml(item.title)}" loading="lazy" decoding="async">
                 <span class="mobile-home-poster-badge">${badge}</span>
-                <span class="collection-rating">★ ${escapeCountryHtml(item.rating || '—')}</span>
+                <span class="collection-rating">IMDb ${escapeCountryHtml(item.rating || '—')}</span>
             </div>
             <div class="collection-card-copy"><h3>${escapeCountryHtml(item.title)}</h3><p>${escapeCountryHtml(item.year || '')} <span>•</span> ${item.type === 'tv' ? 'Dizi' : 'Film'}</p></div>
         </article>`;
