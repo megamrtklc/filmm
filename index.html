@@ -45,7 +45,7 @@
     </script><link rel="stylesheet" href="assets/css/style.css?v=20261110-mobile-hero-overlay-arrows-v25">
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
     <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261110-mobile-hero-title-ellipsis-v1">
-    <link rel="stylesheet" href="assets/css/mobile-navigation.css?v=20261110-editor-picks-mobile-v1">
+    <link rel="stylesheet" href="assets/css/mobile-navigation.css?v=20261110-mobile-nav-categories-v1">
     <link rel="stylesheet" href="assets/css/mobile-homepage-refresh.css?v=20261110-mobile-refresh-v12">
     
 </head>
@@ -130,41 +130,45 @@
         <a href="#/diziler"><i class="fa-solid fa-tv"></i>Diziler</a>
         <a href="#/kesfet"><i class="fa-solid fa-compass"></i>Keşfet</a>
         <a href="#/listem"><i class="fa-solid fa-bookmark"></i>İzleme Listem</a>
-        <button type="button" onclick="showProfileNotice()"><i class="fa-regular fa-user"></i>Profilim</button>
-        <button type="button" onclick="showSettingsNotice()"><i class="fa-solid fa-gear"></i>Ayarlar ve hesap</button>
+        <button type="button" onclick="showSettingsNotice()"><i class="fa-solid fa-gear"></i>Ayarlar</button>
         <div class="drawer-divider"></div>
-        <button type="button" onclick="filterGenre('Aksiyon')"><i class="fa-solid fa-bolt"></i>Aksiyon</button>
-        <button type="button" onclick="filterGenre('Bilim Kurgu')"><i class="fa-solid fa-robot"></i>Bilim Kurgu</button>
-        <button type="button" onclick="filterGenre('Drama')"><i class="fa-solid fa-masks-theater"></i>Drama</button>
-        <button type="button" onclick="filterGenre('Gerilim')"><i class="fa-solid fa-eye"></i>Gerilim</button>
-        <button type="button" onclick="filterGenre('Fantastik')"><i class="fa-solid fa-wand-magic-sparkles"></i>Fantastik</button>
-        <button type="button" onclick="filterGenre('Suç')"><i class="fa-solid fa-user-secret"></i>Suç</button>
+        <button type="button" class="mobile-drawer-category-toggle" data-mobile-categories-toggle aria-expanded="false" aria-controls="mobile-category-panel">
+          <i class="fa-solid fa-layer-group"></i><span>Tüm Kategoriler</span><i class="fa-solid fa-chevron-down category-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="mobile-category-panel" id="mobile-category-panel" hidden aria-label="Tüm film ve dizi türleri">
+          <div class="mobile-category-panel-heading"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>Türüne göre keşfet</span><small>20 kategori</small></div>
+          <div class="mobile-category-grid">
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Aksiyon')"><i class="fa-solid fa-bolt"></i>Aksiyon</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Macera')"><i class="fa-solid fa-compass"></i>Macera</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Animasyon')"><i class="fa-solid fa-wand-magic-sparkles"></i>Animasyon</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Komedi')"><i class="fa-solid fa-face-laugh"></i>Komedi</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Suç')"><i class="fa-solid fa-user-secret"></i>Suç</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Belgesel')"><i class="fa-solid fa-video"></i>Belgesel</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Drama')"><i class="fa-solid fa-masks-theater"></i>Drama</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Aile')"><i class="fa-solid fa-people-roof"></i>Aile</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Fantastik')"><i class="fa-solid fa-hat-wizard"></i>Fantastik</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Tarih')"><i class="fa-solid fa-landmark"></i>Tarih</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Korku')"><i class="fa-solid fa-ghost"></i>Korku</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Müzik')"><i class="fa-solid fa-music"></i>Müzik</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Gizem')"><i class="fa-solid fa-magnifying-glass"></i>Gizem</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Romantik')"><i class="fa-solid fa-heart"></i>Romantik</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Bilim Kurgu')"><i class="fa-solid fa-robot"></i>Bilim Kurgu</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('TV Film')"><i class="fa-solid fa-tv"></i>TV Filmi</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Gerilim')"><i class="fa-solid fa-eye"></i>Gerilim</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Savaş')"><i class="fa-solid fa-shield-halved"></i>Savaş</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('Vahşi Batı')"><i class="fa-solid fa-hat-cowboy"></i>Vahşi Batı</button>
+            <button type="button" class="mobile-category-option" onclick="filterGenre('all')"><i class="fa-solid fa-border-all"></i>Tüm Türler</button>
+          </div>
+        </div>
       </nav>
     </aside>
     <nav class="mobile-bottom-nav" aria-label="Mobil ana gezinme">
         <a href="#" class="mobile-nav-item" data-mobile-route="home" aria-label="Ana Sayfa"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Ana Sayfa</span></a>
         <a href="#/filmler" class="mobile-nav-item" data-mobile-route="filmler" aria-label="Filmler"><i class="fa-solid fa-film" aria-hidden="true"></i><span>Filmler</span></a>
+        <a href="#/diziler" class="mobile-nav-item" data-mobile-route="diziler" aria-label="Diziler"><i class="fa-solid fa-tv" aria-hidden="true"></i><span>Diziler</span></a>
         <a href="#/kesfet" class="mobile-nav-item" data-mobile-route="kesfet" aria-label="Keşfet"><i class="fa-solid fa-compass" aria-hidden="true"></i><span>Keşfet</span></a>
         <a href="#/listem" class="mobile-nav-item" data-mobile-route="listem" aria-label="Listem"><i class="fa-solid fa-bookmark" aria-hidden="true"></i><span>Listem</span></a>
-        <button type="button" class="mobile-nav-item" aria-label="Profil" onclick="showProfileNotice()"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Profil</span></button>
     </nav>
-
-        <div class="mobile-category-panel" id="mobile-category-panel" hidden aria-label="Film ve dizi kategorileri">
-            <div class="mobile-category-panel-heading"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Kategoriler</span><small>Bir tür seç</small></div>
-            <div class="mobile-category-grid">
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Aksiyon')"><i class="fa-solid fa-bolt"></i>Aksiyon</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Bilim Kurgu')"><i class="fa-solid fa-robot"></i>Bilim Kurgu</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Drama')"><i class="fa-solid fa-masks-theater"></i>Drama</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Gerilim')"><i class="fa-solid fa-eye"></i>Gerilim</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Fantastik')"><i class="fa-solid fa-wand-magic-sparkles"></i>Fantastik</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Suç')"><i class="fa-solid fa-user-secret"></i>Suç</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Animasyon')"><i class="fa-solid fa-wand-magic"></i>Animasyon</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Macera')"><i class="fa-solid fa-compass"></i>Macera</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('Gizem')"><i class="fa-solid fa-magnifying-glass"></i>Gizem</button>
-                <button type="button" class="mobile-category-option" onclick="filterGenre('all')"><i class="fa-solid fa-border-all"></i>Tüm Kategoriler</button>
-            </div>
-        </div>
-
 
     <!-- DASHBOARD VIEW -->
     <div id="dashboard-view" class="flex-1 flex flex-col transition-opacity duration-300">
