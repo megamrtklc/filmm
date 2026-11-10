@@ -160,12 +160,21 @@
 }
 
 
-/* Episode archive: three cards per row with six-item numbered pagination. */
-#series-watch-system .series-episodes{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+/* Episode archive: four cards per row with eight-item numbered pagination. */
+#series-watch-system .series-episodes{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 #series-watch-system .series-episode-pagination{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:7px;padding:12px 0 2px}
 #series-watch-system .series-episode-pagination button{display:grid;place-items:center;min-width:34px;height:34px;padding:0 9px;border:1px solid rgba(255,255,255,.11);border-radius:6px;background:rgba(255,255,255,.035);color:#b9bec8;font-size:11px;font-weight:800;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
 #series-watch-system .series-episode-pagination button:hover:not(:disabled){border-color:rgba(216,181,107,.45);color:#f4dfb5}
 #series-watch-system .series-episode-pagination button.is-active{border-color:var(--sg-gold);background:var(--sg-gold);color:#171717}
 #series-watch-system .series-episode-pagination button:disabled{opacity:.3;cursor:not-allowed}
 @media(max-width:900px){#series-watch-system .series-episodes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+
+/* Series archive refinement: diary removed; episode list uses four columns. */
+#detail-page-view.is-series-redesign .detail-description-panel{width:100%;max-width:none;box-sizing:border-box;margin:14px 0 0;padding:18px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(12,14,20,.72)}
+#detail-page-view.is-series-redesign .detail-description-panel p{max-width:none}
+@media(max-width:900px){#series-watch-system .series-season-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#series-watch-system .series-season-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 @media(max-width:560px){#series-watch-system .series-episodes{grid-template-columns:1fr}}
