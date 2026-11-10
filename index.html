@@ -530,7 +530,7 @@
                     <div class="ny7-player-loading" id="player-loading"><span></span></div>
                     <p id="player-error" class="ny7-player-error" role="status" hidden></p>
                     <div class="ny7-player-controls" id="player-controls">
-                        <input id="player-seek" class="ny7-player-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Videoda konum">
+                        <div class="ny7-player-seek-preview" id="player-seek-preview" aria-hidden="true"><img id="player-seek-preview-image" alt="" hidden><span class="ny7-player-seek-preview-time" id="player-seek-preview-time">00:00</span></div><input id="player-seek" class="ny7-player-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Videoda konum">
                         <div class="ny7-player-control-row">
                             <div class="ny7-player-control-left">
                                 <button type="button" id="player-play-toggle" class="ny7-control-button primary" aria-label="Oynat"><i class="fa-solid fa-play"></i></button>
@@ -573,6 +573,7 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
     <script src="https://cdn.dashjs.org/v5.0.2/modern/umd/dash.all.min.js"></script>
     <script src="assets/js/player-pro.js?v=20261109-playback-choice-style-v2"></script>
+    <script src="assets/js/player-seek-preview.js?v=20261111-seek-preview-v1"></script>
     <script src="assets/js/series-pro.js?v=20261109-series-guide-guard-v6"></script>
 </body>
 </html>
