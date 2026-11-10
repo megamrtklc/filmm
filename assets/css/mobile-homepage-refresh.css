@@ -459,3 +459,18 @@
     text-align:center!important;
   }
 }
+
+
+/* Smart TV browsers use the full desktop canvas: prevent the hero from inheriting a narrow split-column layout. */
+html.perde-tv-wide #dashboard-view .home-feature-row{
+  display:block!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:none!important;
+}
+html.perde-tv-wide #dashboard-view .home-feature-row #hero-section.hero-section{
+  display:flex!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
