@@ -19,10 +19,12 @@
        screenWidth / Math.max(screenHeight, 1) >= 1.55 && !touchCapable);
     var tvWide = smartTvBrowser || (widePhysicalDisplay && width <= 1100);
     var phoneDevice = touchCapable && screenWidth > 0 && screenHeight > 0 && Math.min(screenWidth, screenHeight) <= 600;
+    var desktopSiteRequested = phoneDevice && width > screenWidth + 48;
     var compactDesktopViewport = !tvWide && !phoneDevice && touchCapable && width >= 768 && width <= 1100;
 
     root.classList.toggle('perde-tv-wide', tvWide);
     root.classList.toggle('perde-phone-device', phoneDevice);
+    root.classList.toggle('perde-desktop-site-requested', desktopSiteRequested);
     root.classList.toggle('perde-touch-compact', compactDesktopViewport);
   }
 
