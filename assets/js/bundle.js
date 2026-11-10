@@ -1663,7 +1663,6 @@ function renderDetailEpisodeCards(item,data,seasonNumber){
  const seasonIndex=detailEpisodeState.seasons.findIndex(entry=>Number(entry.season_number)===Number(seasonNumber));
  const previous=detailEpisodeState.seasons[seasonIndex-1],next=detailEpisodeState.seasons[seasonIndex+1];
  root.innerHTML=
-  '<div class="detail-episodes-heading"><div><span>DİZİ REHBERİ</span><h2>Bölümler</h2><p>Sezonunu seç, bölüm takibini kaldığın yerden sürdür.</p></div></div>'+
   '<div class="detail-season-picker"><button type="button" class="detail-season-step" data-season-step="'+(previous?previous.season_number:'')+'" '+(previous?'':'disabled')+' aria-label="Önceki sezon"><i class="fa-solid fa-chevron-left"></i></button><div class="detail-season-select-wrap"><span class="detail-season-eyebrow">SEZON SEÇİMİ</span><button type="button" id="detail-season-trigger" class="detail-season-trigger" aria-expanded="false" aria-controls="detail-season-menu"><span><strong>'+escapeCountryHtml(detailEpisodeState.seasons[seasonIndex]?.name||('Sezon '+seasonNumber))+'</strong><small>'+watchedCount+' / '+episodes.length+' bölüm izlendi</small></span><i class="fa-solid fa-chevron-down"></i></button><div id="detail-season-menu" class="detail-season-menu" hidden>'+options+'</div></div><button type="button" class="detail-season-step" data-season-step="'+(next?next.season_number:'')+'" '+(next?'':'disabled')+' aria-label="Sonraki sezon"><i class="fa-solid fa-chevron-right"></i></button><small class="detail-season-count">'+(seasonIndex+1)+' / '+detailEpisodeState.seasons.length+'</small></div>'+
   '<div class="detail-episode-toolbar"><label class="detail-episode-unwatched"><input id="detail-episode-unwatched" type="checkbox"><span>Sadece izlenmeyenler</span></label>'+
   '<button type="button" id="detail-season-mark-all" class="detail-season-mark-all"><i class="fa-solid fa-check-double"></i> Sezonu tamamla</button>'+
@@ -1745,7 +1744,7 @@ async function renderDetailEpisodes(item){
  const panel=document.getElementById('detail-episodes'),root=document.getElementById('detail-episodes-content');if(!panel||!root)return;
  if(item.type!=='tv'){panel.hidden=true;root.innerHTML='';return;}
  panel.hidden=false;const request=++detailEpisodeRequest;detailEpisodeState={itemId:String(item.id),seasons:[]};
- const heading='<div class="detail-episodes-heading"><div><span>BÖLÜM KÜTÜPHANESİ</span><h2>Sezonlar ve bölümler</h2><p>Bir sezon seç, bölümlerini görüntüle ve izlediklerini işaretle.</p></div></div>';
+ const heading=''
  root.innerHTML=heading+'<div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Sezonlar yükleniyor…</div>';
  const auth=getDetailTmdbAuth();if(!auth||!item.tmdbId){root.innerHTML=heading+'<p class="detail-episodes-empty">Bölüm listesi için Yönetim Merkezi’ndeki TMDB erişim anahtarı gerekli.</p>';return;}
  try{
@@ -1755,7 +1754,7 @@ async function renderDetailEpisodes(item){
   detailEpisodeState.seasons=(Array.isArray(data.seasons)?data.seasons:[]).filter(season=>Number(season.season_number)>0&&Number(season.episode_count)>0);
   updateDetailSeriesDashboard(item);
   if(!detailEpisodeState.seasons.length){root.innerHTML=heading+'<p class="detail-episodes-empty">Bu dizi için sezon bilgisi bulunamadı.</p>';return;}
-  root.innerHTML=heading+'<span class="detail-episodes-total">'+detailEpisodeState.seasons.length+' sezon</span><div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Bölümler hazırlanıyor…</div>';
+  root.innerHTML='<div class="detail-episodes-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Bölümler hazırlanıyor…</div>';
   let preferredSeason=0;try{preferredSeason=Number(localStorage.getItem('perde_last_series_season_v1_'+String(item.id)))||0;}catch(_){};if(!detailEpisodeState.seasons.some(season=>Number(season.season_number)===preferredSeason))preferredSeason=Number(detailEpisodeState.seasons[0].season_number);await loadDetailEpisodeSeason(item,preferredSeason);
   if(request===detailEpisodeRequest&&!root.querySelector('.detail-episodes-heading'))root.insertAdjacentHTML('afterbegin',heading);
  }catch(error){if(request!==detailEpisodeRequest)return;root.innerHTML=heading+'<p class="detail-episodes-empty">Sezon bilgileri şu anda alınamadı. TMDB bağlantısını kontrol edip tekrar deneyebilirsin.</p>';console.warn('Dizi sezon bilgileri alınamadı:',error);}
