@@ -599,6 +599,7 @@ function renderHomeCollections() {
         rail.innerHTML=items.length?items.map(item=>mobileRailCard(item,key==='popular'?'Popüler':'Yeni')).join(''):'<p class="text-sm text-slate-500">Bu kategoride henüz yapım yok.</p>';
         const section=rail.closest('.mobile-home-rail-section');
         section?.querySelectorAll('[data-mobile-filter]').forEach(button=>{
+            button.onclick=()=>renderMobileHomeRail(key,button.dataset.mobileFilter);
             const active=button.dataset.mobileFilter===type;
             button.setAttribute('aria-pressed',String(active));
             button.classList.toggle('is-active',active);
