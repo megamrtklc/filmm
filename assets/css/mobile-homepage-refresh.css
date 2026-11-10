@@ -383,7 +383,7 @@
     scroll-snap-type:x mandatory!important;
     scrollbar-width:none!important;
   }
-  html.perde-mobile-refresh-active #dashboard-view #continue-watching-section .continue-watching-card{
+  html.perde-mobile-refresh-active #dashboard-view #continue-watching-section .continue-card{
     flex:0 0 39vw!important;
     min-width:136px!important;
     max-width:154px!important;
