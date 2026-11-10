@@ -1792,9 +1792,9 @@ function mountDetailSeriesLayout(){
  const visual=root.querySelector('.detail-visual'),main=root.querySelector('.detail-main');
  moveDetailSeriesNode(document.getElementById('detail-backdrop'),document.getElementById('series-backdrop-slot'));
  moveDetailSeriesNode(main?.querySelector('.detail-poster-column'),document.getElementById('series-poster-slot'));
+ moveDetailSeriesNode(main?.querySelector('.detail-description-panel'),document.getElementById('series-synopsis-slot'));
  moveDetailSeriesNode(main?.querySelector('.detail-copy'),document.getElementById('series-copy-slot'));
  moveDetailSeriesNode(document.getElementById('detail-episodes'),document.getElementById('series-episodes-slot'));
- moveDetailSeriesNode(document.getElementById('detail-personal-info'),document.getElementById('series-personal-slot'));
  moveDetailSeriesNode(document.getElementById('detail-credits'),document.getElementById('series-credits-slot'));
  moveDetailSeriesNode(document.getElementById('detail-related'),document.getElementById('series-related-slot'));
  if(visual)visual.hidden=true;
@@ -2133,7 +2133,6 @@ function openDetailPage(id,update=true){
  document.getElementById('detail-related-rail').innerHTML=related.map(m=>'<article class="collection-card" onclick="openDetailPage(\''+m.id+'\')"><div class="collection-poster-wrap"><img src="'+m.image+'" alt="'+m.title+'" loading="lazy"><span class="collection-rating">★ '+(m.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+m.title+'</h3>'+originalTitleMarkup(m,'collection-original-title')+'<p>'+m.year+' • '+(m.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('');
  renderDetailSeries(item);
  renderDetailEpisodes(item);
- renderDetailPersonalInfo(item);
  renderDetailCredits(item);
  renderFilmDetailExtras(item);
  loadTmdbDetailCast(item);
