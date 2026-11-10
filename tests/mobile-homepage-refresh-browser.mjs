@@ -116,6 +116,26 @@ try {
   await phone.page.locator('#mobile-drawer-backdrop').click({ position: { x: 4, y: 4 } });
   assert.equal(await drawer.getAttribute('aria-hidden'), 'true');
 
+  // Bottom navigation must route to the matching view and keep its active indicator in sync.
+  const nav = phone.page.locator('.mobile-bottom-nav');
+  const routeCases = [
+    { route: 'filmler', hash: '#/filmler', label: 'Filmler' },
+    { route: 'kesfet', hash: '#/kesfet', label: 'Keşfet' },
+    { route: 'listem', hash: '#/listem', label: 'Listem' }
+  ];
+  for (const item of routeCases) {
+    await nav.locator('[data-mobile-route="' + item.route + '"]').click();
+    await phone.page.waitForFunction(expected => location.hash.toLowerCase() === expected, item.hash);
+    assert.equal(await nav.locator('[data-mobile-route="' + item.route + '"]').getAttribute('aria-current'), 'page', item.label + ': active route should be announced');
+    assert.equal(await nav.locator('[data-mobile-route="' + item.route + '"]').evaluate(el => el.classList.contains('is-active')), true, item.label + ': active styling should be applied');
+    assert.equal(await phone.page.locator('#catalog-page').isVisible(), true, item.label + ': catalog view should be visible');
+  }
+  await nav.locator('[data-mobile-route="home"]').click();
+  await phone.page.waitForFunction(() => location.hash.toLowerCase() === '#/anasayfa' || location.hash === '');
+  assert.equal(await nav.locator('[data-mobile-route="home"]').getAttribute('aria-current'), 'page', 'home: active route should be announced');
+  assert.equal(await phone.page.locator('#dashboard-view').isVisible(), true, 'home: dashboard should be restored');
+  assert.equal(await phone.page.locator('#catalog-page').isVisible(), false, 'home: catalog view should be hidden');
+
   const phoneLandscape = await loadAndCheck('phone landscape', {
     viewport: { width: 844, height: 390 },
     screen: { width: 844, height: 390 },
