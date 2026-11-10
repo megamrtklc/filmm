@@ -1,0 +1,86 @@
+name: Perde Mobile Homepage Refresh Checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "assets/css/mobile-homepage-refresh.css"
+      - "assets/js/mobile-homepage-refresh.js"
+      - "assets/js/mobile-bottom-nav.js"
+      - "assets/js/responsive-mode.js"
+      - ".github/workflows/mobile-homepage-refresh-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-refresh-static-checks:
+    name: Mobile refresh static checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/js/mobile-homepage-refresh.js
+          node --check assets/js/mobile-bottom-nav.js
+          node --check assets/js/responsive-mode.js
+      - name: Install Chromium for browser checks
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run browser emulation checks
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/perde-http.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/mobile-homepage-refresh-browser.mjs
+
+      - name: Validate mobile refresh integration
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const css = fs.readFileSync('assets/css/mobile-homepage-refresh.css', 'utf8');
+          const js = fs.readFileSync('assets/js/mobile-homepage-refresh.js', 'utf8');
+          const responsive = fs.readFileSync('assets/js/responsive-mode.js', 'utf8');
+          assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-mobile-refresh-v2/, 'Mobile CSS cache version missing');
+          assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v5/, 'Mobile JS cache version missing');
+          assert.match(html, /id="mobile-drawer" role="dialog"/, 'Drawer dialog semantics missing');
+          assert.match(html, /onclick="showProfileNotice\(\)"/, 'Profile action missing');
+          assert.match(html, /onclick="showSettingsNotice\(\)"/, 'Settings action missing');
+          assert.match(js, /perde-phone-device/, 'Physical phone class gate missing');
+          assert.match(js, /perde-touch-compact/, 'Tablet exclusion missing');
+          assert.match(js, /perde-tv-wide/, 'TV exclusion missing');
+          assert.match(js, /desktopRequested/, 'Desktop-site mode guard missing');
+          assert.match(js, /e\.key==='Tab'/, 'Drawer keyboard focus handling missing');
+          assert.match(js, /previousBodyOverflow/, 'Previous body scroll state is not preserved');
+          assert.match(responsive, /perde-phone-device/, 'Responsive phone detection missing');
+          assert.match(responsive, /perde-touch-compact/, 'Responsive tablet detection missing');
+          assert.match(responsive, /perde-tv-wide/, 'Responsive TV detection missing');
+          let depth = 0;
+          for (const char of css) { if (char === '{') depth++; if (char === '}') depth--; assert.ok(depth >= 0, 'Unexpected CSS closing brace'); }
+          assert.equal(depth, 0, 'CSS braces are unbalanced');
+          assert.ok(css.includes('html.perde-mobile-refresh-active'), 'Mobile CSS activation gate missing');
+          console.log('Mobile refresh static integration checks passed.');
+          NODE
+      - name: Upload responsive QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perde-mobile-responsive-qa
+          path: artifacts/*.png
+          if-no-files-found: warn
+          retention-days: 7

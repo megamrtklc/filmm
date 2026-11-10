@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="assets/css/series-pro.css?v=20261107-series-v2">
     <link rel="stylesheet" href="assets/css/homepage-responsive.css?v=20261110-mobile-hero-title-ellipsis-v1">
     <link rel="stylesheet" href="assets/css/mobile-navigation.css?v=20261110-phone-landscape-v3">
+    <link rel="stylesheet" href="assets/css/mobile-homepage-refresh.css?v=20261110-mobile-refresh-v2">
     
 </head>
 <body id="theme-body" class="bg-[#0b0c10] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
@@ -120,12 +121,32 @@
 
 
     <!-- Mobil uygulama tarzı alt gezinme -->
+    <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop" data-mobile-drawer-close></div>
+    <aside class="mobile-drawer" id="mobile-drawer" role="dialog" aria-label="Mobil menü" aria-hidden="true">
+      <div class="mobile-drawer-head"><div class="mobile-drawer-title">PERDE<span>.</span></div><button class="mobile-drawer-close" type="button" data-mobile-drawer-close aria-label="Menüyü kapat"><i class="fa-solid fa-xmark"></i></button></div>
+      <nav class="mobile-drawer-links" aria-label="Mobil bağlantılar">
+        <a href="#/anasayfa" onclick="showDashboard();return false;"><i class="fa-solid fa-house"></i>Ana Sayfa</a>
+        <a href="#/filmler"><i class="fa-solid fa-film"></i>Filmler</a>
+        <a href="#/diziler"><i class="fa-solid fa-tv"></i>Diziler</a>
+        <a href="#/kesfet"><i class="fa-solid fa-compass"></i>Keşfet</a>
+        <a href="#/listem"><i class="fa-solid fa-bookmark"></i>İzleme Listem</a>
+        <button type="button" onclick="showProfileNotice()"><i class="fa-regular fa-user"></i>Profilim</button>
+        <button type="button" onclick="showSettingsNotice()"><i class="fa-solid fa-gear"></i>Ayarlar ve hesap</button>
+        <div class="drawer-divider"></div>
+        <button type="button" onclick="filterGenre('Aksiyon')"><i class="fa-solid fa-bolt"></i>Aksiyon</button>
+        <button type="button" onclick="filterGenre('Bilim Kurgu')"><i class="fa-solid fa-robot"></i>Bilim Kurgu</button>
+        <button type="button" onclick="filterGenre('Drama')"><i class="fa-solid fa-masks-theater"></i>Drama</button>
+        <button type="button" onclick="filterGenre('Gerilim')"><i class="fa-solid fa-eye"></i>Gerilim</button>
+        <button type="button" onclick="filterGenre('Fantastik')"><i class="fa-solid fa-wand-magic-sparkles"></i>Fantastik</button>
+        <button type="button" onclick="filterGenre('Suç')"><i class="fa-solid fa-user-secret"></i>Suç</button>
+      </nav>
+    </aside>
     <nav class="mobile-bottom-nav" aria-label="Mobil ana gezinme">
-        <a href="#" class="mobile-nav-item" data-mobile-route="home" aria-label="Anasayfa"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Anasayfa</span></a>
+        <a href="#" class="mobile-nav-item" data-mobile-route="home" aria-label="Ana Sayfa"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Ana Sayfa</span></a>
         <a href="#/filmler" class="mobile-nav-item" data-mobile-route="filmler" aria-label="Filmler"><i class="fa-solid fa-film" aria-hidden="true"></i><span>Filmler</span></a>
-        <a href="#/diziler" class="mobile-nav-item" data-mobile-route="diziler" aria-label="Diziler"><i class="fa-solid fa-tv" aria-hidden="true"></i><span>Diziler</span></a>
         <a href="#/kesfet" class="mobile-nav-item" data-mobile-route="kesfet" aria-label="Keşfet"><i class="fa-solid fa-compass" aria-hidden="true"></i><span>Keşfet</span></a>
-        <button type="button" class="mobile-nav-item mobile-categories-trigger" data-mobile-categories-toggle aria-expanded="false" aria-controls="mobile-category-panel" aria-label="Kategoriler"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Kategoriler</span></button>
+        <a href="#/listem" class="mobile-nav-item" data-mobile-route="listem" aria-label="Listem"><i class="fa-solid fa-bookmark" aria-hidden="true"></i><span>Listem</span></a>
+        <button type="button" class="mobile-nav-item" aria-label="Profil" onclick="showProfileNotice()"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Profil</span></button>
     </nav>
 
         <div class="mobile-category-panel" id="mobile-category-panel" hidden aria-label="Film ve dizi kategorileri">
@@ -515,6 +536,7 @@
     <!-- Modüler JavaScript dosyaları -->
 <script src="assets/js/mobile-bottom-nav.js?v=20261109-mobile-nav-v1"></script>
     <script src="assets/js/responsive-mode.js?v=20261110-phone-landscape-v2"></script>
+    <script src="assets/js/mobile-homepage-refresh.js?v=20261110-mobile-refresh-v5"></script>
     <script src="assets/js/bundle.js?v=20261110-mobile-hero-title-ellipsis-v1"></script>
     <script src="assets/js/homepage.js?v=20261107-home-v1"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
