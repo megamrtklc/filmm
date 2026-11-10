@@ -1457,6 +1457,7 @@ function routeFromHash(){
  if(p[0]==='tur'){filterByGenreTag(p.slice(1).join('/'),false);return;}
  showDashboard(false);
 }
+window.routeFromHash = routeFromHash;
 function showDashboard(update=true){
  hideDirectorProfile();
  closeTrailerPopup();
