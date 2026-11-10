@@ -44,6 +44,46 @@ try {
 
   assert.equal(await phone.page.locator('.mobile-bottom-nav').isVisible(), true, 'phone portrait: bottom navigation should be visible');
   await phone.page.screenshot({ path: 'artifacts/phone-portrait.png' });
+
+  // Verify the approved mobile homepage rails render, scroll horizontally, and filter correctly.
+  const popularSection = phone.page.locator('#collection-popular');
+  const popularRail = phone.page.locator('#popular-home-rail');
+  const newestSection = phone.page.locator('#collection-newest');
+  const newestRail = phone.page.locator('#newest-home-rail');
+  assert.equal(await popularSection.isVisible(), true, 'phone: popular rail should be visible');
+  assert.equal(await newestSection.isVisible(), true, 'phone: newest rail should be visible');
+  assert.ok(await popularRail.locator('.mobile-home-poster-card').count() > 0, 'phone: popular rail should contain cards');
+  assert.ok(await newestRail.locator('.mobile-home-poster-card').count() > 0, 'phone: newest rail should contain cards');
+  const popularOverflow = await popularRail.evaluate(el => el.scrollWidth > el.clientWidth);
+  const newestOverflow = await newestRail.evaluate(el => el.scrollWidth > el.clientWidth);
+  assert.equal(popularOverflow, true, 'phone: popular rail should scroll horizontally');
+  assert.equal(newestOverflow, true, 'phone: newest rail should scroll horizontally');
+
+  const movieFilter = popularSection.locator('[data-mobile-filter="movie"]');
+  await movieFilter.click();
+  assert.equal(await movieFilter.getAttribute('aria-pressed'), 'true', 'popular movie filter should become active');
+  const popularMovieLabels = await popularRail.locator('.collection-card-copy p').allTextContents();
+  assert.ok(popularMovieLabels.length > 0 && popularMovieLabels.every(label => label.includes('Film')), 'popular movie filter should show films only');
+
+  const seriesFilter = popularSection.locator('[data-mobile-filter="tv"]');
+  await seriesFilter.click();
+  assert.equal(await seriesFilter.getAttribute('aria-pressed'), 'true', 'popular series filter should become active');
+  const popularSeriesLabels = await popularRail.locator('.collection-card-copy p').allTextContents();
+  assert.ok(popularSeriesLabels.length > 0 && popularSeriesLabels.every(label => label.includes('Dizi')), 'popular series filter should show series only');
+  await popularSection.locator('[data-mobile-filter="all"]').click();
+
+  const newestMovieFilter = newestSection.locator('[data-mobile-filter="movie"]');
+  await newestMovieFilter.click();
+  const newestMovieLabels = await newestRail.locator('.collection-card-copy p').allTextContents();
+  assert.ok(newestMovieLabels.length > 0 && newestMovieLabels.every(label => label.includes('Film')), 'newest movie filter should show films only');
+  await newestSection.locator('[data-mobile-filter="all"]').click();
+
+  const mobileSectionOrder = await phone.page.evaluate(() => {
+    const ids = ['collection-popular', 'continue-watching-section', 'collection-newest', 'daily-pick-section'];
+    return ids.map(id => document.getElementById(id)?.getBoundingClientRect().top ?? null);
+  });
+  assert.ok(mobileSectionOrder.every(value => value !== null), 'phone: all approved homepage sections should exist');
+  assert.ok(mobileSectionOrder[0] <= mobileSectionOrder[1] && mobileSectionOrder[1] <= mobileSectionOrder[2] && mobileSectionOrder[2] <= mobileSectionOrder[3], 'phone: homepage sections should follow Popular → Continue → Newest → discovery order');
   const trigger = phone.page.locator('[data-mobile-drawer-open]').first();
   await trigger.waitFor({ state: 'visible' });
   await trigger.click();
