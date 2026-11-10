@@ -1,3 +1,7 @@
+/* Keep mobile-only controls inert in desktop/tablet layouts. */
+#collection-featured.mobile-editor-picks .editor-picks-controls,
+#collection-featured.mobile-editor-picks .editor-picks-watch {display:none!important;}
+
 /* PERDE — Mobile Editor Picks: standalone poster carousel */
 @media screen and (max-width: 767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse) {
   html:not(.perde-desktop-site-requested) #dashboard-view #collection-featured.mobile-editor-picks {
