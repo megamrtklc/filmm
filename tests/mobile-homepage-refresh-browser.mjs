@@ -80,10 +80,12 @@ try {
 
   const mobileSectionOrder = await phone.page.evaluate(() => {
     const ids = ['collection-popular', 'continue-watching-section', 'collection-newest', 'daily-pick-section'];
-    return ids.map(id => document.getElementById(id)?.getBoundingClientRect().top ?? null);
+    const nodes = ids.map(id => document.getElementById(id));
+    return nodes.every(Boolean) && nodes.slice(0, -1).every((node, index) =>
+      Boolean(node.compareDocumentPosition(nodes[index + 1]) & Node.DOCUMENT_POSITION_FOLLOWING)
+    );
   });
-  assert.ok(mobileSectionOrder.every(value => value !== null), 'phone: all approved homepage sections should exist');
-  assert.ok(mobileSectionOrder[0] <= mobileSectionOrder[1] && mobileSectionOrder[1] <= mobileSectionOrder[2] && mobileSectionOrder[2] <= mobileSectionOrder[3], 'phone: homepage sections should follow Popular → Continue → Newest → discovery order');
+  assert.equal(mobileSectionOrder, true, 'phone: homepage sections should follow Popular → Continue → Newest → discovery order');
   const trigger = phone.page.locator('[data-mobile-drawer-open]').first();
   await trigger.waitFor({ state: 'visible' });
   await trigger.click();
