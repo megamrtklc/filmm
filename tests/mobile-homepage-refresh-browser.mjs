@@ -138,6 +138,15 @@ try {
   await drawer.waitFor({ state: 'visible' });
   assert.equal(await drawer.getAttribute('aria-hidden'), 'false');
   assert.equal(await trigger.getAttribute('aria-expanded'), 'true');
+  const categoryToggle = drawer.locator('[data-mobile-categories-toggle]');
+  const categoryPanel = drawer.locator('#mobile-category-panel');
+  assert.equal(await categoryPanel.isVisible(), false, 'drawer: categories should start collapsed');
+  await categoryToggle.click();
+  assert.equal(await categoryToggle.getAttribute('aria-expanded'), 'true', 'drawer: category toggle should expose expanded state');
+  assert.equal(await categoryPanel.isVisible(), true, 'drawer: category panel should open on first tap');
+  await categoryToggle.click();
+  assert.equal(await categoryToggle.getAttribute('aria-expanded'), 'false', 'drawer: category toggle should collapse on second tap');
+  assert.equal(await categoryPanel.isVisible(), false, 'drawer: category panel should close on second tap');
   await phone.page.keyboard.press('Escape');
   assert.equal(await drawer.getAttribute('aria-hidden'), 'true');
   assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
