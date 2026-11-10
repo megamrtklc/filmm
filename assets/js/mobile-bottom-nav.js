@@ -8,12 +8,14 @@
     if(panel) panel.hidden=true;
     if(trigger){trigger.setAttribute('aria-expanded','false');trigger.classList.remove('is-active');}
   }
-  function syncMobileNavigation(){
-    var hash=(window.location.hash||'').toLowerCase(), route='home';
+  function syncMobileNavigation(forcedRoute){
+    var hash=(window.location.hash||'').toLowerCase(), route=forcedRoute || 'home';
+    if(!forcedRoute){
     if(hash.indexOf('#/filmler')===0) route='filmler';
     else if(hash.indexOf('#/diziler')===0) route='diziler';
     else if(hash.indexOf('#/kesfet')===0) route='kesfet';
     else if(hash.indexOf('#/listem')===0) route='listem';
+    }
     document.querySelectorAll('.mobile-bottom-nav [data-mobile-route]').forEach(function(item){
       var active=item.getAttribute('data-mobile-route')===route;
       item.classList.toggle('is-active',active);
@@ -44,10 +46,11 @@
       event.preventDefault();
       if(typeof window.showDashboard==='function') window.showDashboard(); else window.location.hash='';
     }
-    syncMobileNavigation();
+    syncMobileNavigation(item.getAttribute('data-mobile-route'));
   });
   document.addEventListener('keydown',function(event){if(event.key==='Escape') closeMobileCategories();});
   window.addEventListener('hashchange',function(){closeMobileCategories();syncMobileNavigation();});
+  window.addEventListener('popstate',function(){closeMobileCategories();syncMobileNavigation();});
   document.addEventListener('DOMContentLoaded',syncMobileNavigation);
   syncMobileNavigation();
 })();
