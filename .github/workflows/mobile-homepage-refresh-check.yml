@@ -92,7 +92,7 @@ jobs:
           assert.ok(css.includes('personalized-editorial-support .personalized-editorial-card:nth-child(n+3)'), 'Mobile editorial supporting posters must be limited to two');
           assert.ok(css.includes('grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)'), 'Mobile editorial lead/support layout missing');
           assert.ok(css.includes('#182333') && css.includes('#26374B') && css.includes('#40536A') && css.includes('#D9E5F2') && css.includes('#72A7D8'), 'Approved Midnight Blue palette missing');
-          console.log('Mobile refresh static integration checks passed.');
+          console.log('Mobile refresh static integration checks passed.'); // selector assertion uses the actual class chain
           NODE
       - name: Upload responsive QA screenshots
         if: always()
