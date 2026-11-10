@@ -4,7 +4,7 @@
   const $ = id => document.getElementById(id);
   const STORAGE = 'perde_series_diary_v1';
   const API = 'https://api.tvmaze.com';
-  let activeItem = null, activeSeason = 1, episodeRows = [], activeEpisode = null;
+  let activeItem = null, activeSeason = 1, episodeRows = [], activeEpisode = null, episodeFilter = 'all';
   const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const norm = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('tr-TR').replace(/[^a-z0-9ığüşöç]+/g,' ').trim();
   const TRANSLATION_CACHE = 'perde_series_tr_translations_v1';
@@ -82,9 +82,10 @@
     if (!main) return null;
     guide = document.createElement('section');
     guide.id = 'series-watch-system'; guide.className = 'series-watch-system'; guide.hidden = true;
-    guide.innerHTML = '<div class="series-guide-heading"><div><span>DİZİ REHBERİ</span><h2>Sezonlar ve bölümler</h2></div><span class="series-guide-count" id="series-guide-count">Bölümler yükleniyor</span></div><div class="series-diary-layout"><section class="series-episodes-column"><div class="series-season-toolbar"><label for="series-season-select">Sezon</label><select id="series-season-select" aria-label="Sezon seç"></select></div><div id="series-episodes" class="series-episodes"><div class="series-loading">Bölüm rehberi hazırlanıyor…</div></div></section><aside class="series-diary"><span class="series-diary-kicker">KİŞİSEL DİZİ GÜNLÜĞÜ</span><h3>İzleme durumun</h3><div id="series-diary-summary"></div><label class="series-field-label" for="series-status">Dizi durumu</label><select id="series-status"><option value="watching">İzliyorum</option><option value="planned">İzleme listemde</option><option value="completed">Tamamladım</option><option value="paused">Ara verdim</option><option value="dropped">Yarıda bıraktım</option></select><label class="series-field-label" for="series-rating">Kişisel puanın</label><select id="series-rating"><option value="">Puan vermedim</option>'+Array.from({length:10},(_,i)=>'<option value="'+(10-i)+'">'+(10-i)+'/10</option>').join('')+'</select><label class="series-field-label" for="series-note">Kişisel notun</label><textarea id="series-note" rows="4" placeholder="Dizi hakkındaki düşüncelerini yaz…"></textarea><button type="button" id="series-save-note" class="series-save-note">Günlüğü kaydet</button></aside></div>';
+    guide.innerHTML = '<div class="series-guide-heading"><div><span>DİZİ REHBERİ</span><h2>Bölümler</h2><p>Sezonunu seç, bölüm takibini kaldığın yerden sürdür.</p></div><span class="series-guide-count" id="series-guide-count">Bölümler yükleniyor</span></div><div class="series-diary-layout"><section class="series-episodes-column"><div class="series-season-toolbar" id="series-season-toolbar" aria-label="Sezon seçimi"></div><div id="series-season-progress" class="series-season-progress"></div><div class="series-episode-filter" id="series-episode-filter" aria-label="Bölüm filtresi"><button type="button" data-episode-filter="all" class="is-active">Tüm Bölümler</button><button type="button" data-episode-filter="unwatched">İzlenmeyenler</button><button type="button" data-episode-filter="watched">İzlenenler</button></div><div id="series-episodes" class="series-episodes"><div class="series-loading">Bölüm rehberi hazırlanıyor…</div></div></section><aside class="series-diary"><span class="series-diary-kicker">KİŞİSEL DİZİ GÜNLÜĞÜ</span><h3>İzleme durumun</h3><div id="series-diary-summary"></div><label class="series-field-label" for="series-status">Dizi durumu</label><select id="series-status"><option value="watching">İzliyorum</option><option value="planned">İzleme listemde</option><option value="completed">Tamamladım</option><option value="paused">Ara verdim</option><option value="dropped">Yarıda bıraktım</option></select><label class="series-field-label" for="series-rating">Kişisel puanın</label><select id="series-rating"><option value="">Puan vermedim</option>'+Array.from({length:10},(_,i)=>'<option value="'+(10-i)+'">'+(10-i)+'/10</option>').join('')+'</select><label class="series-field-label" for="series-note">Kişisel notun</label><textarea id="series-note" rows="4" placeholder="Dizi hakkındaki düşüncelerini yaz…"></textarea><button type="button" id="series-save-note" class="series-save-note">Günlüğü kaydet</button></aside></div>';
     const related = $('detail-related'); if (related?.parentNode === main) main.insertBefore(guide, related); else main.appendChild(guide);
-    $('series-season-select').addEventListener('change', e => { activeSeason = Number(e.target.value)||1; renderEpisodes(); });
+    $('series-season-toolbar').addEventListener('click', e => { const button=e.target.closest('[data-season]'); if(button){ activeSeason=Number(button.dataset.season)||1; episodeFilter='all'; renderEpisodes(); } });
+    $('series-episode-filter').addEventListener('click', e => { const button=e.target.closest('[data-episode-filter]'); if(button){ episodeFilter=button.dataset.episodeFilter; renderEpisodes(); } });
     $('series-status').addEventListener('change', e => updateEntry(activeItem,{status:e.target.value}));
     $('series-rating').addEventListener('change', e => updateEntry(activeItem,{rating:e.target.value}));
     $('series-save-note').addEventListener('click', () => updateEntry(activeItem,{note:$('series-note').value}));
@@ -98,13 +99,29 @@
     renderEpisodes();
   }
   function renderEpisodes() {
-    const host = $('series-episodes'); if (!host) return;
-    const episodes = episodeRows.filter(ep => Number(ep.season) === activeSeason);
+    const host = $('series-episodes'); if (!host || !activeItem) return;
+    const allSeasonEpisodes = episodeRows.filter(ep => Number(ep.season) === activeSeason);
+    const watched = new Set(getEntry(activeItem).watched || []);
+    const doneCount = allSeasonEpisodes.filter(ep => watched.has(String(ep.id))).length;
+    const total = allSeasonEpisodes.length;
+    const percent = total ? Math.round(doneCount / total * 100) : 0;
+    const nextEpisode = allSeasonEpisodes.find(ep => !watched.has(String(ep.id)));
+    const seasonToolbar = $('series-season-toolbar');
+    if (seasonToolbar) {
+      const seasons = [...new Set(episodeRows.map(ep => Number(ep.season)).filter(n => n > 0))].sort((a,b)=>a-b);
+      seasonToolbar.innerHTML = '<span class="series-season-label">SEZONLAR</span><div class="series-season-tabs">'+seasons.map(n=>'<button type="button" data-season="'+n+'" class="'+(n===activeSeason?'is-active':'')+'" aria-pressed="'+(n===activeSeason)+'">Sezon '+n+'</button>').join('')+'</div>';
+    }
+    const progress = $('series-season-progress');
+    if (progress) progress.innerHTML = '<div class="series-season-progress-copy"><div><span>SEZON '+activeSeason+' · İZLEME İLERLEMESİ</span><strong>'+doneCount+' <small>/ '+total+' bölüm</small></strong></div><b>%'+percent+'</b></div><div class="series-season-progress-track"><i style="width:'+percent+'%"></i></div><div class="series-season-progress-foot">'+(nextEpisode?'<span><i class="fa-solid fa-play"></i> Sıradaki: '+esc(episodeTitle(nextEpisode))+'</span>':'<span><i class="fa-solid fa-circle-check"></i> Bu sezon tamamlandı</span>')+'<span>'+doneCount+' / '+total+' tamamlandı</span></div>';
+    const filter = $('series-episode-filter');
+    if (filter) filter.querySelectorAll('[data-episode-filter]').forEach(button=>{const active=button.dataset.episodeFilter===episodeFilter;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
+    const episodes = allSeasonEpisodes.filter(ep => episodeFilter==='all' || (episodeFilter==='watched' ? watched.has(String(ep.id)) : !watched.has(String(ep.id))));
     host.innerHTML = episodes.length ? episodes.map(ep => {
-      const done = getEntry(activeItem).watched.includes(String(ep.id));
-      const image = ep.image?.medium || ep.image?.original || '';
-      return '<article class="series-episode-row"><div class="series-episode-image">'+(image?'<img src="'+esc(image)+'" alt="" loading="lazy">':'<span><i class="fa-solid fa-clapperboard"></i></span>')+'</div><div class="series-episode-copy"><div class="series-episode-meta"><span>S'+String(ep.season).padStart(2,'0')+' · B'+String(ep.number||0).padStart(2,'0')+'</span><span>'+(ep.runtime?ep.runtime+' dk':'')+(ep.airdate?' · '+esc(ep.airdate):'')+'</span></div><h3 data-episode-title="'+esc(ep.id)+'">'+esc(episodeTitle(ep))+'</h3><p data-episode-summary="'+esc(ep.id)+'">'+esc(ep.summary?'Türkçeye çevriliyor…':'Bu bölüm için açıklama bulunmuyor.')+'</p><div class="series-episode-actions"><button type="button" data-play-episode="'+esc(ep.id)+'"><i class="fa-solid fa-play"></i> Bölümü izle</button><button type="button" class="series-watched-toggle '+(done?'is-watched':'')+'" data-watched-episode="'+esc(ep.id)+'"><i class="fa-solid '+(done?'fa-check':'fa-circle-check')+'"></i> '+(done?'İzlendi':'İzlendi olarak işaretle')+'</button></div></div></article>';
-    }).join('') : '<p class="series-empty">Bu sezon için bölüm bilgisi bulunamadı.</p>';
+      const done = watched.has(String(ep.id));
+      const image = ep.image?.original || ep.image?.medium || '';
+      const title = episodeTitle(ep);
+      return '<article class="series-episode-row '+(done?'is-watched':'')+'"><div class="series-episode-image">'+(image?'<img src="'+esc(image)+'" alt="'+esc(title)+' bölüm görseli" loading="lazy">':'<span><i class="fa-solid fa-clapperboard"></i></span>')+'<span class="series-episode-number">'+String(ep.number||0).padStart(2,'0')+'</span>'+(done?'<span class="series-episode-seen"><i class="fa-solid fa-check"></i> İZLENDİ</span>':'')+'</div><div class="series-episode-copy"><div class="series-episode-meta"><span>SEZON '+String(ep.season).padStart(2,'0')+' · BÖLÜM '+String(ep.number||0).padStart(2,'0')+'</span><span>'+(ep.runtime?ep.runtime+' dk':'')+(ep.airdate?' · '+esc(ep.airdate):'')+'</span></div><h3 data-episode-title="'+esc(ep.id)+'">'+esc(title)+'</h3><p data-episode-summary="'+esc(ep.id)+'">'+esc(ep.summary?'Türkçeye çevriliyor…':'Bu bölüm için açıklama bulunmuyor.')+'</p><div class="series-episode-actions"><button type="button" data-play-episode="'+esc(ep.id)+'"><i class="fa-solid fa-play"></i> Bölümü izle</button><button type="button" class="series-watched-toggle '+(done?'is-watched':'')+'" data-watched-episode="'+esc(ep.id)+'"><i class="fa-solid '+(done?'fa-check':'fa-circle-check')+'"></i> '+(done?'İzlendi':'İzlendi olarak işaretle')+'</button></div></div></article>';
+    }).join('') : '<p class="series-empty">'+(episodeFilter==='watched'?'Bu sezonda henüz izlenmiş bölüm yok.':episodeFilter==='unwatched'?'Harika, bu sezondaki tüm bölümleri tamamlamışsın.':'Bu sezon için bölüm bilgisi bulunamadı.')+'</p>';
     host.querySelectorAll('[data-play-episode]').forEach(button => button.addEventListener('click', () => {
       const ep = episodeRows.find(row => String(row.id) === button.dataset.playEpisode);
       if (ep) openEpisode(ep);
@@ -169,7 +186,7 @@
     return episodes;
   }
   async function renderSeries(item) {
-    activeItem = item; activeSeason = 1; episodeRows = [];
+    activeItem = item; activeSeason = 1; episodeFilter = 'all'; episodeRows = [];
     const guide = ensureGuide(); if (!guide) return;
     guide.hidden = item.type !== 'tv';
     if (item.type !== 'tv') return;
@@ -187,7 +204,7 @@
       const seasons = [...new Set(episodeRows.map(ep=>Number(ep.season)).filter(n=>n>0))].sort((a,b)=>a-b);
       if (!seasons.length) throw new Error('Bu dizi için sezon bilgisi bulunamadı.');
       activeSeason = seasons[0];
-      $('series-season-select').innerHTML = seasons.map(n=>'<option value="'+n+'">Sezon '+n+'</option>').join('');
+      episodeFilter = 'all';
       $('series-guide-count').textContent = seasons.length+' sezon · '+episodeRows.length+' bölüm';
       renderEpisodes();
     } catch (error) {
