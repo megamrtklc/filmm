@@ -6,7 +6,7 @@
  var drawer=document.getElementById('mobile-drawer'), backdrop=document.getElementById('mobile-drawer-backdrop');
  function menuTrigger(){return document.querySelector('[data-mobile-drawer-open]');}
  var lastY=window.scrollY||0, ticking=false, hidden=false, lastFocus=null;
- function phone(){var root=document.documentElement;return mq.matches && root.classList.contains('perde-phone-device') && !root.classList.contains('perde-touch-compact') && !root.classList.contains('perde-tv-wide');}
+ function phone(){var root=document.documentElement;var screenWidth=window.screen&&window.screen.width||0;var viewportWidth=Math.max(window.innerWidth||0,root.clientWidth||0);var desktopRequested=screenWidth>0&&viewportWidth>screenWidth+48;return mq.matches && root.classList.contains('perde-phone-device') && !desktopRequested && !root.classList.contains('perde-touch-compact') && !root.classList.contains('perde-tv-wide');}
  function syncMode(){document.documentElement.classList.toggle('perde-mobile-refresh-active',phone());if(!phone()){chrome(false);close();}}
  function chrome(hide){if(!phone()||!header||!dock)return;hidden=hide;header.classList.toggle('is-scroll-hidden',hide);dock.classList.toggle('is-scroll-hidden',hide);}
  function onScroll(){if(ticking)return;ticking=true;requestAnimationFrame(function(){var y=window.scrollY||0,delta=y-lastY;if(y<35)chrome(false);else if(delta>5)chrome(true);else if(delta< -5)chrome(false);lastY=y;ticking=false;});}
