@@ -93,7 +93,7 @@
     if (redesignedHost) redesignedHost.insertBefore(guide, redesignedHost.firstChild);
     else if (related?.parentNode === main) main.insertBefore(guide, related);
     else main.appendChild(guide);
-    $('series-season-toolbar').addEventListener('click', e => { const button=e.target.closest('[data-season]'); if(button){ activeSeason=Number(button.dataset.season)||1; episodeFilter='all'; episodePage=1; renderEpisodes(); } });
+    $('series-season-toolbar').addEventListener('click', e => { const button=e.target.closest('[data-season]'); if(button){ activeSeason=Number(button.dataset.season)||1; const seasonNumbers=[...new Set(episodeRows.map(ep=>Number(ep.season)).filter(n=>n>0))].sort((a,b)=>a-b); seasonPage=Math.floor(Math.max(0,seasonNumbers.indexOf(activeSeason))/SEASONS_PER_PAGE)+1; episodeFilter='all'; episodePage=1; renderEpisodes(); } });
     $('series-episode-filter').addEventListener('click', e => { const button=e.target.closest('[data-episode-filter]'); if(button){ episodeFilter=button.dataset.episodeFilter; episodePage=1; renderEpisodes(); } });
     $('series-season-pagination').addEventListener('click', e => { const button=e.target.closest('[data-season-page]'); if(button){ seasonPage=Number(button.dataset.seasonPage)||1; renderEpisodes(); } });
     return guide;
@@ -117,8 +117,7 @@
     const seasonToolbar = $('series-season-toolbar');
     if (seasonToolbar) {
       const seasonPages=Math.max(1,Math.ceil(seasons.length/SEASONS_PER_PAGE));
-      const activeSeasonIndex=Math.max(0,seasons.indexOf(activeSeason));
-      seasonPage=Math.min(seasonPages,Math.max(1,Math.floor(activeSeasonIndex/SEASONS_PER_PAGE)+1));
+      seasonPage=Math.min(seasonPages,Math.max(1,seasonPage));
       const visibleSeasons=seasons.slice((seasonPage-1)*SEASONS_PER_PAGE,seasonPage*SEASONS_PER_PAGE);
       seasonToolbar.innerHTML = visibleSeasons.map(n => {
         const rows=episodeRows.filter(ep=>Number(ep.season)===n), count=rows.length, seen=rows.filter(ep=>watched.has(String(ep.id))).length;
