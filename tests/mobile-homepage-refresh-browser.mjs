@@ -143,8 +143,9 @@ try {
   assert.equal(await drawer.getAttribute('aria-hidden'), 'true', 'drawer: selecting a route should close it');
   assert.equal(await phone.page.locator('#catalog-page').isVisible(), true, 'drawer: series route should show catalog');
   await phone.page.goBack();
-  await phone.page.waitForFunction(() => location.hash.toLowerCase() !== '#/diziler');
-  assert.equal(await phone.page.locator('#dashboard-view').isVisible(), true, 'browser back: should restore prior dashboard route');
+  await phone.page.waitForFunction(() => location.hash.toLowerCase() === '#/listem');
+  assert.equal(await phone.page.locator('#catalog-page').isVisible(), true, 'browser back: should restore the previous Listem route');
+  assert.equal(await nav.locator('[data-mobile-route="listem"]').getAttribute('aria-current'), 'page', 'browser back: active bottom-nav item should follow restored route');
 
   // Rotate the same phone context and ensure mobile chrome remains active and usable.
   await phone.page.setViewportSize({ width: 844, height: 390 });
