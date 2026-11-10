@@ -286,3 +286,17 @@ body#theme-body>.site-header,.site-header{
 @media (prefers-reduced-motion:reduce){
   #dashboard-view *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+/* Homepage flow order mirrors the reference: spotlight, continue shelf, then discovery rows. */
+#dashboard-view .home-feature-row{order:1!important}
+#dashboard-view .homepage-main{order:2!important}
+#dashboard-view .home-mood-continue-row{order:3!important}
+#dashboard-view #continue-watching-section{order:-1!important}
+#dashboard-view #collection-popular{order:0!important}
+@media (max-width:767px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  html.perde-mobile-refresh-active .site-header{position:sticky!important;top:0!important;height:auto!important;min-height:62px!important}
+  html.perde-mobile-refresh-active .site-header .main-nav{display:none!important}
+  html.perde-mobile-refresh-active .site-header .header-topline{width:100%!important}
+  html.perde-mobile-refresh-active #dashboard-view .homepage-main{order:2!important}
+  html.perde-mobile-refresh-active #dashboard-view .home-mood-continue-row{order:3!important}
+}
