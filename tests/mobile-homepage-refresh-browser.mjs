@@ -136,6 +136,25 @@ try {
   assert.equal(await phone.page.locator('#dashboard-view').isVisible(), true, 'home: dashboard should be restored');
   assert.equal(await phone.page.locator('#catalog-page').isVisible(), false, 'home: catalog view should be hidden');
 
+  // Drawer route links must close the drawer and navigate to their intended destinations.
+  await trigger.click();
+  await drawer.locator('a[href="#/diziler"]').click();
+  await phone.page.waitForFunction(() => location.hash.toLowerCase() === '#/diziler');
+  assert.equal(await drawer.getAttribute('aria-hidden'), 'true', 'drawer: selecting a route should close it');
+  assert.equal(await phone.page.locator('#catalog-page').isVisible(), true, 'drawer: series route should show catalog');
+  await phone.page.goBack();
+  await phone.page.waitForFunction(() => location.hash.toLowerCase() !== '#/diziler');
+  assert.equal(await phone.page.locator('#dashboard-view').isVisible(), true, 'browser back: should restore prior dashboard route');
+
+  // Rotate the same phone context and ensure mobile chrome remains active and usable.
+  await phone.page.setViewportSize({ width: 844, height: 390 });
+  await phone.page.waitForTimeout(250);
+  assert.equal(await phone.page.locator('.mobile-bottom-nav').isVisible(), true, 'rotated phone: bottom navigation should remain visible');
+  assert.equal(await phone.page.locator('[data-mobile-drawer-open]').isVisible(), true, 'rotated phone: drawer trigger should remain visible');
+  await phone.page.screenshot({ path: 'artifacts/phone-rotated-in-session.png' });
+  await phone.page.setViewportSize({ width: 390, height: 844 });
+  await phone.page.waitForTimeout(150);
+
   const phoneLandscape = await loadAndCheck('phone landscape', {
     viewport: { width: 844, height: 390 },
     screen: { width: 844, height: 390 },
