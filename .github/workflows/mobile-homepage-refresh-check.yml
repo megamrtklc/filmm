@@ -9,6 +9,8 @@ on:
       - "assets/js/mobile-homepage-refresh.js"
       - "assets/js/mobile-bottom-nav.js"
       - "assets/js/responsive-mode.js"
+      - "assets/css/mobile-navigation.css"
+      - "tests/mobile-homepage-refresh-browser.mjs"
       - ".github/workflows/mobile-homepage-refresh-check.yml"
   workflow_dispatch:
 
@@ -74,6 +76,10 @@ jobs:
           assert.match(js, /e\.key==='Tab'/, 'Drawer keyboard focus handling missing');
           assert.match(js, /previousBodyOverflow/, 'Previous body scroll state is not preserved');
           assert.match(responsive, /perde-phone-device/, 'Responsive phone detection missing');
+          assert.match(responsive, /perde-desktop-site-requested/, 'Phone desktop-site mode class missing');
+          const mobileNav = fs.readFileSync('assets/css/mobile-navigation.css', 'utf8');
+          assert.match(mobileNav, /html\.perde-desktop-site-requested \.mobile-bottom-nav/, 'Desktop-site mode must hide mobile navigation');
+          assert.match(html, /mobile-navigation\.css\?v=20261110-desktop-mode-nav-v4/, 'Mobile navigation cache version missing');
           assert.match(responsive, /perde-touch-compact/, 'Responsive tablet detection missing');
           assert.match(responsive, /perde-tv-wide/, 'Responsive TV detection missing');
           let depth = 0;

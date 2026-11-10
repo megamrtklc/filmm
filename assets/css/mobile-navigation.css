@@ -371,3 +371,11 @@
   .mobile-bottom-nav .mobile-nav-item i { font-size: 15px !important; }
   .mobile-bottom-nav .mobile-nav-item span { font-size: 8px !important; }
 }
+
+
+/* A phone browser requesting the desktop site must use desktop navigation only. */
+html.perde-desktop-site-requested .mobile-bottom-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
