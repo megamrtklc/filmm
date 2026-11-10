@@ -59,8 +59,8 @@ jobs:
           const css = fs.readFileSync('assets/css/mobile-homepage-refresh.css', 'utf8');
           const js = fs.readFileSync('assets/js/mobile-homepage-refresh.js', 'utf8');
           const responsive = fs.readFileSync('assets/js/responsive-mode.js', 'utf8');
-          assert.match(html, /mobile-homepage-refresh\\.css\\?v=[^\"]+/, 'Mobile CSS link missing');
-          assert.match(html, /cineplay-home-redesign\\.css\\?v=20261110-cineplay-rebuild-v1/, 'Cineplay homepage redesign stylesheet missing');
+          assert.match(html, /mobile-homepage-refresh\.css\?v=[^"]+/, 'Mobile CSS link missing');
+          assert.match(html, /cineplay-home-redesign\.css\?v=20261110-cineplay-rebuild-v1/, 'Cineplay homepage redesign stylesheet missing');
           assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v7/, 'Mobile JS cache version missing');
           assert.match(html, /id="mobile-drawer" role="dialog"/, 'Drawer dialog semantics missing');
           assert.match(html, /id="collection-popular"/, 'Popular mobile home rail missing');
