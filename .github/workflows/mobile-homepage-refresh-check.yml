@@ -34,6 +34,7 @@ jobs:
           node --check assets/js/mobile-homepage-refresh.js
           node --check assets/js/mobile-bottom-nav.js
           node --check assets/js/responsive-mode.js
+          node --check assets/js/mobile-editor-picks.js
       - name: Install Chromium for browser checks
         run: |
           npm install --no-save playwright
@@ -59,8 +60,10 @@ jobs:
           const css = fs.readFileSync('assets/css/mobile-homepage-refresh.css', 'utf8');
           const js = fs.readFileSync('assets/js/mobile-homepage-refresh.js', 'utf8');
           const responsive = fs.readFileSync('assets/js/responsive-mode.js', 'utf8');
-          assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-mobile-editor-picks-magazine-v1/, 'Mobile CSS cache version missing');
+          assert.match(html, /mobile-homepage-refresh\.css\?v=20261110-horizontal-editorial-v2/, 'Mobile CSS cache version missing');
           assert.match(html, /mobile-homepage-refresh\.js\?v=20261110-mobile-refresh-v7/, 'Mobile JS cache version missing');
+          assert.match(html, /mobile-editor-picks\.css\?v=20261111-editor-picks-mobile-v1/, 'Mobile Editor Picks CSS missing');
+          assert.match(html, /mobile-editor-picks\.js\?v=20261111-editor-picks-mobile-v1/, 'Mobile Editor Picks JS missing');
           assert.match(html, /id="mobile-drawer" role="dialog"/, 'Drawer dialog semantics missing');
           assert.match(html, /id="collection-popular"/, 'Popular mobile home rail missing');
           assert.match(html, /id="collection-newest"/, 'Newest mobile home rail missing');
