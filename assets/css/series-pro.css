@@ -183,3 +183,7 @@
 /* Align the series synopsis and cast cards with the full-width episode archive. */
 #detail-series-layout .series-redesign-content{width:100%;max-width:1480px;margin-inline:auto;padding:0 clamp(18px,4vw,56px);box-sizing:border-box}
 #detail-series-layout #series-episodes-slot,
+
+
+/* Series detail: extend only the synopsis card to the selected-season card's right edge. */
+#detail-page-view.is-series-redesign .detail-description-panel{width:calc(100% + max(0px, min(1240px, calc(100vw - 48px)) - 1032px));max-width:none;box-sizing:border-box}
