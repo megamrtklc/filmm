@@ -8,11 +8,13 @@
   window.__perdeFourColorAmbilight = true;
 
   const cssVars = ['--ambilight-one', '--ambilight-two', '--ambilight-three', '--ambilight-four'];
+  const posterImageVar = '--ambilight-poster-image';
   let requestId = 0;
   let lastSource = '';
 
   function reset() {
     cssVars.forEach(name => main.style.removeProperty(name));
+    main.style.removeProperty(posterImageVar);
     main.removeAttribute('data-ambilight');
   }
   function rgbToHex(rgb) {
@@ -101,6 +103,9 @@
 
   function loadPosterPalette(source, id) {
     if (!source) { reset(); return; }
+    // CSS can display a cross-origin poster even when canvas pixel access is blocked.
+    main.style.setProperty(posterImageVar, `url(${JSON.stringify(source)})`);
+    main.dataset.ambilight = 'poster';
     const image = new Image();
     image.crossOrigin = 'anonymous';
     image.decoding = 'async';
@@ -109,12 +114,11 @@
       try { applyPalette(extractFourColors(image)); }
       catch (_) {
         // If the poster host blocks canvas access, don't show unrelated guessed colors.
-        reset();
-        main.dataset.ambilight = 'unavailable';
+        main.dataset.ambilight = 'poster';
       }
     };
     image.onerror = () => {
-      if (id === requestId) { reset(); main.dataset.ambilight = 'unavailable'; }
+      if (id === requestId) main.dataset.ambilight = 'poster';
     };
     image.src = source;
   }
