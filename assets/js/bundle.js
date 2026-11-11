@@ -2690,7 +2690,6 @@ function openPlayerForMedia(id){
    {icon:'fa-clock',label:'SÜRE',value:item.tmdbRuntime||item.duration},
    {icon:'fa-globe',label:'ÜLKE',value:countryText},
    {icon:'fa-video',label:'YÖNETMEN',value:item.tmdbDirector||item.director},
-   {icon:'fa-tv',label:'PLATFORM',value:item.platform}
   ].filter(fact=>fact.value);
   infoFacts.replaceChildren(...facts.map(fact=>{
    const node=document.createElement('div');node.className='ny7-player-fact';
