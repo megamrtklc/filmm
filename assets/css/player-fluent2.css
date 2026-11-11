@@ -411,7 +411,7 @@
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6;
+    -webkit-line-clamp: 5;
     margin: 17px 0 0;
     padding-top: 15px;
     border-top: 1px solid var(--watch-line);
@@ -973,8 +973,8 @@
   #player-modal .ny7-player-overview {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6;
-    line-clamp: 6;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
     overflow: hidden;
     color: #e2e2e2;
     font-size: 15px;
@@ -1060,8 +1060,8 @@
 #player-modal .ny7-player-overview p {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
-  line-clamp: 6;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
   overflow: hidden;
   margin: 0;
   color: #e2e2e2;
