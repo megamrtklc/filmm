@@ -1083,3 +1083,43 @@
   cursor: pointer;
 }
 #player-modal .ny7-player-overview-more[hidden] { display: none !important; }
+
+
+/* Keep every player credit on one line and truncate long values cleanly. */
+#player-modal .ny7-player-fact-copy {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 7px;
+  min-width: 0 !important;
+  width: 100%;
+  overflow: hidden;
+}
+#player-modal .ny7-player-fact-copy small {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
+#player-modal .ny7-player-fact-copy strong {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100%;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: normal !important;
+  line-height: 1.4;
+}
+#player-modal .ny7-player-country-flag {
+  display: inline-block !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  border-radius: 3px !important;
+  vertical-align: -5px !important;
+  margin-right: 4px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.24);
+}
