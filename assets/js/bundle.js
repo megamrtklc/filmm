@@ -544,7 +544,7 @@ async function renderSavedHomeCollections() {
         const response=await fetch(url.href,{cache:'no-store'});
         if(!response.ok)throw new Error('Koleksiyon dosyası yüklenemedi.');
         const saved=await response.json();
-        if(!Array.isArray(saved))return;
+        if(!Array.isArray(saved))saved=[];
         const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
         saved.filter(collection=>collection&&collection.active!==false&&collection.title&&Array.isArray(collection.items)&&collection.items.length)
           .forEach((collection,index)=>{
@@ -572,7 +572,17 @@ async function renderSavedHomeCollections() {
                 const section=available.get(key);if(section)parent.appendChild(section);
             });
         }
-    } catch(error) { console.warn('Özel koleksiyon rafları yüklenemedi:',error); }
+    } catch(error) {
+        console.warn('Özel koleksiyon rafları yüklenemedi:',error);
+        const parent=document.getElementById('home-collections');
+        if(parent){
+            const ids={featured:'collection-featured',movies:'collection-movies',series:'collection-series'};
+            const order=Array.isArray(window.perdeHomepageRails?.order)?window.perdeHomepageRails.order:[];
+            [...new Set([...order.filter(key=>Object.prototype.hasOwnProperty.call(ids,key)),...Object.keys(ids)])].forEach(key=>{
+                const section=document.getElementById(ids[key]);if(section)parent.appendChild(section);
+            });
+        }
+    }
 }
 
 function renderHomeCollections() {
