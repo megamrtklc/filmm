@@ -2715,7 +2715,7 @@ function openPlayerForMedia(id){
  if(overviewMore){
   overviewMore.hidden=true;
   overviewMore.onclick=()=>{if(overviewDialog&&!overviewDialog.open)overviewDialog.showModal();};
-  requestAnimationFrame(()=>{if(infoOverview&&overviewMore){const style=getComputedStyle(infoOverview);const lineHeight=parseFloat(style.lineHeight)||27;const probe=infoOverview.cloneNode(false);probe.textContent=overviewText;probe.style.cssText='position:absolute!important;visibility:hidden!important;display:block!important;inset:auto!important;width:'+infoOverview.clientWidth+'px!important;height:auto!important;max-height:none!important;overflow:visible!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;';document.body.appendChild(probe);const fullHeight=probe.scrollHeight;probe.remove();overviewMore.hidden=fullHeight<=lineHeight*5+3;}});
+  requestAnimationFrame(()=>{if(infoOverview&&overviewMore){const style=getComputedStyle(infoOverview);const lineHeight=parseFloat(style.lineHeight)||27;const probe=infoOverview.cloneNode(false);probe.textContent=overviewText;probe.style.cssText='position:absolute!important;visibility:hidden!important;display:block!important;inset:auto!important;width:'+infoOverview.clientWidth+'px!important;height:auto!important;max-height:none!important;overflow:visible!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;';document.body.appendChild(probe);const fullHeight=probe.scrollHeight;probe.remove();overviewMore.hidden=fullHeight<=lineHeight*4+3;}});
  }
  const sessionStatus=document.getElementById('player-session-status');if(sessionStatus)sessionStatus.textContent='Bağlantı kontrol ediliyor';
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
