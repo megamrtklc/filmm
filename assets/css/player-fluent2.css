@@ -891,25 +891,25 @@
 }
 
 
-/* Refined watch-page poster and credits alignment. */
+/* Refined watch-page poster size and credits alignment. */
 @media screen and (min-width: 1024px) {
   #player-modal .ny7-player-media-info {
-    grid-template-columns: minmax(126px, 42%) minmax(0,1fr);
-    gap: 11px;
+    grid-template-columns: minmax(136px, 42%) minmax(0,1fr);
+    gap: 7px;
   }
   #player-modal .ny7-player-poster-wrap {
     position: relative;
     width: 100%;
-    max-width: 142px;
+    max-width: 152px;
     margin-left: -3px;
   }
   #player-modal .ny7-player-media-info .ny7-player-poster-wrap img {
     display: block;
     width: 100%;
-    max-width: 142px;
+    max-width: 152px;
   }
   #player-modal .ny7-player-media-copy {
-    margin-left: -3px;
+    margin-left: -5px;
   }
   #player-modal .ny7-player-imdb {
     position: absolute;
