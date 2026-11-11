@@ -1384,3 +1384,25 @@ body.catalog-delete-open{overflow:hidden}
 @media(max-width:900px){
   #page-collections .collection-library,#page-collections .collection-editor,#page-collections .collection-preview-panel{padding:14px}
 }
+
+
+/* Dedicated homepage ordering page and navigation notes. */
+#page-homeOrder .home-rail-order-card{margin-top:14px}
+#page-homeOrder .home-rail-order-list{display:grid;gap:8px}
+#page-homeOrder .home-rail-order-item{cursor:grab}
+#page-homeOrder .home-rail-order-item:active{cursor:grabbing}
+#page-homeOrder .home-rail-order-item.is-dragging{opacity:.45}
+#page-homeOrder .home-rail-order-item.is-drop-target{border-color:rgba(216,173,85,.65);background:rgba(216,173,85,.08)}
+#page-homeOrder .home-rails-save-row{margin-top:14px}
+#page-homeRails .collection-workflow-note,
+#page-collections .collection-workflow-note{align-items:center}
+#page-homeRails .collection-workflow-note>button,
+#page-collections .collection-workflow-note>button{margin-left:auto;flex:0 0 auto;white-space:nowrap}
+@media(max-width:700px){
+  #page-homeRails .collection-workflow-note,
+  #page-collections .collection-workflow-note{flex-wrap:wrap}
+  #page-homeRails .collection-workflow-note>button,
+  #page-collections .collection-workflow-note>button{margin-left:29px}
+  #page-homeOrder .home-rails-save-row{align-items:stretch;flex-direction:column}
+  #page-homeOrder .home-rails-save-row .gold-button{width:100%}
+}
