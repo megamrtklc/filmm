@@ -774,25 +774,25 @@
   }
   #player-modal .ny7-player-fact {
     display: grid;
-    grid-template-columns: 15px minmax(0,1fr);
+    grid-template-columns: 17px minmax(0,1fr);
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     min-width: 0;
-    min-height: 31px;
-    padding: 6px 0;
+    min-height: 39px;
+    padding: 8px 0;
     border: 0;
-    border-bottom: 1px solid rgba(255,255,255,.085);
+    border-bottom: 1px solid rgba(255,255,255,.12);
     border-radius: 0;
     background: transparent;
   }
   #player-modal .ny7-player-fact:last-child { border-bottom: 0; }
   #player-modal .ny7-player-fact > i {
     display: block;
-    width: 15px;
+    width: 17px;
     height: auto;
-    color: #dfb65e;
+    color: #e7bd67;
     background: transparent;
-    font-size: 11px;
+    font-size: 13px;
     text-align: center;
   }
   #player-modal .ny7-player-fact-copy {
@@ -800,23 +800,23 @@
     flex-direction: row;
     align-items: baseline;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 7px;
     min-width: 0;
   }
   #player-modal .ny7-player-fact-copy small {
     flex: 0 0 auto;
-    color: #929292;
-    font-size: 8px;
-    font-weight: 750;
-    letter-spacing: .08em;
+    color: #b3a17d;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .075em;
   }
   #player-modal .ny7-player-fact-copy strong {
     min-width: 0;
     overflow: visible;
-    color: #e5e5e5;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.4;
+    color: #f4f1e9;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.55;
     text-overflow: clip;
     white-space: normal;
     overflow-wrap: anywhere;
