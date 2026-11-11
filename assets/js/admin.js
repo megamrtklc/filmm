@@ -14,7 +14,7 @@
   let editorSubtitles = [];
   let editorTmdbCast = [];
   const tmdbTokenStorageKey = 'perde_tmdb_read_token_v1';
-  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',homeRails:'Anasayfa Rafları',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',history:'Değişiklik Geçmişi',settings:'Genel Ayarlar'};
+  const pageNames = {overview:'Genel Bakış',catalog:'Film ve Diziler',editor:'Yapım Ekle / Düzenle',collections:'Koleksiyon Rafları',homeRails:'Anasayfa Rafları',homeOrder:'Anasayfa Sıralaması',hero:'Manşet ve Slider',health:'İçerik Kontrolü',watchlinks:'İzleme Bağlantıları',watch:'İzleme Günlüğü',analytics:'İstatistikler',sources:'Veri Kaynakları',backups:'Yedekleme',history:'Değişiklik Geçmişi',settings:'Genel Ayarlar'};
   function toast(message) {
     const node = $('#admin-toast');
     node.innerHTML = '<i class="fa-solid fa-circle-info"></i>' + escapeHtml(message);
@@ -1066,8 +1066,10 @@
   }
   function normalizeHomepageRails(saved,records=catalog){
     const defaults=homepageRailDefaults(records),validIds=new Set(records.map(item=>String(item.id))),normalized={};
-    const savedOrder=Array.isArray(saved?.order)?saved.order.filter(key=>homepageRailOrderKeys.includes(key)):[];
-    normalized.order=[...new Set([...savedOrder,...homepageRailOrderKeys])];
+    const collectionOrderKeys=Array.isArray(collections)?collections.map(item=>'collection:'+String(item.id)):[];
+    const allowedOrderKeys=[...homepageRailOrderKeys,...collectionOrderKeys];
+    const savedOrder=Array.isArray(saved?.order)?saved.order.filter(key=>allowedOrderKeys.includes(key)):[];
+    normalized.order=[...new Set([...savedOrder,...homepageRailOrderKeys,...collectionOrderKeys])];
     homepageRailKeys.forEach(key=>{
       const source=saved&&saved[key]&&typeof saved[key]==='object'?saved[key]:null;
       let ids=source&&Array.isArray(source.itemIds)?source.itemIds.map(String).filter(id=>validIds.has(id)):defaults[key].itemIds;
@@ -1081,8 +1083,9 @@
     return normalized;
   }
   function renderHomepageRailOrder(){
-    const host=$('#home-rail-order-list');if(!host)return;
-    host.innerHTML=homepageRails.order.map((key,index)=>'<div class="home-rail-order-item" draggable="true" data-home-rail-order-item="'+key+'"><span class="home-rail-order-grip" aria-hidden="true"><i class="fa-solid fa-grip-vertical"></i></span><span class="home-rail-order-number">'+String(index+1).padStart(2,'0')+'</span><b>'+escapeHtml(homepageRails[key]?.title||homepageRailLabels[key])+'</b><span class="home-rail-order-actions"><button type="button" data-home-rail-order-up="'+key+'" '+(index===0?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-order-down="'+key+'" '+(index===homepageRails.order.length-1?'disabled':'')+' aria-label="'+escapeHtml(homepageRailLabels[key])+' rafını aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span></div>').join('');
+    const host=$('#homepage-order-list');if(!host)return;
+    const labelFor=key=>key.startsWith('collection:')?(collections.find(item=>String(item.id)===key.slice(11))?.title||'Silinmiş koleksiyon'):(homepageRails[key]?.title||homepageRailLabels[key]||key);
+    host.innerHTML=homepageRails.order.map((key,index)=>'<div class="home-rail-order-item" draggable="true" data-home-rail-order-item="'+escapeHtml(key)+'"><span class="home-rail-order-grip" aria-hidden="true"><i class="fa-solid fa-grip-vertical"></i></span><span class="home-rail-order-number">'+String(index+1).padStart(2,'0')+'</span><b>'+escapeHtml(labelFor(key))+'</b><span class="home-rail-order-actions"><button type="button" data-home-rail-order-up="'+escapeHtml(key)+'" '+(index===0?'disabled':'')+' aria-label="'+escapeHtml(labelFor(key))+' rafını yukarı taşı"><i class="fa-solid fa-chevron-up"></i></button><button type="button" data-home-rail-order-down="'+escapeHtml(key)+'" '+(index===homepageRails.order.length-1?'disabled':'')+' aria-label="'+escapeHtml(labelFor(key))+' rafını aşağı taşı"><i class="fa-solid fa-chevron-down"></i></button></span></div>').join('')||'<div class="home-rail-empty">Sıralanacak raf bulunamadı.</div>';
   }
   function renderHomepageRails(){
     if(!homepageRails||!homepageRails.featured)return;
@@ -1140,30 +1143,31 @@
   function initHomepageRailsManager(){
     homepageRails=normalizeHomepageRails(homepageRails);
     if(!homepageRailPickersReady){
-      $('#home-rail-order-list').addEventListener('click',event=>{
+      const orderHost=$('#homepage-order-list');
+      orderHost.addEventListener('click',event=>{
         const button=event.target.closest('[data-home-rail-order-up],[data-home-rail-order-down]');if(!button)return;
         const key=button.dataset.homeRailOrderUp||button.dataset.homeRailOrderDown;const index=homepageRails.order.indexOf(key);if(index<0)return;
         const target=index+(button.hasAttribute('data-home-rail-order-up')?-1:1);if(target<0||target>=homepageRails.order.length)return;
         [homepageRails.order[index],homepageRails.order[target]]=[homepageRails.order[target],homepageRails.order[index]];renderHomepageRailOrder();
       });
       let draggedRailKey='';
-      $('#home-rail-order-list').addEventListener('dragstart',event=>{
+      orderHost.addEventListener('dragstart',event=>{
         const item=event.target.closest('[data-home-rail-order-item]');if(!item)return;
         draggedRailKey=item.dataset.homeRailOrderItem;item.classList.add('is-dragging');
         if(event.dataTransfer){event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',draggedRailKey);}
       });
-      $('#home-rail-order-list').addEventListener('dragover',event=>{
+      orderHost.addEventListener('dragover',event=>{
         const target=event.target.closest('[data-home-rail-order-item]');if(!target||!draggedRailKey)return;
         event.preventDefault();target.classList.add('is-drop-target');
       });
-      $('#home-rail-order-list').addEventListener('dragleave',event=>event.target.closest('[data-home-rail-order-item]')?.classList.remove('is-drop-target'));
-      $('#home-rail-order-list').addEventListener('drop',event=>{
+      orderHost.addEventListener('dragleave',event=>event.target.closest('[data-home-rail-order-item]')?.classList.remove('is-drop-target'));
+      orderHost.addEventListener('drop',event=>{
         const target=event.target.closest('[data-home-rail-order-item]');if(!target||!draggedRailKey)return;
         event.preventDefault();const from=homepageRails.order.indexOf(draggedRailKey),to=homepageRails.order.indexOf(target.dataset.homeRailOrderItem);
         if(from>=0&&to>=0&&from!==to){const [moved]=homepageRails.order.splice(from,1);homepageRails.order.splice(to,0,moved);}
         draggedRailKey='';renderHomepageRailOrder();
       });
-      $('#home-rail-order-list').addEventListener('dragend',()=>{draggedRailKey='';$('#home-rail-order-list').querySelectorAll('.is-dragging,.is-drop-target').forEach(item=>item.classList.remove('is-dragging','is-drop-target'));});
+      orderHost.addEventListener('dragend',()=>{draggedRailKey='';orderHost.querySelectorAll('.is-dragging,.is-drop-target').forEach(item=>item.classList.remove('is-dragging','is-drop-target'));});
       homepageRailKeys.forEach(key=>{
         $('#home-rail-'+key+'-search').addEventListener('input',()=>renderHomepageRailSearch(key));
         $('#home-rail-'+key+'-catalog-select').addEventListener('change',event=>{
@@ -1218,6 +1222,28 @@
     }
     renderHomepageRails();
     homepageRailKeys.forEach(renderHomepageRailSearch);
+  }
+  async function saveHomepageOrder(){
+    const button=$('#home-order-save');
+    if(!getGithubToken())return toast('Önce Veri Kaynakları bölümünden GitHub kayıt bağlantısını kur.');
+    homepageRails=normalizeHomepageRails(homepageRails);
+    button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor…';
+    $('#home-order-save-status').textContent='GitHub deposuna kaydediliyor…';
+    try{
+      const current=await githubHeroConfigRequest('GET');
+      if(!current.sha||!current.content)throw new Error('Anasayfa ayar dosyası okunamadı.');
+      const config=JSON.parse(decodeGithubContent(current.content));
+      const payload={...config,version:Math.max(2,Number(config.version)||2),updatedAt:new Date().toISOString(),homeRails:normalizeHomepageRails({...config.homeRails,...homepageRails})};
+      await githubHeroConfigRequest('PUT',{message:'Update Perde homepage card order',content:encodeGithubContent(JSON.stringify(payload,null,2)+'\\n'),sha:current.sha,branch:'main'});
+      homepageRails=payload.homeRails;renderHomepageRailOrder();
+      $('#home-order-save-title').textContent='Yayında';
+      $('#home-order-save-status').textContent=new Date().toLocaleString('tr-TR')+' · GitHub’a kaydedildi.';
+      toast('Anasayfa raf sıralaması kaydedildi.');
+    }catch(error){
+      $('#home-order-save-title').textContent='Kayıt başarısız';
+      $('#home-order-save-status').textContent=error.message;
+      toast('Anasayfa sıralaması kaydedilemedi: '+error.message);
+    }finally{button.disabled=false;button.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Sıralamayı kaydet ve yayınla';}
   }
   async function saveHomepageRails(){
     const button=$('#home-rails-save');
@@ -1305,6 +1331,7 @@
     $('#collection-list').innerHTML=collections.map((item,index)=>'<button type="button" class="collection-list-item'+(item.id===activeCollectionId?' selected':'')+'" data-collection-select="'+escapeHtml(item.id)+'"><span class="collection-list-icon"><i class="fa-solid fa-layer-group"></i></span><span class="collection-list-copy"><b>'+escapeHtml(item.title)+'</b><small>'+item.items.length+' yapım · '+(item.active?'Yayında':'Gizli')+' · '+(index+1)+'. sıra</small></span><i class="fa-solid fa-chevron-right"></i></button>').join('')||'<div class="collection-editor-empty">Henüz koleksiyon yok.</div>';
     renderCollectionEditor();
     renderCatalogPicker('collection-catalog-picker');
+    if(homepageRails&&homepageRails.featured){homepageRails=normalizeHomepageRails(homepageRails);renderHomepageRailOrder();}
   }
   function renderCollectionEditor() {
     const item=selectedCollection();
@@ -1683,6 +1710,7 @@
     if (pageNames[hash]) navigate(hash);
   }
   $('#home-rails-save').addEventListener('click',saveHomepageRails);
+  $('#home-order-save').addEventListener('click',saveHomepageOrder);
   $('#health-filters').addEventListener('click',event=>{
     const button=event.target.closest('[data-health-filter]');if(!button)return;
     healthFilter=button.dataset.healthFilter;
