@@ -2678,13 +2678,16 @@ function openPlayerForMedia(id){
   if(score)score.textContent=numeric.toFixed(1);
  }
  const countryNames={'United States':'ABD','United States of America':'ABD','USA':'ABD','US':'ABD','United Kingdom':'Birleşik Krallık','UK':'Birleşik Krallık','Türkiye':'Türkiye','Turkey':'Türkiye','South Korea':'Güney Kore','Korea':'Güney Kore','Japan':'Japonya','France':'Fransa','Germany':'Almanya','Italy':'İtalya','Spain':'İspanya','Canada':'Kanada','Australia':'Avustralya','India':'Hindistan','China':'Çin','Russia':'Rusya','Mexico':'Meksika','Brazil':'Brezilya','Sweden':'İsveç','Norway':'Norveç','Denmark':'Danimarka','Netherlands':'Hollanda','Belgium':'Belçika','Switzerland':'İsviçre','Poland':'Polonya','Ireland':'İrlanda','New Zealand':'Yeni Zelanda','Thailand':'Tayland','Hong Kong':'Hong Kong','Taiwan':'Tayvan'};
- const countryFlags={'ABD':'🇺🇸','Birleşik Krallık':'🇬🇧','Türkiye':'🇹🇷','Güney Kore':'🇰🇷','Japonya':'🇯🇵','Fransa':'🇫🇷','Almanya':'🇩🇪','İtalya':'🇮🇹','İspanya':'🇪🇸','Kanada':'🇨🇦','Avustralya':'🇦🇺','Hindistan':'🇮🇳','Çin':'🇨🇳','Rusya':'🇷🇺','Meksika':'🇲🇽','Brezilya':'🇧🇷','İsveç':'🇸🇪','Norveç':'🇳🇴','Danimarka':'🇩🇰','Hollanda':'🇳🇱','Belçika':'🇧🇪','İsviçre':'🇨🇭','Polonya':'🇵🇱','İrlanda':'🇮🇪','Yeni Zelanda':'🇳🇿','Tayland':'🇹🇭','Hong Kong':'🇭🇰','Tayvan':'🇹🇼'};
+ const countryCodes={'ABD':'us','Birleşik Krallık':'gb','Türkiye':'tr','Güney Kore':'kr','Japonya':'jp','Fransa':'fr','Almanya':'de','İtalya':'it','İspanya':'es','Kanada':'ca','Avustralya':'au','Hindistan':'in','Çin':'cn','Rusya':'ru','Meksika':'mx','Brezilya':'br','İsveç':'se','Norveç':'no','Danimarka':'dk','Hollanda':'nl','Belçika':'be','İsviçre':'ch','Polonya':'pl','İrlanda':'ie','Yeni Zelanda':'nz','Tayland':'th','Hong Kong':'hk','Tayvan':'tw'};
  const rawCountry=item.tmdbCountries||item.country||'';
- const countryText=(Array.isArray(rawCountry)?rawCountry.join(', '):String(rawCountry)).split(',').map(name=>name.trim()).filter(Boolean).map(name=>{const tr=countryNames[name]||name;return (countryFlags[tr]?countryFlags[tr]+' ':'')+tr;}).join(' · ');
+ const countryList=(Array.isArray(rawCountry)?rawCountry.join(', '):String(rawCountry)).split(',').map(name=>name.trim()).filter(Boolean).map(name=>{const tr=countryNames[name]||name;return {name:tr,code:countryCodes[tr]||''};});
+ const countryText=countryList.map(country=>country.name).join(' · ');
  const infoFacts=document.getElementById('player-info-facts');
  if(infoFacts){
   const facts=[
    {icon:'fa-calendar-days',label:'YIL',value:item.year||item.tmdbReleaseDate?.slice(0,4)},
+   {icon:'fa-tags',label:'KATEGORİ',value:item.tmdbGenres||item.category||item.genre},
+   {icon:'fa-clock',label:'SÜRE',value:item.tmdbRuntime||item.duration},
    {icon:'fa-globe',label:'ÜLKE',value:countryText},
    {icon:'fa-video',label:'YÖNETMEN',value:item.tmdbDirector||item.director},
    {icon:'fa-tv',label:'PLATFORM',value:item.platform}
@@ -2694,7 +2697,14 @@ function openPlayerForMedia(id){
    const icon=document.createElement('i');icon.className='fa-solid '+fact.icon;icon.setAttribute('aria-hidden','true');
    const copy=document.createElement('span');copy.className='ny7-player-fact-copy';
    const label=document.createElement('small');label.textContent=fact.label;
-   const value=document.createElement('strong');value.textContent=String(fact.value);
+   const value=document.createElement('strong');
+   if(fact.label==='ÜLKE'&&countryList.length){
+    countryList.forEach((country,index)=>{
+     if(index){const sep=document.createTextNode(' · ');value.append(sep);}
+     if(country.code){const flag=document.createElement('img');flag.className='ny7-player-country-flag';flag.src='https://flagcdn.com/w40/'+country.code+'.png';flag.srcset='https://flagcdn.com/w80/'+country.code+'.png 2x';flag.alt=country.name+' bayrağı';flag.loading='lazy';value.append(flag);}
+     const name=document.createElement('span');name.textContent=country.name;value.append(name);
+    });
+   }else value.textContent=String(fact.value);
    copy.append(label,value);node.append(icon,copy);return node;
   }));
  }
