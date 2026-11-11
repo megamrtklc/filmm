@@ -1792,7 +1792,6 @@ function mountDetailSeriesLayout(){
  const visual=root.querySelector('.detail-visual'),main=root.querySelector('.detail-main');
  moveDetailSeriesNode(document.getElementById('detail-backdrop'),document.getElementById('series-backdrop-slot'));
  moveDetailSeriesNode(main?.querySelector('.detail-poster-column'),document.getElementById('series-poster-slot'));
- moveDetailSeriesNode(main?.querySelector('.detail-description-panel'),document.getElementById('series-synopsis-slot'));
  moveDetailSeriesNode(main?.querySelector('.detail-copy'),document.getElementById('series-copy-slot'));
  moveDetailSeriesNode(document.getElementById('detail-episodes'),document.getElementById('series-episodes-slot'));
  moveDetailSeriesNode(document.getElementById('detail-credits'),document.getElementById('series-credits-slot'));
