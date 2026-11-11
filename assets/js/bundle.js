@@ -2669,6 +2669,27 @@ function openPlayerForMedia(id){
  if(infoTitle)infoTitle.textContent=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeTitle||'Bölüm')+' — '+item.title:item.title;
  if(infoType)infoType.textContent=window.perdeEpisodeContext?'DİZİ · SEZON '+window.perdeEpisodeContext.season+' · BÖLÜM '+window.perdeEpisodeContext.episode:(item.type==='tv'?'DİZİ':'FİLM');
  if(infoMeta)infoMeta.textContent=[item.year,item.tmdbGenres||item.category,item.tmdbRuntime||item.duration].filter(Boolean).join(' · ')||'Perde arşivi';
+ const infoFacts=document.getElementById('player-info-facts');
+ if(infoFacts){
+  const facts=[
+   {icon:'fa-calendar-days',label:'YIL',value:item.year||item.tmdbReleaseDate?.slice(0,4)},
+   {icon:'fa-film',label:'TÜR',value:item.type==='tv'?'Dizi':item.type==='movie'?'Film':item.type==='series'?'Dizi':''},
+   {icon:'fa-tags',label:'KATEGORİ',value:item.tmdbGenres||item.category||item.genre},
+   {icon:'fa-clock',label:'SÜRE',value:item.tmdbRuntime||item.duration},
+   {icon:'fa-globe',label:'ÜLKE',value:item.tmdbCountries||item.country},
+   {icon:'fa-video',label:'YÖNETMEN',value:item.tmdbDirector||item.director},
+   {icon:'fa-star',label:'IMDb',value:item.ratingCount||((item.tmdbRating||item.rating)?'IMDb '+(item.tmdbRating||item.rating):'')},
+   {icon:'fa-tv',label:'PLATFORM',value:item.platform}
+  ].filter(fact=>fact.value).slice(0,6);
+  infoFacts.replaceChildren(...facts.map(fact=>{
+   const node=document.createElement('div');node.className='ny7-player-fact';
+   const icon=document.createElement('i');icon.className='fa-solid '+fact.icon;icon.setAttribute('aria-hidden','true');
+   const copy=document.createElement('span');copy.className='ny7-player-fact-copy';
+   const label=document.createElement('small');label.textContent=fact.label;
+   const value=document.createElement('strong');value.textContent=String(fact.value);
+   copy.append(label,value);node.append(icon,copy);return node;
+  }));
+ }
  if(infoOverview)infoOverview.textContent=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeOverview||item.tmdbOverview||item.desc||'Bu bölüm için özet bilgisi bulunmuyor.'):item.tmdbOverview||item.desc||'Bu yapım için açıklama bilgisi bulunmuyor.';
  const sessionStatus=document.getElementById('player-session-status');if(sessionStatus)sessionStatus.textContent='Bağlantı kontrol ediliyor';
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
