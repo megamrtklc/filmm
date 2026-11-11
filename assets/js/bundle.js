@@ -2708,8 +2708,8 @@ function openPlayerForMedia(id){
   }));
  }
  const overviewText=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeOverview||item.tmdbOverview||item.desc||'Bu bölüm için özet bilgisi bulunmuyor.'):item.tmdbOverview||item.desc||'Bu yapım için açıklama bilgisi bulunmuyor.';
- if(infoOverview)infoOverview.textContent=overviewText;
  const overviewMore=document.getElementById('player-overview-more'),overviewDialog=document.getElementById('player-overview-dialog'),overviewFull=document.getElementById('player-overview-full'),overviewClose=document.getElementById('player-overview-close');
+ if(infoOverview){infoOverview.textContent=overviewText;if(overviewMore)infoOverview.appendChild(overviewMore);}
  if(overviewFull)overviewFull.textContent=overviewText;
  if(overviewDialog&&overviewClose&&!overviewDialog.dataset.closeBound){overviewClose.addEventListener('click',()=>overviewDialog.close());overviewDialog.addEventListener('click',event=>{if(event.target===overviewDialog)overviewDialog.close();});overviewDialog.dataset.closeBound='1';}
  if(overviewMore){
