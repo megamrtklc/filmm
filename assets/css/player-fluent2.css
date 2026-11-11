@@ -1047,3 +1047,39 @@
     left: auto;
   }
 }
+
+
+/* Synopsis container keeps the read-more action visible directly beneath its text. */
+#player-modal .ny7-player-overview {
+  display: block !important;
+  margin: 17px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  overflow: visible;
+}
+#player-modal .ny7-player-overview p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  overflow: hidden;
+  margin: 0;
+  color: #e2e2e2;
+  font-size: 15px;
+  line-height: 1.8;
+  font-weight: 400;
+}
+#player-modal .ny7-player-overview-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 7px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #e5bd68;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+#player-modal .ny7-player-overview-more[hidden] { display: none !important; }
