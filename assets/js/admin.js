@@ -1234,7 +1234,7 @@
       if(!current.sha||!current.content)throw new Error('Anasayfa ayar dosyası okunamadı.');
       const config=JSON.parse(decodeGithubContent(current.content));
       const payload={...config,version:Math.max(2,Number(config.version)||2),updatedAt:new Date().toISOString(),homeRails:normalizeHomepageRails({...config.homeRails,...homepageRails})};
-      await githubHeroConfigRequest('PUT',{message:'Update Perde homepage card order',content:encodeGithubContent(JSON.stringify(payload,null,2)+'\\n'),sha:current.sha,branch:'main'});
+      await githubHeroConfigRequest('PUT',{message:'Update Perde homepage card order',content:encodeGithubContent(JSON.stringify(payload,null,2)+'\n'),sha:current.sha,branch:'main'});
       homepageRails=payload.homeRails;renderHomepageRailOrder();
       $('#home-order-save-title').textContent='Yayında';
       $('#home-order-save-status').textContent=new Date().toLocaleString('tr-TR')+' · GitHub’a kaydedildi.';
