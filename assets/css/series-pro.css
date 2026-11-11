@@ -178,14 +178,3 @@
 @media(max-width:560px){#series-watch-system .series-season-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media(max-width:560px){#series-watch-system .series-episodes{grid-template-columns:1fr}}
-
-
-/* Align the series synopsis and cast cards with the full-width episode archive. */
-#detail-series-layout .series-redesign-content{width:100%;max-width:1480px;margin-inline:auto;padding:0 clamp(18px,4vw,56px);box-sizing:border-box}
-#detail-series-layout #series-episodes-slot,
-#detail-series-layout #series-synopsis-slot,
-#detail-series-layout #series-credits-slot,
-#detail-series-layout #series-related-slot{display:block;width:100%;max-width:none;min-width:0;box-sizing:border-box}
-#detail-page-view.is-series-redesign #series-synopsis-slot .detail-description-panel,
-#detail-page-view.is-series-redesign #series-credits-slot .detail-credits{width:100%;max-width:none;box-sizing:border-box;margin-inline:0}
-@media(max-width:700px){#detail-series-layout .series-redesign-content{padding-inline:16px}}
