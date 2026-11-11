@@ -963,3 +963,83 @@
     box-shadow: 0 0 0 1px rgba(255,255,255,.18);
   }
 }
+
+
+/* Six-line synopsis with a full-text dialog; IMDb badge at poster bottom-right. */
+@media screen and (min-width: 1024px) {
+  #player-modal .ny7-player-overview {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    overflow: hidden;
+    color: #e2e2e2;
+    font-size: 15px;
+    line-height: 1.8;
+    font-weight: 400;
+  }
+  #player-modal .ny7-player-overview-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #e5bd68;
+    font-size: 12px;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  #player-modal .ny7-player-overview-more[hidden] { display: none !important; }
+  #player-modal .ny7-player-overview-dialog {
+    width: min(680px, calc(100vw - 40px));
+    max-width: 680px;
+    max-height: min(78vh, 760px);
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(229,189,104,.28);
+    border-radius: 14px;
+    background: #191919;
+    color: #ededed;
+    box-shadow: 0 24px 80px rgba(0,0,0,.65);
+  }
+  #player-modal .ny7-player-overview-dialog::backdrop { background: rgba(0,0,0,.78); backdrop-filter: blur(5px); }
+  #player-modal .ny7-player-overview-dialog-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    color: #e5bd68;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .14em;
+  }
+  #player-modal .ny7-player-overview-dialog-head button {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 8px;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    cursor: pointer;
+  }
+  #player-modal .ny7-player-overview-full {
+    max-height: calc(min(78vh, 760px) - 72px);
+    padding: 22px 24px 26px;
+    overflow-y: auto;
+    color: #e3e3e3;
+    font-size: 16px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+  }
+  #player-modal .ny7-player-imdb {
+    top: auto;
+    right: 7px;
+    bottom: 7px;
+    left: auto;
+  }
+}
