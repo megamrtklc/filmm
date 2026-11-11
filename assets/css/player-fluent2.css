@@ -411,7 +411,7 @@
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 4;
     margin: 17px 0 0;
     padding-top: 15px;
     border-top: 1px solid var(--watch-line);
@@ -894,19 +894,19 @@
 /* Refined watch-page poster and credits alignment. */
 @media screen and (min-width: 1024px) {
   #player-modal .ny7-player-media-info {
-    grid-template-columns: minmax(112px, 37%) minmax(0,1fr);
+    grid-template-columns: minmax(126px, 42%) minmax(0,1fr);
     gap: 11px;
   }
   #player-modal .ny7-player-poster-wrap {
     position: relative;
     width: 100%;
-    max-width: 126px;
+    max-width: 142px;
     margin-left: -3px;
   }
   #player-modal .ny7-player-media-info .ny7-player-poster-wrap img {
     display: block;
     width: 100%;
-    max-width: 126px;
+    max-width: 142px;
   }
   #player-modal .ny7-player-media-copy {
     margin-left: -3px;
@@ -973,8 +973,8 @@
   #player-modal .ny7-player-overview {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
-    line-clamp: 5;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     overflow: hidden;
     color: #e2e2e2;
     font-size: 15px;
@@ -1060,8 +1060,8 @@
 #player-modal .ny7-player-overview p {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  line-clamp: 5;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   overflow: hidden;
   margin: 0;
   color: #e2e2e2;
@@ -1122,4 +1122,17 @@
   vertical-align: -5px !important;
   margin-right: 4px;
   box-shadow: 0 0 0 1px rgba(255,255,255,.24);
+}
+
+
+/* Compact IMDb score badge without the IMDb wordmark. */
+#player-modal .ny7-player-imdb {
+  gap: 0 !important;
+  min-width: 0;
+  padding: 5px 8px !important;
+}
+#player-modal .ny7-player-imdb b { display: none !important; }
+#player-modal .ny7-player-imdb strong {
+  font-size: 14px !important;
+  line-height: 1 !important;
 }
