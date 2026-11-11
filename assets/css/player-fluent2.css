@@ -696,9 +696,18 @@
       radial-gradient(ellipse at 97% 5%, var(--ambilight-two, transparent) 0%, transparent 54%),
       radial-gradient(ellipse at 3% 95%, var(--ambilight-three, transparent) 0%, transparent 54%),
       radial-gradient(ellipse at 97% 95%, var(--ambilight-four, transparent) 0%, transparent 54%);
+    background-image:
+      radial-gradient(ellipse at 3% 5%, var(--ambilight-one, transparent) 0%, transparent 54%),
+      radial-gradient(ellipse at 97% 5%, var(--ambilight-two, transparent) 0%, transparent 54%),
+      radial-gradient(ellipse at 3% 95%, var(--ambilight-three, transparent) 0%, transparent 54%),
+      radial-gradient(ellipse at 97% 95%, var(--ambilight-four, transparent) 0%, transparent 54%),
+      var(--ambilight-poster-image, none);
+    background-size: auto, auto, auto, auto, cover;
+    background-position: center;
     transition: opacity .5s ease, filter .5s ease;
   }
-  #player-modal .ny7-player-main-column[data-ambilight="ready"]::before {
+  #player-modal .ny7-player-main-column[data-ambilight="ready"]::before,
+  #player-modal .ny7-player-main-column[data-ambilight="poster"]::before {
     opacity: .96;
   }
   #player-modal .ny7-player-stage {
