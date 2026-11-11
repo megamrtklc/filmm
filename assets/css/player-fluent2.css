@@ -943,3 +943,23 @@
   #player-modal #player-info-type,
   #player-modal #player-info-meta { display: none !important; }
 }
+
+
+/* Country flags and restored category/runtime credits. */
+@media screen and (min-width: 1024px) {
+  #player-modal .ny7-player-fact-copy strong {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  #player-modal .ny7-player-country-flag {
+    display: inline-block;
+    width: 19px;
+    height: 13px;
+    object-fit: cover;
+    border-radius: 2px;
+    vertical-align: -2px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.18);
+  }
+}
