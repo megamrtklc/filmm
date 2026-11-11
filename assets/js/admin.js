@@ -1069,7 +1069,7 @@
     const collectionOrderKeys=Array.isArray(collections)?collections.map(item=>'collection:'+String(item.id)):[];
     const savedOrder=Array.isArray(saved?.order)?saved.order.filter(key=>homepageRailOrderKeys.includes(key)||String(key).startsWith('collection:')):[];
     const liveCollectionKeys=Array.isArray(collections)?collections.map(item=>'collection:'+String(item.id)):[];
-    normalized.order=[...new Set([...savedOrder.filter(key=>!String(key).startsWith('collection:')||liveCollectionKeys.includes(key)),...homepageRailOrderKeys,...liveCollectionKeys])];
+    normalized.order=[...new Set([...savedOrder.filter(key=>!collections.length||!String(key).startsWith('collection:')||liveCollectionKeys.includes(key)),...homepageRailOrderKeys,...liveCollectionKeys])];
     homepageRailKeys.forEach(key=>{
       const source=saved&&saved[key]&&typeof saved[key]==='object'?saved[key]:null;
       let ids=source&&Array.isArray(source.itemIds)?source.itemIds.map(String).filter(id=>validIds.has(id)):defaults[key].itemIds;
