@@ -178,3 +178,8 @@
 @media(max-width:560px){#series-watch-system .series-season-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media(max-width:560px){#series-watch-system .series-episodes{grid-template-columns:1fr}}
+
+/* Dizi detay kartları: mevcut yerleşimi koruyarak genişlikleri hizala */
+#detail-page-view.is-series-redesign .series-redesign-copy-slot{width:100%;max-width:none}
+#detail-page-view.is-series-redesign .detail-description-panel{width:100%;max-width:none;box-sizing:border-box}
+#detail-page-view.is-series-redesign #detail-credits{width:100%;max-width:none;box-sizing:border-box}
