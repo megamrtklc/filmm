@@ -2709,13 +2709,13 @@ function openPlayerForMedia(id){
  }
  const overviewText=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeOverview||item.tmdbOverview||item.desc||'Bu bölüm için özet bilgisi bulunmuyor.'):item.tmdbOverview||item.desc||'Bu yapım için açıklama bilgisi bulunmuyor.';
  const overviewMore=document.getElementById('player-overview-more'),overviewDialog=document.getElementById('player-overview-dialog'),overviewFull=document.getElementById('player-overview-full'),overviewClose=document.getElementById('player-overview-close');
- if(infoOverview){infoOverview.textContent=overviewText;if(overviewMore)infoOverview.appendChild(overviewMore);}
+ if(infoOverview)infoOverview.textContent=overviewText;
  if(overviewFull)overviewFull.textContent=overviewText;
  if(overviewDialog&&overviewClose&&!overviewDialog.dataset.closeBound){overviewClose.addEventListener('click',()=>overviewDialog.close());overviewDialog.addEventListener('click',event=>{if(event.target===overviewDialog)overviewDialog.close();});overviewDialog.dataset.closeBound='1';}
  if(overviewMore){
   overviewMore.hidden=true;
   overviewMore.onclick=()=>{if(overviewDialog&&!overviewDialog.open)overviewDialog.showModal();};
-  requestAnimationFrame(()=>{if(infoOverview&&overviewMore){const style=getComputedStyle(infoOverview);const lineHeight=parseFloat(style.lineHeight)||24;overviewMore.hidden=infoOverview.scrollHeight<=lineHeight*6+3;}});
+  requestAnimationFrame(()=>{if(infoOverview&&overviewMore){const style=getComputedStyle(infoOverview);const lineHeight=parseFloat(style.lineHeight)||27;const probe=infoOverview.cloneNode(false);probe.textContent=overviewText;probe.style.cssText='position:absolute!important;visibility:hidden!important;display:block!important;inset:auto!important;width:'+infoOverview.clientWidth+'px!important;height:auto!important;max-height:none!important;overflow:visible!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;';document.body.appendChild(probe);const fullHeight=probe.scrollHeight;probe.remove();overviewMore.hidden=fullHeight<=lineHeight*6+3;}});
  }
  const sessionStatus=document.getElementById('player-session-status');if(sessionStatus)sessionStatus.textContent='Bağlantı kontrol ediliyor';
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
