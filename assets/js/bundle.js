@@ -553,10 +553,25 @@ async function renderSavedHomeCollections() {
             const railId='saved-collection-rail-'+index;
             const section=document.createElement('section');
             section.className='collection-section saved-collection-section space-y-4';
+            section.dataset.collectionId=String(collection.id);
             const controls=entries.length>8?'<div class="rail-controls" aria-label="'+esc(collection.title)+' rafı kaydırma kontrolleri"><button type="button" data-rail-target="'+railId+'" data-rail-direction="-1" aria-label="Önceki afişler"><i class="fa-solid fa-chevron-left"></i></button><button type="button" data-rail-target="'+railId+'" data-rail-direction="1" aria-label="Sonraki afişler"><i class="fa-solid fa-chevron-right"></i></button></div>':'';
             section.innerHTML='<div class="collection-heading"><div><p class="collection-eyebrow">ÖZEL KOLEKSİYON</p><h2>'+esc(collection.title)+'</h2></div>'+controls+'</div><div id="'+railId+'" class="collection-rail saved-collection-rail">'+entries.map(item=>'<article class="collection-card" data-detail-id="'+esc(item.id)+'" tabindex="0" role="button" aria-label="'+esc(item.title)+' detayını aç"><div class="collection-poster-wrap"><img src="'+esc(item.image)+'" alt="'+esc(item.title)+'" loading="lazy" decoding="async"><span class="collection-rating">★ '+esc(item.rating||'—')+'</span></div><div class="collection-card-copy"><h3>'+esc(item.title)+'</h3>'+originalTitleMarkup(item,'collection-original-title')+'<p>'+esc(item.year||'')+' <span>•</span> '+(item.type==='tv'?'Dizi':'Film')+'</p></div></article>').join('')+'</div>';
             host.appendChild(section);
           });
+        const parent=document.getElementById('home-collections');
+        if(parent){
+            const staticIds={featured:'collection-featured',movies:'collection-movies',series:'collection-series'};
+            const customSections=[...host.children];
+            customSections.forEach(section=>parent.appendChild(section));
+            host.remove();
+            const order=Array.isArray(window.perdeHomepageRails?.order)?window.perdeHomepageRails.order:[];
+            const available=new Map(Object.entries(staticIds).map(([key,id])=>[key,document.getElementById(id)]));
+            customSections.forEach(section=>available.set('collection:'+section.dataset.collectionId,section));
+            const fallback=['featured','movies','series',...customSections.map(section=>'collection:'+section.dataset.collectionId)];
+            [...new Set([...order.filter(key=>available.has(key)),...fallback])].forEach(key=>{
+                const section=available.get(key);if(section)parent.appendChild(section);
+            });
+        }
     } catch(error) { console.warn('Özel koleksiyon rafları yüklenemedi:',error); }
 }
 
@@ -634,11 +649,8 @@ function renderHomeCollections() {
     const movies=byIds('movies');
     const series=byIds('series');
     const sectionIds={featured:'collection-featured',movies:'collection-movies',series:'collection-series'};
-    const railOrder=Array.isArray(configured?.order)?configured.order.filter(key=>Object.prototype.hasOwnProperty.call(sectionIds,key)):[];
-    const orderedRailKeys=[...new Set([...railOrder,...Object.keys(sectionIds)])];
+    // Full homepage ordering is applied after custom collection rails have been fetched.
     const homeCollections=document.getElementById('home-collections');
-    const customRails=document.getElementById('custom-collection-rails');
-    if(homeCollections&&customRails)orderedRailKeys.forEach(key=>{const section=document.getElementById(sectionIds[key]);if(section)section.before(customRails);});
     Object.entries(sectionIds).forEach(([key,id])=>{
         const section=document.getElementById(id),heading=section?.querySelector('.collection-heading h2');
         if(section){const isActive=sectionData[key].active;section.hidden=!isActive;if(isActive)section.style.removeProperty('display');else section.style.setProperty('display','none','important');if(heading)heading.textContent=sectionData[key].title;}
