@@ -985,8 +985,9 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    margin-top: 8px;
+    margin: 0 0 0 8px;
     padding: 0;
+    vertical-align: baseline;
     border: 0;
     background: transparent;
     color: #e5bd68;
