@@ -2667,20 +2667,28 @@ function openPlayerForMedia(id){
  const infoPoster=document.getElementById('player-info-poster'),infoTitle=document.getElementById('player-info-title'),infoType=document.getElementById('player-info-type'),infoMeta=document.getElementById('player-info-meta'),infoOverview=document.getElementById('player-info-overview');
  if(infoPoster){infoPoster.src=item.image||item.tmdbPoster||'';infoPoster.alt=item.title||'Yapım afişi';}
  if(infoTitle)infoTitle.textContent=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeTitle||'Bölüm')+' — '+item.title:item.title;
- if(infoType)infoType.textContent=window.perdeEpisodeContext?'DİZİ · SEZON '+window.perdeEpisodeContext.season+' · BÖLÜM '+window.perdeEpisodeContext.episode:(item.type==='tv'?'DİZİ':'FİLM');
- if(infoMeta)infoMeta.textContent=[item.year,item.tmdbGenres||item.category,item.tmdbRuntime||item.duration].filter(Boolean).join(' · ')||'Perde arşivi';
+ if(infoType)infoType.textContent='';
+ if(infoMeta)infoMeta.textContent='';
+ const imdbValue=item.tmdbRating||item.rating||'';
+ const imdbBadge=document.getElementById('player-info-imdb');
+ if(imdbBadge){
+  const score=imdbBadge.querySelector('strong');
+  const numeric=Number(String(imdbValue).replace(',','.'));
+  imdbBadge.hidden=!(imdbValue&&Number.isFinite(numeric)&&numeric>0);
+  if(score)score.textContent=numeric.toFixed(1);
+ }
+ const countryNames={'United States':'ABD','United States of America':'ABD','USA':'ABD','US':'ABD','United Kingdom':'Birleşik Krallık','UK':'Birleşik Krallık','Türkiye':'Türkiye','Turkey':'Türkiye','South Korea':'Güney Kore','Korea':'Güney Kore','Japan':'Japonya','France':'Fransa','Germany':'Almanya','Italy':'İtalya','Spain':'İspanya','Canada':'Kanada','Australia':'Avustralya','India':'Hindistan','China':'Çin','Russia':'Rusya','Mexico':'Meksika','Brazil':'Brezilya','Sweden':'İsveç','Norway':'Norveç','Denmark':'Danimarka','Netherlands':'Hollanda','Belgium':'Belçika','Switzerland':'İsviçre','Poland':'Polonya','Ireland':'İrlanda','New Zealand':'Yeni Zelanda','Thailand':'Tayland','Hong Kong':'Hong Kong','Taiwan':'Tayvan'};
+ const countryFlags={'ABD':'🇺🇸','Birleşik Krallık':'🇬🇧','Türkiye':'🇹🇷','Güney Kore':'🇰🇷','Japonya':'🇯🇵','Fransa':'🇫🇷','Almanya':'🇩🇪','İtalya':'🇮🇹','İspanya':'🇪🇸','Kanada':'🇨🇦','Avustralya':'🇦🇺','Hindistan':'🇮🇳','Çin':'🇨🇳','Rusya':'🇷🇺','Meksika':'🇲🇽','Brezilya':'🇧🇷','İsveç':'🇸🇪','Norveç':'🇳🇴','Danimarka':'🇩🇰','Hollanda':'🇳🇱','Belçika':'🇧🇪','İsviçre':'🇨🇭','Polonya':'🇵🇱','İrlanda':'🇮🇪','Yeni Zelanda':'🇳🇿','Tayland':'🇹🇭','Hong Kong':'🇭🇰','Tayvan':'🇹🇼'};
+ const rawCountry=item.tmdbCountries||item.country||'';
+ const countryText=(Array.isArray(rawCountry)?rawCountry.join(', '):String(rawCountry)).split(',').map(name=>name.trim()).filter(Boolean).map(name=>{const tr=countryNames[name]||name;return (countryFlags[tr]?countryFlags[tr]+' ':'')+tr;}).join(' · ');
  const infoFacts=document.getElementById('player-info-facts');
  if(infoFacts){
   const facts=[
    {icon:'fa-calendar-days',label:'YIL',value:item.year||item.tmdbReleaseDate?.slice(0,4)},
-   {icon:'fa-film',label:'TÜR',value:item.type==='tv'?'Dizi':item.type==='movie'?'Film':item.type==='series'?'Dizi':''},
-   {icon:'fa-tags',label:'KATEGORİ',value:item.tmdbGenres||item.category||item.genre},
-   {icon:'fa-clock',label:'SÜRE',value:item.tmdbRuntime||item.duration},
-   {icon:'fa-globe',label:'ÜLKE',value:item.tmdbCountries||item.country},
+   {icon:'fa-globe',label:'ÜLKE',value:countryText},
    {icon:'fa-video',label:'YÖNETMEN',value:item.tmdbDirector||item.director},
-   {icon:'fa-star',label:'IMDb',value:item.ratingCount||((item.tmdbRating||item.rating)?'IMDb '+(item.tmdbRating||item.rating):'')},
    {icon:'fa-tv',label:'PLATFORM',value:item.platform}
-  ].filter(fact=>fact.value).slice(0,6);
+  ].filter(fact=>fact.value);
   infoFacts.replaceChildren(...facts.map(fact=>{
    const node=document.createElement('div');node.className='ny7-player-fact';
    const icon=document.createElement('i');icon.className='fa-solid '+fact.icon;icon.setAttribute('aria-hidden','true');
