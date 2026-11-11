@@ -2708,7 +2708,16 @@ function openPlayerForMedia(id){
    copy.append(label,value);node.append(icon,copy);return node;
   }));
  }
- if(infoOverview)infoOverview.textContent=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeOverview||item.tmdbOverview||item.desc||'Bu bölüm için özet bilgisi bulunmuyor.'):item.tmdbOverview||item.desc||'Bu yapım için açıklama bilgisi bulunmuyor.';
+ const overviewText=window.perdeEpisodeContext?(window.perdeEpisodeContext.episodeOverview||item.tmdbOverview||item.desc||'Bu bölüm için özet bilgisi bulunmuyor.'):item.tmdbOverview||item.desc||'Bu yapım için açıklama bilgisi bulunmuyor.';
+ if(infoOverview)infoOverview.textContent=overviewText;
+ const overviewMore=document.getElementById('player-overview-more'),overviewDialog=document.getElementById('player-overview-dialog'),overviewFull=document.getElementById('player-overview-full'),overviewClose=document.getElementById('player-overview-close');
+ if(overviewFull)overviewFull.textContent=overviewText;
+ if(overviewDialog&&overviewClose&&!overviewDialog.dataset.closeBound){overviewClose.addEventListener('click',()=>overviewDialog.close());overviewDialog.addEventListener('click',event=>{if(event.target===overviewDialog)overviewDialog.close();});overviewDialog.dataset.closeBound='1';}
+ if(overviewMore){
+  overviewMore.hidden=true;
+  overviewMore.onclick=()=>{if(overviewDialog&&!overviewDialog.open)overviewDialog.showModal();};
+  requestAnimationFrame(()=>{if(infoOverview&&overviewMore){const style=getComputedStyle(infoOverview);const lineHeight=parseFloat(style.lineHeight)||24;overviewMore.hidden=infoOverview.scrollHeight<=lineHeight*6+3;}});
+ }
  const sessionStatus=document.getElementById('player-session-status');if(sessionStatus)sessionStatus.textContent='Bağlantı kontrol ediliyor';
  modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
  document.documentElement.classList.add('ny7-modal-lock');
