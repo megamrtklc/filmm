@@ -11990,3 +11990,21 @@ body.detail-synopsis-open{overflow:hidden}
     margin-top:20px!important;
   }
 }
+
+
+/* PERDE — Anasayfa: öneri kartından itibaren tüm bölüm aralıklarını sıkılaştır */
+#dashboard-view > .home-mood-continue-row{margin-bottom:18px!important}
+#dashboard-view > .homepage-main{margin-top:0!important;gap:18px!important}
+#dashboard-view > .homepage-main > * + *{margin-top:18px!important}
+#dashboard-view #home-collections{gap:18px!important}
+#dashboard-view #home-collections > * + *{margin-top:18px!important}
+#dashboard-view #custom-collection-rails{gap:18px!important}
+#dashboard-view #custom-collection-rails > * + *{margin-top:18px!important}
+@media(max-width:767px){
+  #dashboard-view > .home-mood-continue-row{margin-bottom:14px!important}
+  #dashboard-view > .homepage-main{gap:14px!important}
+  #dashboard-view > .homepage-main > * + *{margin-top:14px!important}
+  #dashboard-view #home-collections,#dashboard-view #custom-collection-rails{gap:14px!important}
+  #dashboard-view #home-collections > * + *,
+  #dashboard-view #custom-collection-rails > * + *{margin-top:14px!important}
+}
