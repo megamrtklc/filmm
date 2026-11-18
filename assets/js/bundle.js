@@ -170,6 +170,8 @@ function fitHeroTitleToWidth() {
             if (mobileHero) {
                 const mobileBg = document.getElementById('mobile-hero-bg');
                 if (mobileBg) { mobileBg.src = item.tmdbBackdrop || item.backdrop || item.tmdbPoster || item.image; mobileBg.alt = item.title; }
+                const mobilePoster = document.getElementById('mobile-hero-poster');
+                if (mobilePoster) { mobilePoster.src = item.tmdbPoster || item.image || item.poster || item.tmdbBackdrop || item.backdrop || ''; mobilePoster.alt = (item.title || 'Yapım') + ' afişi'; }
                 mobileHero.classList.add('is-changing');
                 window.setTimeout(() => mobileHero.classList.remove('is-changing'), 420);
                 const mobileType = document.getElementById('mobile-hero-type');
