@@ -1,0 +1,47 @@
+/* PERDE — mobile hero: keep the full backdrop visible and show a separate compact poster. */
+@media screen and (max-width:767px), screen and (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  #mobile-hero-section .mobile-hero-art{
+    background:#090b10!important;
+  }
+  #mobile-hero-section .mobile-hero-art img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:contain!important;
+    object-position:center center!important;
+    transform:none!important;
+    filter:saturate(.94)!important;
+    background:#090b10!important;
+  }
+  #mobile-hero-section.is-changing .mobile-hero-art img{
+    transform:none!important;
+  }
+  #mobile-hero-section .mobile-hero-poster{
+    position:absolute!important;
+    z-index:2!important;
+    top:56px!important;
+    left:18px!important;
+    display:block!important;
+    width:70px!important;
+    height:105px!important;
+    object-fit:cover!important;
+    object-position:center!important;
+    border:1px solid rgba(255,255,255,.28)!important;
+    border-radius:5px!important;
+    background:#171a22!important;
+    box-shadow:0 8px 22px rgba(0,0,0,.42)!important;
+  }
+  #mobile-hero-section .mobile-hero-topline{
+    z-index:3!important;
+  }
+  #mobile-hero-section .mobile-hero-type{
+    margin-left:auto!important;
+  }
+}
+@media screen and (max-width:380px){
+  #mobile-hero-section .mobile-hero-poster{
+    top:53px!important;
+    left:15px!important;
+    width:70px!important;
+    height:105px!important;
+  }
+}
