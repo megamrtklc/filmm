@@ -6,7 +6,7 @@
  let activeItems=[],activeIndex=0,timer=null,startedAt=0;
  const duration=5600;
  const groups=[];
- function catalog(){return Array.isArray(window.mediaDatabase)?window.mediaDatabase.filter(x=>x&&x.id!=null&&x.title&&(x.tmdbPoster||x.image||x.poster)):[];}
+ function catalog(){return typeof mediaDatabase!=='undefined'&&Array.isArray(mediaDatabase)?mediaDatabase.filter(x=>x&&x.id!=null&&x.title&&(x.tmdbPoster||x.image||x.poster)):[];}
  function buildGroups(){
   const all=catalog();if(!all.length)return [];
   const newest=all.slice(0,10);
